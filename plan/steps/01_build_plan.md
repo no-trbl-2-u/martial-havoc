@@ -24,7 +24,8 @@ the phase.
       2026-09-05, before the engine phases) — 9f7f32e
 
 **The engine (phases 2–4):**
-- [ ] Phase 2 — Tables as data, and creation
+- [ ] Phase 2 — Tables as data, and creation (brief:
+      `phase_2_tables_and_creation.md`, drafted via oversight 2026-09-05)
 - [ ] Phase 3 — Engine core
 - [ ] Phase 4 — Effects and Oracle lines
 
@@ -32,7 +33,8 @@ the phase.
 - [ ] Phase 5 — The adventure format and The 5 Treasures
 - [ ] Phase 6 — The campaign record and the save
 - [ ] Phase 7 — The trail-head village
-- [ ] Phase 8 — The UI
+- [ ] Phase 8 — The UI (canonical sibling: `/critique` starts after this
+      phase ships; set via oversight 2026-09-05)
 - [ ] Phase 9 — The web release
 
 **The milestone (phase 10, by 2026-12-05):**
@@ -100,6 +102,8 @@ opponents, eight presets as printed). The dice interface with a
 fixed-sequence test source. Creation: rolled attributes, one Martial
 Art, gold by status, Training deduction, pools from rolled SKILL checked
 and flagged, never refused; attributes not typeable.
+Detailed brief: `phase_2_tables_and_creation.md` (no UI; the cave's
+tables wait for Phase 5 under the same schema).
 
 ### Phase 3 — Engine core
 
@@ -179,6 +183,11 @@ a fixed village with three locations and the trail to Flat-top mountain.
 web export; the layout decision is recorded.
 **Waits on:** Phases 4, 5, 6, 7
 **Cost:** three weeks after the layout is picked
+
+This is the **canonical sibling** phase (set via oversight 2026-09-05):
+the first phase that makes the live site observable to a stranger, so
+`/critique`'s first pass runs after it ships, and later feature-surface
+phases mirror its structure.
 
 `[needs-user-call]` **Layout:** the agent renders three layouts at phone
 width with a working beat and files them; the operator picks; the agent
