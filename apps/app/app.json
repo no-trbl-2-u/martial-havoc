@@ -7,7 +7,11 @@
     "scheme": "martial-havoc",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.notrbl2u.martialhavoc"
@@ -19,6 +23,12 @@
       "bundler": "metro",
       "output": "single",
       "name": "Martial Havoc"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "344d4bd5-661e-469c-83de-223cea93aaaf"
+      }
+    },
+    "owner": "no.trbl.2.u"
   }
 }

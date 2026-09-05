@@ -66,11 +66,14 @@ exhaustive set nightly.
 
 ### 4. The deploy gate runs **after** every push.
 
-`npm run deploy` uploads the web export to Cloudflare Workers
-static assets, tagged with the pushed commit; `npm run
-deploy:check` polls Cloudflare for the deploy matching that
-commit. Prints state transitions. Exits non-zero on `error` /
-`failed` / timeout.
+The repository is connected to Cloudflare Workers Builds: every
+push to `main` runs `npm run build:web` then `npm run deploy`
+(other branches run `npm run deploy:version`, a preview upload);
+the version is tagged with the commit. `npm run deploy:check`
+polls Cloudflare for the deploy matching HEAD. Prints state
+transitions. Exits non-zero on `error` / `failed` / timeout. The
+loop may also run `npm run deploy` itself right after the push;
+the two are idempotent.
 
 Every shipping skill calls both as Step 12 (or equivalent). A red
 deploy is treated identically to a red verify gate: read the log,
@@ -195,7 +198,8 @@ names every one with its purpose and who supplies it.
 
 ### `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` — deploy and deploy gate
 
-Used by `npm run deploy` (wrangler) and `npm run deploy:check`.
+Used by `npm run deploy:check`, and by `npm run deploy` when it runs
+outside Workers Builds (which authenticates wrangler itself).
 Account-scoped token with "Workers Scripts: Edit". Optional:
 `CLOUDFLARE_PROJECT` (Worker name, default `martial-havoc`) and
 `CLOUDFLARE_LIVE_URL` (default the workers.dev URL).
@@ -218,7 +222,11 @@ Get one: https://github.com/settings/tokens
 
 ### `EXPO_TOKEN` — native builds (Phase 13 only)
 
-Read by `eas-cli`. Not used before Phase 13.
+Read by `eas-cli`. The app is linked to EAS project
+`344d4bd5-661e-469c-83de-223cea93aaaf` (owner `no.trbl.2.u`) in
+`apps/app/app.json`; build profiles are in `apps/app/eas.json`
+(`preview` = internal distribution, `production`). No build runs
+before Phase 13.
 
 ### `NOTIFY_NTFY_TOPIC` / `NOTIFY_WEBHOOK_URL` — pager (optional)
 
