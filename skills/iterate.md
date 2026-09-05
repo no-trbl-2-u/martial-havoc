@@ -250,7 +250,7 @@ For research-heavy fixes, spawn `scout` in parallel.
 ### Step 4 — Verify
 
 ```bash
-pnpm verify
+npm run verify
 ```
 
 Iterate up to 3 times on same root cause.
@@ -309,7 +309,7 @@ git push origin main
 ### Step 7 — Confirm deploy
 
 ```bash
-pnpm deploy:check
+npm run deploy:check
 ```
 
 **Once deploy:check is green and the row carried an `- issue: #N`,
@@ -333,9 +333,9 @@ Return cleanly. Loop's next tick re-audits.
 
 ## 6. Failure modes
 
-1. **`pnpm verify` fails ≥3 times on same root cause.**
-2. **`pnpm deploy:check` fails ≥3 times on same root cause.**
-3. **`<PROVIDER_AUTH_TOKEN>` missing.**
+1. **`npm run verify` fails ≥3 times on same root cause.**
+2. **`npm run deploy:check` fails ≥3 times on same root cause.**
+3. **`CLOUDFLARE_API_TOKEN` missing.**
 4. **Finding requires schema migration > 20 records.** Push to
    `/plan-a-phase`.
 5. **Finding requires user judgment.** Surface to AUDIT.md as
@@ -384,11 +384,11 @@ Agent({ subagent_type: "<content-curator>", prompt: "..." })
 Agent({ subagent_type: "scout", prompt: "..." })
 
 # Verify + commit + push + deploy
-pnpm verify
+npm run verify
 git add <explicit files>
 git commit -m "<category>: <subject>"
 git push origin main
-pnpm deploy:check
+npm run deploy:check
 
 # Issue mirror
 node scripts/loop-issue.mjs open --severity ... --category ... \

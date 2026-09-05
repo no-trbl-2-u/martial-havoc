@@ -1,2 +1,13 @@
 # nexus: never commit local secrets
 .env
+
+# dependencies and build output
+node_modules/
+apps/app/dist/
+.expo/
+*.tsbuildinfo
+
+# test output
+playwright-report/
+test-results/
+.wrangler/

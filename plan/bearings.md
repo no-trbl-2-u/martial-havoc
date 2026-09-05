@@ -24,8 +24,9 @@ one authored scene (the cave) and a trail-head village; the sandbox
 (generated regions, monasteries, encounters) follows. Voice: authored
 short lines beside every menu; the player writes when they want to.
 
-**Live at:** `[needs-user-call]` until the garden's deploy step lands
-(Cloudflare Workers static assets).
+**Live at:** https://martial-havoc.no-trbl-2-u.workers.dev (Cloudflare
+Workers static assets; the garden's deploy step, 26c9f3c). A custom
+domain is the operator's call.
 
 ## Surface
 

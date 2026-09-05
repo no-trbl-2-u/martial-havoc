@@ -1,0 +1,215 @@
+
+
+ 
+THE 5 TREASURES 
+An adventure for Martial Havoc  
+ 
+On the Flat-top mountain two fiends threaten the travellers: 
+Senior King Gold Horn and Junior King Silver Horn, human eater 
+demons. In the Lotus Flower cave, where they live protected by 
+devil servants, are kept 5 magic treasures. 
+ 
+Event table, roll every time you enter an area: 
+⚀Ambush! ⚁ ⚂Encounter ⚃⚄ Safe exploration  ⚅Hint 
+ 
+Encounters 
+for Event=⚀⚁⚂ roll for the creature encountered in the area 
+read this part only if your PG gets information about the 
+area or with Event roll=Hint 
+ 
+Flat-top mountain 
+ 
+A wild and vast territory covered with pines and willow trees, 
+deep valleys and steep rocks, difficult paths for horses. In the 
+distance an axe at work and the animals running on craggy ridges. 
+ 
+Encounters: ⚀⚁⚂ Woodgatherer ⚃⚄Ogre ⚅ Junior King 
+ 
+ Old poem "Towering peaks, Tapered pinnacles. Down in the 
+deep, winding stream, Beside the lonely cliff" 
+  
+Cave entrance 
+A shut wooden gate hidden by a willow tree; painted in red :       
+蓮花洞 
+A stream falls  slowly silent, swallowed by the mountain.  
+Shrill voices come from the inside. 
+ 
+Encounters: ⚀ Devil servant ⚁⚂⚃ Ogre ⚄⚅Junior King  
+ 
+ Ogres go out hunting for travellers once a day 
+ 
+ 
+ 
+Attendants room  
+ 
+The room serves as entrance to the locked Private Quarters, a 
+kitsch display case contains the finest  tea set, right next to it, on a 
+pedestal a jade vase is guarded by at least one of the personal 
+Senior King’s attendants.  
+ 
+Encounters: ⚀⚁ Skillful Beast ⚂⚃ Dexterous Ghost ⚄⚅ Both 
+ 
+ The attendants have already tested Senior King’s patience. 
+Next mistake they will get punished 
+ 
+ 
+ 
+Dining Hall  
+ 
+The cave vault is high and  the torches barely illuminate the entire 
+area, a long stone table with two stone thrones . The room is busy 
+with devil servants running to and from the kitchen.  
+ 
+Encounters: ⚀⚁⚂⚃ Devil servant ⚄ Junior King ⚅ Senior King 
+ 
+ Junior King would take a nap here if he overdrank wine. 
+ 
+Storage room  
+ 
+A dark room, a faint light from nearby areas illuminates the floor: 
+a mess of boxes, crates,  trunks filled with tools, servants’ clothes, 
+herbs and dried food. 
+A source of light could  show  the shelves: utensils, plates, cups and 
+recipients;  gourds, jugs  and vases of all dimensions. 
+ 
+Encounters: Devil servants 
+One of the  treasures looks like an ordinary gourd bottle. 
+ 
+Women quarter  
+ 
+The door is decorated with ivory bas-reliefs: a rich sedan chair 
+followed by a troop of marching she-devils. A protruding hand 
+with a golden decoration. 
+ 
+Inside: an old woman is sitting on a chair, a white silk scarf 
+wrapped around her head and jewels studded her golden earrings. 
+A she-devil servant is  combing her hair.  
+  
+Encounters: Old Vixen and  she-Devil servant 
+ 
+ The old lady is the demons’ adoptive mother. She knows the 
+spells to control the Dazzling Golden Cord 
+ 
+ 
+ 
+ 
+
+ 
+Kitchen  
+ 
+A steady fire fuels a boiling pot, little devils bustle about amidst  
+chopped ingredients and sauces, knives wielded by steady hands. 
+The smoke rises toward an opening in the ceiling that goes up inside 
+the  mountain. 
+ 
+Soaked in the pool at the back, hidden from the entrance,  there’s 
+a man tied up, he is trembling and murmuring a prayer. 
+ 
+Encounters: Devil servants 
+The man is a MONK, captured to be eaten by the Senior King 
+and prolong his life 
+ 
+Chieftain quarter  
+ 
+The  Senior King’s private area is entered through a paper sliding 
+door. 
+ Inside: a golden screen decorated with a fan wrapped in flames 
+hides the bed; on the other side of the room there’s a lectern with 
+several scattered sheets. 
+    
+Encounters: ⚀⚁⚂⚃Senior King ⚄⚅ Empty 
+By interpreting what is written on the sheets, you come to 
+how two of the treasures work.  
+ 
+ 
+Encounters 
+ 
+DEVIL SERVANT SKILL:5 END:7 ATT:1 
+Sneaky minion, easily frightened if alone (use the Oracle  for the 
+number of devils) 
+Special skill: Surround (3) Sneak attack (2) 
+LOOT: ⚀⚁⚂ junk ⚃⚄ simple weapon ⚅  
+ 
+DEXTEROUS GHOST SKILL:7 END:8 ATT:1 
+A spirit servant, quick yet clumsy. 
+Special skill: evanescence (2), immaterial charge (4) 
+LOOT: private quarter’s key 
+ 
+JUNIOR KING SILVER HORN SKILL:9 END:15 ATT:1 
+Cunny demon, master swordsman. He takes orders only from his 
+elder brother. 
+Special skill:  Shapeshifting (4) levitation (3) 
+ LOOT: seven-star sword 
+ 
+MONK SKILL:4 END:5 ATT:1 
+Unlucky traveller with a vegetarian diet.  
+Curse (3), Exorcism (1)  
+LOOT: ⚀⚁rosary ⚂⚃baoding balls ⚄⚅elixir 
+ 
+OGRE SKILL:6 END:13 ATT:3 
+Half human brute with long fangs. 
+Bite (2), Sweep (1) 
+LOOT: Spear 
+ 
+OLD VIXEN SKILL:8 END:5 ATT:1 
+ Animal spirit in the appearance of an old lady.   
+Special skill: Tightening spell (4) charm (2) 
+LOOT:Dazzling Golden Cord 
+ 
+SENIOR KING GOLDEN HORN SKILL:9 END:18 ATT:4 
+Lord of the cave; sturdy demon with helmet, breast plate and a 
+cloak of red silk. 
+Special skill: Magic flames (4) Call to arms! (4)  
+LOOT: Plantain fan 
+ 
+SKILLFUL BEAST SKILL:7 END:13 ATT:5 
+A monsterlike devil with fighting quality,  but not a sharp mind 
+Special skill: somersault leap (3), whirlwind attack (2) 
+LOOT: private quarter’s key 
+ 
+WOODGATHERER SKILL:5 END:8 ATT:5 
+They know the mountain, but living in a dangerous place made 
+them irritable. 
+Special skill: axe throwing (3), chopping strike(2)  
+LOOT: Great Bear scripture [recited keeps beasts away] 
+ 
+ 
+ 
+ 
+ 
+The 5 Treasures 
+ 
+Read this if you want to know  the treasure’s way of working: 
+ 
+ 
+Gold and red gourd : if opened it will swallow the sky, 
+changing day to night. Close it to have the daylight back. 
+ 
+ 
+Dazzling Golden Cord: with  a spell it moves to tie a 
+person. Another spell unties. It can’t be cut with 
+normal weapons. 
+   
+ 
+Vase of muttonfat jade: remove the label and call out a 
+person’s name, if they respond they’ll be  trapped 
+inside.  
+ 
+ 
+Plantain Fan: it creates magic-fire’s waves 
+inextinguishable using conventional methods. 
+ 
+ 
+Seven-star sword: magical and indestructible weapon. 
+It can block hits from stronger enemies without any 
+effort from the holder. 
+ 
+ 
+ 
+ 
+License 
+https://creativecommons.org/licenses/by-sa/4.0/ 
+ 
+Writing  by Gianluca Monaco 
+Icons: https://limofeus.itch.io/handdrawniconpack 
+Cave map: https://watabou.itch.io/cave-generator 

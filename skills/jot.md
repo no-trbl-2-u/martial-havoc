@@ -223,7 +223,7 @@ git commit -m "jot: ..."
 git push origin main
 
 # What it does NOT run
-pnpm verify                   # no code change
-pnpm deploy:check             # no deploy
+npm run verify                   # no code change
+npm run deploy:check             # no deploy
 AskUserQuestion               # no questions back
 ```

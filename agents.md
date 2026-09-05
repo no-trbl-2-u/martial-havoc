@@ -29,18 +29,20 @@ in code, in content, in design notes.
 
 ### 3. The verify gate is non-negotiable.
 
-`pnpm verify` runs **before** every commit:
+`npm run verify` runs **before** every commit:
 
 ```
-typecheck → test:run → data:validate → build → e2e
+typecheck → test → labels:check → build:web → e2e
 ```
 
-The canonical composition, with two variance rules: `data:validate`
-runs iff the project has a data layer (GitHub-as-DB, DB
-migrations, etc.) — drop the leg otherwise; `lint` is an
-optional leg, wired into `verify` or left as a standalone
-script, per stack. See `nexus/customization/verify-gate.md` for
-stack-specific compositions.
+The composition is the Seed's (`plan/bearings.md`, "Verify
+gate"): `typecheck` is `tsc --noEmit` across the workspaces;
+`test` is Vitest over `packages/engine` and `packages/content`
+(schema validation of every data file is a test); `labels:check`
+fails on any engine behaviour without a `{label, cite}`;
+`build:web` is `expo export --platform web` in `apps/app`; `e2e`
+is Playwright against that export. There is no `data:validate`
+leg: the content package's schema test is that leg.
 
 Every check is a hard gate. **Hermetic e2e is part of the gate.**
 A red e2e is a blocked push. Never `--no-verify`. Fix the root
@@ -64,11 +66,13 @@ exhaustive set nightly.
 
 ### 4. The deploy gate runs **after** every push.
 
-`pnpm deploy:check` polls Cloudflare for the deploy
-matching the just-pushed commit. Prints state transitions. Exits
-non-zero on `error` / `failed` / timeout.
+`npm run deploy` uploads the web export to Cloudflare Workers
+static assets, tagged with the pushed commit; `npm run
+deploy:check` polls Cloudflare for the deploy matching that
+commit. Prints state transitions. Exits non-zero on `error` /
+`failed` / timeout.
 
-Every shipping skill calls it as Step 12 (or equivalent). A red
+Every shipping skill calls both as Step 12 (or equivalent). A red
 deploy is treated identically to a red verify gate: read the log,
 patch, push again. Repeated failures escalate per failure modes.
 
@@ -78,16 +82,22 @@ If a hook fails, fix the underlying issue. If `git pull`
 diverges, stop and report. Tests alongside code, never "add tests
 later".
 
-### 6. <PROJECT-SPECIFIC RULE — e.g. site name lowercase>
+### 6. Every behaviour is labelled. The spec and the PDFs are read-only.
 
-<Customize per the project. For thock: site name is lowercase
-"thock" always. For tickpedia: image alt text required on every
-image. Etc.>
+Every engine export carries `{label, cite}` with `label` one of
+`rule`, `reading`, `invention`; `labels:check` is red otherwise.
+`spec.md` is never edited — drift goes back through `/re-seed`.
+The two PDFs at the repo root are the sources; never edit them.
+The sealed rules in `spec.md` (ATTACK, Final Blow LUCK, night's
+rest, double-six, Morale on retreat rows) reopen only by
+`/re-seed`.
 
-### 7. Content stays in <CONTENT_LOCATION>. Data stays in
-       <DATA_LOCATION>.
+### 7. Content stays in `packages/content`. The engine stays pure.
 
-No hardcoded copy in components. No hardcoded data records.
+No hardcoded copy in components: authored lines, table cells and
+UI strings are data files in `packages/content`, each with a
+citation. `packages/engine` imports no React and rolls no dice of
+its own — the dice source is injected.
 
 ### 8. Blocked is loud.
 
@@ -101,20 +111,26 @@ skill; see `nexus/playbooks/hands-off.md`.
 
 ## Project
 
-**Martial Havoc** — <one-line description>. Lives at <HOSTING_URL>.
+**Martial Havoc** — a rules engine for Gianluca Monaco's rule-light
+d6 solo wuxia RPG: the sandbox is the real game, adventures are
+scenes in it, and The 5 Treasures is the first. Lives at
+https://martial-havoc.no-trbl-2-u.workers.dev.
 
 The product spec is `spec.md` at the repo root. Read it once.
 
 ## Repo shape
 
 ```
-<your app paths>     <one-line per top-level group>
+packages/engine/     Pure TypeScript rules engine; no React; dice injected.
+packages/content/    Data files (JSON, one schema), authored lines, adventures.
+apps/app/            Expo + React Native app; web target exported to Cloudflare.
 plan/                Build plan, phase briefs, audit findings.
 skills/              Source-of-truth skill files invoked by slash commands.
+scripts/             deploy, deploy-check, notify, pulse, loop-issue, serve-static.
+e2e/                 Playwright specs against the web export.
 .claude/             Claude Code config — slash commands, sub-agents,
                      settings.json (permission allowlist), hooks/ (guard).
-design/              Design exports.
-data/                Structured data, if applicable.
+design/              Design exports and the design prompt.
 ```
 
 ## How work happens
@@ -128,20 +144,25 @@ invoke a skill that does the right thing end-to-end.
 | Skill | Source of truth | What it does |
 |---|---|---|
 | `ship-a-phase` | `skills/ship-a-phase.md` | Ship one phase from the build plan. |
-| `ship-data` | `skills/ship-data.md` | Ship one data record (if data layer exists). |
 | `plan-a-phase` | `skills/plan-a-phase.md` | Refine the next phase brief, no code. |
 | `iterate` | `skills/iterate.md` | Audit + ship one improvement. |
 | `critique` | `skills/critique.md` | External-observer pass; writes to `CRITIQUE.md`. |
 | `triage` | `skills/triage.md` | Issue review; routes to backlogs. |
 | `expand` | `skills/expand.md` | Plan-expansion pass; proposes phase candidates from accumulated signals. Posture-controlled (bold/strict/autonomous). |
-| `march` | `skills/march.md` | Outer dispatcher: triage → critique → phase → data → expand → iterate. |
-| `oversight` | `skills/oversight.md` | **User-in-the-loop.** The general-purpose skill that asks anything (`bootstrap` carries the one narrow provisioning exception). Promotes phase candidates. |
+| `march` | `skills/march.md` | Outer dispatcher: triage → critique → phase → expand → iterate. |
+| `oversight` | `skills/oversight.md` | **User-in-the-loop.** The general-purpose skill that asks anything. Promotes phase candidates. |
+| `seed-check` | `skills/seed-check.md` | Read-only check of a change against `spec.md`'s refusals and Horizon. |
+| `re-seed` | `skills/re-seed.md` | Field report back to the estate when the build drifts from `spec.md`. |
+| `jot` | `skills/jot.md` | Catch a stray thought; no code. |
+
+There is no `ship-data` skill: this project has no separate data
+layer (`nexus.adopt.json` `data: false`); content ships inside
+phases.
 
 ### Invocation
 
 ```
 /ship-a-phase                # ship next pending phase
-/ship-data                   # ship next data backlog row
 /plan-a-phase                # refine next phase brief
 /iterate                     # audit + ship one improvement
 /critique                    # external-observer pass
@@ -149,6 +170,7 @@ invoke a skill that does the right thing end-to-end.
 /expand                      # propose new phase candidates
 /march                       # do the right thing
 /oversight                   # course-correct
+/seed-check                  # check a step against spec.md
 /loop 30m /march             # autonomous loop
 ```
 
@@ -158,7 +180,6 @@ invoke a skill that does the right thing end-to-end.
 |---|---|
 | `scout` | Open-web research with citations. |
 | `reader` | Fresh-eyes site observer. |
-| <DOMAIN_SPECIALIST> | <when> |
 
 The main agent writes wiring, code, decisions. Spawn sub-agents
 aggressively for everything else.
@@ -167,21 +188,21 @@ aggressively for everything else.
 
 ## Operational secrets
 
-The autonomous loop is hermetic for shipping; the awareness layer
-needs tokens. Both live in `.env` (gitignored). Configure once
-per machine.
+The autonomous loop is hermetic for shipping; the deploy and
+awareness layers need tokens. They live in `.env` (gitignored) on
+a laptop, or in the environment on a cloud runner. `.env.example`
+names every one with its purpose and who supplies it.
 
-### `<PROVIDER_AUTH_TOKEN>` — deploy gate
+### `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` — deploy and deploy gate
 
-Used by `pnpm deploy:check` to read deploy state.
+Used by `npm run deploy` (wrangler) and `npm run deploy:check`.
+Account-scoped token with "Workers Scripts: Edit". Optional:
+`CLOUDFLARE_PROJECT` (Worker name, default `martial-havoc`) and
+`CLOUDFLARE_LIVE_URL` (default the workers.dev URL).
 
-```
-<PROVIDER_AUTH_TOKEN>=<token-format-prefix>...
-```
+Get one: https://dash.cloudflare.com/profile/api-tokens
 
-Get one: <provider's token URL>
-
-If missing, `pnpm deploy:check` exits 3 with a clear error.
+If missing, `npm run deploy:check` exits 3 with a clear error.
 
 ### `GH_TOKEN` — issue triage
 
@@ -194,6 +215,10 @@ GH_REPO=no-trbl-2-u/martial-havoc
 ```
 
 Get one: https://github.com/settings/tokens
+
+### `EXPO_TOKEN` — native builds (Phase 13 only)
+
+Read by `eas-cli`. Not used before Phase 13.
 
 ### `NOTIFY_NTFY_TOPIC` / `NOTIFY_WEBHOOK_URL` — pager (optional)
 
@@ -218,6 +243,7 @@ failure-mode condition rather than inventing a placeholder.
 | How a phase is built | `plan/phases/phase_<N>_<topic>.md` |
 | How a skill works | `skills/<skill>.md` |
 | What a sub-agent does | `.claude/agents/<name>.md` |
-| Latest weaknesses | `plan/AUDIT.md`, `data/AUDIT.md` |
-| Backlog of pending data work | `data/BACKLOG.md` |
+| Latest weaknesses | `plan/AUDIT.md` |
 | Critique queue | `plan/CRITIQUE.md` |
+| Phase candidates | `plan/PHASE_CANDIDATES.md` |
+| The design prompt | `design/V1-DESIGN-PROMPT.md` |

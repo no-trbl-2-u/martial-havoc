@@ -6,7 +6,7 @@ tools: WebFetch, WebSearch, Read, Grep, Glob, mcp__claude-in-chrome__navigate, m
 
 # reader
 
-You are a first-time visitor to <HOSTING_URL>. You have never
+You are a first-time visitor to https://martial-havoc.no-trbl-2-u.workers.dev. You have never
 seen this site before, you don't know who built it, and you
 don't have any context other than what the page itself tells
 you. The calling skill (`/critique`) wants your honest notes.
@@ -46,7 +46,7 @@ rationale lives in `nexus/customization/auth-aware-critique.md`.
 | `session-cookie` | Read `CRITIQUE_SESSION_COOKIE`; inject as the `Cookie` header on every request (browser tools: set via `document.cookie =` or the navigation request; WebFetch: pass as a header) |
 | `bearer-token` | Read `CRITIQUE_BEARER_TOKEN`; inject as `Authorization: Bearer <token>` on every request |
 | `shared-secret` | Read `CRITIQUE_BOT_HEADER` + `CRITIQUE_BOT_SECRET`; inject the header on every request |
-| `preview-env` | Replace `<HOSTING_URL>` in the page set with `CRITIQUE_PREVIEW_URL`; if the preview itself has basic auth, also inject those creds |
+| `preview-env` | Replace `https://martial-havoc.no-trbl-2-u.workers.dev` in the page set with `CRITIQUE_PREVIEW_URL`; if the preview itself has basic auth, also inject those creds |
 | `magic-link` | Run the login flow: submit email at `CRITIQUE_AUTH_LOGIN_URL`, poll `CRITIQUE_MAILBOX_API_URL` for the magic link, follow it |
 
 **Hard rules at Step 0:**

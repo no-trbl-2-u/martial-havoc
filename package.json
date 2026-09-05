@@ -1,0 +1,33 @@
+{
+  "name": "martial-havoc",
+  "private": true,
+  "license": "CC-BY-SA-4.0",
+  "description": "A rules engine for Martial Havoc: the sandbox is the real game, adventures are scenes in it, and The 5 Treasures is the first.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "vitest run",
+    "labels:check": "vitest run --config vitest.labels.config.mts",
+    "build:web": "npm run build:web -w apps/app",
+    "e2e": "playwright test",
+    "verify": "npm run typecheck && npm run test && npm run labels:check && npm run build:web && npm run e2e",
+    "deploy": "node scripts/deploy.mjs",
+    "deploy:check": "node scripts/deploy-check.mjs",
+    "serve:web": "node scripts/serve-static.mjs apps/app/dist 4173",
+    "pulse": "node scripts/pulse.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "~1.56.1",
+    "@types/node": "^22.19.0",
+    "typescript": "~6.0.3",
+    "vitest": "^5.0.0",
+    "wrangler": "^4.129.0",
+    "yaml": "^2.9.0"
+  }
+}

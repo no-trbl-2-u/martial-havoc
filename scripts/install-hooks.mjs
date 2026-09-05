@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 // scripts/install-hooks.mjs — opt-in pre-commit gate for hand commits.
 //
-// nexus/customization/verify-gate.md's contract is "pnpm verify
+// nexus/customization/verify-gate.md's contract is "npm run verify
 // runs before every commit" — but that only binds the loop (skills
 // run it foreground). A human editing outside the loop has to
 // remember to run it. This writes .git/hooks/pre-commit running
-// pnpm verify — nothing else: no network, no formatting, no
+// npm run verify — nothing else: no network, no formatting, no
 // auto-fix. Opt-in only: clone-and-read contributors are unaffected
 // until they run this themselves.
 //
@@ -57,12 +57,12 @@ if (existing !== null && !ours) {
 const hookBody = `#!/bin/sh
 ${MARKER} — do not edit by hand; regenerate with
 # node scripts/install-hooks.mjs (--uninstall to remove).
-pnpm verify
+npm run verify
 `
 
 fs.mkdirSync(path.dirname(hookPath), { recursive: true })
 fs.writeFileSync(hookPath, hookBody, { mode: 0o755 })
 fs.chmodSync(hookPath, 0o755)
 
-console.log(`install-hooks: wrote ${path.relative(ROOT, hookPath)} — pnpm verify now runs before every commit`)
+console.log(`install-hooks: wrote ${path.relative(ROOT, hookPath)} — npm run verify now runs before every commit`)
 console.log('install-hooks: node scripts/install-hooks.mjs --uninstall to remove')

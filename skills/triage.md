@@ -190,7 +190,7 @@ If no file changes (all `triage:closed` or `triage:reviewed`),
 ### Step 6 — Confirm deploy
 
 ```bash
-pnpm deploy:check
+npm run deploy:check
 ```
 
 ### Step 7 — Done
@@ -286,5 +286,5 @@ gh label create "triage:..." --repo "$GH_REPO" --color "..." 2>/dev/null || true
 git add <files>
 git commit -m "triage: ..."
 git push origin main
-pnpm deploy:check
+npm run deploy:check
 ```

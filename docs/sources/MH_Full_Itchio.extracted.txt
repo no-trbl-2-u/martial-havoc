@@ -1,0 +1,2409 @@
+
+
+0 
+
+ 
+Those who are in harmony with the Tao enter into unison with matter, 
+everything becomes possible: 
+they can walk through stone, through fire or on water. 
+Such powers  belong to the Master,  
+yet the greatest power is to refrain from using them. 
+[Lie Zi] 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+1 
+
+ 
+Index 
+Introduction..............................................................................3 
+Master creation.........................................................................5 
+Actions....................................................................................22 
+Combat...................................................................................23 
+Multiple Combat......................................................................30 
+Escape....................................................................................30 
+Healing....................................................................................31 
+Experience and Advancement...................................................34 
+Adventures..............................................................................36 
+Exploration.............................................................................42 
+Market....................................................................................52 
+Oracle.....................................................................................58 
+Encounters..............................................................................66 
+Opponents..............................................................................70 
+Partial filmography..................................................................80 
+Appendix A: Philosophy of the open system.................................81 
+Appendix B: Martial Havoc - Cinematic Journey..........................81 
+Appendix C: Pre-generated characters........................................91 
+License....................................................................................93 
+ 
+ 
+2 
+
+ 
+Introduction 
+Martial Havoc is a rule-light, d6 (six-sided dice) only, roleplaying game that 
+allows you to easily create a character and start playing in just a few 
+minutes;  it stems from a love for the WuXia genre and traditional Chinese 
+martial arts, inspired by films such as "Five Fingers of Violence”, "Drunken 
+Master” or "Crouching Tiger, Hidden Dragon”. 
+You will play endless fights, flying kicks, close-ups of furrowed brows, 
+sharp blades grabbed with bare hands, demons with magical powers, and 
+the hero (the Master) seeking revenge, fortune or fame.  
+WuXia is generally understood to refer to both "kung fu" stories, without 
+supernatural elements and the XianXia genre, where spirits and humans 
+coexist in a European fantasy-like world. Choose the path you prefer, or 
+mix the two subgenres, what matters is that you have fun. 
+Some terms or mechanics are intentionally ambiguous to encourage player 
+interpretation. The rulebook gives you the tools, the story comes from your 
+imagination. 
+This game is a hack of Heroic Havoc - 
+ruolatorisolitari.itch.io/heroic-havoc  
+    
+3 
+
+ 
+  ZHUN ● Beginning 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+4 
+
+ 
+Master creation 
+To create the Master, define the following characteristics: 
+● Name and age 
+● Martial Art 
+● SKILL, ENDURANCE, and LUCK points 
+● Martial Proficiencies  
+● Techniques and Rituals (if any) 
+● Equipment 
+● Experience points 
+Your initial equipment consists of: 
+● Common clothing 
+● A weapon (even if not listed in the weapon table pg. 53) 
+● A Health Elixir or an item from the Market costing less than 20 GP 
+● As many gold pieces as the Master's social status 
+1d6 1 2 3-4 5 6 
+Status Vagabond Poor Middle Class Rich Noble 
+GP 1 1d6-1 3d6 5d6+6 10d6 
+ 
+ 
+E.g. XinYue 27 - Long Weapon Master -  SKILL=7 ENDURANCE=18 LUCK=9 
+Status: Poor (3GP) Equipment: common clothing, Spear, Health elixir               
+Martial Proficiencies:  Armed Combat (2) Defensive Barrier (4) Sweep (1) 
+5 
+
+ 
+Attributes 
+Determine SKILL, ENDURANCE, and LUCK points as follows: 
+● SKILL: Roll 1d6 and add 6 to the result. 
+● ENDURANCE: Roll 2d6 and add 12 to the result. 
+● LUCK: Roll 1d6 and add 6 to the result. 
+These initial stats are crucial. Although they may fluctuate, they usually 
+only increase above their initial  values in exceptional circumstances.  
+● SKILL represents combat prowess, dexterity, and agility. 
+● ENDURANCE reflects your health and physical condition; if it 
+reaches zero, the Master dies or becomes unconscious. 
+● LUCK indicates your good fortune. 
+ 
+ 
+ 
+6 
+
+ 
+You are a Master of... 
+Choose the Martial Art you specialize in or roll on the next table.  Each 
+Martial Art has its own Martial Proficiencies  on which you can spend as 
+many points as your SKILL value.  
+Martial Proficiencies can’t exceed the maximum value of 4 at creation. 
+A Master can fight with their bare hands or armed (if they have a weapon), 
+even if they do not have that skill, they simply will not add points to  SKILL 
+checks. The same applies to any action that a martial expert wants to try, 
+such as climbing, jumping, intimidating, etc. 
+1d6 1d6 Martial Art Martial Proficiency 
+1-2 1 
+Wu Xing Quan: You are a 
+master of the 5 animals style 
+and can imitate their 
+movements. 
+Dragon - spirit 
+Tiger - courage 
+Crane - elegance 
+Snake - lethality 
+Leopard - speed 
+1-2 2 
+Long weapons: You are a 
+master in using the spear, 
+trident, and halberd, distance 
+keeping weapons. 
+Armed combat 
+Defensive Barrier 
+Sweep 
+1-2 3 
+Blunt weapons: You are a 
+master in using hammer, 
+tonfa, and nunchaku, weapons 
+that favor power over elegance. 
+Armed combat 
+Stunning blow 
+Smash 
+7 
+
+ 
+1-2 4 
+Edged weapons: You are a 
+master in Jian and Dao 
+weapons, swords and sabers, 
+symbols of martial virtue. 
+Armed combat 
+Charisma 
+Coordination 
+1-2 5 
+Improvised weapons: You are a 
+master in the use of fans, 
+stools, umbrellas, throwing 
+tiles, etc. You can always find a 
+weapon. 
+Armed combat 
+Ranged weapons 
+Surprise attack 
+1-2 6 
+Drunken style: As long as you 
+have alcohol, you can surprise 
+your enemy and ignore damage 
+from the first hit. You are 
+unpredictable. 
+Unarmed combat 
+Go unnoticed 
+Baffle 
+3-4 1 
+Iron fist style: You have trained 
+with metal rings, greatly 
+increasing your arms’ strength.  
+Unarmed combat 
+Brute strength 
+Hardened hands 
+3-4 2 
+Shaolin Quan: You are a 
+trained warrior in both armed 
+and hand to hand combat but 
+you cannot kill. Regarded as a 
+religious person you can beg 
+for food or lodging. 
+Non-lethal combat 
+Spirituality 
+Stamina 
+8 
+
+ 
+3-4 3 
+Cult of the Great Immortals: 
+Tricks or magic, people see you 
+as a superior being. You can 
+turn iron into gold, read 
+minds, walk on fire, etc. 
+Body conditioning 
+Transmutation 
+Foresight 
+Alchemy 
+3-4 4 
+Qin Na: You know the Xue Wei, 
+pressure points that control the 
+flow of Qi, and you can activate 
+them with your fingers. 
+Unarmed combat 
+Pressure Points 
+Healing 
+3-4 5 
+Shuai Jiao: A style practiced by 
+the northern  nomads. A 
+grappling art with throws, 
+takedowns and sweeps 
+Wrestling 
+Archer 
+Intimidate 
+3-4 6 
+Red Boat Wing Chun: A 
+close-quarters system 
+practiced within a shadow 
+organization operating across 
+territories. 
+Unarmed combat 
+Stealth 
+Brotherhood 
+5-6 1 
+Praying Mantis Style: Your 
+finishing blow is always lethal, 
+and you can hit small targets 
+with finger strikes. 
+Deadly combat 
+Precision 
+Cold-Blooded 
+9 
+
+ 
+5-6 2 
+Tiger Hooks: You are a master 
+of hooked swords, effective at 
+all ranges for cutting, piercing, 
+tearing, hooking. 
+Double strike 
+Disarming 
+Versatile Weapon 
+5-6 3 
+Double Knives: You are a 
+master of Lu Jiao Dao and 
+Hudie Shuang Dao, effective 
+against long weapons and at 
+close range. 
+Double strike 
+Acrobatics 
+Disarm 
+5-6 4 
+9-Section chain whip: You are a 
+master in Jiu Jie Bian, a 
+concealable weapon capable of 
+entangling your opponents. 
+Armed combat 
+Entangle 
+Quick draw 
+5-6 5 
+Wudang Quan: An ancient style 
+linked to ancestral rites. You 
+can use Rituals in combat.   
+Unarmed combat 
+Occultism 
+Astrology 
+5-6 6 
+TaiJi Quan: A style with fluid, 
+circular movements, favoring 
+the use of inner strength. 
+Unarmed combat 
+Manipulate force 
+Balance 
+ 
+ 
+10 
+
+ 
+Training 
+The Training skill allows you to learn Techniques and Rituals. 
+The difference between them is in the activation time: 
+Techniques are immediate and can also be used in combat, 
+while Rituals require preparation time, such as invoking a 
+deity, meditation, or physical exercise. 
+To obtain the Training skill, during character creation, 
+subtract points from the SKILL attribute (1 SKILL point = 1 
+Training point). 
+The total SKILL attribute will thus be permanently 
+reduced, but without affecting the total points to be spent 
+during character creation for your Martial Proficiencies. 
+For each Training point spent, you gain 4 points to spend on learning 
+Techniques and Rituals from the tables below. 
+In the game, use Training skill as one of your Martial Proficiency, but keep 
+in mind that performing these movements or practices requires mental 
+and physical effort, so you lose as many ENDURANCE points as indicated 
+(from 1 to 4). 
+E.g. You  roll SKILL=9 at creation for a Master in  Improvised Weapons deciding to 
+assign 2 points to the Training skill. You have now 8 Resource points to spend in 
+Technics and Rituals; 9 SKILL points to assign in  Armed combat, Throwing 
+weapons or Surprise attack (Martial Art Proficiencies); but your final SKILL points 
+will be 7.  
+11 
+
+ 
+Techniques Table 
+1d6 1d6 Technique 
+1 
+1 Blue Dragon - Qing Long (1): You can run on water 
+2 Butterfly Palms - Die Zhang(1): You can hit two opponents 
+3 
+Chain Fists - Lian Huan Quan(2): Attack 3 times, then suffer 
+3 attacks 
+4 Crane’s flight- Fei He(1): You jump tens of meters 
+5 
+Crushing Blow - Ding Quan (2): Knock down an opponent 
+shorter than you. 
+6 
+Downwind Ears - Shun Feng Er (2): You can hear sounds 
+even from miles away 
+2 
+1 Eagle Claw - Ying Zhao(1): Lift up to 1000 Jin (500 kg) 
+2 
+Exploding Qi - Fa jing (2): Create a circle of energy that 
+repels those around you 
+3 
+Hand of 1000 characters - Qian Zi Zhou(1): Your blow leaves 
+a scar shaped like an ideogram 
+4 Iron Bridge - Tie Qiao(1): You become immovable 
+5 
+Iron Broom - Tie Sao (2): A blow that incapacitates your 
+opponent's lower limbs 
+12 
+
+ 
+6 
+Iron Head - Tie Tou Gong(2): By channeling Qi to your head, 
+you can achieve an indestructible skull 
+3 
+1 
+Iron Palm - Tie Zhang(1): Your hands become harder than 
+steel 
+2 
+Iron Shirt - Tie Shan(2): If an unarmed blow hits you, you 
+damage your opponent 
+3 
+Light Body - Jin Shen Gong(2): Jump to kick all opponents 
+surrounding you 
+4 
+Lizard climbs the Wall - Bihu Yu Qiang Shu (1): Climb any 
+surface 
+5 
+Monkey Jump - Hou Zung (1): You jump behind your 
+opponent unseen 
+6 
+Piercing through stones - Dian Shi Gong(2): By focusing Qi 
+on your fingertips, you can penetrate objects 
+4 
+1 
+Poisonous Bird - Zhen Niao (2): Your blow disturbs the flow 
+of Qi, causing sickness in your opponent 
+2 
+Pushing the Horse - Tui Ma(1): Give an order to a sentient 
+animal 
+3 
+Rising Wave Strike - Shui Lang Qui (1): Unleash a disruptive 
+air wave in front of you 
+4 
+Rock-Splitting Tiger - Kai Shan Hu (2): By focusing Qi in the 
+cut of your hand, you can break any object 
+13 
+
+ 
+5 
+Shooting Star Kick - Ti Cheng Chui(1): Kick an incoming 
+projectile back 
+6 
+Sky punching fist - Tong Tian Quan(2): Knock down an 
+opponent taller than you 
+5 
+1 Snake Form - She Xing(2): You become extremely flexible 
+2 
+Spinning kick - Hou Bai Tui (1): Knock out your pursuer to 
+the ground 
+3 
+Spirit to flesh - Huan Hun Yun Qing (4): Give a spirit or 
+ghost physical form 
+4 
+Spirit-Summoning Fist - Huan Hun Quan(4): If your next 
+strike is fatal, the opponent's spirit remains bound to you 
+5 Sticky Hands - Chi Shou(1): Steal an object unnoticed 
+6 
+Taming the Tiger - Gong Zi Fu Hu(1): Your fighting spirit 
+keeps sentient animals away 
+6 
+1 
+Tear out a phoenix’s eye - Feng Yan Zhao Chou (2): Press a 
+pressure point to enhance your vision 
+2 
+Three Stars Fist - San Sing Quan (2): Strike one of three 
+points to cause temporary loss of sight, smell, or voice 
+14 
+
+ 
+3 
+Tiger Roar - Hu Xiao(1): You emit a sound that intimidates 
+those around you 
+4 
+Unicorn Step - Qilin Bu(1): By channeling Qi into legs, you 
+can run very fast 
+5 
+Void Boxing- Wuji Quan(2): Disappear from the plane of 
+existence for a few seconds 
+6 
+Water Splitting Move - Fen Shui Gong(2): You can swim 
+underwater beyond human limits 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+15 
+
+ 
+Rituals Table 
+1d6 
+1d6 Ritual 
+1 
+1 
+Acting without acting - Wei Wu Wei(3): Meditate and 
+generate two random events: one positive and one negative. 
+2 
+Acupuncture - Zhen Jiu(1): Treat an injury or spiritual 
+dysfunction  
+3 
+Body and Mind balance - Zheng Qi (2): Swap your current 
+SKILL and ENDURANCE points, without exceeding the 
+initial value. 
+4 
+Book of Changes - Yi Jing(2): By studying the texts, you 
+predict future events 
+5 
+Door gods - Men Shen (2): An invocation that keeps evil 
+spirits away 
+6 
+Geomancy - Fengshui (1): Find the right direction to your 
+destination 
+2 
+1 
+God of Money - Cai Shen(3): An invocation for good luck in 
+business 
+2 
+God of Plagues - Wen Shen (4): An invocation to curse a 
+place 
+3 
+God of Rain - Yu Shen (2): An invocation to change the 
+weather 
+16 
+
+ 
+4 
+King of the Underworld - Yan Wang(4): Summon the spirit 
+of a dead person and ask them a question 
+5 
+Light and shadow - Yin Yang (2): By channeling Qi into your 
+hands, you can create a burning pole and a frozen pole 
+6 
+Lord of the Bow - Hou Yi (2): Your next shot automatically 
+hits its target 
+3 
+1 
+Lord of the Sea - Hai Shen (2): An invocation to influence 
+currents and winds. 
+2 
+Mother of Lightning - Dianmu (4): During a thunderstorm, 
+you can summon lightning to a visible location 
+3 
+Mystical Fire - Sanmei Zhenhuo (4): Summon a fire that can 
+only be extinguished with magic 
+4 
+Older Brother - Shi Xiong (4): Recruit a disciple who follows 
+you everywhere to learn your techniques 
+5 
+Open the mouth, close the mouth - Kai Kou Bi Kou (2): you 
+understand what is right and wrong to say during a 
+conversation 
+6 
+Outer Gate - Wai Men (1): You know how to find the way that 
+leads out 
+4 
+1 
+Protective Demon - Ye Cha (4): Summon a minor deity for a 
+short time to assist in combat 
+17 
+
+ 
+2 
+Pulling Silk Threads - Yi Xian Chuan (3): Move a person's 
+limb at will 
+3 
+Punishing the sky - Xingtian (4): You come back to life with 
+reduced ENDURANCE points 
+4 
+Real Person - Zhenren (2): You can tell if someone is lying 
+with just a few words 
+5 
+Silence gate - Jingzi Menzhong (2): A meditation that allows 
+you to ignore hunger and thirst 
+6 
+Somersault clouds - Jindou Yun(3): You can fall from great 
+heights as if walking on clouds 
+5 
+1 
+Tea ceremony - Chiayi(3): Host someone for a tea to 
+convince them of your proposal 
+2 
+Tempering Steel - Bintie (4): You are skilled in improving 
+blades’ quality 
+3 
+The 5 phases - Wuxing (3): Transform small amounts of 
+matter in the direction: →water→wood→fire→earth→metal→ 
+4 
+The 72 transformations - Qishi Er Bianhua (4): You turn into 
+any creature for a short time 
+5 
+The Eight Celestial Drunkards - Ui Jiu Ba Xian (4): Summon 
+unknown deities who wreak havoc on the scene 
+18 
+
+ 
+6 
+The Golden Bell - Jin Zhong Zhao(4): A long conditioning 
+makes your body indestructible for a short period of time 
+6 
+1 
+The Way of Tao - Dao De Jing(3): Every event brings with it 
+its opposite; you just need to pay attention to details 
+2 
+Tightening spell - Jingu (2): A spell that causes a 
+tremendous headache 
+3 
+Violin - Xiqin(3): Playing a particular melody can induce 
+hypnosis 
+4 
+Vital Breath - Qi Gong (1): Exercises for spiritual 
+regeneration 
+5 
+Wheel of Existence - Youlun (3): By observing a person, you 
+learn about their past life and a hidden secret 
+6 
+White Guanyin - Baiyi Guanyin (2): Recite a mantra that 
+helps you in benevolent actions 
+ 
+ 
+ 
+ 
+ 
+ 
+19 
+
+ 
+      ZHEN ● Actions 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+20 
+
+ 
+21 
+
+ 
+Actions 
+There are two ways to determine the success of an action: 
+● SKILL check: When you have to decide the outcome of an action 
+that depends directly on the Master's skills. The threshold is equal 
+to SKILL + Martial Proficiency points (if relevant). 
+ 
+● LUCK check: When you have to decide the outcome of an action 
+that does not depend on the Master's skills, but on external 
+factors.  
+In both cases, roll 2d6 and compare the result with the relevant attribute. If 
+the result is equal to or lower, the check is successful. Otherwise, it is a 
+failure. 
+After making a LUCK check, subtract one point from the total LUCK value, 
+regardless of the outcome. If you succeed, the check is successful. 
+Otherwise, you have been unlucky. 
+ 
+22 
+
+ 
+Combat 
+To resolve a combat, calculate the Attack Strength for both you and your 
+opponent: 
+Roll 2d6, add the result to the value of one relevant Martial Proficiency (if 
+any) and to your SKILL points, the result is your total Attack Strength 
+(=2d6+Martial Proficiency+SKILL) 
+If your opponent has the higher Attack Strength, they damage you, 
+subtracting the difference between the two Attack Strengths from your 
+ENDURANCE. 
+If your Attack Strength is higher  than your opponent, you can do one of 
+the following: 
+○ Subtract the difference in Attack Strengths from 
+your opponent’s ENDURANCE. 
+○ Use one of the Techniques you know 
+○ Change or recover a weapon 
+○ Create an Opening 
+The combat continues until: 
+○ You succeed in landing a Final Blow  
+○ Your opponent's or your ENDURANCE points reach zero 
+○ An Unexpected Event occurs 
+23 
+
+ 
+Use a technique 
+You can use one of the Techniques you know without making a roll check, 
+but you must subtract as many ENDURANCE points as the value of the 
+Technique. 
+In times of need, the Master can concentrate internal energy and perform 
+a spectacular action without failing.  
+To make the fights more challenging, do not use the Technique to end a 
+fight; even if you can knock down an opponent, it does not mean that they 
+are defeated, but that you have gained a great advantage, or the chance to 
+escape without consequences. 
+Creating an Opening 
+You do not damage your opponent, but your last attack has exposed a 
+weakness in your opponent or made them harmless. You can take 
+advantage to deliver a Final Blow.  
+24 
+
+ 
+Final Blow 
+After creating an opening, roll 2d6. If both dice show the same number, 
+your blow lands, giving you the chance to deliver a devastating strike. 
+To add  this new Technique to your Martial Arts knowledge, roll against 
+your current LUCK. On a failure, lose 1 LUCK; on success assign it a value 
+(1–4) with a brief description. For inspiration, roll  2d6 on the following 
+table, the attributes suit both the action and the animal. 
+E.g. Destroying Palm of the Turtle / Palm of the Destroyer  Turtle / Deadly Palm of 
+the Destroyer Turtle 
+E.g. New technique: Impetuous Slap of the Phoenix (2). I jump and strike my 
+opponent's cheek, leaving a red scar on their face.  
+E.g. New technique:  Spiritual Headbutt of the Unicorn (4). I project an energy 
+wave towards my opponent, who loses memory of the fight. 
+E.g. New technique: Fox's Spinning Jump (1):  a sudden kick and I find myself in 
+the crowd, escaping the fight  
+ 
+ 
+ 
+ 
+ 
+ 
+25 
+
+ 
+ Final blow table 
+1d6 1d6 Action Attribute Animal 
+1-2 
+1 Strike Furious Dragon 
+2 Kick Spinning Tiger 
+3 Punch Celestial Crane 
+4 Headbutt Infernal Serpent 
+5 Palm Fiery Scorpion 
+6 Fingers Explosive Leopard 
+3-4 
+1 Cut Impetuous Monkey 
+2 Flight Rocky Phoenix 
+3 Leap Stellar Taurus 
+4 Charge Flying Turtle 
+5 Slap Legendary Leopard 
+6 Knee Strike Deadly Lion 
+5-6 
+1 Parry Spiritual Eagle 
+2 Block Demonic Falcon 
+3 Attack Poisonous Fox 
+4 Defense Lightning Mantis 
+5 Sprint Destructive Horse 
+6 Sweep Sharp Unicorn 
+26 
+
+ 
+Unexpected event 
+When the final result of an attack roll ends in a draw (you and your 
+opponent have the same Attack Strength), an Unexpected Event occurs. It 
+does not necessarily have to be an extreme incident, but can also be a 
+simple diversion. 
+ After an Unexpected Event, you are no longer in the combat phase. 
+Imagine the two opponents still in the attack position, crossing their 
+weapons and staring into each other's eyes for seconds... then something 
+happens. If it is not clear from the ongoing narrative, roll on the following 
+table: 
+ 
+ 
+ 
+ 
+27 
+
+ 
+2d6 Unexpected Event 
+2 Adverse divine intervention 
+3 Injury or loss of weapon for the Master 
+4 Enemy retreat (called back, secret plan, etc) 
+5 Environmental change (floor/ceiling collapses, light, climate) 
+6 The fight resumes 
+7 
+Reinforcements: 1-4 Minions
+1
+  of the same type 
+8 The fight resumes 
+9 Environmental change (floor/ceiling collapses, light, climate) 
+10 Enemy retreat (called back, flees, etc) 
+11 Injury or loss of weapon for the opponent 
+12 Favorable divine intervention 
+1
+To streamline combat while maintaining the idea of a chaotic scene, you can 
+consider Minions with ENDURANCE=1; if you hit you can remove one minion  
+For divine intervention or to generate random deities, you can roll on the 
+following table.  
+ 
+28 
+
+ 
+Table of Deities 
+1d6 1d6 Name Action Object 
+1-3 
+1 Rakshasa  Protector  Purity  
+2 Immortal Guardian  Benevolence 
+3 Bodhisattva Lord Underworld 
+4 Great Sage  Destroyer Prosperity 
+5 Divinity  Guardian 5 elements 
+6 Emperor Enemy Moon 
+4-6 
+1 Venerable Dispenser Sun 
+2 Star Occulter Night  
+3 General Sovereign Earth 
+4 Spirit Creator 4 seas 
+5 Buddha Destroyer Confusion 
+6 Dragon Defender Dreams 
+ 
+ 
+29 
+
+ 
+Multiple Combat 
+Reduce your SKILL points by an amount equal to the 
+number of opponents you face.Remember that some 
+Techniques or Martial Proficiencies can help you in multiple 
+combat: in case of a successful attack, distribute the same 
+amount of damage to the enemies.  
+E.g. you have the Martial Proficiency Double Strike, your attack 
+against 3 opponents causes 4 damage; two of them will suffer 4 
+damage. 
+The opponent’s ATTACK attribute (see Opponents pg. 70) 
+indicates how many enemies can attack at the same time. 
+Escape 
+During a fight, if you think the enemy is too tough, you can 
+flee. If you have not used a Technique or some other 
+stratagem for a daring escape, suffer a last blow and 
+subtract 2  points from your ENDURANCE.  
+Score 1 Dishonor Point for each time you fail to escape 
+without suffering damage. At the end of the adventure, your 
+Dishonor Points will affect your total Experience Points (see 
+Experience and Advancement pg. 34). 
+30 
+
+ 
+Healing 
+ 
+● SKILL: this attribute isn’t usually affected, but if it is, you can 
+restore part of it (1 point) with spiritual regeneration Techniques. 
+It recovers completely after a full night's rest. 
+ 
+ 
+● ENDURANCE: partially recovers (4 points) with healing 
+techniques, spiritual regeneration, eating a meal, or with a Health 
+Elixir. It recovers completely with a week’s rest. 
+ 
+ 
+● LUCK: partially recovered (1 point) with a Spirituality roll check in 
+a Temple (see Exploring the City pg. 47)  
+ 
+ 
+31 
+
+ 
+   SHENG ● Ascending 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+32 
+
+ 
+33 
+
+ 
+Experience and Advancement 
+At the end of each adventure, assign a number from 1 (poor) to 3 (excellent) 
+for each of the following: 
+● Mission Success 
+● Use of equipment and environment 
+● Combat spectacularity 
+● Lateral thinking 
+Add the four values together and subtract your Dishonor Points (see 
+Escape pg. 30) from the total to obtain the XP you can spend on 
+advancement. A Master with low SKILL points will have more 
+opportunities to improve their martial Proficiencies; a Master with a high 
+SKILL level will have almost reached perfection in their style and will be 
+able to expand their knowledge in other areas. 
+Use this table to determine the XP needed to increase the Master's 
+attributes by 1 point: 
+ Master's SKILL points 
+ 6 or less 7-9 10-12 
+Martial Proficiency 6 XP 8 XP 10 XP 
+SKILL 8 XP 10 XP 12 XP 
+ENDURANCE 4 XP 4 XP 4 XP 
+LUCK 10 XP 8 XP 6 XP 
+Training skill 10 XP 8 XP 6 XP 
+34 
+
+ 
+SKILL and LUCK attributes cannot exceed 12 points, while Martial 
+Proficiency can exceed the initial maximum value of 4. 
+To learn new  Techniques or Rituals, you will need to increase your 
+Training Skill (by spending XP). 
+E.g. Master Lee:  SKILL=11 LUCK=9 ENDURANCE=24 
+In saving the governor's son from the  bandits, Master Lee obtained the following: 
+Mission success: 2  
+Use of equipment and environment: 3  
+Combat spectacularity: 1  
+Lateral thinking: 3 
+Dishonor points: 1 
+Total= 8 
+With 8 XP, I can choose to increase ENDURANCE by 1 or 2 points (4 XP) or my 
+LUCK by 1 point (6 XP); or I can increase my Training skill  by 1 point (6 XP), 
+obtaining 4 Resource Points to spend on learning new Techniques or Rituals. 
+Any remaining XP will remain available to spend on the next advancement. 
+ 
+ 
+ 
+35 
+
+ 
+Adventures 
+1d6 1d6 Adventure 
+1 
+1 
+An enemy school has killed your master and all your 
+companions. You are the last survivor who can avenge 
+them 
+2 
+Unknown killers have murdered your father. You must find 
+your brothers and seek revenge 
+3 Strange animal attacks on a mountain pass threaten trade 
+4 
+A ghost haunts a palace, making life impossible for its 
+inhabitants 
+5 
+Nomads from the north have attacked a village on the 
+border; the governor is looking for talented men 
+6 
+An isolated village has stopped paying taxes. You are sent 
+to gather information 
+2 
+1 One city, two martial arts schools at war for decades 
+2 You must escort a Mandarin to a newly conquered province 
+3 
+A corrupt official tries to expropriate your family's 
+property 
+36 
+
+ 
+4 
+Thieves have stolen a sacred object from a monastery, and 
+the abbot is looking for volunteers to find it 
+5 
+A martial arts tournament is held every year on a remote 
+island; only one will survive 
+6 
+A monk is worshipped as a god. The local deities appear to 
+you in a dream, asking to put an end to it 
+3 
+1 
+You wake up to find your family slaughtered, you see only a 
+one-armed figure running away 
+2 
+Although the task is impossible, there is nothing else to do; 
+you must kill the emperor 
+3 
+In a cave hidden by a waterfall, it is said that there are 
+monkeys with magical powers 
+4 
+A nobleman pays you to teach his inept heir how to become 
+strong and brave 
+5 
+You are wrongly accused of murder and there is a bounty 
+on your head 
+6 
+To defeat a demon, you must find an ally and create a new 
+dual technique 
+4 1 
+The new Manchu emperor is about to launch an attack on 
+the last rebel monastery 
+37 
+
+ 
+2 
+Your master has taught his skills to five other people. You 
+must find out if they have turned evil and, if so, kill them 
+3 
+A Japanese warship has just landed on the coast, spreading 
+panic 
+4 
+A troop of European colonialists has occupied a port city 
+and rules it with an iron fist 
+5 
+You are tormented by a spirit and must find a way to get rid 
+of it 
+6 
+You have been struck on a pressure point and will die in 7 
+days, unless... 
+5 
+1 
+You must accompany a Buddhist monk to India to retrieve 
+the sacred scriptures 
+2 
+A village is being preyed upon by bandits. You must teach 
+everyone who is willing to fight in order to stop the next 
+attack 
+3 
+You must infiltrate a criminal organization using an 
+invitation to a tournament as a cover 
+4 Bandits have kidnapped the governor's son 
+5 On your wedding day, a demon kidnaps your partner 
+38 
+
+ 
+6 
+There is a mysterious killer who murders everyone with 
+your surname 
+6 
+1 A prince seeks your help, an impostor has taken his place 
+2 
+For months, the village's harvests have been poor and the 
+crops rot quickly 
+3 You find out that you have an evil twin brother 
+4 
+A pupil attacks you in your sleep. Thought dead, you wake 
+up in your coffin 
+5 
+An enraged dragon causes continuous tsunamis on some 
+coastal villages 
+6 
+You are under the magical influence of a criminal who uses 
+you as a ruthless assassin for his own ends 
+ 
+        
+39 
+
+ 
+         LǙ ● Traveller 
+ 
+ 
+ 
+ 
+ 
+ 
+40 
+
+ 
+41 
+
+ 
+Exploration 
+Follow these steps to explore the world: 
+1. Establish a starting city and determine its Resources by rolling on 
+the Region Exploration table. 
+2. Follow the Region Exploration procedure and determine the 
+surrounding locations (consider the starting city in the center). 
+3. If you decide to travel and explore, roll to determine the 
+characteristics of the locations you want to visit. 
+4. When you move to a location or start a new scene, roll for an Event 
+to determine what happens. 
+5. If the Event involves an encounter, roll on the Oracle’s Encounter 
+Outcome row pg. 58. If the result is Attack or Ambush, start a 
+combat; otherwise, roll on the NPC or Creature Reaction row. 
+6. If you find a Monastery, you may decide to enter and explore it. 
+Follow the Monastery generation procedure. 
+7. When in doubt, use the Oracle tools to determine the answers you 
+would normally ask the Game Master.  
+ 
+ 
+ 
+42 
+
+ 
+Exploring the Region 
+To create a region of unexplored lands, roll a handful of d6 on a sheet of 
+paper. Mark where the dice land. The value on the visible face corresponds 
+to the Location. Roll additional d6 to determine other characteristics, if 
+necessary. 
+Remember to place your starting city in the center of the map. 
+d6 Location Landmark Resources Risk Event 
+1 City Monastery 
+Medicinal 
+herbs 
+Low Encounter 
+2 Mountain 
+Hermit's 
+Refuge 
+Elixir Low Rest 
+3 Plain 
+Martial arts 
+school 
+Sacred relics Medium 
+Effect 
+Expiration  
+4 Forest 
+Frontier
+1 
+Magic 
+Weapons 
+Medium 
+Weather 
+Change 
+5 Rice fields Empty Jade High Hint 
+6 Water Empty 
+Ancient 
+Texts 
+High 
+Free 
+Exploration 
+1
+marks the border of imperial law: a barbarian territory, a magical kingdom or a rebel enclave 
+ 
+43 
+
+ 
+To determine the distance between places, consider the distance between 
+the dice and decide on an arbitrary scale (hours of travel, kilometers, 
+number of scenes, etc.). For the route type, roll 2d6 on the following table: 
+2-3 4-5 6-8 9-10 11-12 
+Nothing Mule track Trail Beaten path Paved road 
+On the busiest roads you may find: 
+Inn: A multi-story building offering food and lodging 
+ to travelers. The perfect place for ambushes; in the  
+ event of fighting, the stairs will tend to collapse. 
+Guard post: marks the passage to a different county, guards check 
+travelers' passports to verify if they are in order.  
+Rope bridge: the road is interrupted by a chasm or a watercourse,  
+and a suspension bridge has been set up for passage. You can only cross 
+one at a time, and fighting on it without good balance could be fatal. 
+To randomly determine their presence on the roads, roll 1d6: 
+1-2 3-4 5 6 
+Nothing Inn Rope bridge Guard post 
+ 
+44 
+
+ 
+Explore the Monasteries 
+To create a monastery, roll a handful of d6. The value on the visible side 
+corresponds to the Location. Roll additional d6 to determine other 
+characteristics, if necessary. If you want to create the monastery as you 
+explore it, roll only for the first Location and then the next one when you 
+explore a new area. In a monastery, you can find outdoor and indoor 
+locations, buildings, or natural environments such as ponds or bamboo 
+groves.  
+d6 Location  
+Location 
+Function 
+Openings Atmosphere Event 
+1 Corridor Treasure 1 Mysterious Encounter 
+2 Courtyard Trap 2 Tense Rest 
+3 Room Altar 2 Spectral 
+Effect 
+Expiration 
+4 
+Pagoda
+ 
+Meditation 3 Desolate 
+Conditions 
+Change 
+5 Hall Cemetery 3 Mystic Hint 
+6 Staircase Dormitory 4 Eerie 
+Free 
+exploration 
+ 
+45 
+
+ 
+Explore the cities 
+The city you are staying in is not just a shelter, but a living place where your 
+adventures can begin and develop.  
+Explore some of the city's locations to interact with people who may help, 
+or hinder, your plans.  
+ 
+Gambling House 
+Here you can play Fantan or Sic Bo and hope to earn a few coins; but be 
+careful, if you are too lucky, they will make it clear that it is time to go 
+home. 
+To settle a bet, decide on the amount, then you and the Dealer (see 
+Opponents pg.  71) roll 2d6: use your current LUCK points, adding any 
+points from a Martial Proficiency that may help you, and the Dealer uses 
+their SKILL points. Whoever gets the highest score wins the bet. 
+ If you don't have the money to pay, a fight begins. You do not have to 
+decrease your LUCK points when rolling for a bet. 
+46 
+
+ 
+Temple 
+Whether it's a large complex or a small altar among the shacks, it doesn't 
+matter, here you will always find flowers, people using divination tools 
+such as Jiaobei, and a cloud of smoke rising from an incense burner. 
+If you have incense, you can attempt a Spirituality check (SKILL check plus 
+any Martial Proficiency or Technique that may help you) at the three stars 
+of good fortune - Sanxing. If successful, you recover 1 LUCK point. 
+Abusing the patience of the gods could cause the opposite effect, or worse, 
+bring a curse upon yourself. 
+ 
+Central District 
+Administrative and residential center for magistrates, mandarins, and 
+nobles. Luxurious Siheyuan, courtyard houses, surrounded by neat 
+avenues. 
+The area is protected by walls, with guards at the four cardinal entrances 
+and patrols with lanterns on the streets at night. 
+Entering here armed or dressed in common clothes will not be easy. 
+47 
+
+ 
+Market 
+Not a square, but a series of streets divided by type of merchandise in an 
+orderly chaos of shouting, food, animals, beggars, street performers, 
+puppeteers, scammers... one wrong move can create chaos with 
+unpredictable consequences. 
+You can find everything you're looking for, but don't expect to resell your 
+goods at full price unless you're a skilled negotiator. 
+City Walls 
+To respect cosmic symmetry, a large city should have three entrances on 
+each side, a medium city one entrance on each side, and a small one 
+entrance on the south side. 
+Each entrance is controlled, closed at night by iron gates and surmounted 
+by a tower. The walls are walkable and made of brick. 
+Guards stamp passports on entry and exit; passing quickly or unseen is 
+very difficult. 
+ 
+ 
+ 
+ 
+48 
+
+ 
+Hutong 
+A maze of narrow streets separates the more modest courtyard houses of 
+ordinary citizens: merchants, artisans, professionals. Here everyone 
+returns to rest after a day's work, to enjoy the silence of the night. 
+It is easy to get lost, but also to cover your tracks. If the streets seem quiet, 
+look up and keep an eye on the rooftops. 
+ 
+Chaguan 
+The tea room, a place to relax and socialize. Over a cup of green tea or a 
+chess game, people discuss business, job offers, and resolve disputes. 
+The presence of a small stage attracts artists for theater performances, 
+storytellers, and acrobats. 
+If you want to show off, you can play Chinese chess or Go: 
+Make a Concentration check (SKILL check plus any Proficiency or 
+Technique/Ritual that may help you). If you pass the check, roll 2d6. With a 
+double result, you have demonstrated your superiority and won the game. 
+If you fail the Concentration check, reduce your ENDURANCE by 1; it's an 
+exhausting game. Continue until you win or abandon the game. 
+49 
+
+ 
+City Services 
+Every city is equipped with all basic services such as a blacksmith, inn, 
+magistrate, shops, administrative offices, etc; if you are looking for a 
+particular service, you can consult this table to get an idea of how much it 
+might cost.  
+Service Price 
+Fortune teller 3 GP (per question) 
+Astral chart 18 GP 
+Herbalist 8 GP (per dose) 
+Acupuncture 12 GP (per session) 
+Geomancer 25 GP 
+Bodyguard 80 GP (per day) 
+Messenger 
+2 SP (per km or hour) 
+Scribe 5 SP (per letter) 
+Funeral 50-200 GP 
+Litter bearer 8 SP (per km or hour) 
+Confucian library free offering 
+                      
+50 
+
+ 
+City encounters 
+As you walk around  your city, you may run into someone you already 
+know. They could be key figures or  stall merchants. Roll on the table to 
+randomly determine the nature of your connection and their traits. 
+1d6 1d6 Connection Trait 
+1-3 
+1 owes you money Loyalist 
+2 outfought  you Broken 
+3 hates you Cruel 
+4 loves you Stingy 
+5 knows your secret Naive 
+6 owed money by you Hot-headed 
+4-6 
+1 is a distant relative Honest 
+2 is an  enemy’s enemy Chatter 
+3 is a childhood friend Rebel 
+4 betrayed you Liar 
+5 wronged  you Vain 
+6 is a rival Undercover 
+ 
+ 
+51 
+
+ 
+Market 
+You can visit the Market to find everything you need. If it is not listed, find 
+a similar item to get an idea of the price 
+1 gold piece (GP) is worth 10 silver pieces (SP). 
+Common Items 
+Item Price 
+Incense 5 SP 
+Lantern 1 GP 
+Torch 1 SP 
+Musical Instrument 12 GP 
+Wicker Backpack 2 GP 
+High-quality tea 5 SP 
+Rations (per day) 5 GP 
+Health Elixir 25 GP 
+Smoke Bomb 25 GP 
+Protection Amulet 40 GP 
+Map of Body Meridians 70 GP 
+Training Manual 100 GP 
+Gunpowder 85 GP 
+Acupuncture Needles 4 GP 
+52 
+
+ 
+Weapons 
+ Although weapons do not directly affect the dice roll, some martial arts 
+specialize in certain types of weapons; if you do not have a weapon, do not 
+add the specialization points.  
+Weapon Price 
+Sword 13 GP 
+Saber 10 GP 
+Tonfa 8 GP 
+Halberd 18 GP 
+Bow 15 GP 
+Dagger 5 GP 
+Trident 
+16 GP 
+Mace 9 GP 
+Long staff 5 GP 
+Butterfly knives 10 GP 
+Spear 12 GP 
+Dart 1 GP 
+Rope Dart 6 GP 
+3-section staff 10 GP 
+53 
+
+ 
+Expedition Equipment 
+Whether or not you possess these items affects your ability to interact with 
+the world. For example, you cannot climb without a rope or light a fire 
+without a flint. 
+Item Price 
+Tent 10 GP 
+Bamboo mat 2 GP 
+Kite 1 GP 
+Travel tea set 4 GP 
+Rope 2 GP 
+Flint 1 GP 
+Field knife 
+4 GP 
+Compass 10 GP 
+Topographic Map 10 GP 
+Douli hat  2 GP 
+Hook and Line 3 GP 
+Cart 20 GP 
+Trained monkey 75 GP 
+Horse 50 GP 
+Mule 25 GP 
+Paper and Ink 8 GP 
+Candle Clock 15 GP 
+Grapple 7 GP 
+54 
+
+ 
+Armor 
+Protections have no effect on the dice roll; martial artists rarely use them if 
+they limit their movements, but in some cases they can influence the 
+narrative development of a scene.  
+ 
+Item Price 
+Large Wicker Shield 6 GP 
+Small Bronze Shield 10 GP 
+Iron Fan 15 GP 
+Complete War Armor 150 GP 
+Reinforced Douli Hat 10 GP 
+Iron Helmet 18 GP 
+War Mask  
+25 GP 
+Steel Helmet with Neck Guard 50 GP 
+Leg Bandages 
+3 GP 
+Arm Bandages 3 GP 
+Iron Rings 
+15 GP 
+ 
+55 
+
+ 
+    XUN ● Proceeding 
+ 
+ 
+56 
+
+ 
+57 
+
+ 
+Oracle 
+ 
+Consult the Oracles when dealing with uncertainty about information or 
+abilities beyond the Master's knowledge (typically questions you would ask 
+the Game Master). 
+There are several categories of Oracles available, one for each row of the 
+following table: 
+ 1 2 3 4 5 6 
+Closed Question No, and No No, but Yes, but Yes Yes, and 
+Outcome Disaster Negative Positive Excellent 
+NPC reaction Hostile Wary Unaware Kind Helpful Flee 
+Creature 
+Reaction 
+Hostile Territorial Unaware Curious Docile Flee 
+Encounter 
+Outcome 
+Ambush Attack 
+NPC/Creature 
+Reaction  
+Enemy Type Minion Subordinate Warrior Boss 
+No. of enemies 1d6 3 2 1 
+Enemy attack Normal Special 
+Door Open Trapped Locked Closed 
+Object amount Finished One more Many remaining 
+Value 5 GP 10 GP 25 GP 50 GP 100 GP 250 GP 
+58 
+
+ 
+Inspirations 
+Inspiration can be invoked in the following cases: 
+1. You want to ask the Oracle an open question. 
+2. You are looking for a stimulus or suggestion. 
+Inspirations are used to suggest a discovery, an event, a character goal, or 
+a situation. Combine the rolls on both of the following tables to provide an 
+action and a subject. Then, interpret the result based on the context of the 
+question and your current situation. 
+Action 
+d66 1 2 3 4 5 6 
+1 Attack Investigate Search Close Avoid Save 
+2 Defend Create Climb Treat Influence Betray 
+3 Explore Heal Throw Jump Examine Overcome 
+4 Talk Meet Hide Sleep Give up Enrich 
+5 Fight Negotiate Disguise Protect 
+Create 
+illusions 
+Communi
+cate 
+6 Escape Travel Open Pursue Evoke  Challenge 
+ 
+ 
+59 
+
+ 
+Theme 
+d66 1 2 3 4 5 6 
+1 Adventure Choice Conflict Betrayal Honor Blessing 
+2 Magic Rebellion Friendship Rescue Power Curse 
+3 Mystery Spirituality Survival Discovery Faith 
+Redemptio
+n 
+4 Fight Secret Treasure Death 
+Reveal 
+tion 
+Courage 
+5 Exploration Deception Research Revenge 
+Techniqu
+e 
+Destiny 
+6 Encounter Mission Horoscope Freedom Darkness Tradition 
+Sparks 
+The following tables contain random words related to the theme of the 
+game and include names of generic objects and places. First roll a d6 to 
+determine which table to consult, then roll d66 to find the word. 
+The spark thus rolled should be interpreted intuitively in relation to the 
+context of the game. It will help make your adventure more vivid and 
+surprising. 
+60 
+
+ 
+Table 1 
+d66 1 2 3 4 5 6 
+1 Mace Coin Cloak Brooch Lotus Whip 
+2 Sword Pearl Bed Pendant Drum Lantern 
+3 Ring Sutra Brush Energy Flute Pipe 
+4 Elixir Lens Bridge Staff Mouse Buffalo 
+5 Relic Gem Amulet Poison Lute Crystal 
+6 Key Statuette Chain Tiger Emptiness Mirror 
+ 
+Table 2 
+d66 1 2 3 4 5 6 
+1 Brazier Pagoda Cup Incense Mask Candle 
+2 
+Meridia
+ns 
+Altar Bottle Shadow Broom Tomb 
+3 Helmet Dagger Pendant Shard Vase Die 
+4 Stele Rod Bell Teapot Noble Gate 
+5 Chess Curtain Seal Knife Ideogram Fan 
+6 Rosary Claw Eagle Rock Hourglass Mortar 
+ 
+ 
+61 
+
+ 
+Table 3 
+d66 1 2 3 4 5 6 
+1 set square Giada Bow Arrows Fur Bamboo 
+2 Blade Sled Manual Scar Nail Talisman 
+3 Star Black Wave Halberd Oil Bag 
+4 Grapevine Falcon Tree Walls Cliff Wood 
+5 Sack Tower Dark Belt Dust Puppet 
+6 Blanket Staircase 
+Chrysan
+themum 
+Bones Tunic Ink 
+ 
+Table 4 
+d66 1 2 3 4 5 6 
+1 Hat  Unicorn Ginseng Horse Desert Rooster 
+2 Rope Grass Silk Moon Fire Pyre 
+3 Bed Bench Bottle Feather Stone Storm 
+4 Globe Statue Inkwell Courtyard Bowl Dragon 
+5 Book Necklace Lock Student Trap Bandit 
+6 Wheel Inn Sphere Bear Dart Dog 
+ 
+ 
+62 
+
+ 
+Table 5 
+d66 1 2 3 4 5 6 
+1 Sea Compass Rain Metal Leather Emperor 
+2 Wind Needle Forest Saw Rice Gloves 
+3 Sun Passport Spear Cards Plow Pen 
+4 Rope Table Net Bandage Webs Column 
+5 Lightning Frontier Snake Pole Flame Kite 
+6 Horn Door Pig Fish Deer Torch 
+ 
+Table 6 
+d66 1 2 3 4 5 6 
+1 Leaf Sickle Spice Twilight Mine Volcano 
+2 Pumpkin Monkey Gong Portal Meadow Water 
+3 River Spark Spirit Valley Dawn Lake 
+4 Butterfly Sign Sign Swamp Treasure Island 
+5 White Map Sunset Light Ruins Cloud 
+6 Saddle Wax Tao Mountain Field Demon 
+ 
+ 
+63 
+
+ 
+      SONG ● Conflict 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+64 
+
+ 
+65 
+
+ 
+Encounters 
+To randomly determine an encounter, use the following table, rolling on 
+the relevant column. 
+If you need to roll for a Martial Art, the value in parentheses represents 
+how many points each Martial Proficiency has. 
+If you need to roll for s Technique or Ritual, add the value in parentheses to 
+the opponent's Attack Strength. Your opponent does not spend 
+ENDURANCE points to perform Techniques or Rituals. 
+Sometimes you will face spirits or ghosts, incorporeal beings immune to 
+traditional weapons or blows; you will need to use a technique, ritual, or 
+exceptional weapon to defeat them.  
+ 
+ 
+ 
+66 
+
+ 
+2d6 Urban Non-urban Water Supernatural Monastery 
+2 Gui Supernatural Kun Dapeng 
+Tutelary 
+Spirit 
+3 Mandarin Xiongu Shen Long Wang Shi Gong 
+4 Shi Fu Mercenary Smuggler Shan Xiao Shi Fu 
+5 
+Guard with 
+Sheng Biao 
+Monk Pirate Shi Shi Devotee 
+6 
+Guard with 
+Lian Ting 
+Beast 
+Giant 
+Octopus 
+Huang Feng 
+Guai 
+Shi Di 
+7 Brawler Bandit Tanka Huli Jing Tu Di 
+8 Shi Di 
+Green 
+Hornet 
+Shark Jiangshi Thief 
+9 
+Guard with Tie 
+Jian  
+Macaque 
+Giant 
+Jellyfish 
+Gui Cook 
+10 Thief  Gai Bang Kobukson Feng Huang Yogi 
+11 Boxer  Yauxia Pan Long Bai Gu Jing Attendant 
+12 Rebels  Supernatural 
+Ghost 
+Pirate 
+Niu Mowang First Abbot 
+67 
+
+ 
+Treasures 
+If you believe that your defeated opponents may be in possession of, or 
+guarding, something of valor, roll 1d6 and compare it with their 
+ENDURANCE: 
+1d6 Up to 16 17-19 20 or more 
+1 Nothing 1d6 GP 2d6 GP 
+2 1d6 GP 2d6 GP 3d6 GP 
+3 2d6 GP 3d6 GP 4d6 GP 
+4 3d6 GP 4d6 GP 5d6 GP 
+5 
+1d6 GP + 
+Common Item 
+2d6 + Common Item Special Item 
+6 
+2d6 GP + 
+Common Item 
+Special Item Special Item 
+ 
+ 
+68 
+
+ 
+Special Items 
+When required by the Treasure table, roll 2d6 on the following table to 
+determine the special item found. 
+2d6 Item 
+2 The rosary of Amitabha Buddha: If recited, it grants a miracle, single use  
+3 
+The hat of the Immortal Cao Guojiu: You are automatically recognized as 
+a mandarin/noble 
+4 The Bottle of the Immortal Li Tenguai: One sip can cure any illness  
+5 
+The castanets of the Immortal Lan Caihe: Their sound attracts the 
+attention of everyone present, stopping whatever they are doing  
+6 The sword of the Immortal Lu Dongbin: effective against spirits  
+7 
+The lotus flower of the immortal He Xiangu: restores LUCK and increases 
+it by 1, single use 
+8 
+The flute of the Immortal Han Xiangzi: It ends an 
+atmospheric/environmental effect  
+9 
+The phoenix feather of the immortal Zhang Guolao: you are destined to 
+die a natural death, ignore the next fatal blow 
+10 
+The Immortal Han Zhongli's Fan: Creates gold or silver (50/50) from 
+stone, equivalent in weight, single use  
+11 
+Sanzang's Passport: You can travel freely throughout the territory and 
+enter all urban centers 
+12 Sun WuKong's Staff: A weapon that extends and retracts on command  
+69 
+
+ 
+Opponents 
+Attendant 
+A mysterious figure often 
+missing a limb. 
+● SKILL 5 
+● ENDURANCE 8 
+● ATTACK 1 
+● Proficiencies: Technique 
+(4), Double Identity (3) 
+Bai Gu Jing 
+White Bone Demon who 
+deceives humans. 
+● SKILL 8 
+● ENDURANCE 17 
+● ATTACK 1 
+● Proficiencies: Charm 
+(3), Doppelganger (3) 
+Bandit 
+A ruthless thief and assassin. 
+● SKILL 6 
+● ENDURANCE 9 
+● ATTACK 1 
+● Proficiencies: Trap (3), 
+Ambush (3) 
+Beast 
+A tiger, leopard, or jaguar. 
+● SKILL 8 
+● ENDURANCE 18 
+● ATTACK 2 
+● Proficiencies: Bite (2), 
+Agility (3) 
+Boxer 
+A tall and sturdy European. 
+● SKILL 7 
+● ENDURANCE 20 
+● ATTACK 1 
+● Proficiencies: Uppercut 
+(2), Firearms (4) 
+ 
+70 
+
+ 
+Brawler 
+ A thug looking for trouble. 
+● SKILL 4 
+● ENDURANCE 4 
+● ATTACK 2-4 
+● Proficiencies: Call for 
+Reinforcements (2), 
+Dirty Trick (3) 
+Cook 
+The least religious member of 
+the monastery. 
+● SKILL 5 
+● ENDURANCE 10 
+● ATTACK 2 
+● Proficiencies: Cleaver 
+(4), Knife Throwing (3) 
+Dapeng 
+A mastodontic bird that 
+transforms into the Kun fish. 
+● SKILL 12 
+● ENDURANCE 24 
+● ATTACK 10 
+● Proficiencies: Tornado 
+(4), Storm (4) 
+Dealer 
+They play as long as it suits 
+them. 
+● SKILL 7 
+● ENDURANCE 6 
+● ATTACK 1 
+● Proficiencies: Cheating 
+(3), Rage-quit (4) 
+Devotee 
+A religious person marked with 
+Jieba. 
+● SKILL 4 
+● ENDURANCE 8 
+● ATTACK 1 
+● Proficiencies: Charm 
+(3), Invocation (2) 
+ 
+ 
+71 
+
+ 
+Feng Huang 
+A bird resembling a phoenix. 
+● SKILL 11 
+● ENDURANCE 17 
+● ATTACK 2 
+● Proficiencies: Fire 
+Breath (3), Ice Breath (3) 
+First Abbot 
+The spirit of the founder. 
+● SKILL 11 
+● ENDURANCE 6 
+● ATTACK 1 
+● Proficiencies: Martial 
+Arts (3) 
+Gai Bang 
+A member of the martial sect of 
+vagabonds 
+● SKILL 11 
+● ENDURANCE 10 
+● ATTACK 1 
+● Proficiencies: Knotty 
+Staff(2), Mark a Victim 
+(3) 
+Ghost Pirate 
+It sails on a spectral ship. 
+● SKILL 9 
+● ENDURANCE 12 
+● ATTACK 6 
+● Proficiencies: Diving 
+(4), Mirage (3) 
+Giant Jellyfish 
+A gelatinous monster with 
+spikes. 
+● SKILL 7 
+● ENDURANCE 10 
+● ATTACK 4 
+● Proficiencies: 
+Camouflage (3), Venom 
+(2) 
+ 
+ 
+72 
+
+ 
+Giant Octopus 
+A tentacled creature. 
+● SKILL 7 
+● ENDURANCE 14 
+● ATTACK 3 
+● Proficiencies: Trapping 
+(3), Ink (2) 
+Green Hornet 
+An insect with a deadly sting. 
+● SKILL 7 
+● ENDURANCE 18 
+● ATTACK 6 
+● Proficiencies: 
+Multi-Directional 
+Attack (2), Protect the 
+Nest (3) 
+Guard with Lian Ting 
+Two-section long staff. 
+● SKILL 8 
+● ENDURANCE 15 
+● ATTACK 1 
+● Proficiencies: Stun (2), 
+Throwing Weapon (2) 
+Guard with Sheng Biao 
+Rope with a weight at the end. 
+● SKILL 8 
+● ENDURANCE 15 
+● ATTACK 1 
+● Proficiencies: Trapping 
+(2), Throwing Weapon 
+(2) 
+Guard with Tie Jian 
+Quad-edged straight mace. 
+● SKILL 8 
+● ENDURANCE 15 
+● ATTACK 1 
+● Proficiencies: Disarm 
+(3), Throwing Weapon 
+(2) 
+ 
+ 
+73 
+
+ 
+Gui 
+A human ghost. 
+● SKILL 5 
+● ENDURANCE 8 
+● ATTACK 1 
+● Proficiencies: Curse (3), 
+Haunt (2) 
+Huang Feng Guai 
+Yellow Wind Demon, a human 
+eater creature. 
+● SKILL 8 
+● ENDURANCE 17 
+● ATTACK 
+● Proficiencies: Blinding 
+Wind (3), Cannibalism 
+(2) 
+Huli Jing 
+A mischievous fox spirit. 
+● SKILLS 9 
+● ENDURANCE 8 
+● ATTACK 1 
+● Proficiencies: 
+Shapeshifter (4), 
+Soulmate (3) 
+Jiangshi 
+One-legged undead that absorbs 
+Qi. 
+● SKILL 8 
+● ENDURANCE 12 
+● ATTACK 1 
+● Proficiencies: Vampiric 
+Attack (3), Jump (2) 
+Kobukson 
+A sailor on a Korean turtle ship. 
+● SKILL 8 
+● ENDURANCE 20 
+● ATTACK 6 
+● Proficiencies: Cannon 
+Shot (3), Armor (4) 
+ 
+74 
+
+ 
+Kun 
+Mastodontic fish that 
+transforms into the Dapeng 
+bird. 
+● SKILL 12 
+● ENDURANCE 24 
+● ATTACK 10 
+● Proficiencies: Swallow 
+(4), Tsunami (4) 
+Long Wang 
+King of dragons, guardian of the 
+gods. 
+● SKILL 11 
+● ENDURANCE 20 
+● ATTACK 4 
+● Proficiencies: Climate 
+Change (3), Summon 
+Snakes (3) 
+Macaque 
+A mischievous primate. 
+● SKILL 4 
+● ENDURANCE 5 
+● ATTACK 1 
+● Proficiencies: Stealing 
+(3), Throwing Feces (2) 
+Mandarin 
+A high-ranking imperial official. 
+● SKILL 6 
+● ENDURANCE 4 
+● ATTACK 1 
+● Proficiencies: Call 
+Guards (4), Put a 
+Bounty (3) 
+Mercenary 
+A bodyguard for nobles and 
+traveling merchants. 
+● SKILL 10 
+● ENDURANCE 17 
+● ATTACK 1 
+● Proficiencies: Martial 
+Arts (2) 
+ 
+75 
+
+ 
+Monk 
+A person dressed in religious 
+clothing. 
+● SKILL 8 
+● ENDURANCE 15 
+● ATTACK 1 
+● Proficiencies: Ritual (2), 
+Technique (2) 
+Niu Mowang 
+A demon in the form of a bull. 
+● SKILL 10 
+● ENDURANCE 18 
+● ATTACK 2 
+● Proficiencies: Charge 
+(3), Lightning Bolt (3) 
+Pan Long 
+Water dragon. 
+● SKILL 9 
+● ENDURANCE 18 
+● ATTACK 4 
+● Proficiencies: Wave (3), 
+Vortex (3) 
+Pirate 
+A sea and river bandit. 
+● SKILL 8 
+● ENDURANCE 17 
+● ATTACK 1 
+● Proficiencies: Boarding 
+(3), Rain of Arrows (3) 
+Rebels 
+A group of poorly armed 
+peasants. 
+● SKILL 4 
+● ENDURANCE 22 
+● ATTACK 6 
+● Proficiencies: Surround 
+(2), Human Wave (4) 
+Shan Xiao  
+A furry creature with long fangs. 
+● SKILL 8 
+● ENDURANCE 18 
+● ATTACK 3 
+76 
+
+ 
+● Proficiencies: Rock 
+Throwing (2), 
+Confusion (4) 
+Shark 
+Ruthless killer of the sea. 
+● SKILL 8 
+● ENDURANCE 15 
+● ATTACK 1 
+● Proficiencies: Jaws (3), 
+Blood Trail (2) 
+Shen 
+A dragon with the appearance of 
+a mollusk. 
+● SKILL 9 
+● ENDURANCE 18 
+● ATTACK 2 
+● Proficiencies: Illusion 
+(4), Shapeshifter (2) 
+ 
+ 
+Shi Di 
+A martial art practitioner. 
+● SKILL 7 
+● ENDURANCE 14 
+● ATTACK 1 
+● Proficiencies: Martial 
+Arts (1) 
+Shi Fu 
+A martial art’s master. 
+● SKILL 9 
+● ENDURANCE 17 
+● ATTACK 1 
+● Proficiencies: Martial 
+Arts (2) 
+Shi Gong 
+A grand Master. 
+● SKILL 10 
+● ENDURANCE 18 
+● ATTACK 1 
+● Proficiencies: Martial 
+Arts (4) 
+ 
+77 
+
+ 
+Shi Shi 
+Lion-dog holding a bronze ball. 
+● SKILL 8 
+● ENDURANCE 20 
+● ATTACK 1 
+● Proficiencies: Stone 
+Skin (2), Projectile (3) 
+Smuggler 
+A skilled sailor seeking profit. 
+● SKILL 9 
+● ENDURANCE 10 
+● ATTACK 1 
+● Proficiencies: Escape 
+Route (3), Negotiate (3) 
+Tanka 
+Belonging to the "boat people, 
+dredger of waterways. 
+● SKILL 6 
+● ENDURANCE 9 
+● ATTACK 1 
+● Proficiencies: Fishing 
+Net (2), Special Item (3) 
+Thief 
+A skilled and elusive 
+professional. 
+● SKILL 8 
+● ENDURANCE 8 
+● ATTACK 1 
+● Proficiencies: Steal (3), 
+Vanish (4) 
+Tu Di 
+An inexperienced young 
+student. 
+● SKILL 5 
+● ENDURANCE 10 
+● ATTACK 1 
+● Proficiencies: 
+Beginner's Luck (2), 
+Escape (4) 
+ 
+ 
+ 
+78 
+
+ 
+Tutelary Spirit 
+Emanation of the local deity. 
+● SKILL 11 
+● ENDURANCE 9 
+● ATTACK 1 
+● Proficiencies: Miracle 
+(4), Curse (2) 
+ 
+Xiongu 
+A nomadic warrior. 
+● SKILL 7 
+● ENDURANCE 18 
+● ATTACK 1 
+● Proficiencies: Fighting 
+(3), Archery (3) 
+ 
+ 
+ 
+Youxia 
+A wandering knight who 
+defends those in need. 
+● SKILL 11 
+● ENDURANCE 20 
+● ATTACK 1 
+● Proficiencies: Code of 
+Chivalry (4), Martial Arts 
+(2) 
+Yogi 
+A religious person in 
+meditation. 
+● SKILL 6 
+● ENDURANCE 16 
+● ATTACK 1 
+● Proficiencies: 
+Incorporeal (4), 
+Technique (2) 
+ 
+ 
+79 
+
+ 
+Partial filmography 
+A Touch of Zen (1971) 
+Ashes of Time (1994) 
+Blade of Fury (1993) 
+Burning Paradise (1994) 
+Five Fingers of Death (1972) 
+Clan of the White Lotus (1980) 
+Crippled Avengers (1978) 
+Crystal Fist (1979) 
+Dance of the Drunken Mantis (1979) 
+Drunken Master (1978) 
+Duel to the Death (1983)  
+Eagle's Claw (1978) 
+Enter the Dragon (1973) 
+Fearless (2006) 
+Fist of Fury (1972) 
+Five Elements Ninjas (1982) 
+Heroes (2008) 
+Heroes of the East (1978) 
+Iron Monkey (1993) 
+House of Flying Daggers (2004) 
+Crouching Tiger, Hidden Dragon(2000) 
+The 36th Chamber of Shaolin (1978) 
+Legendary Weapon of China (1982) 
+Prodigal Son (1981) 
+Secret Rivals (1976) 
+Seven Grandmasters (1977) 
+Shaolin Wooden Men (1976) 
+Sleeping Fist (1979) 
+Snake in the Eagle's Shadow (1978) 
+Chinese Ghost Story (1987) 
+Tai Chi Master (1993) 
+The Big Boss (1971) 
+The Devil's Mirror (1972) 
+The First Sword (1967) 
+The Five Deadly Venoms (1978) 
+The Heroic Ones (1970) 
+The Nine Demons (1984) 
+The Miracle Fighters (1982) 
+The Way of the Dragon (1972) 
+The One-Armed Swordsman (1967) 
+The Scorpion King (1992) 
+Thunderclap (1984) 
+Warriors Two (1978 
+80 
+
+ 
+Appendix A: Philosophy of the open system 
+This game is based on the philosophy of a game in continuous 
+development. Anyone can contribute to changing the rules, expanding 
+parts of the world, or adding details.  
+If you want to contribute with new material, or if you think the price of an 
+item is wrong, or you simply think you have a good idea, join in and edit 
+the text. 
+This project came to life thanks to Ruolatori Solitari group: 
+https://www.ruolatorisolitari.it/ 
+   
+  Appendix B: Martial Havoc - Cinematic 
+Journey  
+It is possible to experience Solo RPG as a sandbox experience in which the 
+protagonist lives endless adventures, between tables and dice rolls, until 
+the demiurge decides to change the game. 
+Martial Havoc - Cinematic Journey (hereinafter referred to as MH-CJ) is an 
+alternative tool for creating stories and bringing them to fruition in 90 
+minutes of imaginary television time; the three-act theory is used to 
+harness the narrative into a predefined structure, accompanying the player 
+in reliving simple adventures of revenge and magic seen on TV. 
+81 
+
+ 
+Three-act structure 
+ 
+  This is a simplified outline of the three-act theory, adapted to the clichés of 
+Hong Kong film productions. We see how the narrative tension, once past 
+the initial phase, tends to rise continuously until it reaches the final 
+climax. 
+  The symbol  represents a plot point, an event in the story that has an 
+impact on the characters or the world, and pushes it in a new direction. 
+  Each act ends with a climax, a point of maximum tension; a point of no 
+return to a new act. The protagonist cannot physically go back, or events 
+have changed him irreversibly. 
+82 
+
+ 
+  Obstacles represent the engine that drives the story forward: let's imagine 
+them as a circular movement that starts with the presentation of the 
+obstacle and ends with its resolution. In the end, we will be back on the 
+same narrative line, ready to reach the next step. This type of simple 
+Obstacle can become complicated, giving rise to sub-Obstacles that must 
+be resolved before completing the initial Obstacle.            
+  It is important not to open too many sub-obstacles and to return to the 
+narrative path to maintain tension towards the objective. 
+                                                                               
+  In MH-CJ, consider most sub-obstacles as fights, i.e., the means to 
+continue resolving the main obstacle: entering a building, escaping from a 
+building, convincing someone, etc. 
+   
+83 
+
+ 
+  Although in a film it is possible to decide the number of Obstacles, in Solo 
+RPGs, and more generally in emerging fiction, we do not know how many 
+trials our protagonist will have to overcome, but we can interpret the 
+results of the dice rolls to understand if we have reached a plot point.  
+  If the result of the dice roll conflicts with the linear development of the 
+story, ignore the dice. Reach the plot point without lowering the tension. 
+  For example, at the beginning of the third act, the protagonist has defeated 
+the generals guarding the room where the boss resides and is opening the 
+door; a roll on the Event table with Rest result, although plausible, would 
+slow down the momentum. Instead, let the Encounter happen and prepare 
+for the finale. 
+   
+  Finally, in order not to lose sight of the Objective and stay on track with the 
+plot, you can draw the outline as you play, marking the transition to a new 
+act and the achievement of plot points. 
+  Act I - Presentation 
+Define the world where the story takes place with its rules (realism, 
+presence of the supernatural, historical time) and introduce the 
+characters.  
+Call/Incident: an event that changes the balance of the world and involves 
+the protagonist. It defines the initial Goal. 
+Motivation/Point of No Return: the push that convinces the protagonist to 
+accept the call. 
+Climax: the turning point of the first act, representing the abandonment 
+of the Ordinary World just presented. The protagonist is ready for action 
+and to enter a New World. 
+84 
+
+ 
+ 
+In Solo RPG, the protagonist and the world in which they live are defined 
+by rolling on the creation tables and interpreting the results. Similarly, the 
+Incident can be generated from the "Adventures" table pg. 36. 
+ 
+The Motivation, if not obvious, can emerge by playing the first act: the 
+protagonist lives in a world altered by the Incident and their life is 
+irrevocably disrupted, until they accept the Call. 
+ 
+As an additional creation tool, it is recommended to use Faser "Adventure 
+Generator"  (published in Italian by Ruolatori Solitari: 
+https://ruolatorisolitari.itch.io/faser). 
+ 
+In MH-CJ, when defining the world, you decide whether magic is present. 
+If so, go overboard with the special effects; otherwise, remember that a 
+deity can manifest itself with flashes of fire or as an invisible hand. 
+ 
+Also, set concrete goals, avoid politics and complicated romantic 
+entanglements.  
+  Act 2 - Confrontation 
+We move into the Other World. It can be a physical place with different 
+rules or a new social context. This is the most dynamic moment in the 
+story; in order to achieve their Goal, the protagonist is forced to overcome 
+a series of Obstacles. 
+First part: The Obstacles help us learn more about the Other World and 
+introduce new characters. 
+85 
+
+ 
+Central turning point - twist/revelation/progress: divides the second act 
+into two parts; the Obstacles overcome so far clarify the goal by revealing 
+unknown details. The antagonist may be revealed. The initial Goal may 
+change.  
+Second part: The obstacles become more dangerous, the antagonist more 
+pressing, and the goal draws nearer. 
+Crisis/failure/death: The goal recedes. Often the loss of a companion or a 
+near-death experience shakes the protagonist's hope and the actual 
+possibility of achieving the goal.  
+Climax: The final goal becomes achievable again. Often, this involves a 
+realization or "rebirth" of the protagonist. 
+ 
+In MH-CJ, the second act represents almost the entirety of the narrative. 
+The focus is on the challenges presented by the Obstacles, the discovery of 
+the new world, and the interaction between the characters. 
+ 
+There are two recurring narrative structures that alone can sustain the 
+second act: climbing the pyramid, trial and error. 
+ 
+Climbing the pyramid: on the way to the boss fight, the protagonist must 
+first face a series of enemies starting from the base of an imaginary 
+pyramid with waves of minions, then raise the level of the battle with fewer 
+but more powerful enemies, until reaching the boss at the top of the 
+pyramid.  
+ 
+Trial and error: on the path to completing the mission, the protagonist is 
+immediately confronted with the main challenge, which is impossible to 
+86 
+
+ 
+overcome. A sequence of improvements and trials will begin until he is 
+ready (physically or mentally) to overcome the challenge.  
+  Act 3 - Resolution 
+This is the climax of the narrative tension, the confrontation with the 
+antagonist or the conflict.  
+Rising Action: the protagonist gathers their last strength to achieve the 
+Goal. Obstacles may arise if not previously resolved, but usually no new 
+challenges.  
+Climax: in many cases, the boss fight, the protagonist clashes with the 
+antagonist. Resolution of the main conflict. The Goal may or may not be 
+achieved (success or failure). 
+Resolution: the adventure is summed up, the protagonist is transformed 
+by the challenges, and all the questions left open in the first two acts are 
+answered. 
+ 
+In Solo RPG, we decide whether to conclude the protagonist's narrative arc 
+and end the game or to show how the protagonist and the world they live in 
+have changed; level up and prepare for a new adventure.  
+ 
+In MH-CJ, if you decide to end the adventure, you don't have to come up 
+with a meaningful ending; a joyful jump and a freeze frame with the 
+closing credits will suffice.    
+ 
+If, on the other hand, you are ready to face new challenges with the same 
+protagonist, pick up one of the narrative threads left unresolved in the 
+87 
+
+ 
+second act; or answer the question: which figure in the shadows was 
+pulling the strings of the boss you just defeated? And start over. 
+  Examples (with spoilers) 
+The following are personal interpretations of the narrative structure of two 
+films, without any claim to academic rigor. 
+Clan of the White Lotus (1980) 
+Act I  
+In a country divided between the government and Shaolin rebels, the clash 
+between two local fighters (Crane and Tiger) and the evil White Lotus Clan 
+ends with the killing of Crane and Tiger's girlfriend. 
+Climax: Tiger is forced to flee and hide in a safe place. 
+ 
+Act II  
+To get revenge, Tiger starts a series of training sessions, (failed) attacks on 
+the White Lotus monastery, and escapes. He never manages to get to the 
+head of the Clan. 
+Twist: The protagonist realizes he must learn a new fighting method (the 
+weaver's style), aimed at pressure points. 
+Crisis: Yet another fight with the clan leader will see the protagonist close 
+to death. 
+Climax: Saved by acupuncture, the protagonist will have an intuition to 
+face the boss again. 
+ 
+ 
+ 
+88 
+
+ 
+ 
+ 
+Act III 
+Final battle with the leader of the White Lotus Clan 
+Climax: Using sewing needles, the protagonist manages to strike the boss's 
+fatal point. 
+Resolution: Revenge is complete. 
+ 
+ 
+ 
+ 
+89 
+
+ 
+Zu: Warriors from the Magic Mountain (1983) 
+Act I 
+During the civil wars, a soldier deserts and enters a mysterious cave to 
+escape the battlefield. 
+Climax: The cave is the passageway to a magical and dangerous world. 
+ 
+Act II 
+During the battle with the forces of evil, he is saved by a formidable 
+swordsman and tries to become his pupil. 
+Attacked by the Blood Demon, they are helped by a warrior monk and his 
+disciple, who, although motivated by the same desire for justice, are in 
+competition with our heroes. 
+Twist: The only way to destroy the Demon's soul is to find two magical twin 
+swords. 
+ 
+The monk is knocked out and the swordsman, poisoned, slowly turns into 
+a demon, losing control of himself. 
+An encounter with a magical presence, the Ice Queen, will only slow down 
+the poison. 
+Crisis: With the two masters out of the picture, the young heroes are left 
+without guidance. 
+Climax: The two heroes will manage to overcome their differences to 
+achieve their goal without the help of their masters. 
+ 
+ 
+ 
+ 
+90 
+
+ 
+Act III 
+The journey to recover the twin swords will be hindered by the swordsman, 
+now transformed into a demon. Only the sacrifice of the Ice Queen will 
+stop him. 
+Climax: Defeat of the Blood Demon with the twin swords. 
+Resolution: victory of good and personal growth of the young heroes. 
+ 
+ 
+ 
+Appendix C: Pre-generated characters 
+Here are 8 ready to play Master’s sheets inspired by iconic characters: 
+91 
+
+ 
+ 
+92 
+
+ 
+ License 
+Writing  and translation from  Heroic Havoc: ruolatorisolitari.itch.io/heroic-havoc 
+by Gianluca Monaco 
+ 
+Graphic by Gianluca Monaco 
+  
+Cover artwork (except  title)  and pages  21,33, 41,57, 65 by: Cristian Cammarata 
+(Naitsirc) Instagram: _naitsirc93 www.instagram.com/_naitsirc93 
+  
+Creative Commons Attribution-ShareAlike 4.0 International 
+This license requires that reusers give credit to the creator. It allows reusers to 
+distribute, remix, adapt, and build upon the material in any medium or format, 
+even for commercial purposes. If others remix, adapt, or build upon the material, 
+they must license the modified material under identical terms. 
+ https://creativecommons.org/licenses/by-sa/4.0/ 
+ 
+ 
+ 
+ 
+ 
+ 
+93 

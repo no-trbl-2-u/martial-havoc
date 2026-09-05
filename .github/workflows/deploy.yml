@@ -1,0 +1,53 @@
+name: Deploy Martial Havoc
+
+# On every push to main: the full verify gate, then the web export goes
+# to Cloudflare Workers static assets tagged with the commit, which is
+# what `npm run deploy:check` polls for. Needs two repository secrets:
+# CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID (see .env.example).
+# Until they exist this workflow fails at the deploy step and the loop
+# deploys from wherever it runs instead (`npm run deploy`).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-martial-havoc
+  cancel-in-progress: false
+
+jobs:
+  verify-and-deploy:
+    name: verify, export, deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify gate
+        run: npm run verify
+
+      - name: Deploy to Cloudflare Workers
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npm run deploy
+
+      - name: Deploy check
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npm run deploy:check

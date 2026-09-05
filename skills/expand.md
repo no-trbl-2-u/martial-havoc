@@ -257,7 +257,7 @@ pass counter is what `/march` reads to rate-limit.
 ### Step 6 — Confirm deploy
 
 ```bash
-pnpm deploy:check
+npm run deploy:check
 ```
 
 Plan-only commits trigger rebuilds; verify no regression.
@@ -354,5 +354,5 @@ plan/steps/01_build_plan.md                   # autonomous posture only
 git add <files>
 git commit -m "expand: pass <N> — ..."
 git push origin main
-pnpm deploy:check
+npm run deploy:check
 ```
