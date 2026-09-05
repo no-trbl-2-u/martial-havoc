@@ -1,0 +1,25 @@
+{
+  "$comment": "UI strings for the app shell. Phase 1 placeholder page; Phase 2 replaces the page, Phase 8 the shell. Every record carries a cite.",
+  "records": [
+    {
+      "id": "app.title",
+      "text": "Martial Havoc",
+      "cite": "MH_Full_Itchio.pdf, cover"
+    },
+    {
+      "id": "app.tagline",
+      "text": "A rules engine for a rule-light d6 solo wuxia RPG. The sandbox is the real game; adventures are scenes in it.",
+      "cite": "spec.md, Horizon"
+    },
+    {
+      "id": "app.licence",
+      "text": "CC BY-SA 4.0. Rules by Gianluca Monaco; cover and chapter art by Cristian Cammarata; adventure icons by limofeus; cave map by watabou. Text and SVG only; none of the credited art ships.",
+      "cite": "spec.md, Routine calls (Licence); LICENSE"
+    },
+    {
+      "id": "app.garden",
+      "text": "The garden is planted. Nothing grows here yet.",
+      "cite": "plan/phases/phase_1_bootstrap.md"
+    }
+  ]
+}

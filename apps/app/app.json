@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "Martial Havoc",
+    "slug": "martial-havoc",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "scheme": "martial-havoc",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "platforms": ["ios", "android", "web"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.notrbl2u.martialhavoc"
+    },
+    "android": {
+      "package": "com.notrbl2u.martialhavoc"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "name": "Martial Havoc"
+    }
+  }
+}

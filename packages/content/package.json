@@ -1,0 +1,20 @@
+{
+  "name": "@martial-havoc/content",
+  "version": "0.0.0",
+  "private": true,
+  "license": "CC-BY-SA-4.0",
+  "description": "Data files, authored lines and adventure files. Every record carries a citation.",
+  "type": "module",
+  "types": "./src/index.ts",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run"
+  }
+}
