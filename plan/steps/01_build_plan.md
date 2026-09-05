@@ -17,8 +17,8 @@ partial-with-carry-overs. Tick in this file in the same commit that ships
 the phase.
 
 **The garden (phase 1):**
-- [ ] Phase 1 — The garden (stack, env manifest, verify gate, deploy
-      target, seed skills; done = one tick on nothing)
+- [x] Phase 1 — The garden (stack, env manifest, verify gate, deploy
+      target, seed skills; done = one tick on nothing) — 26c9f3c
 
 **The engine (phases 2–4):**
 - [ ] Phase 2 — Tables as data, and creation
@@ -249,5 +249,10 @@ with linked notes here.)
 
 ## Phase log (commit hashes)
 
-(Empty until phase 1 ships. One line per shipped phase:
+(One line per shipped phase:
 `phase <N> — <commit hash> — <one-line summary>`.)
+
+- phase 1 — 26c9f3c — the garden: npm workspaces (engine, content, Expo
+  app), verify gate green on nothing, Cloudflare Workers deploy target,
+  placeholder page live at https://martial-havoc.no-trbl-2-u.workers.dev
+  (commits 4c3c888, 3b6fa96, 9d1dad9, 26c9f3c)
