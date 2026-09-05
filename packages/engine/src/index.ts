@@ -31,7 +31,6 @@ export { chooseMartialArt, martialArtBySheetName, rollMartialArt } from './creat
 export {
   CREATION_CAP,
   proficienciesClean,
-  proficiencyValue,
   spendProficiencies,
   styleHasProficiency,
 } from './creation/proficiencies'

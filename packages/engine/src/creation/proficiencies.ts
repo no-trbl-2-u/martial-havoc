@@ -95,11 +95,3 @@ export const styleHasProficiency =
     const resolved = canonicalName(resolution)(name).toLowerCase()
     return martialArt.proficiencies.some((p) => p.toLowerCase() === resolved)
   }
-
-/** Unused here, but exported for symmetry with the other lookups. */
-export const proficiencyValue =
-  (report: ProficiencyReport) =>
-  (name: string): number =>
-    report.assigned.find((p) => p.name.toLowerCase() === name.trim().toLowerCase())?.value ?? 0
-
-export { findByName }
