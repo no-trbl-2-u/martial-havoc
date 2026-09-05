@@ -110,6 +110,51 @@ Before stopping on any failure-mode condition, run
 notification never becomes its own stop). Applies to every
 skill; see `nexus/playbooks/hands-off.md`.
 
+### 9. `docs/` first. Always.
+
+**Before writing anything that touches the rules, read the
+concept in `docs/` that covers it.** Not the PDFs, not memory,
+not a summary in a phase brief — the concept file. Phase 1b
+decomposed the whole rulebook and the whole of *The 5 Treasures*
+into one markdown concept per section, each with its folio
+citation, its `sources`, and the estate's rule ids (`R-nn`) and
+readings (`I-nn`). That bundle is the authority in this
+repository, and it exists precisely so no phase has to go back
+to two PDFs and guess.
+
+Which file, by what you are doing:
+
+| Working on… | Read first |
+|---|---|
+| Anything at all | `docs/index.md`, then the directory index it points at |
+| A procedure, a check, a roll made while resolving an action | `docs/rules/<concept>.md` |
+| Something that exists in the world — a style, an opponent, an item, a word table | `docs/world/<concept>.md` |
+| An adventure or a campaign hook | `docs/campaigns/<concept>.md` |
+| A case the book is silent or ambiguous about | `docs/rules/readings/` — the `I-nn` readings, and `discrepancies.md` |
+| Where a number or a line actually came from | `docs/sources/` |
+
+Three things follow from this rule:
+
+1. **Transcribe, don't paraphrase.** A table's cells, a
+   Technique's effect, an opponent's description are copied
+   verbatim from the concept, including printed spelling
+   ("CHamber", "Giada", "mount"). Normalisation belongs in ids,
+   never in text.
+2. **Cite what you read.** Every data record's `cite` and every
+   behaviour's `{label, cite}` names the folio the concept
+   names. A `reading` cites its `I-nn`.
+3. **A concept and its own prose can disagree.** Where a doc's
+   Notes summarise its own table and the two differ, the
+   **table** wins — it is the transcription; the prose is a
+   gloss. Record the disagreement in the commit body so it can
+   be corrected on a later pass. (Rule 6 still holds: `spec.md`
+   and the two PDFs are read-only, and correcting `docs/` is
+   its own change, never a side effect of shipping a phase.)
+
+`scripts/docs-check.test.ts` keeps the bundle honest — every
+concept carries frontmatter, a citation and resolvable links, or
+`npm run test` is red.
+
 ---
 
 ## Project
@@ -124,6 +169,8 @@ The product spec is `spec.md` at the repo root. Read it once.
 ## Repo shape
 
 ```
+docs/                The rulebook and the adventure, decomposed into one
+                     cited concept per section. Read first (rule 9).
 packages/engine/     Pure TypeScript rules engine; no React; dice injected.
 packages/content/    Data files (JSON, one schema), authored lines, adventures.
 apps/app/            Expo + React Native app; web target exported to Cloudflare.
@@ -245,6 +292,11 @@ failure-mode condition rather than inventing a placeholder.
 
 | If you need… | Read |
 |---|---|
+| **What a rule actually says** | **`docs/` — start at `docs/index.md` (rule 9)** |
+| A procedure or a roll | `docs/rules/<concept>.md` |
+| A style, opponent, item or word table | `docs/world/<concept>.md` |
+| An adventure or a hook | `docs/campaigns/<concept>.md` |
+| Where the book is silent | `docs/rules/readings/` (`I-nn`) |
 | What Martial Havoc is | `spec.md` |
 | Stack, conventions, defaults | `plan/bearings.md` |
 | What ships next | `plan/steps/01_build_plan.md` |
