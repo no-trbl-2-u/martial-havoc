@@ -1,0 +1,77 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.city-services",
+  "kind": "list",
+  "title": "City Services",
+  "cite": "MH p.50",
+  "label": "rule",
+  "docs": "docs/rules/cities.md",
+  "records": [
+    {
+      "id": "city-service.fortune-teller",
+      "cite": "MH p.50",
+      "service": "Fortune teller",
+      "price": "3 GP (per question)"
+    },
+    {
+      "id": "city-service.astral-chart",
+      "cite": "MH p.50",
+      "service": "Astral chart",
+      "price": "18 GP"
+    },
+    {
+      "id": "city-service.herbalist",
+      "cite": "MH p.50",
+      "service": "Herbalist",
+      "price": "8 GP (per dose)"
+    },
+    {
+      "id": "city-service.acupuncture",
+      "cite": "MH p.50",
+      "service": "Acupuncture",
+      "price": "12 GP (per session)"
+    },
+    {
+      "id": "city-service.geomancer",
+      "cite": "MH p.50",
+      "service": "Geomancer",
+      "price": "25 GP"
+    },
+    {
+      "id": "city-service.bodyguard",
+      "cite": "MH p.50",
+      "service": "Bodyguard",
+      "price": "80 GP (per day)"
+    },
+    {
+      "id": "city-service.messenger",
+      "cite": "MH p.50",
+      "service": "Messenger",
+      "price": "2 SP (per km or hour)"
+    },
+    {
+      "id": "city-service.scribe",
+      "cite": "MH p.50",
+      "service": "Scribe",
+      "price": "5 SP (per letter)"
+    },
+    {
+      "id": "city-service.funeral",
+      "cite": "MH p.50",
+      "service": "Funeral",
+      "price": "50-200 GP"
+    },
+    {
+      "id": "city-service.litter-bearer",
+      "cite": "MH p.50",
+      "service": "Litter bearer",
+      "price": "8 SP (per km or hour)"
+    },
+    {
+      "id": "city-service.confucian-library",
+      "cite": "MH p.50",
+      "service": "Confucian library",
+      "price": "free offering"
+    }
+  ]
+}

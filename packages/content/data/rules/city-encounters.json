@@ -1,0 +1,167 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.city-encounters",
+  "kind": "d6-banded",
+  "title": "City encounters",
+  "cite": "MH p.51",
+  "label": "rule",
+  "docs": "docs/rules/cities.md",
+  "records": [
+    {
+      "id": "city-encounter.1-3.1",
+      "cite": "MH p.51",
+      "band": "1-3",
+      "faces": [
+        1,
+        2,
+        3
+      ],
+      "row": 1,
+      "connection": "owes you money",
+      "trait": "Loyalist"
+    },
+    {
+      "id": "city-encounter.1-3.2",
+      "cite": "MH p.51",
+      "band": "1-3",
+      "faces": [
+        1,
+        2,
+        3
+      ],
+      "row": 2,
+      "connection": "outfought you",
+      "trait": "Broken"
+    },
+    {
+      "id": "city-encounter.1-3.3",
+      "cite": "MH p.51",
+      "band": "1-3",
+      "faces": [
+        1,
+        2,
+        3
+      ],
+      "row": 3,
+      "connection": "hates you",
+      "trait": "Cruel"
+    },
+    {
+      "id": "city-encounter.1-3.4",
+      "cite": "MH p.51",
+      "band": "1-3",
+      "faces": [
+        1,
+        2,
+        3
+      ],
+      "row": 4,
+      "connection": "loves you",
+      "trait": "Stingy"
+    },
+    {
+      "id": "city-encounter.1-3.5",
+      "cite": "MH p.51",
+      "band": "1-3",
+      "faces": [
+        1,
+        2,
+        3
+      ],
+      "row": 5,
+      "connection": "knows your secret",
+      "trait": "Naive"
+    },
+    {
+      "id": "city-encounter.1-3.6",
+      "cite": "MH p.51",
+      "band": "1-3",
+      "faces": [
+        1,
+        2,
+        3
+      ],
+      "row": 6,
+      "connection": "owed money by you",
+      "trait": "Hot-headed"
+    },
+    {
+      "id": "city-encounter.4-6.1",
+      "cite": "MH p.51",
+      "band": "4-6",
+      "faces": [
+        4,
+        5,
+        6
+      ],
+      "row": 1,
+      "connection": "is a distant relative",
+      "trait": "Honest"
+    },
+    {
+      "id": "city-encounter.4-6.2",
+      "cite": "MH p.51",
+      "band": "4-6",
+      "faces": [
+        4,
+        5,
+        6
+      ],
+      "row": 2,
+      "connection": "is an enemy's enemy",
+      "trait": "Chatter"
+    },
+    {
+      "id": "city-encounter.4-6.3",
+      "cite": "MH p.51",
+      "band": "4-6",
+      "faces": [
+        4,
+        5,
+        6
+      ],
+      "row": 3,
+      "connection": "is a childhood friend",
+      "trait": "Rebel"
+    },
+    {
+      "id": "city-encounter.4-6.4",
+      "cite": "MH p.51",
+      "band": "4-6",
+      "faces": [
+        4,
+        5,
+        6
+      ],
+      "row": 4,
+      "connection": "betrayed you",
+      "trait": "Liar"
+    },
+    {
+      "id": "city-encounter.4-6.5",
+      "cite": "MH p.51",
+      "band": "4-6",
+      "faces": [
+        4,
+        5,
+        6
+      ],
+      "row": 5,
+      "connection": "wronged you",
+      "trait": "Vain"
+    },
+    {
+      "id": "city-encounter.4-6.6",
+      "cite": "MH p.51",
+      "band": "4-6",
+      "faces": [
+        4,
+        5,
+        6
+      ],
+      "row": 6,
+      "connection": "is a rival",
+      "trait": "Undercover"
+    }
+  ]
+}

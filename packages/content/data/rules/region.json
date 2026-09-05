@@ -1,0 +1,222 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.region",
+  "kind": "d6-by-column",
+  "title": "Region Exploration table",
+  "cite": "MH p.43",
+  "label": "rule",
+  "docs": "docs/rules/exploration.md",
+  "records": [
+    {
+      "id": "region.location.1",
+      "cite": "MH p.43",
+      "column": "Location",
+      "face": 1,
+      "text": "City"
+    },
+    {
+      "id": "region.landmark.1",
+      "cite": "MH p.43",
+      "column": "Landmark",
+      "face": 1,
+      "text": "Monastery"
+    },
+    {
+      "id": "region.resources.1",
+      "cite": "MH p.43",
+      "column": "Resources",
+      "face": 1,
+      "text": "Medicinal herbs"
+    },
+    {
+      "id": "region.risk.1",
+      "cite": "MH p.43",
+      "column": "Risk",
+      "face": 1,
+      "text": "Low"
+    },
+    {
+      "id": "region.event.1",
+      "cite": "MH p.43",
+      "column": "Event",
+      "face": 1,
+      "text": "Encounter"
+    },
+    {
+      "id": "region.location.2",
+      "cite": "MH p.43",
+      "column": "Location",
+      "face": 2,
+      "text": "Mountain"
+    },
+    {
+      "id": "region.landmark.2",
+      "cite": "MH p.43",
+      "column": "Landmark",
+      "face": 2,
+      "text": "Hermit's Refuge"
+    },
+    {
+      "id": "region.resources.2",
+      "cite": "MH p.43",
+      "column": "Resources",
+      "face": 2,
+      "text": "Elixir"
+    },
+    {
+      "id": "region.risk.2",
+      "cite": "MH p.43",
+      "column": "Risk",
+      "face": 2,
+      "text": "Low"
+    },
+    {
+      "id": "region.event.2",
+      "cite": "MH p.43",
+      "column": "Event",
+      "face": 2,
+      "text": "Rest"
+    },
+    {
+      "id": "region.location.3",
+      "cite": "MH p.43",
+      "column": "Location",
+      "face": 3,
+      "text": "Plain"
+    },
+    {
+      "id": "region.landmark.3",
+      "cite": "MH p.43",
+      "column": "Landmark",
+      "face": 3,
+      "text": "Martial arts school"
+    },
+    {
+      "id": "region.resources.3",
+      "cite": "MH p.43",
+      "column": "Resources",
+      "face": 3,
+      "text": "Sacred relics"
+    },
+    {
+      "id": "region.risk.3",
+      "cite": "MH p.43",
+      "column": "Risk",
+      "face": 3,
+      "text": "Medium"
+    },
+    {
+      "id": "region.event.3",
+      "cite": "MH p.43",
+      "column": "Event",
+      "face": 3,
+      "text": "Effect Expiration"
+    },
+    {
+      "id": "region.location.4",
+      "cite": "MH p.43",
+      "column": "Location",
+      "face": 4,
+      "text": "Forest"
+    },
+    {
+      "id": "region.landmark.4",
+      "cite": "MH p.43",
+      "column": "Landmark",
+      "face": 4,
+      "text": "Frontier",
+      "note": "marks the border of imperial law: a barbarian territory, a magical kingdom or a rebel enclave"
+    },
+    {
+      "id": "region.resources.4",
+      "cite": "MH p.43",
+      "column": "Resources",
+      "face": 4,
+      "text": "Magic Weapons"
+    },
+    {
+      "id": "region.risk.4",
+      "cite": "MH p.43",
+      "column": "Risk",
+      "face": 4,
+      "text": "Medium"
+    },
+    {
+      "id": "region.event.4",
+      "cite": "MH p.43",
+      "column": "Event",
+      "face": 4,
+      "text": "Weather Change"
+    },
+    {
+      "id": "region.location.5",
+      "cite": "MH p.43",
+      "column": "Location",
+      "face": 5,
+      "text": "Rice fields"
+    },
+    {
+      "id": "region.landmark.5",
+      "cite": "MH p.43",
+      "column": "Landmark",
+      "face": 5,
+      "text": "Empty"
+    },
+    {
+      "id": "region.resources.5",
+      "cite": "MH p.43",
+      "column": "Resources",
+      "face": 5,
+      "text": "Jade"
+    },
+    {
+      "id": "region.risk.5",
+      "cite": "MH p.43",
+      "column": "Risk",
+      "face": 5,
+      "text": "High"
+    },
+    {
+      "id": "region.event.5",
+      "cite": "MH p.43",
+      "column": "Event",
+      "face": 5,
+      "text": "Hint"
+    },
+    {
+      "id": "region.location.6",
+      "cite": "MH p.43",
+      "column": "Location",
+      "face": 6,
+      "text": "Water"
+    },
+    {
+      "id": "region.landmark.6",
+      "cite": "MH p.43",
+      "column": "Landmark",
+      "face": 6,
+      "text": "Empty"
+    },
+    {
+      "id": "region.resources.6",
+      "cite": "MH p.43",
+      "column": "Resources",
+      "face": 6,
+      "text": "Ancient Texts"
+    },
+    {
+      "id": "region.risk.6",
+      "cite": "MH p.43",
+      "column": "Risk",
+      "face": 6,
+      "text": "High"
+    },
+    {
+      "id": "region.event.6",
+      "cite": "MH p.43",
+      "column": "Event",
+      "face": 6,
+      "text": "Free Exploration"
+    }
+  ]
+}

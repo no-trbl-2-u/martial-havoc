@@ -1,0 +1,116 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.xp-costs",
+  "kind": "list",
+  "title": "XP cost table",
+  "cite": "MH p.34",
+  "label": "rule",
+  "docs": "docs/rules/experience-and-advancement.md",
+  "records": [
+    {
+      "id": "xp-cost.martial-proficiency.skill-6-or-less",
+      "cite": "MH p.34",
+      "increase": "Martial Proficiency",
+      "band": "SKILL 6 or less",
+      "cost": 6
+    },
+    {
+      "id": "xp-cost.martial-proficiency.skill-7-9",
+      "cite": "MH p.34",
+      "increase": "Martial Proficiency",
+      "band": "SKILL 7-9",
+      "cost": 8
+    },
+    {
+      "id": "xp-cost.martial-proficiency.skill-10-12",
+      "cite": "MH p.34",
+      "increase": "Martial Proficiency",
+      "band": "SKILL 10-12",
+      "cost": 10
+    },
+    {
+      "id": "xp-cost.skill.skill-6-or-less",
+      "cite": "MH p.34",
+      "increase": "SKILL",
+      "band": "SKILL 6 or less",
+      "cost": 8
+    },
+    {
+      "id": "xp-cost.skill.skill-7-9",
+      "cite": "MH p.34",
+      "increase": "SKILL",
+      "band": "SKILL 7-9",
+      "cost": 10
+    },
+    {
+      "id": "xp-cost.skill.skill-10-12",
+      "cite": "MH p.34",
+      "increase": "SKILL",
+      "band": "SKILL 10-12",
+      "cost": 12
+    },
+    {
+      "id": "xp-cost.endurance.skill-6-or-less",
+      "cite": "MH p.34",
+      "increase": "ENDURANCE",
+      "band": "SKILL 6 or less",
+      "cost": 4
+    },
+    {
+      "id": "xp-cost.endurance.skill-7-9",
+      "cite": "MH p.34",
+      "increase": "ENDURANCE",
+      "band": "SKILL 7-9",
+      "cost": 4
+    },
+    {
+      "id": "xp-cost.endurance.skill-10-12",
+      "cite": "MH p.34",
+      "increase": "ENDURANCE",
+      "band": "SKILL 10-12",
+      "cost": 4
+    },
+    {
+      "id": "xp-cost.luck.skill-6-or-less",
+      "cite": "MH p.34",
+      "increase": "LUCK",
+      "band": "SKILL 6 or less",
+      "cost": 10
+    },
+    {
+      "id": "xp-cost.luck.skill-7-9",
+      "cite": "MH p.34",
+      "increase": "LUCK",
+      "band": "SKILL 7-9",
+      "cost": 8
+    },
+    {
+      "id": "xp-cost.luck.skill-10-12",
+      "cite": "MH p.34",
+      "increase": "LUCK",
+      "band": "SKILL 10-12",
+      "cost": 6
+    },
+    {
+      "id": "xp-cost.training-skill.skill-6-or-less",
+      "cite": "MH p.34",
+      "increase": "Training skill",
+      "band": "SKILL 6 or less",
+      "cost": 10
+    },
+    {
+      "id": "xp-cost.training-skill.skill-7-9",
+      "cite": "MH p.34",
+      "increase": "Training skill",
+      "band": "SKILL 7-9",
+      "cost": 8
+    },
+    {
+      "id": "xp-cost.training-skill.skill-10-12",
+      "cite": "MH p.34",
+      "increase": "Training skill",
+      "band": "SKILL 10-12",
+      "cost": 6
+    }
+  ]
+}

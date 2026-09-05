@@ -1,0 +1,221 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.monastery",
+  "kind": "d6-by-column",
+  "title": "Monastery table",
+  "cite": "MH p.45",
+  "label": "rule",
+  "docs": "docs/rules/exploration.md",
+  "records": [
+    {
+      "id": "monastery.location.1",
+      "cite": "MH p.45",
+      "column": "Location",
+      "face": 1,
+      "text": "Corridor"
+    },
+    {
+      "id": "monastery.location-function.1",
+      "cite": "MH p.45",
+      "column": "Location Function",
+      "face": 1,
+      "text": "Treasure"
+    },
+    {
+      "id": "monastery.openings.1",
+      "cite": "MH p.45",
+      "column": "Openings",
+      "face": 1,
+      "text": "1"
+    },
+    {
+      "id": "monastery.atmosphere.1",
+      "cite": "MH p.45",
+      "column": "Atmosphere",
+      "face": 1,
+      "text": "Mysterious"
+    },
+    {
+      "id": "monastery.event.1",
+      "cite": "MH p.45",
+      "column": "Event",
+      "face": 1,
+      "text": "Encounter"
+    },
+    {
+      "id": "monastery.location.2",
+      "cite": "MH p.45",
+      "column": "Location",
+      "face": 2,
+      "text": "Courtyard"
+    },
+    {
+      "id": "monastery.location-function.2",
+      "cite": "MH p.45",
+      "column": "Location Function",
+      "face": 2,
+      "text": "Trap"
+    },
+    {
+      "id": "monastery.openings.2",
+      "cite": "MH p.45",
+      "column": "Openings",
+      "face": 2,
+      "text": "2"
+    },
+    {
+      "id": "monastery.atmosphere.2",
+      "cite": "MH p.45",
+      "column": "Atmosphere",
+      "face": 2,
+      "text": "Tense"
+    },
+    {
+      "id": "monastery.event.2",
+      "cite": "MH p.45",
+      "column": "Event",
+      "face": 2,
+      "text": "Rest"
+    },
+    {
+      "id": "monastery.location.3",
+      "cite": "MH p.45",
+      "column": "Location",
+      "face": 3,
+      "text": "Room"
+    },
+    {
+      "id": "monastery.location-function.3",
+      "cite": "MH p.45",
+      "column": "Location Function",
+      "face": 3,
+      "text": "Altar"
+    },
+    {
+      "id": "monastery.openings.3",
+      "cite": "MH p.45",
+      "column": "Openings",
+      "face": 3,
+      "text": "2"
+    },
+    {
+      "id": "monastery.atmosphere.3",
+      "cite": "MH p.45",
+      "column": "Atmosphere",
+      "face": 3,
+      "text": "Spectral"
+    },
+    {
+      "id": "monastery.event.3",
+      "cite": "MH p.45",
+      "column": "Event",
+      "face": 3,
+      "text": "Effect Expiration"
+    },
+    {
+      "id": "monastery.location.4",
+      "cite": "MH p.45",
+      "column": "Location",
+      "face": 4,
+      "text": "Pagoda"
+    },
+    {
+      "id": "monastery.location-function.4",
+      "cite": "MH p.45",
+      "column": "Location Function",
+      "face": 4,
+      "text": "Meditation"
+    },
+    {
+      "id": "monastery.openings.4",
+      "cite": "MH p.45",
+      "column": "Openings",
+      "face": 4,
+      "text": "3"
+    },
+    {
+      "id": "monastery.atmosphere.4",
+      "cite": "MH p.45",
+      "column": "Atmosphere",
+      "face": 4,
+      "text": "Desolate"
+    },
+    {
+      "id": "monastery.event.4",
+      "cite": "MH p.45",
+      "column": "Event",
+      "face": 4,
+      "text": "Conditions Change"
+    },
+    {
+      "id": "monastery.location.5",
+      "cite": "MH p.45",
+      "column": "Location",
+      "face": 5,
+      "text": "Hall"
+    },
+    {
+      "id": "monastery.location-function.5",
+      "cite": "MH p.45",
+      "column": "Location Function",
+      "face": 5,
+      "text": "Cemetery"
+    },
+    {
+      "id": "monastery.openings.5",
+      "cite": "MH p.45",
+      "column": "Openings",
+      "face": 5,
+      "text": "3"
+    },
+    {
+      "id": "monastery.atmosphere.5",
+      "cite": "MH p.45",
+      "column": "Atmosphere",
+      "face": 5,
+      "text": "Mystic"
+    },
+    {
+      "id": "monastery.event.5",
+      "cite": "MH p.45",
+      "column": "Event",
+      "face": 5,
+      "text": "Hint"
+    },
+    {
+      "id": "monastery.location.6",
+      "cite": "MH p.45",
+      "column": "Location",
+      "face": 6,
+      "text": "Staircase"
+    },
+    {
+      "id": "monastery.location-function.6",
+      "cite": "MH p.45",
+      "column": "Location Function",
+      "face": 6,
+      "text": "Dormitory"
+    },
+    {
+      "id": "monastery.openings.6",
+      "cite": "MH p.45",
+      "column": "Openings",
+      "face": 6,
+      "text": "4"
+    },
+    {
+      "id": "monastery.atmosphere.6",
+      "cite": "MH p.45",
+      "column": "Atmosphere",
+      "face": 6,
+      "text": "Eerie"
+    },
+    {
+      "id": "monastery.event.6",
+      "cite": "MH p.45",
+      "column": "Event",
+      "face": 6,
+      "text": "Free exploration"
+    }
+  ]
+}

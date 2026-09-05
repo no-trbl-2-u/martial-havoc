@@ -1,0 +1,88 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.special-items",
+  "kind": "2d6",
+  "title": "Special Items",
+  "cite": "MH p.69",
+  "label": "rule",
+  "docs": "docs/rules/treasures-and-special-items.md",
+  "records": [
+    {
+      "id": "special-item.2",
+      "cite": "MH p.69",
+      "total": 2,
+      "name": "The rosary of Amitabha Buddha",
+      "effect": "If recited, it grants a miracle, single use"
+    },
+    {
+      "id": "special-item.3",
+      "cite": "MH p.69",
+      "total": 3,
+      "name": "The hat of the Immortal Cao Guojiu",
+      "effect": "You are automatically recognized as a mandarin/noble"
+    },
+    {
+      "id": "special-item.4",
+      "cite": "MH p.69",
+      "total": 4,
+      "name": "The Bottle of the Immortal Li Tenguai",
+      "effect": "One sip can cure any illness"
+    },
+    {
+      "id": "special-item.5",
+      "cite": "MH p.69",
+      "total": 5,
+      "name": "The castanets of the Immortal Lan Caihe",
+      "effect": "Their sound attracts the attention of everyone present, stopping whatever they are doing"
+    },
+    {
+      "id": "special-item.6",
+      "cite": "MH p.69",
+      "total": 6,
+      "name": "The sword of the Immortal Lu Dongbin",
+      "effect": "effective against spirits"
+    },
+    {
+      "id": "special-item.7",
+      "cite": "MH p.69",
+      "total": 7,
+      "name": "The lotus flower of the immortal He Xiangu",
+      "effect": "restores LUCK and increases it by 1, single use"
+    },
+    {
+      "id": "special-item.8",
+      "cite": "MH p.69",
+      "total": 8,
+      "name": "The flute of the Immortal Han Xiangzi",
+      "effect": "It ends an atmospheric/environmental effect"
+    },
+    {
+      "id": "special-item.9",
+      "cite": "MH p.69",
+      "total": 9,
+      "name": "The phoenix feather of the immortal Zhang Guolao",
+      "effect": "you are destined to die a natural death, ignore the next fatal blow"
+    },
+    {
+      "id": "special-item.10",
+      "cite": "MH p.69",
+      "total": 10,
+      "name": "The Immortal Han Zhongli's Fan",
+      "effect": "Creates gold or silver (50/50) from stone, equivalent in weight, single use"
+    },
+    {
+      "id": "special-item.11",
+      "cite": "MH p.69",
+      "total": 11,
+      "name": "Sanzang's Passport",
+      "effect": "You can travel freely throughout the territory and enter all urban centers"
+    },
+    {
+      "id": "special-item.12",
+      "cite": "MH p.69",
+      "total": 12,
+      "name": "Sun WuKong's Staff",
+      "effect": "A weapon that extends and retracts on command"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.social-status",
+  "kind": "1d6",
+  "title": "Social Status",
+  "cite": "MH p.5",
+  "label": "rule",
+  "docs": "docs/rules/master-creation.md",
+  "records": [
+    {
+      "id": "social-status.vagabond",
+      "cite": "MH p.5",
+      "faces": [
+        1
+      ],
+      "status": "Vagabond",
+      "goldDice": {
+        "n": 0,
+        "d": 6,
+        "plus": 1
+      }
+    },
+    {
+      "id": "social-status.poor",
+      "cite": "MH p.5",
+      "faces": [
+        2
+      ],
+      "status": "Poor",
+      "goldDice": {
+        "n": 1,
+        "d": 6,
+        "plus": -1
+      }
+    },
+    {
+      "id": "social-status.middle-class",
+      "cite": "MH p.5",
+      "faces": [
+        3,
+        4
+      ],
+      "status": "Middle Class",
+      "goldDice": {
+        "n": 3,
+        "d": 6,
+        "plus": 0
+      }
+    },
+    {
+      "id": "social-status.rich",
+      "cite": "MH p.5",
+      "faces": [
+        5
+      ],
+      "status": "Rich",
+      "goldDice": {
+        "n": 5,
+        "d": 6,
+        "plus": 6
+      }
+    },
+    {
+      "id": "social-status.noble",
+      "cite": "MH p.5",
+      "faces": [
+        6
+      ],
+      "status": "Noble",
+      "goldDice": {
+        "n": 10,
+        "d": 6,
+        "plus": 0
+      }
+    }
+  ]
+}

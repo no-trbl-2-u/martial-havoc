@@ -1,0 +1,227 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "campaigns.adventure-hooks",
+  "kind": "d66",
+  "title": "Adventures",
+  "cite": "MH p.36-39",
+  "label": "rule",
+  "docs": "docs/campaigns/adventure-hooks.md",
+  "records": [
+    {
+      "id": "hook.11",
+      "cite": "MH p.36-39",
+      "d66": 11,
+      "text": "An enemy school has killed your master and all your companions. You are the last survivor who can avenge them"
+    },
+    {
+      "id": "hook.12",
+      "cite": "MH p.36-39",
+      "d66": 12,
+      "text": "Unknown killers have murdered your father. You must find your brothers and seek revenge"
+    },
+    {
+      "id": "hook.13",
+      "cite": "MH p.36-39",
+      "d66": 13,
+      "text": "Strange animal attacks on a mountain pass threaten trade"
+    },
+    {
+      "id": "hook.14",
+      "cite": "MH p.36-39",
+      "d66": 14,
+      "text": "A ghost haunts a palace, making life impossible for its inhabitants"
+    },
+    {
+      "id": "hook.15",
+      "cite": "MH p.36-39",
+      "d66": 15,
+      "text": "Nomads from the north have attacked a village on the border; the governor is looking for talented men"
+    },
+    {
+      "id": "hook.16",
+      "cite": "MH p.36-39",
+      "d66": 16,
+      "text": "An isolated village has stopped paying taxes. You are sent to gather information"
+    },
+    {
+      "id": "hook.21",
+      "cite": "MH p.36-39",
+      "d66": 21,
+      "text": "One city, two martial arts schools at war for decades"
+    },
+    {
+      "id": "hook.22",
+      "cite": "MH p.36-39",
+      "d66": 22,
+      "text": "You must escort a Mandarin to a newly conquered province"
+    },
+    {
+      "id": "hook.23",
+      "cite": "MH p.36-39",
+      "d66": 23,
+      "text": "A corrupt official tries to expropriate your family's property"
+    },
+    {
+      "id": "hook.24",
+      "cite": "MH p.36-39",
+      "d66": 24,
+      "text": "Thieves have stolen a sacred object from a monastery, and the abbot is looking for volunteers to find it"
+    },
+    {
+      "id": "hook.25",
+      "cite": "MH p.36-39",
+      "d66": 25,
+      "text": "A martial arts tournament is held every year on a remote island; only one will survive"
+    },
+    {
+      "id": "hook.26",
+      "cite": "MH p.36-39",
+      "d66": 26,
+      "text": "A monk is worshipped as a god. The local deities appear to you in a dream, asking to put an end to it"
+    },
+    {
+      "id": "hook.31",
+      "cite": "MH p.36-39",
+      "d66": 31,
+      "text": "You wake up to find your family slaughtered, you see only a one-armed figure running away"
+    },
+    {
+      "id": "hook.32",
+      "cite": "MH p.36-39",
+      "d66": 32,
+      "text": "Although the task is impossible, there is nothing else to do; you must kill the emperor"
+    },
+    {
+      "id": "hook.33",
+      "cite": "MH p.36-39",
+      "d66": 33,
+      "text": "In a cave hidden by a waterfall, it is said that there are monkeys with magical powers"
+    },
+    {
+      "id": "hook.34",
+      "cite": "MH p.36-39",
+      "d66": 34,
+      "text": "A nobleman pays you to teach his inept heir how to become strong and brave"
+    },
+    {
+      "id": "hook.35",
+      "cite": "MH p.36-39",
+      "d66": 35,
+      "text": "You are wrongly accused of murder and there is a bounty on your head"
+    },
+    {
+      "id": "hook.36",
+      "cite": "MH p.36-39",
+      "d66": 36,
+      "text": "To defeat a demon, you must find an ally and create a new dual technique"
+    },
+    {
+      "id": "hook.41",
+      "cite": "MH p.36-39",
+      "d66": 41,
+      "text": "The new Manchu emperor is about to launch an attack on the last rebel monastery"
+    },
+    {
+      "id": "hook.42",
+      "cite": "MH p.36-39",
+      "d66": 42,
+      "text": "Your master has taught his skills to five other people. You must find out if they have turned evil and, if so, kill them"
+    },
+    {
+      "id": "hook.43",
+      "cite": "MH p.36-39",
+      "d66": 43,
+      "text": "A Japanese warship has just landed on the coast, spreading panic"
+    },
+    {
+      "id": "hook.44",
+      "cite": "MH p.36-39",
+      "d66": 44,
+      "text": "A troop of European colonialists has occupied a port city and rules it with an iron fist"
+    },
+    {
+      "id": "hook.45",
+      "cite": "MH p.36-39",
+      "d66": 45,
+      "text": "You are tormented by a spirit and must find a way to get rid of it"
+    },
+    {
+      "id": "hook.46",
+      "cite": "MH p.36-39",
+      "d66": 46,
+      "text": "You have been struck on a pressure point and will die in 7 days, unless..."
+    },
+    {
+      "id": "hook.51",
+      "cite": "MH p.36-39",
+      "d66": 51,
+      "text": "You must accompany a Buddhist monk to India to retrieve the sacred scriptures"
+    },
+    {
+      "id": "hook.52",
+      "cite": "MH p.36-39",
+      "d66": 52,
+      "text": "A village is being preyed upon by bandits. You must teach everyone who is willing to fight in order to stop the next attack"
+    },
+    {
+      "id": "hook.53",
+      "cite": "MH p.36-39",
+      "d66": 53,
+      "text": "You must infiltrate a criminal organization using an invitation to a tournament as a cover"
+    },
+    {
+      "id": "hook.54",
+      "cite": "MH p.36-39",
+      "d66": 54,
+      "text": "Bandits have kidnapped the governor's son"
+    },
+    {
+      "id": "hook.55",
+      "cite": "MH p.36-39",
+      "d66": 55,
+      "text": "On your wedding day, a demon kidnaps your partner"
+    },
+    {
+      "id": "hook.56",
+      "cite": "MH p.36-39",
+      "d66": 56,
+      "text": "There is a mysterious killer who murders everyone with your surname"
+    },
+    {
+      "id": "hook.61",
+      "cite": "MH p.36-39",
+      "d66": 61,
+      "text": "A prince seeks your help, an impostor has taken his place"
+    },
+    {
+      "id": "hook.62",
+      "cite": "MH p.36-39",
+      "d66": 62,
+      "text": "For months, the village's harvests have been poor and the crops rot quickly"
+    },
+    {
+      "id": "hook.63",
+      "cite": "MH p.36-39",
+      "d66": 63,
+      "text": "You find out that you have an evil twin brother"
+    },
+    {
+      "id": "hook.64",
+      "cite": "MH p.36-39",
+      "d66": 64,
+      "text": "A pupil attacks you in your sleep. Thought dead, you wake up in your coffin"
+    },
+    {
+      "id": "hook.65",
+      "cite": "MH p.36-39",
+      "d66": 65,
+      "text": "An enraged dragon causes continuous tsunamis on some coastal villages"
+    },
+    {
+      "id": "hook.66",
+      "cite": "MH p.36-39",
+      "d66": 66,
+      "text": "You are under the magical influence of a criminal who uses you as a ruthless assassin for his own ends"
+    }
+  ]
+}

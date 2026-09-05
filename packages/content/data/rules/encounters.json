@@ -1,0 +1,506 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.encounters",
+  "kind": "2d6-by-column",
+  "title": "Encounters matrix",
+  "cite": "MH p.67",
+  "label": "rule",
+  "docs": "docs/rules/encounters.md",
+  "records": [
+    {
+      "id": "encounter.urban.2",
+      "cite": "MH p.67",
+      "total": 2,
+      "column": "Urban",
+      "printed": "Gui",
+      "opponentRef": "opponent.gui",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.non-urban.2",
+      "cite": "MH p.67",
+      "total": 2,
+      "column": "Non-urban",
+      "printed": "Supernatural",
+      "opponentRef": null,
+      "redirectColumn": "Supernatural"
+    },
+    {
+      "id": "encounter.water.2",
+      "cite": "MH p.67",
+      "total": 2,
+      "column": "Water",
+      "printed": "Kun",
+      "opponentRef": "opponent.kun",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.supernatural.2",
+      "cite": "MH p.67",
+      "total": 2,
+      "column": "Supernatural",
+      "printed": "Dapeng",
+      "opponentRef": "opponent.dapeng",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.monastery.2",
+      "cite": "MH p.67",
+      "total": 2,
+      "column": "Monastery",
+      "printed": "Tutelary Spirit",
+      "opponentRef": "opponent.tutelary-spirit",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.urban.3",
+      "cite": "MH p.67",
+      "total": 3,
+      "column": "Urban",
+      "printed": "Mandarin",
+      "opponentRef": "opponent.mandarin",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.non-urban.3",
+      "cite": "MH p.67",
+      "total": 3,
+      "column": "Non-urban",
+      "printed": "Xiongu",
+      "opponentRef": "opponent.xiongu",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.water.3",
+      "cite": "MH p.67",
+      "total": 3,
+      "column": "Water",
+      "printed": "Shen",
+      "opponentRef": "opponent.shen",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.supernatural.3",
+      "cite": "MH p.67",
+      "total": 3,
+      "column": "Supernatural",
+      "printed": "Long Wang",
+      "opponentRef": "opponent.long-wang",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.monastery.3",
+      "cite": "MH p.67",
+      "total": 3,
+      "column": "Monastery",
+      "printed": "Shi Gong",
+      "opponentRef": "opponent.shi-gong",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.urban.4",
+      "cite": "MH p.67",
+      "total": 4,
+      "column": "Urban",
+      "printed": "Shi Fu",
+      "opponentRef": "opponent.shi-fu",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.non-urban.4",
+      "cite": "MH p.67",
+      "total": 4,
+      "column": "Non-urban",
+      "printed": "Mercenary",
+      "opponentRef": "opponent.mercenary",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.water.4",
+      "cite": "MH p.67",
+      "total": 4,
+      "column": "Water",
+      "printed": "Smuggler",
+      "opponentRef": "opponent.smuggler",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.supernatural.4",
+      "cite": "MH p.67",
+      "total": 4,
+      "column": "Supernatural",
+      "printed": "Shan Xiao",
+      "opponentRef": "opponent.shan-xiao",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.monastery.4",
+      "cite": "MH p.67",
+      "total": 4,
+      "column": "Monastery",
+      "printed": "Shi Fu",
+      "opponentRef": "opponent.shi-fu",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.urban.5",
+      "cite": "MH p.67",
+      "total": 5,
+      "column": "Urban",
+      "printed": "Guard with Sheng Biao",
+      "opponentRef": "opponent.guard-with-sheng-biao",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.non-urban.5",
+      "cite": "MH p.67",
+      "total": 5,
+      "column": "Non-urban",
+      "printed": "Monk",
+      "opponentRef": "opponent.monk",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.water.5",
+      "cite": "MH p.67",
+      "total": 5,
+      "column": "Water",
+      "printed": "Pirate",
+      "opponentRef": "opponent.pirate",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.supernatural.5",
+      "cite": "MH p.67",
+      "total": 5,
+      "column": "Supernatural",
+      "printed": "Shi Shi",
+      "opponentRef": "opponent.shi-shi",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.monastery.5",
+      "cite": "MH p.67",
+      "total": 5,
+      "column": "Monastery",
+      "printed": "Devotee",
+      "opponentRef": "opponent.devotee",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.urban.6",
+      "cite": "MH p.67",
+      "total": 6,
+      "column": "Urban",
+      "printed": "Guard with Lian Ting",
+      "opponentRef": "opponent.guard-with-lian-ting",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.non-urban.6",
+      "cite": "MH p.67",
+      "total": 6,
+      "column": "Non-urban",
+      "printed": "Beast",
+      "opponentRef": "opponent.beast",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.water.6",
+      "cite": "MH p.67",
+      "total": 6,
+      "column": "Water",
+      "printed": "Giant Octopus",
+      "opponentRef": "opponent.giant-octopus",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.supernatural.6",
+      "cite": "MH p.67",
+      "total": 6,
+      "column": "Supernatural",
+      "printed": "Huang Feng Guai",
+      "opponentRef": "opponent.huang-feng-guai",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.monastery.6",
+      "cite": "MH p.67",
+      "total": 6,
+      "column": "Monastery",
+      "printed": "Shi Di",
+      "opponentRef": "opponent.shi-di",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.urban.7",
+      "cite": "MH p.67",
+      "total": 7,
+      "column": "Urban",
+      "printed": "Brawler",
+      "opponentRef": "opponent.brawler",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.non-urban.7",
+      "cite": "MH p.67",
+      "total": 7,
+      "column": "Non-urban",
+      "printed": "Bandit",
+      "opponentRef": "opponent.bandit",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.water.7",
+      "cite": "MH p.67",
+      "total": 7,
+      "column": "Water",
+      "printed": "Tanka",
+      "opponentRef": "opponent.tanka",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.supernatural.7",
+      "cite": "MH p.67",
+      "total": 7,
+      "column": "Supernatural",
+      "printed": "Huli Jing",
+      "opponentRef": "opponent.huli-jing",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.monastery.7",
+      "cite": "MH p.67",
+      "total": 7,
+      "column": "Monastery",
+      "printed": "Tu Di",
+      "opponentRef": "opponent.tu-di",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.urban.8",
+      "cite": "MH p.67",
+      "total": 8,
+      "column": "Urban",
+      "printed": "Shi Di",
+      "opponentRef": "opponent.shi-di",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.non-urban.8",
+      "cite": "MH p.67",
+      "total": 8,
+      "column": "Non-urban",
+      "printed": "Green Hornet",
+      "opponentRef": "opponent.green-hornet",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.water.8",
+      "cite": "MH p.67",
+      "total": 8,
+      "column": "Water",
+      "printed": "Shark",
+      "opponentRef": "opponent.shark",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.supernatural.8",
+      "cite": "MH p.67",
+      "total": 8,
+      "column": "Supernatural",
+      "printed": "Jiangshi",
+      "opponentRef": "opponent.jiangshi",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.monastery.8",
+      "cite": "MH p.67",
+      "total": 8,
+      "column": "Monastery",
+      "printed": "Thief",
+      "opponentRef": "opponent.thief",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.urban.9",
+      "cite": "MH p.67",
+      "total": 9,
+      "column": "Urban",
+      "printed": "Guard with Tie Jian",
+      "opponentRef": "opponent.guard-with-tie-jian",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.non-urban.9",
+      "cite": "MH p.67",
+      "total": 9,
+      "column": "Non-urban",
+      "printed": "Macaque",
+      "opponentRef": "opponent.macaque",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.water.9",
+      "cite": "MH p.67",
+      "total": 9,
+      "column": "Water",
+      "printed": "Giant Jellyfish",
+      "opponentRef": "opponent.giant-jellyfish",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.supernatural.9",
+      "cite": "MH p.67",
+      "total": 9,
+      "column": "Supernatural",
+      "printed": "Gui",
+      "opponentRef": "opponent.gui",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.monastery.9",
+      "cite": "MH p.67",
+      "total": 9,
+      "column": "Monastery",
+      "printed": "Cook",
+      "opponentRef": "opponent.cook",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.urban.10",
+      "cite": "MH p.67",
+      "total": 10,
+      "column": "Urban",
+      "printed": "Thief",
+      "opponentRef": "opponent.thief",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.non-urban.10",
+      "cite": "MH p.67",
+      "total": 10,
+      "column": "Non-urban",
+      "printed": "Gai Bang",
+      "opponentRef": "opponent.gai-bang",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.water.10",
+      "cite": "MH p.67",
+      "total": 10,
+      "column": "Water",
+      "printed": "Kobukson",
+      "opponentRef": "opponent.kobukson",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.supernatural.10",
+      "cite": "MH p.67",
+      "total": 10,
+      "column": "Supernatural",
+      "printed": "Feng Huang",
+      "opponentRef": "opponent.feng-huang",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.monastery.10",
+      "cite": "MH p.67",
+      "total": 10,
+      "column": "Monastery",
+      "printed": "Yogi",
+      "opponentRef": "opponent.yogi",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.urban.11",
+      "cite": "MH p.67",
+      "total": 11,
+      "column": "Urban",
+      "printed": "Boxer",
+      "opponentRef": "opponent.boxer",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.non-urban.11",
+      "cite": "MH p.67",
+      "total": 11,
+      "column": "Non-urban",
+      "printed": "Yauxia",
+      "opponentRef": "opponent.youxia",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.water.11",
+      "cite": "MH p.67",
+      "total": 11,
+      "column": "Water",
+      "printed": "Pan Long",
+      "opponentRef": "opponent.pan-long",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.supernatural.11",
+      "cite": "MH p.67",
+      "total": 11,
+      "column": "Supernatural",
+      "printed": "Bai Gu Jing",
+      "opponentRef": "opponent.bai-gu-jing",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.monastery.11",
+      "cite": "MH p.67",
+      "total": 11,
+      "column": "Monastery",
+      "printed": "Attendant",
+      "opponentRef": "opponent.attendant",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.urban.12",
+      "cite": "MH p.67",
+      "total": 12,
+      "column": "Urban",
+      "printed": "Rebels",
+      "opponentRef": "opponent.rebels",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.non-urban.12",
+      "cite": "MH p.67",
+      "total": 12,
+      "column": "Non-urban",
+      "printed": "Supernatural",
+      "opponentRef": null,
+      "redirectColumn": "Supernatural"
+    },
+    {
+      "id": "encounter.water.12",
+      "cite": "MH p.67",
+      "total": 12,
+      "column": "Water",
+      "printed": "Ghost Pirate",
+      "opponentRef": "opponent.ghost-pirate",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.supernatural.12",
+      "cite": "MH p.67",
+      "total": 12,
+      "column": "Supernatural",
+      "printed": "Niu Mowang",
+      "opponentRef": "opponent.niu-mowang",
+      "redirectColumn": null
+    },
+    {
+      "id": "encounter.monastery.12",
+      "cite": "MH p.67",
+      "total": 12,
+      "column": "Monastery",
+      "printed": "First Abbot",
+      "opponentRef": "opponent.first-abbot",
+      "redirectColumn": null
+    }
+  ]
+}

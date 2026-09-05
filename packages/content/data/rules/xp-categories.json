@@ -1,0 +1,51 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.xp-categories",
+  "kind": "list",
+  "title": "Experience score categories",
+  "cite": "MH p.34",
+  "label": "rule",
+  "docs": "docs/rules/experience-and-advancement.md",
+  "records": [
+    {
+      "id": "xp-category.mission-success",
+      "cite": "MH p.34",
+      "category": "Mission Success",
+      "min": 1,
+      "max": 3,
+      "subtracted": false
+    },
+    {
+      "id": "xp-category.use-of-equipment-and-environment",
+      "cite": "MH p.34",
+      "category": "Use of equipment and environment",
+      "min": 1,
+      "max": 3,
+      "subtracted": false
+    },
+    {
+      "id": "xp-category.combat-spectacularity",
+      "cite": "MH p.34",
+      "category": "Combat spectacularity",
+      "min": 1,
+      "max": 3,
+      "subtracted": false
+    },
+    {
+      "id": "xp-category.lateral-thinking",
+      "cite": "MH p.34",
+      "category": "Lateral thinking",
+      "min": 1,
+      "max": 3,
+      "subtracted": false
+    },
+    {
+      "id": "xp-category.minus-dishonor-points",
+      "cite": "MH p.34",
+      "category": "minus Dishonor Points",
+      "min": 0,
+      "max": null,
+      "subtracted": true
+    }
+  ]
+}

@@ -29,6 +29,8 @@ export {
 
 // The tables themselves.
 export * from './world/index'
+export * from './rules/index'
+export * from './campaigns/index'
 
 // How much of it there is.
 export { contentCounts } from './counts'

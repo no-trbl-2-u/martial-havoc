@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.healing",
+  "kind": "list",
+  "title": "Healing summary",
+  "cite": "MH p.31",
+  "label": "rule",
+  "docs": "docs/rules/multiple-combat-escape-healing.md",
+  "records": [
+    {
+      "id": "healing.skill",
+      "cite": "MH p.31",
+      "attribute": "SKILL",
+      "partial": "spiritual regeneration Techniques",
+      "amount": 1,
+      "full": "a full night's rest"
+    },
+    {
+      "id": "healing.endurance",
+      "cite": "MH p.31",
+      "attribute": "ENDURANCE",
+      "partial": "healing techniques, spiritual regeneration, eating a meal, a Health Elixir",
+      "amount": 4,
+      "full": "a week's rest"
+    },
+    {
+      "id": "healing.luck",
+      "cite": "MH p.31",
+      "attribute": "LUCK",
+      "partial": "Spirituality check in a Temple, with incense (p. 47)",
+      "amount": 1,
+      "full": null
+    }
+  ]
+}

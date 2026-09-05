@@ -1,0 +1,109 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.distances",
+  "kind": "list",
+  "title": "Route type and road features",
+  "cite": "MH p.44",
+  "label": "rule",
+  "docs": "docs/rules/exploration.md",
+  "records": [
+    {
+      "id": "distance.route-type.nothing",
+      "cite": "MH p.44",
+      "table": "Route type",
+      "dice": "2d6",
+      "totals": [
+        2,
+        3
+      ],
+      "text": "Nothing"
+    },
+    {
+      "id": "distance.route-type.mule-track",
+      "cite": "MH p.44",
+      "table": "Route type",
+      "dice": "2d6",
+      "totals": [
+        4,
+        5
+      ],
+      "text": "Mule track"
+    },
+    {
+      "id": "distance.route-type.trail",
+      "cite": "MH p.44",
+      "table": "Route type",
+      "dice": "2d6",
+      "totals": [
+        6,
+        7,
+        8
+      ],
+      "text": "Trail"
+    },
+    {
+      "id": "distance.route-type.beaten-path",
+      "cite": "MH p.44",
+      "table": "Route type",
+      "dice": "2d6",
+      "totals": [
+        9,
+        10
+      ],
+      "text": "Beaten path"
+    },
+    {
+      "id": "distance.route-type.paved-road",
+      "cite": "MH p.44",
+      "table": "Route type",
+      "dice": "2d6",
+      "totals": [
+        11,
+        12
+      ],
+      "text": "Paved road"
+    },
+    {
+      "id": "distance.road-feature.nothing",
+      "cite": "MH p.44",
+      "table": "Road feature",
+      "dice": "1d6",
+      "totals": [
+        1,
+        2
+      ],
+      "text": "Nothing"
+    },
+    {
+      "id": "distance.road-feature.inn",
+      "cite": "MH p.44",
+      "table": "Road feature",
+      "dice": "1d6",
+      "totals": [
+        3,
+        4
+      ],
+      "text": "Inn"
+    },
+    {
+      "id": "distance.road-feature.rope-bridge",
+      "cite": "MH p.44",
+      "table": "Road feature",
+      "dice": "1d6",
+      "totals": [
+        5
+      ],
+      "text": "Rope bridge"
+    },
+    {
+      "id": "distance.road-feature.guard-post",
+      "cite": "MH p.44",
+      "table": "Road feature",
+      "dice": "1d6",
+      "totals": [
+        6
+      ],
+      "text": "Guard post"
+    }
+  ]
+}

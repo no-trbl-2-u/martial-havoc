@@ -1,0 +1,137 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.treasures",
+  "kind": "1d6",
+  "title": "Treasures",
+  "cite": "MH p.68",
+  "label": "rule",
+  "docs": "docs/rules/treasures-and-special-items.md",
+  "records": [
+    {
+      "id": "treasure.up-to-16.1",
+      "cite": "MH p.68",
+      "face": 1,
+      "band": "Up to 16",
+      "text": "Nothing"
+    },
+    {
+      "id": "treasure.17-19.1",
+      "cite": "MH p.68",
+      "face": 1,
+      "band": "17-19",
+      "text": "1d6 GP"
+    },
+    {
+      "id": "treasure.20-or-more.1",
+      "cite": "MH p.68",
+      "face": 1,
+      "band": "20 or more",
+      "text": "2d6 GP"
+    },
+    {
+      "id": "treasure.up-to-16.2",
+      "cite": "MH p.68",
+      "face": 2,
+      "band": "Up to 16",
+      "text": "1d6 GP"
+    },
+    {
+      "id": "treasure.17-19.2",
+      "cite": "MH p.68",
+      "face": 2,
+      "band": "17-19",
+      "text": "2d6 GP"
+    },
+    {
+      "id": "treasure.20-or-more.2",
+      "cite": "MH p.68",
+      "face": 2,
+      "band": "20 or more",
+      "text": "3d6 GP"
+    },
+    {
+      "id": "treasure.up-to-16.3",
+      "cite": "MH p.68",
+      "face": 3,
+      "band": "Up to 16",
+      "text": "2d6 GP"
+    },
+    {
+      "id": "treasure.17-19.3",
+      "cite": "MH p.68",
+      "face": 3,
+      "band": "17-19",
+      "text": "3d6 GP"
+    },
+    {
+      "id": "treasure.20-or-more.3",
+      "cite": "MH p.68",
+      "face": 3,
+      "band": "20 or more",
+      "text": "4d6 GP"
+    },
+    {
+      "id": "treasure.up-to-16.4",
+      "cite": "MH p.68",
+      "face": 4,
+      "band": "Up to 16",
+      "text": "3d6 GP"
+    },
+    {
+      "id": "treasure.17-19.4",
+      "cite": "MH p.68",
+      "face": 4,
+      "band": "17-19",
+      "text": "4d6 GP"
+    },
+    {
+      "id": "treasure.20-or-more.4",
+      "cite": "MH p.68",
+      "face": 4,
+      "band": "20 or more",
+      "text": "5d6 GP"
+    },
+    {
+      "id": "treasure.up-to-16.5",
+      "cite": "MH p.68",
+      "face": 5,
+      "band": "Up to 16",
+      "text": "1d6 GP + Common Item"
+    },
+    {
+      "id": "treasure.17-19.5",
+      "cite": "MH p.68",
+      "face": 5,
+      "band": "17-19",
+      "text": "2d6 + Common Item"
+    },
+    {
+      "id": "treasure.20-or-more.5",
+      "cite": "MH p.68",
+      "face": 5,
+      "band": "20 or more",
+      "text": "Special Item"
+    },
+    {
+      "id": "treasure.up-to-16.6",
+      "cite": "MH p.68",
+      "face": 6,
+      "band": "Up to 16",
+      "text": "2d6 GP + Common Item"
+    },
+    {
+      "id": "treasure.17-19.6",
+      "cite": "MH p.68",
+      "face": 6,
+      "band": "17-19",
+      "text": "Special Item"
+    },
+    {
+      "id": "treasure.20-or-more.6",
+      "cite": "MH p.68",
+      "face": 6,
+      "band": "20 or more",
+      "text": "Special Item"
+    }
+  ]
+}

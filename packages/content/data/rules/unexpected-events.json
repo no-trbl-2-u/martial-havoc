@@ -1,0 +1,88 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.unexpected-events",
+  "kind": "2d6",
+  "title": "Unexpected Event table",
+  "cite": "MH p.28",
+  "label": "rule",
+  "docs": "docs/rules/combat.md",
+  "records": [
+    {
+      "id": "unexpected-event.2",
+      "cite": "MH p.28",
+      "total": 2,
+      "text": "Adverse divine intervention",
+      "retreatRow": false
+    },
+    {
+      "id": "unexpected-event.3",
+      "cite": "MH p.28",
+      "total": 3,
+      "text": "Injury or loss of weapon for the Master",
+      "retreatRow": false
+    },
+    {
+      "id": "unexpected-event.4",
+      "cite": "MH p.28",
+      "total": 4,
+      "text": "Enemy retreat (called back, secret plan, etc)",
+      "retreatRow": true
+    },
+    {
+      "id": "unexpected-event.5",
+      "cite": "MH p.28",
+      "total": 5,
+      "text": "Environmental change (floor/ceiling collapses, light, climate)",
+      "retreatRow": false
+    },
+    {
+      "id": "unexpected-event.6",
+      "cite": "MH p.28",
+      "total": 6,
+      "text": "The fight resumes",
+      "retreatRow": false
+    },
+    {
+      "id": "unexpected-event.7",
+      "cite": "MH p.28",
+      "total": 7,
+      "text": "Reinforcements: 1-4 Minions (footnote: optional ENDURANCE=1 rule, R33) of the same type",
+      "retreatRow": false
+    },
+    {
+      "id": "unexpected-event.8",
+      "cite": "MH p.28",
+      "total": 8,
+      "text": "The fight resumes",
+      "retreatRow": false
+    },
+    {
+      "id": "unexpected-event.9",
+      "cite": "MH p.28",
+      "total": 9,
+      "text": "Environmental change (floor/ceiling collapses, light, climate)",
+      "retreatRow": false
+    },
+    {
+      "id": "unexpected-event.10",
+      "cite": "MH p.28",
+      "total": 10,
+      "text": "Enemy retreat (called back, flees, etc)",
+      "retreatRow": true
+    },
+    {
+      "id": "unexpected-event.11",
+      "cite": "MH p.28",
+      "total": 11,
+      "text": "Injury or loss of weapon for the opponent",
+      "retreatRow": false
+    },
+    {
+      "id": "unexpected-event.12",
+      "cite": "MH p.28",
+      "total": 12,
+      "text": "Favorable divine intervention",
+      "retreatRow": false
+    }
+  ]
+}

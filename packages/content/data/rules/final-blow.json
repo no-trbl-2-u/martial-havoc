@@ -1,0 +1,245 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.final-blow",
+  "kind": "d6-banded",
+  "title": "Final Blow inspiration table",
+  "cite": "MH p.26",
+  "label": "rule",
+  "docs": "docs/rules/combat.md",
+  "records": [
+    {
+      "id": "final-blow.1-2.1",
+      "cite": "MH p.26",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 1,
+      "action": "Strike",
+      "attribute": "Furious",
+      "animal": "Dragon"
+    },
+    {
+      "id": "final-blow.1-2.2",
+      "cite": "MH p.26",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 2,
+      "action": "Kick",
+      "attribute": "Spinning",
+      "animal": "Tiger"
+    },
+    {
+      "id": "final-blow.1-2.3",
+      "cite": "MH p.26",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 3,
+      "action": "Punch",
+      "attribute": "Celestial",
+      "animal": "Crane"
+    },
+    {
+      "id": "final-blow.1-2.4",
+      "cite": "MH p.26",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 4,
+      "action": "Headbutt",
+      "attribute": "Infernal",
+      "animal": "Serpent"
+    },
+    {
+      "id": "final-blow.1-2.5",
+      "cite": "MH p.26",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 5,
+      "action": "Palm",
+      "attribute": "Fiery",
+      "animal": "Scorpion"
+    },
+    {
+      "id": "final-blow.1-2.6",
+      "cite": "MH p.26",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 6,
+      "action": "Fingers",
+      "attribute": "Explosive",
+      "animal": "Leopard"
+    },
+    {
+      "id": "final-blow.3-4.1",
+      "cite": "MH p.26",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 1,
+      "action": "Cut",
+      "attribute": "Impetuous",
+      "animal": "Monkey"
+    },
+    {
+      "id": "final-blow.3-4.2",
+      "cite": "MH p.26",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 2,
+      "action": "Flight",
+      "attribute": "Rocky",
+      "animal": "Phoenix"
+    },
+    {
+      "id": "final-blow.3-4.3",
+      "cite": "MH p.26",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 3,
+      "action": "Leap",
+      "attribute": "Stellar",
+      "animal": "Taurus"
+    },
+    {
+      "id": "final-blow.3-4.4",
+      "cite": "MH p.26",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 4,
+      "action": "Charge",
+      "attribute": "Flying",
+      "animal": "Turtle"
+    },
+    {
+      "id": "final-blow.3-4.5",
+      "cite": "MH p.26",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 5,
+      "action": "Slap",
+      "attribute": "Legendary",
+      "animal": "Leopard"
+    },
+    {
+      "id": "final-blow.3-4.6",
+      "cite": "MH p.26",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 6,
+      "action": "Knee Strike",
+      "attribute": "Deadly",
+      "animal": "Lion"
+    },
+    {
+      "id": "final-blow.5-6.1",
+      "cite": "MH p.26",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 1,
+      "action": "Parry",
+      "attribute": "Spiritual",
+      "animal": "Eagle"
+    },
+    {
+      "id": "final-blow.5-6.2",
+      "cite": "MH p.26",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 2,
+      "action": "Block",
+      "attribute": "Demonic",
+      "animal": "Falcon"
+    },
+    {
+      "id": "final-blow.5-6.3",
+      "cite": "MH p.26",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 3,
+      "action": "Attack",
+      "attribute": "Poisonous",
+      "animal": "Fox"
+    },
+    {
+      "id": "final-blow.5-6.4",
+      "cite": "MH p.26",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 4,
+      "action": "Defense",
+      "attribute": "Lightning",
+      "animal": "Mantis"
+    },
+    {
+      "id": "final-blow.5-6.5",
+      "cite": "MH p.26",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 5,
+      "action": "Sprint",
+      "attribute": "Destructive",
+      "animal": "Horse"
+    },
+    {
+      "id": "final-blow.5-6.6",
+      "cite": "MH p.26",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 6,
+      "action": "Sweep",
+      "attribute": "Sharp",
+      "animal": "Unicorn"
+    }
+  ]
+}

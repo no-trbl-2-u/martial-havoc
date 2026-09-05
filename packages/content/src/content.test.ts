@@ -57,6 +57,25 @@ const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
   'world.inspirations': 72,
   'world.sparks': 216,
   'world.presets': 8,
+
+  // The rules: the tables the procedures roll on.
+  'rules.social-status': 5,
+  'rules.final-blow': 18,
+  'rules.unexpected-events': 11,
+  'rules.healing': 3,
+  'rules.xp-categories': 5,
+  'rules.xp-costs': 15,
+  'rules.region': 30,
+  'rules.monastery': 30,
+  'rules.distances': 9,
+  'rules.city-services': 11,
+  'rules.city-encounters': 12,
+  'rules.encounters': 55,
+  'rules.treasures': 18,
+  'rules.special-items': 11,
+
+  // The campaign layer: what an adventure can be about.
+  'campaigns.adventure-hooks': 36,
 }
 
 /** Recursively list files under `dir` with the given extension, sorted. */
