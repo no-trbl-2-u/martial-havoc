@@ -1,5 +1,6 @@
 {
   "$schema": "../../schema/content.schema.json",
+  "$comment": "UI strings for the app shell. Phase 1 placeholder page; Phase 8 (The UI) replaces the page and the shell. Every record carries a cite.",
   "id": "app.strings",
   "kind": "strings",
   "title": "App shell strings",

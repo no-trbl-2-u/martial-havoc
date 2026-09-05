@@ -1,7 +1,7 @@
 /**
  * The garden's one e2e: the exported web build serves the placeholder
- * page with the project name and the licence line. Phase 2 replaces
- * this spec together with the page.
+ * page with the project name and the licence line. Phase 8 (The UI)
+ * replaces this spec together with the page.
  */
 import { expect, test } from '@playwright/test'
 

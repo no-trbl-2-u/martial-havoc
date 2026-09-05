@@ -24,8 +24,9 @@ the phase.
       2026-09-05, before the engine phases) — 9f7f32e
 
 **The engine (phases 2–4):**
-- [ ] Phase 2 — Tables as data, and creation (brief:
+- [x] Phase 2 — Tables as data, and creation (brief:
       `phase_2_tables_and_creation.md`, drafted via oversight 2026-09-05)
+      — 1da8ae3
 - [ ] Phase 3 — Engine core
 - [ ] Phase 4 — Effects and Oracle lines
 
@@ -294,3 +295,11 @@ with linked notes here.)
   estate's inventory, R01-R84 and I-01..I-64 preserved, docs leg added
   to the verify gate (commits 83f636b, 2ed9db5, 1e05736, 62629e4,
   9f7f32e)
+- phase 2 — 1da8ae3 — tables as data, and creation: one JSON Schema
+  and the ajv validator leg inside the content test; 26 content files and
+  844 records transcribed cell for cell from docs/ (world 571, rules 233,
+  hooks 36, app strings 4); the dice interface and the whole of master
+  creation (MH p.5-11) as pure functions over injected tables and
+  injected dice; all eight pre-generated sheets load as printed, Yin's
+  two overspends reported and not corrected; 17 labelled behaviours
+  (commits 7b2af31, c9e3131, 0731fb5, 25c4f20, 1da8ae3, plus this tick)

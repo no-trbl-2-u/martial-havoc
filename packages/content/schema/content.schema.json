@@ -1204,6 +1204,10 @@
                 }
               ]
             }
+          },
+          "$comment": {
+            "description": "A note to the next reader. Standard JSON Schema annotation; carried by files that need to say why they look the way they do.",
+            "type": "string"
           }
         }
       },
@@ -1260,6 +1264,10 @@
                 }
               ]
             }
+          },
+          "$comment": {
+            "description": "A note to the next reader. Standard JSON Schema annotation; carried by files that need to say why they look the way they do.",
+            "type": "string"
           }
         }
       },
@@ -1313,6 +1321,10 @@
                 }
               ]
             }
+          },
+          "$comment": {
+            "description": "A note to the next reader. Standard JSON Schema annotation; carried by files that need to say why they look the way they do.",
+            "type": "string"
           }
         }
       },
@@ -1366,6 +1378,10 @@
                 }
               ]
             }
+          },
+          "$comment": {
+            "description": "A note to the next reader. Standard JSON Schema annotation; carried by files that need to say why they look the way they do.",
+            "type": "string"
           }
         }
       },
@@ -1412,6 +1428,10 @@
             "items": {
               "$ref": "#/$defs/records/encounterCell"
             }
+          },
+          "$comment": {
+            "description": "A note to the next reader. Standard JSON Schema annotation; carried by files that need to say why they look the way they do.",
+            "type": "string"
           }
         }
       },
@@ -1465,6 +1485,10 @@
                 }
               ]
             }
+          },
+          "$comment": {
+            "description": "A note to the next reader. Standard JSON Schema annotation; carried by files that need to say why they look the way they do.",
+            "type": "string"
           }
         }
       },
@@ -1533,6 +1557,10 @@
                 }
               ]
             }
+          },
+          "$comment": {
+            "description": "A note to the next reader. Standard JSON Schema annotation; carried by files that need to say why they look the way they do.",
+            "type": "string"
           }
         }
       },
@@ -1606,6 +1634,10 @@
             "items": {
               "$ref": "#/$defs/records/preset"
             }
+          },
+          "$comment": {
+            "description": "A note to the next reader. Standard JSON Schema annotation; carried by files that need to say why they look the way they do.",
+            "type": "string"
           }
         }
       },
@@ -1652,6 +1684,10 @@
             "items": {
               "$ref": "#/$defs/records/string"
             }
+          },
+          "$comment": {
+            "description": "A note to the next reader. Standard JSON Schema annotation; carried by files that need to say why they look the way they do.",
+            "type": "string"
           }
         }
       }

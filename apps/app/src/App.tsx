@@ -3,8 +3,12 @@
  *
  * Phase 1 ships exactly one screen: the project name and the licence
  * line, both read from `@martial-havoc/content` (no copy lives in a
- * component — agents.md rule 7). Phase 2 replaces this screen; it is
- * not the app's shell and must not grow one.
+ * component — agents.md rule 7). Phase 8 (The UI) replaces this screen;
+ * it is not the app's shell and must not grow one.
+ *
+ * Phase 2 shipped the tables and the creation engine behind it and
+ * deliberately left the screen alone: the build plan gives the UI to
+ * Phase 8, which is also where a random dice source is injected.
  */
 import { t } from '@martial-havoc/content'
 import { StyleSheet, Text, View } from 'react-native'
