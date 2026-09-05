@@ -9,8 +9,8 @@
 
 ## Pending
 
-(empty — first pass runs after the canonical sibling phase
-ships and the deploy is green)
+(empty — first pass runs after the canonical sibling phase, Phase 8
+(The UI), ships and the deploy is green; set via oversight 2026-09-05)
 
 ## Done
 
