@@ -1,0 +1,626 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.market",
+  "kind": "list",
+  "title": "Market",
+  "cite": "MH p.52-55",
+  "label": "rule",
+  "docs": "docs/world/market.md",
+  "records": [
+    {
+      "id": "market.common.incense",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Incense",
+      "priceGp": null,
+      "priceSp": 5,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.common.lantern",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Lantern",
+      "priceGp": 1,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.common.torch",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Torch",
+      "priceGp": null,
+      "priceSp": 1,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.common.musical-instrument",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Musical Instrument",
+      "priceGp": 12,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.common.wicker-backpack",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Wicker Backpack",
+      "priceGp": 2,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.common.high-quality-tea",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "High-quality tea",
+      "priceGp": null,
+      "priceSp": 5,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.common.rations-per-day",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Rations (per day)",
+      "priceGp": 5,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.common.health-elixir",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Health Elixir",
+      "priceGp": 25,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.common.smoke-bomb",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Smoke Bomb",
+      "priceGp": 25,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.common.protection-amulet",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Protection Amulet",
+      "priceGp": 40,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.common.map-of-body-meridians",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Map of Body Meridians",
+      "priceGp": 70,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.common.training-manual",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Training Manual",
+      "priceGp": 100,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.common.gunpowder",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Gunpowder",
+      "priceGp": 85,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.common.acupuncture-needles",
+      "cite": "MH p.52-55",
+      "list": "common",
+      "item": "Acupuncture Needles",
+      "priceGp": 4,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.sword",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Sword",
+      "priceGp": 13,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.saber",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Saber",
+      "priceGp": 10,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.tonfa",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Tonfa",
+      "priceGp": 8,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.halberd",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Halberd",
+      "priceGp": 18,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.bow",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Bow",
+      "priceGp": 15,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.dagger",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Dagger",
+      "priceGp": 5,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.trident",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Trident",
+      "priceGp": 16,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.mace",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Mace",
+      "priceGp": 9,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.long-staff",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Long staff",
+      "priceGp": 5,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.butterfly-knives",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Butterfly knives",
+      "priceGp": 10,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.spear",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Spear",
+      "priceGp": 12,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.dart",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Dart",
+      "priceGp": 1,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.rope-dart",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "Rope Dart",
+      "priceGp": 6,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.weapons.3-section-staff",
+      "cite": "MH p.52-55",
+      "list": "weapons",
+      "item": "3-section staff",
+      "priceGp": 10,
+      "priceSp": null,
+      "flags": [
+        "weapon",
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.tent",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Tent",
+      "priceGp": 10,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.bamboo-mat",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Bamboo mat",
+      "priceGp": 2,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.kite",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Kite",
+      "priceGp": 1,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.travel-tea-set",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Travel tea set",
+      "priceGp": 4,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.rope",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Rope",
+      "priceGp": 2,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.flint",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Flint",
+      "priceGp": 1,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.field-knife",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Field knife",
+      "priceGp": 4,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.compass",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Compass",
+      "priceGp": 10,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.topographic-map",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Topographic Map",
+      "priceGp": 10,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.douli-hat",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Douli hat",
+      "priceGp": 2,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.hook-and-line",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Hook and Line",
+      "priceGp": 3,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.cart",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Cart",
+      "priceGp": 20,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.expedition.trained-monkey",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Trained monkey",
+      "priceGp": 75,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.expedition.horse",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Horse",
+      "priceGp": 50,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.expedition.mule",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Mule",
+      "priceGp": 25,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.expedition.paper-and-ink",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Paper and Ink",
+      "priceGp": 8,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.candle-clock",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Candle Clock",
+      "priceGp": 15,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.expedition.grapple",
+      "cite": "MH p.52-55",
+      "list": "expedition",
+      "item": "Grapple",
+      "priceGp": 7,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.armor.large-wicker-shield",
+      "cite": "MH p.52-55",
+      "list": "armor",
+      "item": "Large Wicker Shield",
+      "priceGp": 6,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.armor.small-bronze-shield",
+      "cite": "MH p.52-55",
+      "list": "armor",
+      "item": "Small Bronze Shield",
+      "priceGp": 10,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.armor.iron-fan",
+      "cite": "MH p.52-55",
+      "list": "armor",
+      "item": "Iron Fan",
+      "priceGp": 15,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.armor.complete-war-armor",
+      "cite": "MH p.52-55",
+      "list": "armor",
+      "item": "Complete War Armor",
+      "priceGp": 150,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.armor.reinforced-douli-hat",
+      "cite": "MH p.52-55",
+      "list": "armor",
+      "item": "Reinforced Douli Hat",
+      "priceGp": 10,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.armor.iron-helmet",
+      "cite": "MH p.52-55",
+      "list": "armor",
+      "item": "Iron Helmet",
+      "priceGp": 18,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.armor.war-mask",
+      "cite": "MH p.52-55",
+      "list": "armor",
+      "item": "War Mask",
+      "priceGp": 25,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.armor.steel-helmet-with-neck-guard",
+      "cite": "MH p.52-55",
+      "list": "armor",
+      "item": "Steel Helmet with Neck Guard",
+      "priceGp": 50,
+      "priceSp": null,
+      "flags": []
+    },
+    {
+      "id": "market.armor.leg-bandages",
+      "cite": "MH p.52-55",
+      "list": "armor",
+      "item": "Leg Bandages",
+      "priceGp": 3,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.armor.arm-bandages",
+      "cite": "MH p.52-55",
+      "list": "armor",
+      "item": "Arm Bandages",
+      "priceGp": 3,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    },
+    {
+      "id": "market.armor.iron-rings",
+      "cite": "MH p.52-55",
+      "list": "armor",
+      "item": "Iron Rings",
+      "priceGp": 15,
+      "priceSp": null,
+      "flags": [
+        "underTwentyGp"
+      ]
+    }
+  ]
+}

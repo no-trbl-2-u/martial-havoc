@@ -1,0 +1,335 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.rituals",
+  "kind": "d66",
+  "title": "Rituals",
+  "cite": "MH p.16-19",
+  "label": "rule",
+  "docs": "docs/world/rituals.md",
+  "records": [
+    {
+      "id": "ritual.acting-without-acting",
+      "cite": "MH p.16-19",
+      "d66": 11,
+      "name": "Acting without acting",
+      "pinyin": "Wei Wu Wei",
+      "cost": 3,
+      "effect": "Meditate and generate two random events: one positive and one negative."
+    },
+    {
+      "id": "ritual.acupuncture",
+      "cite": "MH p.16-19",
+      "d66": 12,
+      "name": "Acupuncture",
+      "pinyin": "Zhen Jiu",
+      "cost": 1,
+      "effect": "Treat an injury or spiritual dysfunction"
+    },
+    {
+      "id": "ritual.body-and-mind-balance",
+      "cite": "MH p.16-19",
+      "d66": 13,
+      "name": "Body and Mind balance",
+      "pinyin": "Zheng Qi",
+      "cost": 2,
+      "effect": "Swap your current SKILL and ENDURANCE points, without exceeding the initial value."
+    },
+    {
+      "id": "ritual.book-of-changes",
+      "cite": "MH p.16-19",
+      "d66": 14,
+      "name": "Book of Changes",
+      "pinyin": "Yi Jing",
+      "cost": 2,
+      "effect": "By studying the texts, you predict future events"
+    },
+    {
+      "id": "ritual.door-gods",
+      "cite": "MH p.16-19",
+      "d66": 15,
+      "name": "Door gods",
+      "pinyin": "Men Shen",
+      "cost": 2,
+      "effect": "An invocation that keeps evil spirits away"
+    },
+    {
+      "id": "ritual.geomancy",
+      "cite": "MH p.16-19",
+      "d66": 16,
+      "name": "Geomancy",
+      "pinyin": "Fengshui",
+      "cost": 1,
+      "effect": "Find the right direction to your destination"
+    },
+    {
+      "id": "ritual.god-of-money",
+      "cite": "MH p.16-19",
+      "d66": 21,
+      "name": "God of Money",
+      "pinyin": "Cai Shen",
+      "cost": 3,
+      "effect": "An invocation for good luck in business"
+    },
+    {
+      "id": "ritual.god-of-plagues",
+      "cite": "MH p.16-19",
+      "d66": 22,
+      "name": "God of Plagues",
+      "pinyin": "Wen Shen",
+      "cost": 4,
+      "effect": "An invocation to curse a place"
+    },
+    {
+      "id": "ritual.god-of-rain",
+      "cite": "MH p.16-19",
+      "d66": 23,
+      "name": "God of Rain",
+      "pinyin": "Yu Shen",
+      "cost": 2,
+      "effect": "An invocation to change the weather"
+    },
+    {
+      "id": "ritual.king-of-the-underworld",
+      "cite": "MH p.16-19",
+      "d66": 24,
+      "name": "King of the Underworld",
+      "pinyin": "Yan Wang",
+      "cost": 4,
+      "effect": "Summon the spirit of a dead person and ask them a question"
+    },
+    {
+      "id": "ritual.light-and-shadow",
+      "cite": "MH p.16-19",
+      "d66": 25,
+      "name": "Light and shadow",
+      "pinyin": "Yin Yang",
+      "cost": 2,
+      "effect": "By channeling Qi into your hands, you can create a burning pole and a frozen pole"
+    },
+    {
+      "id": "ritual.lord-of-the-bow",
+      "cite": "MH p.16-19",
+      "d66": 26,
+      "name": "Lord of the Bow",
+      "pinyin": "Hou Yi",
+      "cost": 2,
+      "effect": "Your next shot automatically hits its target"
+    },
+    {
+      "id": "ritual.lord-of-the-sea",
+      "cite": "MH p.16-19",
+      "d66": 31,
+      "name": "Lord of the Sea",
+      "pinyin": "Hai Shen",
+      "cost": 2,
+      "effect": "An invocation to influence currents and winds."
+    },
+    {
+      "id": "ritual.mother-of-lightning",
+      "cite": "MH p.16-19",
+      "d66": 32,
+      "name": "Mother of Lightning",
+      "pinyin": "Dianmu",
+      "cost": 4,
+      "effect": "During a thunderstorm, you can summon lightning to a visible location"
+    },
+    {
+      "id": "ritual.mystical-fire",
+      "cite": "MH p.16-19",
+      "d66": 33,
+      "name": "Mystical Fire",
+      "pinyin": "Sanmei Zhenhuo",
+      "cost": 4,
+      "effect": "Summon a fire that can only be extinguished with magic"
+    },
+    {
+      "id": "ritual.older-brother",
+      "cite": "MH p.16-19",
+      "d66": 34,
+      "name": "Older Brother",
+      "pinyin": "Shi Xiong",
+      "cost": 4,
+      "effect": "Recruit a disciple who follows you everywhere to learn your techniques"
+    },
+    {
+      "id": "ritual.open-the-mouth-close-the-mouth",
+      "cite": "MH p.16-19",
+      "d66": 35,
+      "name": "Open the mouth, close the mouth",
+      "pinyin": "Kai Kou Bi Kou",
+      "cost": 2,
+      "effect": "you understand what is right and wrong to say during a conversation"
+    },
+    {
+      "id": "ritual.outer-gate",
+      "cite": "MH p.16-19",
+      "d66": 36,
+      "name": "Outer Gate",
+      "pinyin": "Wai Men",
+      "cost": 1,
+      "effect": "You know how to find the way that leads out"
+    },
+    {
+      "id": "ritual.protective-demon",
+      "cite": "MH p.16-19",
+      "d66": 41,
+      "name": "Protective Demon",
+      "pinyin": "Ye Cha",
+      "cost": 4,
+      "effect": "Summon a minor deity for a short time to assist in combat"
+    },
+    {
+      "id": "ritual.pulling-silk-threads",
+      "cite": "MH p.16-19",
+      "d66": 42,
+      "name": "Pulling Silk Threads",
+      "pinyin": "Yi Xian Chuan",
+      "cost": 3,
+      "effect": "Move a person's limb at will"
+    },
+    {
+      "id": "ritual.punishing-the-sky",
+      "cite": "MH p.16-19",
+      "d66": 43,
+      "name": "Punishing the sky",
+      "pinyin": "Xingtian",
+      "cost": 4,
+      "effect": "You come back to life with reduced ENDURANCE points"
+    },
+    {
+      "id": "ritual.real-person",
+      "cite": "MH p.16-19",
+      "d66": 44,
+      "name": "Real Person",
+      "pinyin": "Zhenren",
+      "cost": 2,
+      "effect": "You can tell if someone is lying with just a few words"
+    },
+    {
+      "id": "ritual.silence-gate",
+      "cite": "MH p.16-19",
+      "d66": 45,
+      "name": "Silence gate",
+      "pinyin": "Jingzi Menzhong",
+      "cost": 2,
+      "effect": "A meditation that allows you to ignore hunger and thirst"
+    },
+    {
+      "id": "ritual.somersault-clouds",
+      "cite": "MH p.16-19",
+      "d66": 46,
+      "name": "Somersault clouds",
+      "pinyin": "Jindou Yun",
+      "cost": 3,
+      "effect": "You can fall from great heights as if walking on clouds"
+    },
+    {
+      "id": "ritual.tea-ceremony",
+      "cite": "MH p.16-19",
+      "d66": 51,
+      "name": "Tea ceremony",
+      "pinyin": "Chiayi",
+      "cost": 3,
+      "effect": "Host someone for a tea to convince them of your proposal"
+    },
+    {
+      "id": "ritual.tempering-steel",
+      "cite": "MH p.16-19",
+      "d66": 52,
+      "name": "Tempering Steel",
+      "pinyin": "Bintie",
+      "cost": 4,
+      "effect": "You are skilled in improving blades' quality"
+    },
+    {
+      "id": "ritual.the-5-phases",
+      "cite": "MH p.16-19",
+      "d66": 53,
+      "name": "The 5 phases",
+      "pinyin": "Wuxing",
+      "cost": 3,
+      "effect": "Transform small amounts of matter in the direction: ->water->wood->fire->earth->metal->"
+    },
+    {
+      "id": "ritual.the-72-transformations",
+      "cite": "MH p.16-19",
+      "d66": 54,
+      "name": "The 72 transformations",
+      "pinyin": "Qishi Er Bianhua",
+      "cost": 4,
+      "effect": "You turn into any creature for a short time"
+    },
+    {
+      "id": "ritual.the-eight-celestial-drunkards",
+      "cite": "MH p.16-19",
+      "d66": 55,
+      "name": "The Eight Celestial Drunkards",
+      "pinyin": "Ui Jiu Ba Xian",
+      "cost": 4,
+      "effect": "Summon unknown deities who wreak havoc on the scene"
+    },
+    {
+      "id": "ritual.the-golden-bell",
+      "cite": "MH p.16-19",
+      "d66": 56,
+      "name": "The Golden Bell",
+      "pinyin": "Jin Zhong Zhao",
+      "cost": 4,
+      "effect": "A long conditioning makes your body indestructible for a short period of time"
+    },
+    {
+      "id": "ritual.the-way-of-tao",
+      "cite": "MH p.16-19",
+      "d66": 61,
+      "name": "The Way of Tao",
+      "pinyin": "Dao De Jing",
+      "cost": 3,
+      "effect": "Every event brings with it its opposite; you just need to pay attention to details"
+    },
+    {
+      "id": "ritual.tightening-spell",
+      "cite": "MH p.16-19",
+      "d66": 62,
+      "name": "Tightening spell",
+      "pinyin": "Jingu",
+      "cost": 2,
+      "effect": "A spell that causes a tremendous headache"
+    },
+    {
+      "id": "ritual.violin",
+      "cite": "MH p.16-19",
+      "d66": 63,
+      "name": "Violin",
+      "pinyin": "Xiqin",
+      "cost": 3,
+      "effect": "Playing a particular melody can induce hypnosis"
+    },
+    {
+      "id": "ritual.vital-breath",
+      "cite": "MH p.16-19",
+      "d66": 64,
+      "name": "Vital Breath",
+      "pinyin": "Qi Gong",
+      "cost": 1,
+      "effect": "Exercises for spiritual regeneration"
+    },
+    {
+      "id": "ritual.wheel-of-existence",
+      "cite": "MH p.16-19",
+      "d66": 65,
+      "name": "Wheel of Existence",
+      "pinyin": "Youlun",
+      "cost": 3,
+      "effect": "By observing a person, you learn about their past life and a hidden secret"
+    },
+    {
+      "id": "ritual.white-guanyin",
+      "cite": "MH p.16-19",
+      "d66": 66,
+      "name": "White Guanyin",
+      "pinyin": "Baiyi Guanyin",
+      "cost": 2,
+      "effect": "Recite a mantra that helps you in benevolent actions"
+    }
+  ]
+}

@@ -1,10 +1,38 @@
 /**
  * @martial-havoc/content — public surface.
  *
- * Content is data (agents.md standing rule 7). This module is the only
- * TypeScript in the package: it types the data files and exposes pure
- * lookups over them. No I/O at runtime — the bundler inlines the JSON.
+ * Content is data (agents.md standing rule 7). The TypeScript in this
+ * package types the data files and exposes total lookups over them; it
+ * holds no copy of its own and does no I/O at runtime — the bundler
+ * inlines the JSON.
+ *
+ * The engine imports this package for **types only** (`import type`);
+ * tables are passed into engine functions as arguments, which is what
+ * keeps the engine pure and lets Phase 5 hand it an adventure's tables
+ * the same way.
  */
+
+// The record types, one per shape in `schema/content.schema.json`.
+export type * from './types'
+
+// Total lookups, curried on the records so a table binds once.
+export {
+  byD66,
+  byBanded,
+  byFaces,
+  byId,
+  byName,
+  byTotal,
+  byTotals,
+  inColumn,
+} from './lookup'
+
+// The tables themselves.
+export * from './world/index'
+
+// How much of it there is.
+export { contentCounts } from './counts'
+export type { ContentCounts } from './counts'
 
 import strings from '../data/app/strings.json'
 

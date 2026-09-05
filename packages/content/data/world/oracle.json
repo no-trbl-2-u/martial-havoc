@@ -1,0 +1,539 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.oracle",
+  "kind": "d6-by-column",
+  "title": "Oracle",
+  "cite": "MH p.58",
+  "label": "rule",
+  "docs": "docs/world/oracle.md",
+  "records": [
+    {
+      "id": "oracle.closed-question.1",
+      "cite": "MH p.58",
+      "row": "Closed Question",
+      "face": 1,
+      "text": "No, and",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.closed-question.2",
+      "cite": "MH p.58",
+      "row": "Closed Question",
+      "face": 2,
+      "text": "No",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.closed-question.3",
+      "cite": "MH p.58",
+      "row": "Closed Question",
+      "face": 3,
+      "text": "No, but",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.closed-question.4",
+      "cite": "MH p.58",
+      "row": "Closed Question",
+      "face": 4,
+      "text": "Yes, but",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.closed-question.5",
+      "cite": "MH p.58",
+      "row": "Closed Question",
+      "face": 5,
+      "text": "Yes",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.closed-question.6",
+      "cite": "MH p.58",
+      "row": "Closed Question",
+      "face": 6,
+      "text": "Yes, and",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.outcome.1",
+      "cite": "MH p.58",
+      "row": "Outcome",
+      "face": 1,
+      "text": "Disaster",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.outcome.2",
+      "cite": "MH p.58",
+      "row": "Outcome",
+      "face": 2,
+      "text": "Negative",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.outcome.3",
+      "cite": "MH p.58",
+      "row": "Outcome",
+      "face": 3,
+      "text": "Negative",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.outcome.4",
+      "cite": "MH p.58",
+      "row": "Outcome",
+      "face": 4,
+      "text": "Positive",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.outcome.5",
+      "cite": "MH p.58",
+      "row": "Outcome",
+      "face": 5,
+      "text": "Positive",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.outcome.6",
+      "cite": "MH p.58",
+      "row": "Outcome",
+      "face": 6,
+      "text": "Excellent",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.npc-reaction.1",
+      "cite": "MH p.58",
+      "row": "NPC reaction",
+      "face": 1,
+      "text": "Hostile",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.npc-reaction.2",
+      "cite": "MH p.58",
+      "row": "NPC reaction",
+      "face": 2,
+      "text": "Wary",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.npc-reaction.3",
+      "cite": "MH p.58",
+      "row": "NPC reaction",
+      "face": 3,
+      "text": "Unaware",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.npc-reaction.4",
+      "cite": "MH p.58",
+      "row": "NPC reaction",
+      "face": 4,
+      "text": "Kind",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.npc-reaction.5",
+      "cite": "MH p.58",
+      "row": "NPC reaction",
+      "face": 5,
+      "text": "Helpful",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.npc-reaction.6",
+      "cite": "MH p.58",
+      "row": "NPC reaction",
+      "face": 6,
+      "text": "Flee",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.creature-reaction.1",
+      "cite": "MH p.58",
+      "row": "Creature Reaction",
+      "face": 1,
+      "text": "Hostile",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.creature-reaction.2",
+      "cite": "MH p.58",
+      "row": "Creature Reaction",
+      "face": 2,
+      "text": "Territorial",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.creature-reaction.3",
+      "cite": "MH p.58",
+      "row": "Creature Reaction",
+      "face": 3,
+      "text": "Unaware",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.creature-reaction.4",
+      "cite": "MH p.58",
+      "row": "Creature Reaction",
+      "face": 4,
+      "text": "Curious",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.creature-reaction.5",
+      "cite": "MH p.58",
+      "row": "Creature Reaction",
+      "face": 5,
+      "text": "Docile",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.creature-reaction.6",
+      "cite": "MH p.58",
+      "row": "Creature Reaction",
+      "face": 6,
+      "text": "Flee",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.encounter-outcome.1",
+      "cite": "MH p.58",
+      "row": "Encounter Outcome",
+      "face": 1,
+      "text": "Ambush",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.encounter-outcome.2",
+      "cite": "MH p.58",
+      "row": "Encounter Outcome",
+      "face": 2,
+      "text": "Attack",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.encounter-outcome.3",
+      "cite": "MH p.58",
+      "row": "Encounter Outcome",
+      "face": 3,
+      "text": "Attack",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.encounter-outcome.4",
+      "cite": "MH p.58",
+      "row": "Encounter Outcome",
+      "face": 4,
+      "text": "Attack",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.encounter-outcome.5",
+      "cite": "MH p.58",
+      "row": "Encounter Outcome",
+      "face": 5,
+      "text": "NPC/Creature Reaction",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.encounter-outcome.6",
+      "cite": "MH p.58",
+      "row": "Encounter Outcome",
+      "face": 6,
+      "text": "NPC/Creature Reaction",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.enemy-type.1",
+      "cite": "MH p.58",
+      "row": "Enemy Type",
+      "face": 1,
+      "text": "Minion",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.enemy-type.2",
+      "cite": "MH p.58",
+      "row": "Enemy Type",
+      "face": 2,
+      "text": "Subordinate",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.enemy-type.3",
+      "cite": "MH p.58",
+      "row": "Enemy Type",
+      "face": 3,
+      "text": "Subordinate",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.enemy-type.4",
+      "cite": "MH p.58",
+      "row": "Enemy Type",
+      "face": 4,
+      "text": "Warrior",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.enemy-type.5",
+      "cite": "MH p.58",
+      "row": "Enemy Type",
+      "face": 5,
+      "text": "Warrior",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.enemy-type.6",
+      "cite": "MH p.58",
+      "row": "Enemy Type",
+      "face": 6,
+      "text": "Boss",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.no-of-enemies.1",
+      "cite": "MH p.58",
+      "row": "No. of enemies",
+      "face": 1,
+      "text": "1d6",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.no-of-enemies.2",
+      "cite": "MH p.58",
+      "row": "No. of enemies",
+      "face": 2,
+      "text": "3",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.no-of-enemies.3",
+      "cite": "MH p.58",
+      "row": "No. of enemies",
+      "face": 3,
+      "text": "3",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.no-of-enemies.4",
+      "cite": "MH p.58",
+      "row": "No. of enemies",
+      "face": 4,
+      "text": "2",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.no-of-enemies.5",
+      "cite": "MH p.58",
+      "row": "No. of enemies",
+      "face": 5,
+      "text": "2",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.no-of-enemies.6",
+      "cite": "MH p.58",
+      "row": "No. of enemies",
+      "face": 6,
+      "text": "1",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.enemy-attack.1",
+      "cite": "MH p.58",
+      "row": "Enemy attack",
+      "face": 1,
+      "text": "Normal",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.enemy-attack.2",
+      "cite": "MH p.58",
+      "row": "Enemy attack",
+      "face": 2,
+      "text": "Normal",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.enemy-attack.3",
+      "cite": "MH p.58",
+      "row": "Enemy attack",
+      "face": 3,
+      "text": "Normal",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.enemy-attack.4",
+      "cite": "MH p.58",
+      "row": "Enemy attack",
+      "face": 4,
+      "text": "Special",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.enemy-attack.5",
+      "cite": "MH p.58",
+      "row": "Enemy attack",
+      "face": 5,
+      "text": "Special",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.enemy-attack.6",
+      "cite": "MH p.58",
+      "row": "Enemy attack",
+      "face": 6,
+      "text": "Special",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.door.1",
+      "cite": "MH p.58",
+      "row": "Door",
+      "face": 1,
+      "text": "Open",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.door.2",
+      "cite": "MH p.58",
+      "row": "Door",
+      "face": 2,
+      "text": "Open",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.door.3",
+      "cite": "MH p.58",
+      "row": "Door",
+      "face": 3,
+      "text": "Open",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.door.4",
+      "cite": "MH p.58",
+      "row": "Door",
+      "face": 4,
+      "text": "Trapped",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.door.5",
+      "cite": "MH p.58",
+      "row": "Door",
+      "face": 5,
+      "text": "Locked",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.door.6",
+      "cite": "MH p.58",
+      "row": "Door",
+      "face": 6,
+      "text": "Closed",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.object-amount.1",
+      "cite": "MH p.58",
+      "row": "Object amount",
+      "face": 1,
+      "text": "Finished",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.object-amount.2",
+      "cite": "MH p.58",
+      "row": "Object amount",
+      "face": 2,
+      "text": "One more",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.object-amount.3",
+      "cite": "MH p.58",
+      "row": "Object amount",
+      "face": 3,
+      "text": "One more",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.object-amount.4",
+      "cite": "MH p.58",
+      "row": "Object amount",
+      "face": 4,
+      "text": "Many remaining",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.object-amount.5",
+      "cite": "MH p.58",
+      "row": "Object amount",
+      "face": 5,
+      "text": "Many remaining",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.object-amount.6",
+      "cite": "MH p.58",
+      "row": "Object amount",
+      "face": 6,
+      "text": "Many remaining",
+      "spanInferred": true
+    },
+    {
+      "id": "oracle.value.1",
+      "cite": "MH p.58",
+      "row": "Value",
+      "face": 1,
+      "text": "5 GP",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.value.2",
+      "cite": "MH p.58",
+      "row": "Value",
+      "face": 2,
+      "text": "10 GP",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.value.3",
+      "cite": "MH p.58",
+      "row": "Value",
+      "face": 3,
+      "text": "25 GP",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.value.4",
+      "cite": "MH p.58",
+      "row": "Value",
+      "face": 4,
+      "text": "50 GP",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.value.5",
+      "cite": "MH p.58",
+      "row": "Value",
+      "face": 5,
+      "text": "100 GP",
+      "spanInferred": false
+    },
+    {
+      "id": "oracle.value.6",
+      "cite": "MH p.58",
+      "row": "Value",
+      "face": 6,
+      "text": "250 GP",
+      "spanInferred": false
+    }
+  ]
+}

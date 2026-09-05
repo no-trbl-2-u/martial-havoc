@@ -24,6 +24,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import Ajv2020 from 'ajv/dist/2020'
 import { describe, expect, it } from 'vitest'
+import { contentCounts } from './counts'
 import { appStrings, stringById, t } from './index'
 
 const here = new URL('.', import.meta.url).pathname
@@ -43,6 +44,19 @@ const repoRoot = join(packageDir, '..', '..')
  */
 const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
   'app.strings': 4,
+
+  // The world: the lists a Master is built from and the tables the
+  // sandbox is rolled on.
+  'world.martial-arts': 18,
+  'world.techniques': 36,
+  'world.rituals': 36,
+  'world.deities': 12,
+  'world.opponents': 50,
+  'world.market': 57,
+  'world.oracle': 66,
+  'world.inspirations': 72,
+  'world.sparks': 216,
+  'world.presets': 8,
 }
 
 /** Recursively list files under `dir` with the given extension, sorted. */
@@ -162,6 +176,16 @@ describe('the whole package', () => {
         .map((r) => `${file.rel}: ${r.id} has d66 ${String(r.d66)}`),
     )
     expect(bad, `impossible d66 addresses:\n${bad.join('\n')}`).toEqual([])
+  })
+
+  it('registers every file that ships, so contentCounts sees all of them', () => {
+    // contentCounts() is built from static imports (the app is bundled;
+    // there is no fs at runtime). This is the check that a file added to
+    // data/ but never imported into counts.ts cannot ship unnoticed.
+    const counts = contentCounts()
+    const onDisk = Object.fromEntries(files.map((f) => [f.parsed.id, f.parsed.records.length]))
+    expect(counts.byFile).toEqual(onDisk)
+    expect(counts.files).toBe(files.length)
   })
 
   it('reports its size (the spec asks for counts readable from the build)', () => {

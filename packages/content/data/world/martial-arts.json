@@ -1,0 +1,356 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.martial-arts",
+  "kind": "d6-banded",
+  "title": "Martial Arts",
+  "cite": "MH p.7-10",
+  "label": "rule",
+  "docs": "docs/world/martial-arts.md",
+  "records": [
+    {
+      "id": "martial-art.wu-xing-quan",
+      "cite": "MH p.7-10",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 1,
+      "name": "Wu Xing Quan",
+      "styleText": "You are a master of the 5 animals style and can imitate their movements.",
+      "proficiencies": [
+        "Dragon - spirit",
+        "Tiger - courage",
+        "Crane - elegance",
+        "Snake - lethality",
+        "Leopard - speed"
+      ],
+      "power": null,
+      "powerClass": null
+    },
+    {
+      "id": "martial-art.long-weapons",
+      "cite": "MH p.7-10",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 2,
+      "name": "Long weapons",
+      "styleText": "You are a master in using the spear, trident, and halberd, distance keeping weapons.",
+      "proficiencies": [
+        "Armed combat",
+        "Defensive Barrier",
+        "Sweep"
+      ],
+      "power": null,
+      "powerClass": null
+    },
+    {
+      "id": "martial-art.blunt-weapons",
+      "cite": "MH p.7-10",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 3,
+      "name": "Blunt weapons",
+      "styleText": "You are a master in using hammer, tonfa, and nunchaku, weapons that favor power over elegance.",
+      "proficiencies": [
+        "Armed combat",
+        "Stunning blow",
+        "Smash"
+      ],
+      "power": null,
+      "powerClass": null
+    },
+    {
+      "id": "martial-art.edged-weapons",
+      "cite": "MH p.7-10",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 4,
+      "name": "Edged weapons",
+      "styleText": "You are a master in Jian and Dao weapons, swords and sabers, symbols of martial virtue.",
+      "proficiencies": [
+        "Armed combat",
+        "Charisma",
+        "Coordination"
+      ],
+      "power": null,
+      "powerClass": null
+    },
+    {
+      "id": "martial-art.improvised-weapons",
+      "cite": "MH p.7-10",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 5,
+      "name": "Improvised weapons",
+      "styleText": "You are a master in the use of fans, stools, umbrellas, throwing tiles, etc. You can always find a weapon.",
+      "proficiencies": [
+        "Armed combat",
+        "Ranged weapons",
+        "Surprise attack"
+      ],
+      "power": "You can always find a weapon",
+      "powerClass": "narrative-only"
+    },
+    {
+      "id": "martial-art.drunken-style",
+      "cite": "MH p.7-10",
+      "band": "1-2",
+      "faces": [
+        1,
+        2
+      ],
+      "row": 6,
+      "name": "Drunken style",
+      "styleText": "As long as you have alcohol, you can surprise your enemy and ignore damage from the first hit. You are unpredictable.",
+      "proficiencies": [
+        "Unarmed combat",
+        "Go unnoticed",
+        "Baffle"
+      ],
+      "power": "As long as you have alcohol, you can surprise your enemy and ignore damage from the first hit",
+      "powerClass": "needs an alcohol item and a per-fight \"first hit\" flag"
+    },
+    {
+      "id": "martial-art.iron-fist-style",
+      "cite": "MH p.7-10",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 1,
+      "name": "Iron fist style",
+      "styleText": "You have trained with metal rings, greatly increasing your arms' strength.",
+      "proficiencies": [
+        "Unarmed combat",
+        "Brute strength",
+        "Hardened hands"
+      ],
+      "power": null,
+      "powerClass": null
+    },
+    {
+      "id": "martial-art.shaolin-quan",
+      "cite": "MH p.7-10",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 2,
+      "name": "Shaolin Quan",
+      "styleText": "You are a trained warrior in both armed and hand to hand combat but you cannot kill. Regarded as a religious person you can beg for food or lodging.",
+      "proficiencies": [
+        "Non-lethal combat",
+        "Spirituality",
+        "Stamina"
+      ],
+      "power": "you cannot kill. Regarded as a religious person you can beg for food or lodging",
+      "powerClass": "an opponent at ENDURANCE 0 cannot die"
+    },
+    {
+      "id": "martial-art.cult-of-the-great-immortals",
+      "cite": "MH p.7-10",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 3,
+      "name": "Cult of the Great Immortals",
+      "styleText": "Tricks or magic, people see you as a superior being. You can turn iron into gold, read minds, walk on fire, etc.",
+      "proficiencies": [
+        "Body conditioning",
+        "Transmutation",
+        "Foresight",
+        "Alchemy"
+      ],
+      "power": "You can turn iron into gold, read minds, walk on fire, etc.",
+      "powerClass": "narrative-only"
+    },
+    {
+      "id": "martial-art.qin-na",
+      "cite": "MH p.7-10",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 4,
+      "name": "Qin Na",
+      "styleText": "You know the Xue Wei, pressure points that control the flow of Qi, and you can activate them with your fingers.",
+      "proficiencies": [
+        "Unarmed combat",
+        "Pressure Points",
+        "Healing"
+      ],
+      "power": null,
+      "powerClass": null
+    },
+    {
+      "id": "martial-art.shuai-jiao",
+      "cite": "MH p.7-10",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 5,
+      "name": "Shuai Jiao",
+      "styleText": "A style practiced by the northern nomads. A grappling art with throws, takedowns and sweeps",
+      "proficiencies": [
+        "Wrestling",
+        "Archer",
+        "Intimidate"
+      ],
+      "power": null,
+      "powerClass": null
+    },
+    {
+      "id": "martial-art.red-boat-wing-chun",
+      "cite": "MH p.7-10",
+      "band": "3-4",
+      "faces": [
+        3,
+        4
+      ],
+      "row": 6,
+      "name": "Red Boat Wing Chun",
+      "styleText": "A close-quarters system practiced within a shadow organization operating across territories.",
+      "proficiencies": [
+        "Unarmed combat",
+        "Stealth",
+        "Brotherhood"
+      ],
+      "power": null,
+      "powerClass": null
+    },
+    {
+      "id": "martial-art.praying-mantis-style",
+      "cite": "MH p.7-10",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 1,
+      "name": "Praying Mantis Style",
+      "styleText": "Your finishing blow is always lethal, and you can hit small targets with finger strikes.",
+      "proficiencies": [
+        "Deadly combat",
+        "Precision",
+        "Cold-Blooded"
+      ],
+      "power": "Your finishing blow is always lethal, and you can hit small targets with finger strikes",
+      "powerClass": "a landed Final Blow kills"
+    },
+    {
+      "id": "martial-art.tiger-hooks",
+      "cite": "MH p.7-10",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 2,
+      "name": "Tiger Hooks",
+      "styleText": "You are a master of hooked swords, effective at all ranges for cutting, piercing, tearing, hooking.",
+      "proficiencies": [
+        "Double strike",
+        "Disarming",
+        "Versatile Weapon"
+      ],
+      "power": null,
+      "powerClass": null
+    },
+    {
+      "id": "martial-art.double-knives",
+      "cite": "MH p.7-10",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 3,
+      "name": "Double Knives",
+      "styleText": "You are a master of Lu Jiao Dao and Hudie Shuang Dao, effective against long weapons and at close range.",
+      "proficiencies": [
+        "Double strike",
+        "Acrobatics",
+        "Disarm"
+      ],
+      "power": null,
+      "powerClass": null
+    },
+    {
+      "id": "martial-art.9-section-chain-whip",
+      "cite": "MH p.7-10",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 4,
+      "name": "9-Section chain whip",
+      "styleText": "You are a master in Jiu Jie Bian, a concealable weapon capable of entangling your opponents.",
+      "proficiencies": [
+        "Armed combat",
+        "Entangle",
+        "Quick draw"
+      ],
+      "power": "a concealable weapon capable of entangling",
+      "powerClass": "narrative-only"
+    },
+    {
+      "id": "martial-art.wudang-quan",
+      "cite": "MH p.7-10",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 5,
+      "name": "Wudang Quan",
+      "styleText": "An ancient style linked to ancestral rites. You can use Rituals in combat.",
+      "proficiencies": [
+        "Unarmed combat",
+        "Occultism",
+        "Astrology"
+      ],
+      "power": "You can use Rituals in combat",
+      "powerClass": "Rituals allowed in combat, the one exception to R14"
+    },
+    {
+      "id": "martial-art.taiji-quan",
+      "cite": "MH p.7-10",
+      "band": "5-6",
+      "faces": [
+        5,
+        6
+      ],
+      "row": 6,
+      "name": "TaiJi Quan",
+      "styleText": "A style with fluid, circular movements, favoring the use of inner strength.",
+      "proficiencies": [
+        "Unarmed combat",
+        "Manipulate force",
+        "Balance"
+      ],
+      "power": null,
+      "powerClass": null
+    }
+  ]
+}

@@ -1,0 +1,1091 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.opponents",
+  "kind": "list",
+  "title": "Opponents",
+  "cite": "MH p.70-79",
+  "label": "rule",
+  "docs": "docs/world/opponents.md",
+  "records": [
+    {
+      "id": "opponent.attendant",
+      "cite": "MH p.70",
+      "name": "Attendant",
+      "description": "A mysterious figure often missing a limb.",
+      "skill": 5,
+      "endurance": 8,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Technique",
+          "value": 4
+        },
+        {
+          "name": "Double Identity",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.70",
+      "notes": ""
+    },
+    {
+      "id": "opponent.bai-gu-jing",
+      "cite": "MH p.70",
+      "name": "Bai Gu Jing",
+      "description": "White Bone Demon who deceives humans.",
+      "skill": 8,
+      "endurance": 17,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Charm",
+          "value": 3
+        },
+        {
+          "name": "Doppelganger",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.70",
+      "notes": ""
+    },
+    {
+      "id": "opponent.bandit",
+      "cite": "MH p.70",
+      "name": "Bandit",
+      "description": "A ruthless thief and assassin.",
+      "skill": 6,
+      "endurance": 9,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Trap",
+          "value": 3
+        },
+        {
+          "name": "Ambush",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.70",
+      "notes": ""
+    },
+    {
+      "id": "opponent.beast",
+      "cite": "MH p.70",
+      "name": "Beast",
+      "description": "A tiger, leopard, or jaguar.",
+      "skill": 8,
+      "endurance": 18,
+      "attack": 2,
+      "proficiencies": [
+        {
+          "name": "Bite",
+          "value": 2
+        },
+        {
+          "name": "Agility",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.70",
+      "notes": ""
+    },
+    {
+      "id": "opponent.boxer",
+      "cite": "MH p.70",
+      "name": "Boxer",
+      "description": "A tall and sturdy European.",
+      "skill": 7,
+      "endurance": 20,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Uppercut",
+          "value": 2
+        },
+        {
+          "name": "Firearms",
+          "value": 4
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.70",
+      "notes": ""
+    },
+    {
+      "id": "opponent.brawler",
+      "cite": "MH p.71",
+      "name": "Brawler",
+      "description": "A thug looking for trouble.",
+      "skill": 4,
+      "endurance": 4,
+      "attack": "2-4",
+      "proficiencies": [
+        {
+          "name": "Call for Reinforcements",
+          "value": 2
+        },
+        {
+          "name": "Dirty Trick",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.71",
+      "notes": "ATTACK printed as a range, \"2-4\""
+    },
+    {
+      "id": "opponent.cook",
+      "cite": "MH p.71",
+      "name": "Cook",
+      "description": "The least religious member of the monastery.",
+      "skill": 5,
+      "endurance": 10,
+      "attack": 2,
+      "proficiencies": [
+        {
+          "name": "Cleaver",
+          "value": 4
+        },
+        {
+          "name": "Knife Throwing",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.71",
+      "notes": ""
+    },
+    {
+      "id": "opponent.dapeng",
+      "cite": "MH p.71",
+      "name": "Dapeng",
+      "description": "A mastodontic bird that transforms into the Kun fish.",
+      "skill": 12,
+      "endurance": 24,
+      "attack": 10,
+      "proficiencies": [
+        {
+          "name": "Tornado",
+          "value": 4
+        },
+        {
+          "name": "Storm",
+          "value": 4
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.71",
+      "notes": "Highest SKILL, ENDURANCE and ATTACK on the roster, shared with Kun"
+    },
+    {
+      "id": "opponent.dealer",
+      "cite": "MH p.71",
+      "name": "Dealer",
+      "description": "They play as long as it suits them.",
+      "skill": 7,
+      "endurance": 6,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Cheating",
+          "value": 3
+        },
+        {
+          "name": "Rage-quit",
+          "value": 4
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.71",
+      "notes": "Not on the Encounters matrix; reached from the Gambling House (p. 46), where the Dealer rolls 2d6 + SKILL"
+    },
+    {
+      "id": "opponent.devotee",
+      "cite": "MH p.71",
+      "name": "Devotee",
+      "description": "A religious person marked with Jieba.",
+      "skill": 4,
+      "endurance": 8,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Charm",
+          "value": 3
+        },
+        {
+          "name": "Invocation",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.71",
+      "notes": ""
+    },
+    {
+      "id": "opponent.feng-huang",
+      "cite": "MH p.72",
+      "name": "Feng Huang",
+      "description": "A bird resembling a phoenix.",
+      "skill": 11,
+      "endurance": 17,
+      "attack": 2,
+      "proficiencies": [
+        {
+          "name": "Fire Breath",
+          "value": 3
+        },
+        {
+          "name": "Ice Breath",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.72",
+      "notes": ""
+    },
+    {
+      "id": "opponent.first-abbot",
+      "cite": "MH p.72",
+      "name": "First Abbot",
+      "description": "The spirit of the founder.",
+      "skill": 11,
+      "endurance": 6,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Martial Arts",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": 3,
+      "page": "MH p.72",
+      "notes": "Single Proficiency (R75)"
+    },
+    {
+      "id": "opponent.gai-bang",
+      "cite": "MH p.72",
+      "name": "Gai Bang",
+      "description": "A member of the martial sect of vagabonds",
+      "skill": 11,
+      "endurance": 10,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Knotty Staff",
+          "value": 2
+        },
+        {
+          "name": "Mark a Victim",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.72",
+      "notes": "Description has no full stop, as printed"
+    },
+    {
+      "id": "opponent.ghost-pirate",
+      "cite": "MH p.72",
+      "name": "Ghost Pirate",
+      "description": "It sails on a spectral ship.",
+      "skill": 9,
+      "endurance": 12,
+      "attack": 6,
+      "proficiencies": [
+        {
+          "name": "Diving",
+          "value": 4
+        },
+        {
+          "name": "Mirage",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.72",
+      "notes": ""
+    },
+    {
+      "id": "opponent.giant-jellyfish",
+      "cite": "MH p.72",
+      "name": "Giant Jellyfish",
+      "description": "A gelatinous monster with spikes.",
+      "skill": 7,
+      "endurance": 10,
+      "attack": 4,
+      "proficiencies": [
+        {
+          "name": "Camouflage",
+          "value": 3
+        },
+        {
+          "name": "Venom",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.72",
+      "notes": ""
+    },
+    {
+      "id": "opponent.giant-octopus",
+      "cite": "MH p.73",
+      "name": "Giant Octopus",
+      "description": "A tentacled creature.",
+      "skill": 7,
+      "endurance": 14,
+      "attack": 3,
+      "proficiencies": [
+        {
+          "name": "Trapping",
+          "value": 3
+        },
+        {
+          "name": "Ink",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.73",
+      "notes": ""
+    },
+    {
+      "id": "opponent.green-hornet",
+      "cite": "MH p.73",
+      "name": "Green Hornet",
+      "description": "An insect with a deadly sting.",
+      "skill": 7,
+      "endurance": 18,
+      "attack": 6,
+      "proficiencies": [
+        {
+          "name": "Multi-Directional Attack",
+          "value": 2
+        },
+        {
+          "name": "Protect the Nest",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.73",
+      "notes": ""
+    },
+    {
+      "id": "opponent.guard-with-lian-ting",
+      "cite": "MH p.73",
+      "name": "Guard with Lian Ting",
+      "description": "Two-section long staff.",
+      "skill": 8,
+      "endurance": 15,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Stun",
+          "value": 2
+        },
+        {
+          "name": "Throwing Weapon",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.73",
+      "notes": ""
+    },
+    {
+      "id": "opponent.guard-with-sheng-biao",
+      "cite": "MH p.73",
+      "name": "Guard with Sheng Biao",
+      "description": "Rope with a weight at the end.",
+      "skill": 8,
+      "endurance": 15,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Trapping",
+          "value": 2
+        },
+        {
+          "name": "Throwing Weapon",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.73",
+      "notes": ""
+    },
+    {
+      "id": "opponent.guard-with-tie-jian",
+      "cite": "MH p.73",
+      "name": "Guard with Tie Jian",
+      "description": "Quad-edged straight mace.",
+      "skill": 8,
+      "endurance": 15,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Disarm",
+          "value": 3
+        },
+        {
+          "name": "Throwing Weapon",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.73",
+      "notes": ""
+    },
+    {
+      "id": "opponent.gui",
+      "cite": "MH p.74",
+      "name": "Gui",
+      "description": "A human ghost.",
+      "skill": 5,
+      "endurance": 8,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Curse",
+          "value": 3
+        },
+        {
+          "name": "Haunt",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.74",
+      "notes": "Appears in both the Urban and the Supernatural columns of the matrix"
+    },
+    {
+      "id": "opponent.huang-feng-guai",
+      "cite": "MH p.74",
+      "name": "Huang Feng Guai",
+      "description": "Yellow Wind Demon, a human eater creature.",
+      "skill": 8,
+      "endurance": 17,
+      "attack": null,
+      "proficiencies": [
+        {
+          "name": "Blinding Wind",
+          "value": 3
+        },
+        {
+          "name": "Cannibalism",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.74",
+      "notes": "ATTACK is blank in the source (the inventory records the cell as blank): the bullet reads \"ATTACK\" with no number, verified on the render and in the extraction"
+    },
+    {
+      "id": "opponent.huli-jing",
+      "cite": "MH p.74",
+      "name": "Huli Jing",
+      "description": "A mischievous fox spirit.",
+      "skill": 9,
+      "endurance": 8,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Shapeshifter",
+          "value": 4
+        },
+        {
+          "name": "Soulmate",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.74",
+      "notes": "Printed \"SKILLS 9\""
+    },
+    {
+      "id": "opponent.jiangshi",
+      "cite": "MH p.74",
+      "name": "Jiangshi",
+      "description": "One-legged undead that absorbs Qi.",
+      "skill": 8,
+      "endurance": 12,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Vampiric Attack",
+          "value": 3
+        },
+        {
+          "name": "Jump",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.74",
+      "notes": ""
+    },
+    {
+      "id": "opponent.kobukson",
+      "cite": "MH p.74",
+      "name": "Kobukson",
+      "description": "A sailor on a Korean turtle ship.",
+      "skill": 8,
+      "endurance": 20,
+      "attack": 6,
+      "proficiencies": [
+        {
+          "name": "Cannon Shot",
+          "value": 3
+        },
+        {
+          "name": "Armor",
+          "value": 4
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.74",
+      "notes": ""
+    },
+    {
+      "id": "opponent.kun",
+      "cite": "MH p.75",
+      "name": "Kun",
+      "description": "Mastodontic fish that transforms into the Dapeng bird.",
+      "skill": 12,
+      "endurance": 24,
+      "attack": 10,
+      "proficiencies": [
+        {
+          "name": "Swallow",
+          "value": 4
+        },
+        {
+          "name": "Tsunami",
+          "value": 4
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.75",
+      "notes": ""
+    },
+    {
+      "id": "opponent.long-wang",
+      "cite": "MH p.75",
+      "name": "Long Wang",
+      "description": "King of dragons, guardian of the gods.",
+      "skill": 11,
+      "endurance": 20,
+      "attack": 4,
+      "proficiencies": [
+        {
+          "name": "Climate Change",
+          "value": 3
+        },
+        {
+          "name": "Summon Snakes",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.75",
+      "notes": ""
+    },
+    {
+      "id": "opponent.macaque",
+      "cite": "MH p.75",
+      "name": "Macaque",
+      "description": "A mischievous primate.",
+      "skill": 4,
+      "endurance": 5,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Stealing",
+          "value": 3
+        },
+        {
+          "name": "Throwing Feces",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.75",
+      "notes": ""
+    },
+    {
+      "id": "opponent.mandarin",
+      "cite": "MH p.75",
+      "name": "Mandarin",
+      "description": "A high-ranking imperial official.",
+      "skill": 6,
+      "endurance": 4,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Call Guards",
+          "value": 4
+        },
+        {
+          "name": "Put a Bounty",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.75",
+      "notes": "Lowest ENDURANCE on the roster, shared with Brawler"
+    },
+    {
+      "id": "opponent.mercenary",
+      "cite": "MH p.75",
+      "name": "Mercenary",
+      "description": "A bodyguard for nobles and traveling merchants.",
+      "skill": 10,
+      "endurance": 17,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Martial Arts",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": 2,
+      "page": "MH p.75",
+      "notes": "Single Proficiency (R75)"
+    },
+    {
+      "id": "opponent.monk",
+      "cite": "MH p.76",
+      "name": "Monk",
+      "description": "A person dressed in religious clothing.",
+      "skill": 8,
+      "endurance": 15,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Ritual",
+          "value": 2
+        },
+        {
+          "name": "Technique",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.76",
+      "notes": "The adventure's Monk (SKILL 4, ENDURANCE 5) is a different block"
+    },
+    {
+      "id": "opponent.niu-mowang",
+      "cite": "MH p.76",
+      "name": "Niu Mowang",
+      "description": "A demon in the form of a bull.",
+      "skill": 10,
+      "endurance": 18,
+      "attack": 2,
+      "proficiencies": [
+        {
+          "name": "Charge",
+          "value": 3
+        },
+        {
+          "name": "Lightning Bolt",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.76",
+      "notes": ""
+    },
+    {
+      "id": "opponent.pan-long",
+      "cite": "MH p.76",
+      "name": "Pan Long",
+      "description": "Water dragon.",
+      "skill": 9,
+      "endurance": 18,
+      "attack": 4,
+      "proficiencies": [
+        {
+          "name": "Wave",
+          "value": 3
+        },
+        {
+          "name": "Vortex",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.76",
+      "notes": ""
+    },
+    {
+      "id": "opponent.pirate",
+      "cite": "MH p.76",
+      "name": "Pirate",
+      "description": "A sea and river bandit.",
+      "skill": 8,
+      "endurance": 17,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Boarding",
+          "value": 3
+        },
+        {
+          "name": "Rain of Arrows",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.76",
+      "notes": ""
+    },
+    {
+      "id": "opponent.rebels",
+      "cite": "MH p.76",
+      "name": "Rebels",
+      "description": "A group of poorly armed peasants.",
+      "skill": 4,
+      "endurance": 22,
+      "attack": 6,
+      "proficiencies": [
+        {
+          "name": "Surround",
+          "value": 2
+        },
+        {
+          "name": "Human Wave",
+          "value": 4
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.76",
+      "notes": "A group written as one block"
+    },
+    {
+      "id": "opponent.shan-xiao",
+      "cite": "MH p.76-77",
+      "name": "Shan Xiao",
+      "description": "A furry creature with long fangs.",
+      "skill": 8,
+      "endurance": 18,
+      "attack": 3,
+      "proficiencies": [
+        {
+          "name": "Rock Throwing",
+          "value": 2
+        },
+        {
+          "name": "Confusion",
+          "value": 4
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.76-77",
+      "notes": "Block runs across the page break"
+    },
+    {
+      "id": "opponent.shark",
+      "cite": "MH p.77",
+      "name": "Shark",
+      "description": "Ruthless killer of the sea.",
+      "skill": 8,
+      "endurance": 15,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Jaws",
+          "value": 3
+        },
+        {
+          "name": "Blood Trail",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.77",
+      "notes": ""
+    },
+    {
+      "id": "opponent.shen",
+      "cite": "MH p.77",
+      "name": "Shen",
+      "description": "A dragon with the appearance of a mollusk.",
+      "skill": 9,
+      "endurance": 18,
+      "attack": 2,
+      "proficiencies": [
+        {
+          "name": "Illusion",
+          "value": 4
+        },
+        {
+          "name": "Shapeshifter",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.77",
+      "notes": ""
+    },
+    {
+      "id": "opponent.shi-di",
+      "cite": "MH p.77",
+      "name": "Shi Di",
+      "description": "A martial art practitioner.",
+      "skill": 7,
+      "endurance": 14,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Martial Arts",
+          "value": 1
+        }
+      ],
+      "martialArtsValue": 1,
+      "page": "MH p.77",
+      "notes": "Single Proficiency (R75); in both the Urban and the Monastery columns"
+    },
+    {
+      "id": "opponent.shi-fu",
+      "cite": "MH p.77",
+      "name": "Shi Fu",
+      "description": "A martial art's master.",
+      "skill": 9,
+      "endurance": 17,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Martial Arts",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": 2,
+      "page": "MH p.77",
+      "notes": "Single Proficiency (R75); in both the Urban and the Monastery columns"
+    },
+    {
+      "id": "opponent.shi-gong",
+      "cite": "MH p.77",
+      "name": "Shi Gong",
+      "description": "A grand Master.",
+      "skill": 10,
+      "endurance": 18,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Martial Arts",
+          "value": 4
+        }
+      ],
+      "martialArtsValue": 4,
+      "page": "MH p.77",
+      "notes": "Single Proficiency (R75)"
+    },
+    {
+      "id": "opponent.shi-shi",
+      "cite": "MH p.78",
+      "name": "Shi Shi",
+      "description": "Lion-dog holding a bronze ball.",
+      "skill": 8,
+      "endurance": 20,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Stone Skin",
+          "value": 2
+        },
+        {
+          "name": "Projectile",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.78",
+      "notes": ""
+    },
+    {
+      "id": "opponent.smuggler",
+      "cite": "MH p.78",
+      "name": "Smuggler",
+      "description": "A skilled sailor seeking profit.",
+      "skill": 9,
+      "endurance": 10,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Escape Route",
+          "value": 3
+        },
+        {
+          "name": "Negotiate",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.78",
+      "notes": ""
+    },
+    {
+      "id": "opponent.tanka",
+      "cite": "MH p.78",
+      "name": "Tanka",
+      "description": "Belonging to the \"boat people, dredger of waterways.",
+      "skill": 6,
+      "endurance": 9,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Fishing Net",
+          "value": 2
+        },
+        {
+          "name": "Special Item",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.78",
+      "notes": "Opening quotation mark unclosed, as printed"
+    },
+    {
+      "id": "opponent.thief",
+      "cite": "MH p.78",
+      "name": "Thief",
+      "description": "A skilled and elusive professional.",
+      "skill": 8,
+      "endurance": 8,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Steal",
+          "value": 3
+        },
+        {
+          "name": "Vanish",
+          "value": 4
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.78",
+      "notes": "In both the Urban and the Monastery columns"
+    },
+    {
+      "id": "opponent.tu-di",
+      "cite": "MH p.78",
+      "name": "Tu Di",
+      "description": "An inexperienced young student.",
+      "skill": 5,
+      "endurance": 10,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Beginner's Luck",
+          "value": 2
+        },
+        {
+          "name": "Escape",
+          "value": 4
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.78",
+      "notes": ""
+    },
+    {
+      "id": "opponent.tutelary-spirit",
+      "cite": "MH p.79",
+      "name": "Tutelary Spirit",
+      "description": "Emanation of the local deity.",
+      "skill": 11,
+      "endurance": 9,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Miracle",
+          "value": 4
+        },
+        {
+          "name": "Curse",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.79",
+      "notes": ""
+    },
+    {
+      "id": "opponent.xiongu",
+      "cite": "MH p.79",
+      "name": "Xiongu",
+      "description": "A nomadic warrior.",
+      "skill": 7,
+      "endurance": 18,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Fighting",
+          "value": 3
+        },
+        {
+          "name": "Archery",
+          "value": 3
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.79",
+      "notes": ""
+    },
+    {
+      "id": "opponent.youxia",
+      "cite": "MH p.79",
+      "name": "Youxia",
+      "description": "A wandering knight who defends those in need.",
+      "skill": 11,
+      "endurance": 20,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Code of Chivalry",
+          "value": 4
+        },
+        {
+          "name": "Martial Arts",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": 2,
+      "page": "MH p.79",
+      "notes": "Spelled \"Yauxia\" on the Encounters matrix; carries \"Martial Arts (2)\" beside a named Proficiency"
+    },
+    {
+      "id": "opponent.yogi",
+      "cite": "MH p.79",
+      "name": "Yogi",
+      "description": "A religious person in meditation.",
+      "skill": 6,
+      "endurance": 16,
+      "attack": 1,
+      "proficiencies": [
+        {
+          "name": "Incorporeal",
+          "value": 4
+        },
+        {
+          "name": "Technique",
+          "value": 2
+        }
+      ],
+      "martialArtsValue": null,
+      "page": "MH p.79",
+      "notes": "The only block whose Proficiency names incorporeality"
+    }
+  ]
+}

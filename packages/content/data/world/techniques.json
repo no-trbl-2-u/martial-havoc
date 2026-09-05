@@ -1,0 +1,335 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.techniques",
+  "kind": "d66",
+  "title": "Techniques",
+  "cite": "MH p.12-15",
+  "label": "rule",
+  "docs": "docs/world/techniques.md",
+  "records": [
+    {
+      "id": "technique.blue-dragon",
+      "cite": "MH p.12-15",
+      "d66": 11,
+      "name": "Blue Dragon",
+      "pinyin": "Qing Long",
+      "cost": 1,
+      "effect": "You can run on water"
+    },
+    {
+      "id": "technique.butterfly-palms",
+      "cite": "MH p.12-15",
+      "d66": 12,
+      "name": "Butterfly Palms",
+      "pinyin": "Die Zhang",
+      "cost": 1,
+      "effect": "You can hit two opponents"
+    },
+    {
+      "id": "technique.chain-fists",
+      "cite": "MH p.12-15",
+      "d66": 13,
+      "name": "Chain Fists",
+      "pinyin": "Lian Huan Quan",
+      "cost": 2,
+      "effect": "Attack 3 times, then suffer 3 attacks"
+    },
+    {
+      "id": "technique.cranes-flight",
+      "cite": "MH p.12-15",
+      "d66": 14,
+      "name": "Crane's flight",
+      "pinyin": "Fei He",
+      "cost": 1,
+      "effect": "You jump tens of meters"
+    },
+    {
+      "id": "technique.crushing-blow",
+      "cite": "MH p.12-15",
+      "d66": 15,
+      "name": "Crushing Blow",
+      "pinyin": "Ding Quan",
+      "cost": 2,
+      "effect": "Knock down an opponent shorter than you."
+    },
+    {
+      "id": "technique.downwind-ears",
+      "cite": "MH p.12-15",
+      "d66": 16,
+      "name": "Downwind Ears",
+      "pinyin": "Shun Feng Er",
+      "cost": 2,
+      "effect": "You can hear sounds even from miles away"
+    },
+    {
+      "id": "technique.eagle-claw",
+      "cite": "MH p.12-15",
+      "d66": 21,
+      "name": "Eagle Claw",
+      "pinyin": "Ying Zhao",
+      "cost": 1,
+      "effect": "Lift up to 1000 Jin (500 kg)"
+    },
+    {
+      "id": "technique.exploding-qi",
+      "cite": "MH p.12-15",
+      "d66": 22,
+      "name": "Exploding Qi",
+      "pinyin": "Fa jing",
+      "cost": 2,
+      "effect": "Create a circle of energy that repels those around you"
+    },
+    {
+      "id": "technique.hand-of-1000-characters",
+      "cite": "MH p.12-15",
+      "d66": 23,
+      "name": "Hand of 1000 characters",
+      "pinyin": "Qian Zi Zhou",
+      "cost": 1,
+      "effect": "Your blow leaves a scar shaped like an ideogram"
+    },
+    {
+      "id": "technique.iron-bridge",
+      "cite": "MH p.12-15",
+      "d66": 24,
+      "name": "Iron Bridge",
+      "pinyin": "Tie Qiao",
+      "cost": 1,
+      "effect": "You become immovable"
+    },
+    {
+      "id": "technique.iron-broom",
+      "cite": "MH p.12-15",
+      "d66": 25,
+      "name": "Iron Broom",
+      "pinyin": "Tie Sao",
+      "cost": 2,
+      "effect": "A blow that incapacitates your opponent's lower limbs"
+    },
+    {
+      "id": "technique.iron-head",
+      "cite": "MH p.12-15",
+      "d66": 26,
+      "name": "Iron Head",
+      "pinyin": "Tie Tou Gong",
+      "cost": 2,
+      "effect": "By channeling Qi to your head, you can achieve an indestructible skull"
+    },
+    {
+      "id": "technique.iron-palm",
+      "cite": "MH p.12-15",
+      "d66": 31,
+      "name": "Iron Palm",
+      "pinyin": "Tie Zhang",
+      "cost": 1,
+      "effect": "Your hands become harder than steel"
+    },
+    {
+      "id": "technique.iron-shirt",
+      "cite": "MH p.12-15",
+      "d66": 32,
+      "name": "Iron Shirt",
+      "pinyin": "Tie Shan",
+      "cost": 2,
+      "effect": "If an unarmed blow hits you, you damage your opponent"
+    },
+    {
+      "id": "technique.light-body",
+      "cite": "MH p.12-15",
+      "d66": 33,
+      "name": "Light Body",
+      "pinyin": "Jin Shen Gong",
+      "cost": 2,
+      "effect": "Jump to kick all opponents surrounding you"
+    },
+    {
+      "id": "technique.lizard-climbs-the-wall",
+      "cite": "MH p.12-15",
+      "d66": 34,
+      "name": "Lizard climbs the Wall",
+      "pinyin": "Bihu Yu Qiang Shu",
+      "cost": 1,
+      "effect": "Climb any surface"
+    },
+    {
+      "id": "technique.monkey-jump",
+      "cite": "MH p.12-15",
+      "d66": 35,
+      "name": "Monkey Jump",
+      "pinyin": "Hou Zung",
+      "cost": 1,
+      "effect": "You jump behind your opponent unseen"
+    },
+    {
+      "id": "technique.piercing-through-stones",
+      "cite": "MH p.12-15",
+      "d66": 36,
+      "name": "Piercing through stones",
+      "pinyin": "Dian Shi Gong",
+      "cost": 2,
+      "effect": "By focusing Qi on your fingertips, you can penetrate objects"
+    },
+    {
+      "id": "technique.poisonous-bird",
+      "cite": "MH p.12-15",
+      "d66": 41,
+      "name": "Poisonous Bird",
+      "pinyin": "Zhen Niao",
+      "cost": 2,
+      "effect": "Your blow disturbs the flow of Qi, causing sickness in your opponent"
+    },
+    {
+      "id": "technique.pushing-the-horse",
+      "cite": "MH p.12-15",
+      "d66": 42,
+      "name": "Pushing the Horse",
+      "pinyin": "Tui Ma",
+      "cost": 1,
+      "effect": "Give an order to a sentient animal"
+    },
+    {
+      "id": "technique.rising-wave-strike",
+      "cite": "MH p.12-15",
+      "d66": 43,
+      "name": "Rising Wave Strike",
+      "pinyin": "Shui Lang Qui",
+      "cost": 1,
+      "effect": "Unleash a disruptive air wave in front of you"
+    },
+    {
+      "id": "technique.rock-splitting-tiger",
+      "cite": "MH p.12-15",
+      "d66": 44,
+      "name": "Rock-Splitting Tiger",
+      "pinyin": "Kai Shan Hu",
+      "cost": 2,
+      "effect": "By focusing Qi in the cut of your hand, you can break any object"
+    },
+    {
+      "id": "technique.shooting-star-kick",
+      "cite": "MH p.12-15",
+      "d66": 45,
+      "name": "Shooting Star Kick",
+      "pinyin": "Ti Cheng Chui",
+      "cost": 1,
+      "effect": "Kick an incoming projectile back"
+    },
+    {
+      "id": "technique.sky-punching-fist",
+      "cite": "MH p.12-15",
+      "d66": 46,
+      "name": "Sky punching fist",
+      "pinyin": "Tong Tian Quan",
+      "cost": 2,
+      "effect": "Knock down an opponent taller than you"
+    },
+    {
+      "id": "technique.snake-form",
+      "cite": "MH p.12-15",
+      "d66": 51,
+      "name": "Snake Form",
+      "pinyin": "She Xing",
+      "cost": 2,
+      "effect": "You become extremely flexible"
+    },
+    {
+      "id": "technique.spinning-kick",
+      "cite": "MH p.12-15",
+      "d66": 52,
+      "name": "Spinning kick",
+      "pinyin": "Hou Bai Tui",
+      "cost": 1,
+      "effect": "Knock out your pursuer to the ground"
+    },
+    {
+      "id": "technique.spirit-to-flesh",
+      "cite": "MH p.12-15",
+      "d66": 53,
+      "name": "Spirit to flesh",
+      "pinyin": "Huan Hun Yun Qing",
+      "cost": 4,
+      "effect": "Give a spirit or ghost physical form"
+    },
+    {
+      "id": "technique.spirit-summoning-fist",
+      "cite": "MH p.12-15",
+      "d66": 54,
+      "name": "Spirit-Summoning Fist",
+      "pinyin": "Huan Hun Quan",
+      "cost": 4,
+      "effect": "If your next strike is fatal, the opponent's spirit remains bound to you"
+    },
+    {
+      "id": "technique.sticky-hands",
+      "cite": "MH p.12-15",
+      "d66": 55,
+      "name": "Sticky Hands",
+      "pinyin": "Chi Shou",
+      "cost": 1,
+      "effect": "Steal an object unnoticed"
+    },
+    {
+      "id": "technique.taming-the-tiger",
+      "cite": "MH p.12-15",
+      "d66": 56,
+      "name": "Taming the Tiger",
+      "pinyin": "Gong Zi Fu Hu",
+      "cost": 1,
+      "effect": "Your fighting spirit keeps sentient animals away"
+    },
+    {
+      "id": "technique.tear-out-a-phoenixs-eye",
+      "cite": "MH p.12-15",
+      "d66": 61,
+      "name": "Tear out a phoenix's eye",
+      "pinyin": "Feng Yan Zhao Chou",
+      "cost": 2,
+      "effect": "Press a pressure point to enhance your vision"
+    },
+    {
+      "id": "technique.three-stars-fist",
+      "cite": "MH p.12-15",
+      "d66": 62,
+      "name": "Three Stars Fist",
+      "pinyin": "San Sing Quan",
+      "cost": 2,
+      "effect": "Strike one of three points to cause temporary loss of sight, smell, or voice"
+    },
+    {
+      "id": "technique.tiger-roar",
+      "cite": "MH p.12-15",
+      "d66": 63,
+      "name": "Tiger Roar",
+      "pinyin": "Hu Xiao",
+      "cost": 1,
+      "effect": "You emit a sound that intimidates those around you"
+    },
+    {
+      "id": "technique.unicorn-step",
+      "cite": "MH p.12-15",
+      "d66": 64,
+      "name": "Unicorn Step",
+      "pinyin": "Qilin Bu",
+      "cost": 1,
+      "effect": "By channeling Qi into legs, you can run very fast"
+    },
+    {
+      "id": "technique.void-boxing",
+      "cite": "MH p.12-15",
+      "d66": 65,
+      "name": "Void Boxing",
+      "pinyin": "Wuji Quan",
+      "cost": 2,
+      "effect": "Disappear from the plane of existence for a few seconds"
+    },
+    {
+      "id": "technique.water-splitting-move",
+      "cite": "MH p.12-15",
+      "d66": 66,
+      "name": "Water Splitting Move",
+      "pinyin": "Fen Shui Gong",
+      "cost": 2,
+      "effect": "You can swim underwater beyond human limits"
+    }
+  ]
+}

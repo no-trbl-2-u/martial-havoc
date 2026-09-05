@@ -1,0 +1,515 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.inspirations",
+  "kind": "d66",
+  "title": "Inspirations",
+  "cite": "MH p.59-60",
+  "label": "rule",
+  "docs": "docs/world/inspirations.md",
+  "records": [
+    {
+      "id": "inspiration.action.11",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 11,
+      "word": "Attack"
+    },
+    {
+      "id": "inspiration.action.12",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 12,
+      "word": "Investigate"
+    },
+    {
+      "id": "inspiration.action.13",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 13,
+      "word": "Search"
+    },
+    {
+      "id": "inspiration.action.14",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 14,
+      "word": "Close"
+    },
+    {
+      "id": "inspiration.action.15",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 15,
+      "word": "Avoid"
+    },
+    {
+      "id": "inspiration.action.16",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 16,
+      "word": "Save"
+    },
+    {
+      "id": "inspiration.action.21",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 21,
+      "word": "Defend"
+    },
+    {
+      "id": "inspiration.action.22",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 22,
+      "word": "Create"
+    },
+    {
+      "id": "inspiration.action.23",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 23,
+      "word": "Climb"
+    },
+    {
+      "id": "inspiration.action.24",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 24,
+      "word": "Treat"
+    },
+    {
+      "id": "inspiration.action.25",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 25,
+      "word": "Influence"
+    },
+    {
+      "id": "inspiration.action.26",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 26,
+      "word": "Betray"
+    },
+    {
+      "id": "inspiration.action.31",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 31,
+      "word": "Explore"
+    },
+    {
+      "id": "inspiration.action.32",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 32,
+      "word": "Heal"
+    },
+    {
+      "id": "inspiration.action.33",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 33,
+      "word": "Throw"
+    },
+    {
+      "id": "inspiration.action.34",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 34,
+      "word": "Jump"
+    },
+    {
+      "id": "inspiration.action.35",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 35,
+      "word": "Examine"
+    },
+    {
+      "id": "inspiration.action.36",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 36,
+      "word": "Overcome"
+    },
+    {
+      "id": "inspiration.action.41",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 41,
+      "word": "Talk"
+    },
+    {
+      "id": "inspiration.action.42",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 42,
+      "word": "Meet"
+    },
+    {
+      "id": "inspiration.action.43",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 43,
+      "word": "Hide"
+    },
+    {
+      "id": "inspiration.action.44",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 44,
+      "word": "Sleep"
+    },
+    {
+      "id": "inspiration.action.45",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 45,
+      "word": "Give up"
+    },
+    {
+      "id": "inspiration.action.46",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 46,
+      "word": "Enrich"
+    },
+    {
+      "id": "inspiration.action.51",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 51,
+      "word": "Fight"
+    },
+    {
+      "id": "inspiration.action.52",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 52,
+      "word": "Negotiate"
+    },
+    {
+      "id": "inspiration.action.53",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 53,
+      "word": "Disguise"
+    },
+    {
+      "id": "inspiration.action.54",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 54,
+      "word": "Protect"
+    },
+    {
+      "id": "inspiration.action.55",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 55,
+      "word": "Create illusions"
+    },
+    {
+      "id": "inspiration.action.56",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 56,
+      "word": "Communicate"
+    },
+    {
+      "id": "inspiration.action.61",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 61,
+      "word": "Escape"
+    },
+    {
+      "id": "inspiration.action.62",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 62,
+      "word": "Travel"
+    },
+    {
+      "id": "inspiration.action.63",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 63,
+      "word": "Open"
+    },
+    {
+      "id": "inspiration.action.64",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 64,
+      "word": "Pursue"
+    },
+    {
+      "id": "inspiration.action.65",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 65,
+      "word": "Evoke"
+    },
+    {
+      "id": "inspiration.action.66",
+      "cite": "MH p.59-60",
+      "table": "action",
+      "d66": 66,
+      "word": "Challenge"
+    },
+    {
+      "id": "inspiration.theme.11",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 11,
+      "word": "Adventure"
+    },
+    {
+      "id": "inspiration.theme.12",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 12,
+      "word": "Choice"
+    },
+    {
+      "id": "inspiration.theme.13",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 13,
+      "word": "Conflict"
+    },
+    {
+      "id": "inspiration.theme.14",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 14,
+      "word": "Betrayal"
+    },
+    {
+      "id": "inspiration.theme.15",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 15,
+      "word": "Honor"
+    },
+    {
+      "id": "inspiration.theme.16",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 16,
+      "word": "Blessing"
+    },
+    {
+      "id": "inspiration.theme.21",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 21,
+      "word": "Magic"
+    },
+    {
+      "id": "inspiration.theme.22",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 22,
+      "word": "Rebellion"
+    },
+    {
+      "id": "inspiration.theme.23",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 23,
+      "word": "Friendship"
+    },
+    {
+      "id": "inspiration.theme.24",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 24,
+      "word": "Rescue"
+    },
+    {
+      "id": "inspiration.theme.25",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 25,
+      "word": "Power"
+    },
+    {
+      "id": "inspiration.theme.26",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 26,
+      "word": "Curse"
+    },
+    {
+      "id": "inspiration.theme.31",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 31,
+      "word": "Mystery"
+    },
+    {
+      "id": "inspiration.theme.32",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 32,
+      "word": "Spirituality"
+    },
+    {
+      "id": "inspiration.theme.33",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 33,
+      "word": "Survival"
+    },
+    {
+      "id": "inspiration.theme.34",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 34,
+      "word": "Discovery"
+    },
+    {
+      "id": "inspiration.theme.35",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 35,
+      "word": "Faith"
+    },
+    {
+      "id": "inspiration.theme.36",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 36,
+      "word": "Redemption"
+    },
+    {
+      "id": "inspiration.theme.41",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 41,
+      "word": "Fight"
+    },
+    {
+      "id": "inspiration.theme.42",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 42,
+      "word": "Secret"
+    },
+    {
+      "id": "inspiration.theme.43",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 43,
+      "word": "Treasure"
+    },
+    {
+      "id": "inspiration.theme.44",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 44,
+      "word": "Death"
+    },
+    {
+      "id": "inspiration.theme.45",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 45,
+      "word": "Revelation"
+    },
+    {
+      "id": "inspiration.theme.46",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 46,
+      "word": "Courage"
+    },
+    {
+      "id": "inspiration.theme.51",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 51,
+      "word": "Exploration"
+    },
+    {
+      "id": "inspiration.theme.52",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 52,
+      "word": "Deception"
+    },
+    {
+      "id": "inspiration.theme.53",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 53,
+      "word": "Research"
+    },
+    {
+      "id": "inspiration.theme.54",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 54,
+      "word": "Revenge"
+    },
+    {
+      "id": "inspiration.theme.55",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 55,
+      "word": "Technique"
+    },
+    {
+      "id": "inspiration.theme.56",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 56,
+      "word": "Destiny"
+    },
+    {
+      "id": "inspiration.theme.61",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 61,
+      "word": "Encounter"
+    },
+    {
+      "id": "inspiration.theme.62",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 62,
+      "word": "Mission"
+    },
+    {
+      "id": "inspiration.theme.63",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 63,
+      "word": "Horoscope"
+    },
+    {
+      "id": "inspiration.theme.64",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 64,
+      "word": "Freedom"
+    },
+    {
+      "id": "inspiration.theme.65",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 65,
+      "word": "Darkness"
+    },
+    {
+      "id": "inspiration.theme.66",
+      "cite": "MH p.59-60",
+      "table": "theme",
+      "d66": 66,
+      "word": "Tradition"
+    }
+  ]
+}

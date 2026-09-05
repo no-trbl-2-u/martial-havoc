@@ -1,0 +1,365 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.presets",
+  "kind": "presets",
+  "title": "Pre-generated Masters",
+  "cite": "MH p.91-92",
+  "label": "rule",
+  "docs": "docs/world/pregenerated-masters.md",
+  "nameResolution": [
+    {
+      "onSheet": "Wing Chun",
+      "canonicalId": "martial-art.red-boat-wing-chun",
+      "canonicalName": "Red Boat Wing Chun"
+    },
+    {
+      "onSheet": "Scorpion style",
+      "canonicalId": "martial-art.praying-mantis-style",
+      "canonicalName": "Praying Mantis Style"
+    },
+    {
+      "onSheet": "Acrobatic",
+      "canonicalId": "proficiency.acrobatics",
+      "canonicalName": "Acrobatics"
+    },
+    {
+      "onSheet": "Non lethal combat",
+      "canonicalId": "proficiency.non-lethal-combat",
+      "canonicalName": "Non-lethal combat"
+    },
+    {
+      "onSheet": "Cold blooded",
+      "canonicalId": "proficiency.cold-blooded",
+      "canonicalName": "Cold-Blooded"
+    },
+    {
+      "onSheet": "Guardians of the gate",
+      "canonicalId": "ritual.door-gods",
+      "canonicalName": "Door gods"
+    },
+    {
+      "onSheet": "Open the mount close the mouth",
+      "canonicalId": "ritual.open-the-mouth-close-the-mouth",
+      "canonicalName": "Open the mouth, close the mouth"
+    },
+    {
+      "onSheet": "Pluck the phoenix's Eye",
+      "canonicalId": "technique.tear-out-a-phoenixs-eye",
+      "canonicalName": "Tear out a phoenix's eye"
+    },
+    {
+      "onSheet": "The 72 transformation",
+      "canonicalId": "ritual.the-72-transformations",
+      "canonicalName": "The 72 transformations"
+    },
+    {
+      "onSheet": "Older brother",
+      "canonicalId": "ritual.older-brother",
+      "canonicalName": "Older Brother"
+    }
+  ],
+  "records": [
+    {
+      "id": "preset.beggar-so",
+      "cite": "MH p.91-92",
+      "name": "Beggar So",
+      "age": 63,
+      "status": "Vagabond",
+      "equipment": [
+        "Wine bottle"
+      ],
+      "skill": 10,
+      "endurance": 16,
+      "luck": 11,
+      "martialArt": "Drunken style",
+      "proficiencies": [
+        {
+          "name": "Unarmed combat",
+          "value": 4
+        },
+        {
+          "name": "Go unnoticed",
+          "value": 1
+        },
+        {
+          "name": "Baffle",
+          "value": 3
+        }
+      ],
+      "training": 2,
+      "techniques": [
+        "Monkey jump",
+        "Snake form"
+      ],
+      "rituals": [
+        "Older brother"
+      ],
+      "from": "Drunken master (1978)"
+    },
+    {
+      "id": "preset.chen-zhen",
+      "cite": "MH p.91-92",
+      "name": "Chen Zhen",
+      "age": 28,
+      "status": "Middle class",
+      "equipment": [
+        "Nunchaku"
+      ],
+      "skill": 9,
+      "endurance": 18,
+      "luck": 8,
+      "martialArt": "Wing Chun",
+      "proficiencies": [
+        {
+          "name": "Unarmed combat",
+          "value": 4
+        },
+        {
+          "name": "Stealth",
+          "value": 2
+        },
+        {
+          "name": "Brotherhood",
+          "value": 2
+        }
+      ],
+      "training": 2,
+      "techniques": [
+        "Sky punching fist",
+        "Tiger roar",
+        "Chain fists",
+        "Light body"
+      ],
+      "rituals": [],
+      "from": "Fist of fury (1972)"
+    },
+    {
+      "id": "preset.yin",
+      "cite": "MH p.91-92",
+      "name": "Yin",
+      "age": 43,
+      "status": "Poor",
+      "equipment": [
+        "Magical sword",
+        "protection sutra",
+        "bow and arrows"
+      ],
+      "skill": 7,
+      "endurance": 22,
+      "luck": 9,
+      "martialArt": "Wudang quan",
+      "proficiencies": [
+        {
+          "name": "Unarmed combat",
+          "value": 2
+        },
+        {
+          "name": "Occultism",
+          "value": 4
+        },
+        {
+          "name": "Astrology",
+          "value": 4
+        }
+      ],
+      "training": 2,
+      "techniques": [],
+      "rituals": [
+        "Lord of the bow",
+        "Mystical fire",
+        "King of the underworld",
+        "Guardians of the gate"
+      ],
+      "from": "A chinese ghost story (1987)"
+    },
+    {
+      "id": "preset.golden-swallow",
+      "cite": "MH p.91-92",
+      "name": "Golden Swallow",
+      "age": 34,
+      "status": "Rich",
+      "equipment": [
+        "double knives",
+        "man clothes",
+        "throwing darts"
+      ],
+      "skill": 7,
+      "endurance": 15,
+      "luck": 10,
+      "martialArt": "Double knives",
+      "proficiencies": [
+        {
+          "name": "Double strike",
+          "value": 3
+        },
+        {
+          "name": "Acrobatic",
+          "value": 2
+        },
+        {
+          "name": "Disarm",
+          "value": 3
+        }
+      ],
+      "training": 1,
+      "techniques": [
+        "Shooting star kick"
+      ],
+      "rituals": [
+        "Open the mount close the mouth"
+      ],
+      "from": "Come drink with me (1966)"
+    },
+    {
+      "id": "preset.san-te",
+      "cite": "MH p.91-92",
+      "name": "San Te",
+      "age": 27,
+      "status": "Poor",
+      "equipment": [
+        "Three-section staff"
+      ],
+      "skill": 8,
+      "endurance": 20,
+      "luck": 9,
+      "martialArt": "Shaolin Quan",
+      "proficiencies": [
+        {
+          "name": "Non lethal combat",
+          "value": 4
+        },
+        {
+          "name": "Spirituality",
+          "value": 1
+        },
+        {
+          "name": "Stamina",
+          "value": 2
+        }
+      ],
+      "training": 2,
+      "techniques": [
+        "Iron head",
+        "Pluck the phoenix's Eye",
+        "Rising Wave Strike",
+        "Eagle Claw"
+      ],
+      "rituals": [],
+      "from": "The 36th CHamber of Shaolin (1978)"
+    },
+    {
+      "id": "preset.sun-wukong",
+      "cite": "MH p.91-92",
+      "name": "Sun Wukong",
+      "age": 1100,
+      "status": "Vagabond",
+      "equipment": [
+        "Magical staff"
+      ],
+      "skill": 10,
+      "endurance": 24,
+      "luck": 7,
+      "martialArt": "Cult of the great immortals",
+      "proficiencies": [
+        {
+          "name": "Body conditioning",
+          "value": 4
+        },
+        {
+          "name": "Transmutation",
+          "value": 4
+        },
+        {
+          "name": "Foresight",
+          "value": 2
+        },
+        {
+          "name": "Alchemy",
+          "value": 1
+        }
+      ],
+      "training": 4,
+      "techniques": [
+        "Unicorn step",
+        "Pushing the horse"
+      ],
+      "rituals": [
+        "Somersault clouds",
+        "The 72 transformation",
+        "White Guanyin"
+      ],
+      "from": "Journey to the west (16th century)"
+    },
+    {
+      "id": "preset.sonny-wong",
+      "cite": "MH p.91-92",
+      "name": "Sonny Wong",
+      "age": 30,
+      "status": "Rich",
+      "equipment": [
+        "Revolver"
+      ],
+      "skill": 8,
+      "endurance": 17,
+      "luck": 11,
+      "martialArt": "Scorpion style",
+      "proficiencies": [
+        {
+          "name": "Deadly combat",
+          "value": 3
+        },
+        {
+          "name": "Cold blooded",
+          "value": 3
+        },
+        {
+          "name": "Precision",
+          "value": 2
+        }
+      ],
+      "training": 1,
+      "techniques": [
+        "Spinning kick",
+        "Lizard climbs the wall"
+      ],
+      "rituals": [],
+      "from": "The scorpion king (1992)"
+    },
+    {
+      "id": "preset.jen-yu",
+      "cite": "MH p.91-92",
+      "name": "Jen Yu",
+      "age": 17,
+      "status": "Noble",
+      "equipment": [
+        "Legendary weapon"
+      ],
+      "skill": 8,
+      "endurance": 16,
+      "luck": 9,
+      "martialArt": "Edged Weapons",
+      "proficiencies": [
+        {
+          "name": "Armed Combat",
+          "value": 3
+        },
+        {
+          "name": "Charisma",
+          "value": 2
+        },
+        {
+          "name": "Coordination",
+          "value": 3
+        }
+      ],
+      "training": 1,
+      "techniques": [
+        "Sticky hands",
+        "Blue dragon",
+        "Crane's flight"
+      ],
+      "rituals": [],
+      "from": "Crouching Tiger, Hidden Dragon (2000)"
+    }
+  ]
+}

@@ -1,0 +1,1523 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.sparks",
+  "kind": "d66",
+  "title": "Sparks",
+  "cite": "MH p.60-63",
+  "label": "rule",
+  "docs": "docs/world/sparks.md",
+  "records": [
+    {
+      "id": "spark.1.11",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 11,
+      "word": "Mace"
+    },
+    {
+      "id": "spark.1.12",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 12,
+      "word": "Coin"
+    },
+    {
+      "id": "spark.1.13",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 13,
+      "word": "Cloak"
+    },
+    {
+      "id": "spark.1.14",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 14,
+      "word": "Brooch"
+    },
+    {
+      "id": "spark.1.15",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 15,
+      "word": "Lotus"
+    },
+    {
+      "id": "spark.1.16",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 16,
+      "word": "Whip"
+    },
+    {
+      "id": "spark.1.21",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 21,
+      "word": "Sword"
+    },
+    {
+      "id": "spark.1.22",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 22,
+      "word": "Pearl"
+    },
+    {
+      "id": "spark.1.23",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 23,
+      "word": "Bed"
+    },
+    {
+      "id": "spark.1.24",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 24,
+      "word": "Pendant"
+    },
+    {
+      "id": "spark.1.25",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 25,
+      "word": "Drum"
+    },
+    {
+      "id": "spark.1.26",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 26,
+      "word": "Lantern"
+    },
+    {
+      "id": "spark.1.31",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 31,
+      "word": "Ring"
+    },
+    {
+      "id": "spark.1.32",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 32,
+      "word": "Sutra"
+    },
+    {
+      "id": "spark.1.33",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 33,
+      "word": "Brush"
+    },
+    {
+      "id": "spark.1.34",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 34,
+      "word": "Energy"
+    },
+    {
+      "id": "spark.1.35",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 35,
+      "word": "Flute"
+    },
+    {
+      "id": "spark.1.36",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 36,
+      "word": "Pipe"
+    },
+    {
+      "id": "spark.1.41",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 41,
+      "word": "Elixir"
+    },
+    {
+      "id": "spark.1.42",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 42,
+      "word": "Lens"
+    },
+    {
+      "id": "spark.1.43",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 43,
+      "word": "Bridge"
+    },
+    {
+      "id": "spark.1.44",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 44,
+      "word": "Staff"
+    },
+    {
+      "id": "spark.1.45",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 45,
+      "word": "Mouse"
+    },
+    {
+      "id": "spark.1.46",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 46,
+      "word": "Buffalo"
+    },
+    {
+      "id": "spark.1.51",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 51,
+      "word": "Relic"
+    },
+    {
+      "id": "spark.1.52",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 52,
+      "word": "Gem"
+    },
+    {
+      "id": "spark.1.53",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 53,
+      "word": "Amulet"
+    },
+    {
+      "id": "spark.1.54",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 54,
+      "word": "Poison"
+    },
+    {
+      "id": "spark.1.55",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 55,
+      "word": "Lute"
+    },
+    {
+      "id": "spark.1.56",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 56,
+      "word": "Crystal"
+    },
+    {
+      "id": "spark.1.61",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 61,
+      "word": "Key"
+    },
+    {
+      "id": "spark.1.62",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 62,
+      "word": "Statuette"
+    },
+    {
+      "id": "spark.1.63",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 63,
+      "word": "Chain"
+    },
+    {
+      "id": "spark.1.64",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 64,
+      "word": "Tiger"
+    },
+    {
+      "id": "spark.1.65",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 65,
+      "word": "Emptiness"
+    },
+    {
+      "id": "spark.1.66",
+      "cite": "MH p.60-63",
+      "table": "1",
+      "d66": 66,
+      "word": "Mirror"
+    },
+    {
+      "id": "spark.2.11",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 11,
+      "word": "Brazier"
+    },
+    {
+      "id": "spark.2.12",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 12,
+      "word": "Pagoda"
+    },
+    {
+      "id": "spark.2.13",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 13,
+      "word": "Cup"
+    },
+    {
+      "id": "spark.2.14",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 14,
+      "word": "Incense"
+    },
+    {
+      "id": "spark.2.15",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 15,
+      "word": "Mask"
+    },
+    {
+      "id": "spark.2.16",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 16,
+      "word": "Candle"
+    },
+    {
+      "id": "spark.2.21",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 21,
+      "word": "Meridians"
+    },
+    {
+      "id": "spark.2.22",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 22,
+      "word": "Altar"
+    },
+    {
+      "id": "spark.2.23",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 23,
+      "word": "Bottle"
+    },
+    {
+      "id": "spark.2.24",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 24,
+      "word": "Shadow"
+    },
+    {
+      "id": "spark.2.25",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 25,
+      "word": "Broom"
+    },
+    {
+      "id": "spark.2.26",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 26,
+      "word": "Tomb"
+    },
+    {
+      "id": "spark.2.31",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 31,
+      "word": "Helmet"
+    },
+    {
+      "id": "spark.2.32",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 32,
+      "word": "Dagger"
+    },
+    {
+      "id": "spark.2.33",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 33,
+      "word": "Pendant"
+    },
+    {
+      "id": "spark.2.34",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 34,
+      "word": "Shard"
+    },
+    {
+      "id": "spark.2.35",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 35,
+      "word": "Vase"
+    },
+    {
+      "id": "spark.2.36",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 36,
+      "word": "Die"
+    },
+    {
+      "id": "spark.2.41",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 41,
+      "word": "Stele"
+    },
+    {
+      "id": "spark.2.42",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 42,
+      "word": "Rod"
+    },
+    {
+      "id": "spark.2.43",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 43,
+      "word": "Bell"
+    },
+    {
+      "id": "spark.2.44",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 44,
+      "word": "Teapot"
+    },
+    {
+      "id": "spark.2.45",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 45,
+      "word": "Noble"
+    },
+    {
+      "id": "spark.2.46",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 46,
+      "word": "Gate"
+    },
+    {
+      "id": "spark.2.51",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 51,
+      "word": "Chess"
+    },
+    {
+      "id": "spark.2.52",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 52,
+      "word": "Curtain"
+    },
+    {
+      "id": "spark.2.53",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 53,
+      "word": "Seal"
+    },
+    {
+      "id": "spark.2.54",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 54,
+      "word": "Knife"
+    },
+    {
+      "id": "spark.2.55",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 55,
+      "word": "Ideogram"
+    },
+    {
+      "id": "spark.2.56",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 56,
+      "word": "Fan"
+    },
+    {
+      "id": "spark.2.61",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 61,
+      "word": "Rosary"
+    },
+    {
+      "id": "spark.2.62",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 62,
+      "word": "Claw"
+    },
+    {
+      "id": "spark.2.63",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 63,
+      "word": "Eagle"
+    },
+    {
+      "id": "spark.2.64",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 64,
+      "word": "Rock"
+    },
+    {
+      "id": "spark.2.65",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 65,
+      "word": "Hourglass"
+    },
+    {
+      "id": "spark.2.66",
+      "cite": "MH p.60-63",
+      "table": "2",
+      "d66": 66,
+      "word": "Mortar"
+    },
+    {
+      "id": "spark.3.11",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 11,
+      "word": "set square"
+    },
+    {
+      "id": "spark.3.12",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 12,
+      "word": "Giada"
+    },
+    {
+      "id": "spark.3.13",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 13,
+      "word": "Bow"
+    },
+    {
+      "id": "spark.3.14",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 14,
+      "word": "Arrows"
+    },
+    {
+      "id": "spark.3.15",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 15,
+      "word": "Fur"
+    },
+    {
+      "id": "spark.3.16",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 16,
+      "word": "Bamboo"
+    },
+    {
+      "id": "spark.3.21",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 21,
+      "word": "Blade"
+    },
+    {
+      "id": "spark.3.22",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 22,
+      "word": "Sled"
+    },
+    {
+      "id": "spark.3.23",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 23,
+      "word": "Manual"
+    },
+    {
+      "id": "spark.3.24",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 24,
+      "word": "Scar"
+    },
+    {
+      "id": "spark.3.25",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 25,
+      "word": "Nail"
+    },
+    {
+      "id": "spark.3.26",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 26,
+      "word": "Talisman"
+    },
+    {
+      "id": "spark.3.31",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 31,
+      "word": "Star"
+    },
+    {
+      "id": "spark.3.32",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 32,
+      "word": "Black"
+    },
+    {
+      "id": "spark.3.33",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 33,
+      "word": "Wave"
+    },
+    {
+      "id": "spark.3.34",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 34,
+      "word": "Halberd"
+    },
+    {
+      "id": "spark.3.35",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 35,
+      "word": "Oil"
+    },
+    {
+      "id": "spark.3.36",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 36,
+      "word": "Bag"
+    },
+    {
+      "id": "spark.3.41",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 41,
+      "word": "Grapevine"
+    },
+    {
+      "id": "spark.3.42",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 42,
+      "word": "Falcon"
+    },
+    {
+      "id": "spark.3.43",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 43,
+      "word": "Tree"
+    },
+    {
+      "id": "spark.3.44",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 44,
+      "word": "Walls"
+    },
+    {
+      "id": "spark.3.45",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 45,
+      "word": "Cliff"
+    },
+    {
+      "id": "spark.3.46",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 46,
+      "word": "Wood"
+    },
+    {
+      "id": "spark.3.51",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 51,
+      "word": "Sack"
+    },
+    {
+      "id": "spark.3.52",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 52,
+      "word": "Tower"
+    },
+    {
+      "id": "spark.3.53",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 53,
+      "word": "Dark"
+    },
+    {
+      "id": "spark.3.54",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 54,
+      "word": "Belt"
+    },
+    {
+      "id": "spark.3.55",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 55,
+      "word": "Dust"
+    },
+    {
+      "id": "spark.3.56",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 56,
+      "word": "Puppet"
+    },
+    {
+      "id": "spark.3.61",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 61,
+      "word": "Blanket"
+    },
+    {
+      "id": "spark.3.62",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 62,
+      "word": "Staircase"
+    },
+    {
+      "id": "spark.3.63",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 63,
+      "word": "Chrysanthemum"
+    },
+    {
+      "id": "spark.3.64",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 64,
+      "word": "Bones"
+    },
+    {
+      "id": "spark.3.65",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 65,
+      "word": "Tunic"
+    },
+    {
+      "id": "spark.3.66",
+      "cite": "MH p.60-63",
+      "table": "3",
+      "d66": 66,
+      "word": "Ink"
+    },
+    {
+      "id": "spark.4.11",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 11,
+      "word": "Hat"
+    },
+    {
+      "id": "spark.4.12",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 12,
+      "word": "Unicorn"
+    },
+    {
+      "id": "spark.4.13",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 13,
+      "word": "Ginseng"
+    },
+    {
+      "id": "spark.4.14",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 14,
+      "word": "Horse"
+    },
+    {
+      "id": "spark.4.15",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 15,
+      "word": "Desert"
+    },
+    {
+      "id": "spark.4.16",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 16,
+      "word": "Rooster"
+    },
+    {
+      "id": "spark.4.21",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 21,
+      "word": "Rope"
+    },
+    {
+      "id": "spark.4.22",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 22,
+      "word": "Grass"
+    },
+    {
+      "id": "spark.4.23",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 23,
+      "word": "Silk"
+    },
+    {
+      "id": "spark.4.24",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 24,
+      "word": "Moon"
+    },
+    {
+      "id": "spark.4.25",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 25,
+      "word": "Fire"
+    },
+    {
+      "id": "spark.4.26",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 26,
+      "word": "Pyre"
+    },
+    {
+      "id": "spark.4.31",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 31,
+      "word": "Bed"
+    },
+    {
+      "id": "spark.4.32",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 32,
+      "word": "Bench"
+    },
+    {
+      "id": "spark.4.33",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 33,
+      "word": "Bottle"
+    },
+    {
+      "id": "spark.4.34",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 34,
+      "word": "Feather"
+    },
+    {
+      "id": "spark.4.35",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 35,
+      "word": "Stone"
+    },
+    {
+      "id": "spark.4.36",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 36,
+      "word": "Storm"
+    },
+    {
+      "id": "spark.4.41",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 41,
+      "word": "Globe"
+    },
+    {
+      "id": "spark.4.42",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 42,
+      "word": "Statue"
+    },
+    {
+      "id": "spark.4.43",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 43,
+      "word": "Inkwell"
+    },
+    {
+      "id": "spark.4.44",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 44,
+      "word": "Courtyard"
+    },
+    {
+      "id": "spark.4.45",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 45,
+      "word": "Bowl"
+    },
+    {
+      "id": "spark.4.46",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 46,
+      "word": "Dragon"
+    },
+    {
+      "id": "spark.4.51",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 51,
+      "word": "Book"
+    },
+    {
+      "id": "spark.4.52",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 52,
+      "word": "Necklace"
+    },
+    {
+      "id": "spark.4.53",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 53,
+      "word": "Lock"
+    },
+    {
+      "id": "spark.4.54",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 54,
+      "word": "Student"
+    },
+    {
+      "id": "spark.4.55",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 55,
+      "word": "Trap"
+    },
+    {
+      "id": "spark.4.56",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 56,
+      "word": "Bandit"
+    },
+    {
+      "id": "spark.4.61",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 61,
+      "word": "Wheel"
+    },
+    {
+      "id": "spark.4.62",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 62,
+      "word": "Inn"
+    },
+    {
+      "id": "spark.4.63",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 63,
+      "word": "Sphere"
+    },
+    {
+      "id": "spark.4.64",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 64,
+      "word": "Bear"
+    },
+    {
+      "id": "spark.4.65",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 65,
+      "word": "Dart"
+    },
+    {
+      "id": "spark.4.66",
+      "cite": "MH p.60-63",
+      "table": "4",
+      "d66": 66,
+      "word": "Dog"
+    },
+    {
+      "id": "spark.5.11",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 11,
+      "word": "Sea"
+    },
+    {
+      "id": "spark.5.12",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 12,
+      "word": "Compass"
+    },
+    {
+      "id": "spark.5.13",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 13,
+      "word": "Rain"
+    },
+    {
+      "id": "spark.5.14",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 14,
+      "word": "Metal"
+    },
+    {
+      "id": "spark.5.15",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 15,
+      "word": "Leather"
+    },
+    {
+      "id": "spark.5.16",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 16,
+      "word": "Emperor"
+    },
+    {
+      "id": "spark.5.21",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 21,
+      "word": "Wind"
+    },
+    {
+      "id": "spark.5.22",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 22,
+      "word": "Needle"
+    },
+    {
+      "id": "spark.5.23",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 23,
+      "word": "Forest"
+    },
+    {
+      "id": "spark.5.24",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 24,
+      "word": "Saw"
+    },
+    {
+      "id": "spark.5.25",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 25,
+      "word": "Rice"
+    },
+    {
+      "id": "spark.5.26",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 26,
+      "word": "Gloves"
+    },
+    {
+      "id": "spark.5.31",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 31,
+      "word": "Sun"
+    },
+    {
+      "id": "spark.5.32",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 32,
+      "word": "Passport"
+    },
+    {
+      "id": "spark.5.33",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 33,
+      "word": "Spear"
+    },
+    {
+      "id": "spark.5.34",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 34,
+      "word": "Cards"
+    },
+    {
+      "id": "spark.5.35",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 35,
+      "word": "Plow"
+    },
+    {
+      "id": "spark.5.36",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 36,
+      "word": "Pen"
+    },
+    {
+      "id": "spark.5.41",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 41,
+      "word": "Rope"
+    },
+    {
+      "id": "spark.5.42",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 42,
+      "word": "Table"
+    },
+    {
+      "id": "spark.5.43",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 43,
+      "word": "Net"
+    },
+    {
+      "id": "spark.5.44",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 44,
+      "word": "Bandage"
+    },
+    {
+      "id": "spark.5.45",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 45,
+      "word": "Webs"
+    },
+    {
+      "id": "spark.5.46",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 46,
+      "word": "Column"
+    },
+    {
+      "id": "spark.5.51",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 51,
+      "word": "Lightning"
+    },
+    {
+      "id": "spark.5.52",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 52,
+      "word": "Frontier"
+    },
+    {
+      "id": "spark.5.53",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 53,
+      "word": "Snake"
+    },
+    {
+      "id": "spark.5.54",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 54,
+      "word": "Pole"
+    },
+    {
+      "id": "spark.5.55",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 55,
+      "word": "Flame"
+    },
+    {
+      "id": "spark.5.56",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 56,
+      "word": "Kite"
+    },
+    {
+      "id": "spark.5.61",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 61,
+      "word": "Horn"
+    },
+    {
+      "id": "spark.5.62",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 62,
+      "word": "Door"
+    },
+    {
+      "id": "spark.5.63",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 63,
+      "word": "Pig"
+    },
+    {
+      "id": "spark.5.64",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 64,
+      "word": "Fish"
+    },
+    {
+      "id": "spark.5.65",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 65,
+      "word": "Deer"
+    },
+    {
+      "id": "spark.5.66",
+      "cite": "MH p.60-63",
+      "table": "5",
+      "d66": 66,
+      "word": "Torch"
+    },
+    {
+      "id": "spark.6.11",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 11,
+      "word": "Leaf"
+    },
+    {
+      "id": "spark.6.12",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 12,
+      "word": "Sickle"
+    },
+    {
+      "id": "spark.6.13",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 13,
+      "word": "Spice"
+    },
+    {
+      "id": "spark.6.14",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 14,
+      "word": "Twilight"
+    },
+    {
+      "id": "spark.6.15",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 15,
+      "word": "Mine"
+    },
+    {
+      "id": "spark.6.16",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 16,
+      "word": "Volcano"
+    },
+    {
+      "id": "spark.6.21",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 21,
+      "word": "Pumpkin"
+    },
+    {
+      "id": "spark.6.22",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 22,
+      "word": "Monkey"
+    },
+    {
+      "id": "spark.6.23",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 23,
+      "word": "Gong"
+    },
+    {
+      "id": "spark.6.24",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 24,
+      "word": "Portal"
+    },
+    {
+      "id": "spark.6.25",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 25,
+      "word": "Meadow"
+    },
+    {
+      "id": "spark.6.26",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 26,
+      "word": "Water"
+    },
+    {
+      "id": "spark.6.31",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 31,
+      "word": "River"
+    },
+    {
+      "id": "spark.6.32",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 32,
+      "word": "Spark"
+    },
+    {
+      "id": "spark.6.33",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 33,
+      "word": "Spirit"
+    },
+    {
+      "id": "spark.6.34",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 34,
+      "word": "Valley"
+    },
+    {
+      "id": "spark.6.35",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 35,
+      "word": "Dawn"
+    },
+    {
+      "id": "spark.6.36",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 36,
+      "word": "Lake"
+    },
+    {
+      "id": "spark.6.41",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 41,
+      "word": "Butterfly"
+    },
+    {
+      "id": "spark.6.42",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 42,
+      "word": "Sign"
+    },
+    {
+      "id": "spark.6.43",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 43,
+      "word": "Sign"
+    },
+    {
+      "id": "spark.6.44",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 44,
+      "word": "Swamp"
+    },
+    {
+      "id": "spark.6.45",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 45,
+      "word": "Treasure"
+    },
+    {
+      "id": "spark.6.46",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 46,
+      "word": "Island"
+    },
+    {
+      "id": "spark.6.51",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 51,
+      "word": "White"
+    },
+    {
+      "id": "spark.6.52",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 52,
+      "word": "Map"
+    },
+    {
+      "id": "spark.6.53",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 53,
+      "word": "Sunset"
+    },
+    {
+      "id": "spark.6.54",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 54,
+      "word": "Light"
+    },
+    {
+      "id": "spark.6.55",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 55,
+      "word": "Ruins"
+    },
+    {
+      "id": "spark.6.56",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 56,
+      "word": "Cloud"
+    },
+    {
+      "id": "spark.6.61",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 61,
+      "word": "Saddle"
+    },
+    {
+      "id": "spark.6.62",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 62,
+      "word": "Wax"
+    },
+    {
+      "id": "spark.6.63",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 63,
+      "word": "Tao"
+    },
+    {
+      "id": "spark.6.64",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 64,
+      "word": "Mountain"
+    },
+    {
+      "id": "spark.6.65",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 65,
+      "word": "Field"
+    },
+    {
+      "id": "spark.6.66",
+      "cite": "MH p.60-63",
+      "table": "6",
+      "d66": 66,
+      "word": "Demon"
+    }
+  ]
+}
