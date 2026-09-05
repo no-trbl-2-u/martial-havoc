@@ -220,6 +220,12 @@ else if (PROVIDER === 'cloudflare-workers') {
   const auth = { Authorization: `Bearer ${TOKEN}` }
   const base = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT}/workers/scripts/${SCRIPT}`
   const liveUrl = process.env.CLOUDFLARE_LIVE_URL ?? `https://${SCRIPT}.no-trbl-2-u.workers.dev`
+  // Production is main: there the sha must be the live deployment. On any
+  // other branch (or with DEPLOY_PREVIEW=1) an uploaded preview version
+  // counts as ready, since that is all a branch push produces.
+  const branch = process.env.WORKERS_CI_BRANCH ?? execSync('git rev-parse --abbrev-ref HEAD', { encoding: 'utf-8' }).trim()
+  const PREVIEW = process.env.DEPLOY_PREVIEW === '1' || (branch !== 'main' && branch !== 'HEAD')
+  if (PREVIEW) console.log(`Branch "${branch}": accepting an uploaded preview version as ready.`)
 
   await pollLoop(async () => {
     // 1. Which version was built from HEAD? (annotation carries the sha)
@@ -239,6 +245,15 @@ else if (PROVIDER === 'cloudflare-workers') {
     const latest = dData.result?.deployments?.[0]
     const serving = latest?.versions?.find((x) => x.version_id === version.id)
     if (serving && serving.percentage === 100) return { state: 'ready', url: liveUrl }
+
+    // 3. Off the production branch, an uploaded version IS the deliverable
+    //    (a preview; `npm run deploy:version`). Its URL is the alias or the
+    //    version-id prefix in front of the Worker's workers.dev host.
+    if (PREVIEW) {
+      const host = liveUrl.replace(/^https?:\/\//, '')
+      const prefix = version.annotations?.['workers/alias'] ?? version.id.slice(0, 8)
+      return { state: 'ready', url: `https://${prefix}-${host}` }
+    }
     return {
       state: 'uploaded',
       id: version.id?.slice(0, 8),
