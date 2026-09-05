@@ -280,7 +280,7 @@ with linked notes here.)
   app), verify gate green on nothing, Cloudflare Workers deploy target,
   placeholder page live at https://martial-havoc.no-trbl-2-u.workers.dev
   (commits 4c3c888, 3b6fa96, 9d1dad9, 26c9f3c)
-- phase 1b — 9f7f32e — the decomposition: 52 OKF concepts under docs/
+- phase 1b — 9f7f32e — the decomposition: 47 OKF concepts under docs/
   (rules 19, world 13, campaigns 10, root and sources 5) from the
   estate's inventory, R01-R84 and I-01..I-64 preserved, docs leg added
   to the verify gate (commits 83f636b, 2ed9db5, 1e05736, 62629e4,
