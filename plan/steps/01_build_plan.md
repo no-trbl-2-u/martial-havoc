@@ -19,6 +19,9 @@ the phase.
 **The garden (phase 1):**
 - [x] Phase 1 — The garden (stack, env manifest, verify gate, deploy
       target, seed skills; done = one tick on nothing) — 26c9f3c
+- [ ] Phase 1b — The decomposition (the rulebook and the adventure as
+      OKF documentation under `docs/`; injected by the operator
+      2026-09-05, before the engine phases)
 
 **The engine (phases 2–4):**
 - [ ] Phase 2 — Tables as data, and creation
@@ -58,6 +61,27 @@ the payload; if a later brief is missing when the loop reaches its phase,
 Makes the loop able to run. Nothing here is a feature. Detailed brief:
 `phase_1_bootstrap.md`. Done when `/ship-a-phase` on a trivial slice goes
 green end to end: verified, deployed, reported.
+
+### Phase 1b — The decomposition
+
+**Done when:** every section of the rulebook and every part of the
+adventure is one OKF concept under `docs/rules/`, `docs/world/` or
+`docs/campaigns/`, with frontmatter (`type`, `sources`, `cite`,
+`generated`) and folio citations; `docs/index.md` and per-directory
+indexes list every concept; a verify leg fails on any doc without
+frontmatter, citation or a resolvable link; the estate's rule ids
+(R-nn) and reading ids (I-nn) are preserved.
+**Waits on:** Phase 1
+**Cost:** one session
+
+Injected by the operator on 2026-09-05 (not in the Seed; recorded here
+as an operator call, the way `/oversight` promotes a candidate). Reason:
+the engine phases cite the book by folio and the estate's inventory by
+id; a repository-local, machine-checkable decomposition gives Phases
+2–5 and 11–12 one place to cite instead of two PDFs and a file in
+another repository. Detailed brief: `phase_1b_decomposition.md`.
+Not a feature: no engine code, no data files, no schema (Phase 2 owns
+those; it reads these docs).
 
 ### Phase 2 — Tables as data, and creation
 
