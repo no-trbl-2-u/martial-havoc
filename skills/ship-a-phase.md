@@ -242,7 +242,7 @@ commit per family.
 ### Step 9 — Verify gate
 
 ```bash
-pnpm verify    # or your stack's equivalent
+npm run verify    # or your stack's equivalent
 ```
 
 Runs `typecheck → test:run → data:validate → build → e2e` (or
@@ -296,7 +296,7 @@ commit (subject `phases: brief for phase <N>`).
 ### Step 12 — Confirm deploy
 
 ```bash
-pnpm deploy:check
+npm run deploy:check
 ```
 
 Outcomes:
@@ -307,7 +307,7 @@ Outcomes:
   cause. Re-run from Step 9. Up to 3 same-root-cause iterations;
   otherwise stop per §10.
 - **Exit 2 (timeout)** — surface the timeout; continue.
-- **Exit 3 (config)** — `<PROVIDER_AUTH_TOKEN>` missing or
+- **Exit 3 (config)** — `CLOUDFLARE_API_TOKEN` missing or
   unreachable. Stop per §10.
 
 ### Step 12.5 — Phase mirror close-comment
@@ -343,9 +343,11 @@ next in 2–3 lines.
 6. **Tests alongside code** — never "add tests later".
 7. **Small, focused components in folders.** Prefer 5 small
    files over 1 dense file.
-8. **Content stays in <CONTENT_LOCATION>.** Data stays in
-   `<DATA_LOCATION>`. No hardcoded copy/records in components.
-9. <PROJECT-SPECIFIC RULES — e.g., site name lowercase>
+8. **Content stays in packages/content.** Data stays in
+   `packages/content (there is no separate data layer)`. No hardcoded copy/records in components.
+9. **Every behaviour is labelled** rule, reading or invention with a
+   citation; `labels:check` is a verify leg. Never edit `spec.md` or
+   the two PDFs at the repo root.
 10. **Phase issue mirror is best-effort, not gating.** If
     `loop-issue.mjs phase-open` fails, the phase still ships;
     log the stderr and continue. The mirror is a public timeline,
@@ -388,10 +390,10 @@ past the blocked row into still-shippable work, and
 
 Repo-shaped — stop the tick:
 
-1. **`pnpm verify` fails ≥3 times on the same root cause.**
-2. **`pnpm deploy:check` fails ≥3 times on the same root cause**
-   after `pnpm verify` passes locally.
-3. **`<PROVIDER_AUTH_TOKEN>` missing or rejected**
+1. **`npm run verify` fails ≥3 times on the same root cause.**
+2. **`npm run deploy:check` fails ≥3 times on the same root cause**
+   after `npm run verify` passes locally.
+3. **`CLOUDFLARE_API_TOKEN` missing or rejected**
    (deploy:check exit 3). Stop and ask the user to populate
    `.env`.
 4. **A `git pull` produces a divergence.** Don't `--rebase`
@@ -429,9 +431,9 @@ Agent({ subagent_type: "scout", prompt: "..." })
 # + your domain specialists
 
 # Verify + commit + push + deploy
-pnpm verify
+npm run verify
 git add <explicit files>
 git commit -m "<subject>"
 git push origin main
-pnpm deploy:check
+npm run deploy:check
 ```

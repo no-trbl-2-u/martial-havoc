@@ -85,7 +85,7 @@ export const pageReads: PageReads = {
 ## Verify gate
 
 ```bash
-pnpm verify
+npm run verify
 ```
 
 All checks must pass before commit.
@@ -114,7 +114,7 @@ Flip Phase <N>'s `[ ]` → `[x]` in
 ## Confirm deploy
 
 ```bash
-pnpm deploy:check
+npm run deploy:check
 ```
 
 ## Follow-ups (out of scope this phase)

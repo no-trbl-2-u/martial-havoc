@@ -21,7 +21,7 @@ the `reader` sub-agent** — it has browser tools and the
 fresh-eyes mandate. Your job is orchestration, self-assessment,
 filtering, committing.
 
-Pre-flight: if `pnpm deploy:check` reports no green deploy yet,
+Pre-flight: if `npm run deploy:check` reports no green deploy yet,
 defer. Critiquing a non-existent site is noise.
 
 Argument: $ARGUMENTS

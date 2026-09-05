@@ -114,7 +114,7 @@ etc.) and the next pass re-runs.
 
 ```bash
 git pull --ff-only
-pnpm deploy:check
+npm run deploy:check
 ```
 
 If no green deploy: defer. Write a one-line entry to CRITIQUE.md
@@ -131,7 +131,7 @@ non-existent pages), recent shipping focus.
 ```
 Agent({
   subagent_type: "reader",
-  prompt: "Visit these URLs of <HOSTING_URL>: [list].
+  prompt: "Visit these URLs of https://martial-havoc.no-trbl-2-u.workers.dev: [list].
            Voice cue from plan/bearings.md: <quote>.
            Already-addressed (skip): <Done section>.
            Focus: <from arg or 'general'>.
@@ -206,7 +206,7 @@ If **zero** findings (rare): still update metadata, commit
 ### Step 6 — Confirm deploy
 
 ```bash
-pnpm deploy:check
+npm run deploy:check
 ```
 
 ### Step 7 — Done
@@ -261,7 +261,7 @@ Conditions to dispatch:
 1. **At least 12 commits** after `Last pass` commit, OR
    `Last pass` more than **24 hours** ago, OR `Last pass` is
    "never" and at least one page-family phase has shipped.
-2. `pnpm deploy:check` shows green.
+2. `npm run deploy:check` shows green.
 3. No pending HIGH critique already queued for iterate.
 
 If all three: `/march` calls `/critique` for that tick.
@@ -278,7 +278,7 @@ plan/bearings.md                     # voice, URL contract, Auth: field
 
 # Commands
 git pull --ff-only                   # Step 0
-pnpm deploy:check                    # green-deploy precondition
+npm run deploy:check                    # green-deploy precondition
 git commit && git push               # single critique: <summary> commit
 ```
 

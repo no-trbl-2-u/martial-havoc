@@ -290,7 +290,7 @@ function selfTest() {
     ['git reset HEAD~1', null],
     ['gh issue list -n 5', null],
     ['git log -n 5', null],
-    ['pnpm verify', null],
+    ['npm run verify', null],
   ]
   let failed = 0
   for (const [cmd, expected] of cases) {

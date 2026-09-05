@@ -48,7 +48,7 @@ In parallel where independent:
 
 1. `git log --oneline -20` — recent shipping velocity.
 2. `git status --short` — uncommitted changes.
-3. `pnpm deploy:check` — current deploy state.
+3. `npm run deploy:check` — current deploy state.
 4. `plan/steps/01_build_plan.md` "Status" block — pending
    phases.
 5. `plan/AUDIT.md` — open `/iterate` findings.
@@ -234,7 +234,7 @@ the loop" and exit.
 ### Step 7 — Confirm deploy
 
 ```bash
-pnpm deploy:check
+npm run deploy:check
 ```
 
 Skip if no commit was made.
@@ -297,5 +297,5 @@ plan/phases/phase_<N>_<topic>.md   # via /plan-a-phase
 # Commit
 git commit -m "oversight: <one-line>"
 git push origin main
-pnpm deploy:check
+npm run deploy:check
 ```

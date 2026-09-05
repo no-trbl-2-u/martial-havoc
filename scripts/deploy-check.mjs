@@ -29,7 +29,7 @@ if (fs.existsSync('.env')) {
   }
 }
 
-const PROVIDER = process.env.DEPLOY_PROVIDER ?? 'netlify'  // override per project
+const PROVIDER = process.env.DEPLOY_PROVIDER ?? 'cloudflare-workers'  // Martial Havoc: Workers static assets
 const TIMEOUT_MS = 10 * 60 * 1000   // 10 min default
 const POLL_MS = 5 * 1000
 
@@ -199,6 +199,55 @@ else if (PROVIDER === 'cloudflare-pages') {
 }
 
 // =====================================================================
+// PROVIDER: CLOUDFLARE WORKERS (static assets)
+// =====================================================================
+// The web export is uploaded as a Worker with static assets
+// (`wrangler deploy`, see wrangler.jsonc). Every upload carries the
+// commit it was built from as the version's `workers/message`
+// annotation (`npm run deploy` passes `--message <sha>`). This block
+// walks the script's versions, finds the one annotated with HEAD's
+// sha, then confirms a deployment routes 100% of traffic to it.
+//
+// Env: CLOUDFLARE_API_TOKEN (Workers Scripts: Edit), CLOUDFLARE_ACCOUNT_ID,
+//      CLOUDFLARE_PROJECT (the Worker name; defaults to "martial-havoc").
+else if (PROVIDER === 'cloudflare-workers') {
+  const TOKEN = process.env.CLOUDFLARE_API_TOKEN
+  const ACCOUNT = process.env.CLOUDFLARE_ACCOUNT_ID
+  const SCRIPT = process.env.CLOUDFLARE_PROJECT ?? 'martial-havoc'
+  if (!TOKEN) configFail('CLOUDFLARE_API_TOKEN', 'https://dash.cloudflare.com/profile/api-tokens')
+  if (!ACCOUNT) configFail('CLOUDFLARE_ACCOUNT_ID', 'Cloudflare dashboard sidebar (Workers & Pages overview)')
+
+  const auth = { Authorization: `Bearer ${TOKEN}` }
+  const base = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT}/workers/scripts/${SCRIPT}`
+  const liveUrl = process.env.CLOUDFLARE_LIVE_URL ?? `https://${SCRIPT}.no-trbl-2-u.workers.dev`
+
+  await pollLoop(async () => {
+    // 1. Which version was built from HEAD? (annotation carries the sha)
+    const vRes = await fetch(`${base}/versions?per_page=25`, { headers: auth })
+    if (vRes.status === 404) return { state: 'pending' } // script not created yet
+    if (!vRes.ok) return null
+    const vData = await vRes.json()
+    const version = (vData.result?.items ?? []).find(
+      (v) => (v.annotations?.['workers/message'] ?? '').includes(sha.slice(0, 7)),
+    )
+    if (!version) return { state: 'pending' }
+
+    // 2. Is that version what the Worker serves? (latest deployment at 100%)
+    const dRes = await fetch(`${base}/deployments`, { headers: auth })
+    if (!dRes.ok) return null
+    const dData = await dRes.json()
+    const latest = dData.result?.deployments?.[0]
+    const serving = latest?.versions?.find((x) => x.version_id === version.id)
+    if (serving && serving.percentage === 100) return { state: 'ready', url: liveUrl }
+    return {
+      state: 'uploaded',
+      id: version.id?.slice(0, 8),
+      message: 'version uploaded but not the live deployment yet',
+    }
+  })
+}
+
+// =====================================================================
 // PROVIDER: RENDER
 // =====================================================================
 else if (PROVIDER === 'render') {
@@ -307,7 +356,7 @@ else if (PROVIDER === 'none') {
 
 else {
   console.error(`Unknown DEPLOY_PROVIDER: "${PROVIDER}".`)
-  console.error(`Supported: netlify | vercel | github-actions | cloudflare-pages | render | fly | health-check | none`)
+  console.error(`Supported: netlify | vercel | github-actions | cloudflare-pages | cloudflare-workers | render | fly | health-check | none`)
   console.error(`See nexus/playbooks/ci-providers.md for full details.`)
   process.exit(3)
 }
