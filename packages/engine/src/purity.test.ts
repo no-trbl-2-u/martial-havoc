@@ -68,20 +68,46 @@ describe('the engine imports content as types only', () => {
     // the tables into the engine instead of letting a caller inject
     // them, and would stop Phase 5 handing it an adventure's tables the
     // same way.
+    //
+    // Matched per statement rather than per line, because an import list
+    // long enough to wrap puts the module specifier on a line that does
+    // not start with `import type`.
+    const statement = /\b(import|export)\b((?:(?!\bimport\b|\bexport\b)[\s\S])*?)from\s*['"]@martial-havoc\/content['"]/g
+    const sideEffect = /\bimport\s*['"]@martial-havoc\/content['"]/
+
     const offenders = files
-      .filter((f) =>
-        f.text
-          .split('\n')
-          .some(
-            (line) =>
-              line.includes('@martial-havoc/content') &&
-              !line.trimStart().startsWith('import type'),
-          ),
-      )
+      .filter((f) => {
+        if (sideEffect.test(f.text)) return true
+        return [...f.text.matchAll(statement)].some(
+          (match) => !(match[2] ?? '').trimStart().startsWith('type'),
+        )
+      })
       .map((f) => f.rel)
+
     expect(
       offenders,
       `tables are injected, never imported: ${offenders.join(', ')}`,
     ).toEqual([])
+  })
+
+  it('would catch a value import if one appeared', () => {
+    // The regex above is the whole rule, so it gets its own check.
+    const statement = /\b(import|export)\b((?:(?!\bimport\b|\bexport\b)[\s\S])*?)from\s*['"]@martial-havoc\/content['"]/g
+    const isValueImport = (source: string) =>
+      [...source.matchAll(statement)].some(
+        (match) => !(match[2] ?? '').trimStart().startsWith('type'),
+      )
+    expect(isValueImport("import { market } from '@martial-havoc/content'")).toBe(true)
+    expect(isValueImport("import type { Preset } from '@martial-havoc/content'")).toBe(false)
+    expect(
+      isValueImport("import type {\n  Preset,\n  MarketItem,\n} from '@martial-havoc/content'"),
+    ).toBe(false)
+    expect(isValueImport("export { market } from '@martial-havoc/content'")).toBe(true)
+    // Anchors on the nearest preceding import, not the first in the file.
+    expect(
+      isValueImport(
+        "import { x } from './local'\nimport type { Preset } from '@martial-havoc/content'",
+      ),
+    ).toBe(false)
   })
 })
