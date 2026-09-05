@@ -1,5 +1,10 @@
 {
-  "$comment": "UI strings for the app shell. Phase 1 placeholder page; Phase 2 replaces the page, Phase 8 the shell. Every record carries a cite.",
+  "$schema": "../../schema/content.schema.json",
+  "id": "app.strings",
+  "kind": "strings",
+  "title": "App shell strings",
+  "cite": "spec.md, Routine calls",
+  "label": "invention",
   "records": [
     {
       "id": "app.title",

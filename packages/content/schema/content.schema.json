@@ -1,0 +1,1660 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://martial-havoc.no-trbl-2-u.workers.dev/schema/content.schema.json",
+  "title": "Martial Havoc content file",
+  "description": "The one schema every data file in packages/content/data validates against. A file is an envelope (id, kind, title, cite, label, docs) wrapping an array of records. `kind` names the shape of the table's dice address; the top-level oneOf switches on it, and each branch fixes exactly which record shapes that kind may hold. Every object is closed (additionalProperties: false) so a stray or misspelled field is red, and every record carries `id` and `cite` so nothing ships without a folio. Phase 5's adventure files reuse these same kinds, which is what keeps `one schema` true.",
+  "type": "object",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/files/d6-banded"
+    },
+    {
+      "$ref": "#/$defs/files/d66"
+    },
+    {
+      "$ref": "#/$defs/files/1d6"
+    },
+    {
+      "$ref": "#/$defs/files/2d6"
+    },
+    {
+      "$ref": "#/$defs/files/2d6-by-column"
+    },
+    {
+      "$ref": "#/$defs/files/d6-by-column"
+    },
+    {
+      "$ref": "#/$defs/files/list"
+    },
+    {
+      "$ref": "#/$defs/files/presets"
+    },
+    {
+      "$ref": "#/$defs/files/strings"
+    }
+  ],
+  "$defs": {
+    "atoms": {
+      "id": {
+        "description": "Dotted kebab-case identifier, unique across the whole package (e.g. `technique.iron-head`). The d66 or the band is a field, never part of the id.",
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)+$"
+      },
+      "cite": {
+        "description": "Where the record comes from: a folio (`MH p.12`), an inventory id (`I-04`), or a repo path.",
+        "type": "string",
+        "minLength": 1
+      },
+      "label": {
+        "description": "The spec's three labels. Every table transcribed from the book is `rule`.",
+        "enum": [
+          "rule",
+          "reading",
+          "invention"
+        ]
+      },
+      "reading": {
+        "description": "An inventory reading id, carried IN ADDITION to the record's own fields when a cell is inferred rather than printed. Never instead of `cite`.",
+        "type": "string",
+        "pattern": "^I-[0-9]{2}[a-z]?$"
+      },
+      "band": {
+        "description": "A banded d6 address as printed: the first die's range (`1-2`, `3-4`, `5-6`, or `1-3`, `4-6`).",
+        "type": "string",
+        "pattern": "^[1-6]-[1-6]$"
+      },
+      "die": {
+        "description": "One d6 face.",
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 6
+      },
+      "d66": {
+        "description": "A d66 address: tens die then ones die, read as a two-digit number (11..66; every digit is 1-6, which the content test asserts).",
+        "type": "integer",
+        "minimum": 11,
+        "maximum": 66
+      },
+      "twoD6": {
+        "description": "A 2d6 total.",
+        "type": "integer",
+        "minimum": 2,
+        "maximum": 12
+      },
+      "faces": {
+        "description": "The d6 faces a banded row covers, listed explicitly so the engine never parses a range string.",
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 6,
+        "items": {
+          "$ref": "#/$defs/atoms/die"
+        }
+      },
+      "diceSpec": {
+        "description": "A dice expression as data: `n` dice of `d` faces plus `plus`. `n: 0` means no dice at all, so a fixed amount (Vagabond's 1 GP) needs no second shape and no branch in the engine.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "n",
+          "d",
+          "plus"
+        ],
+        "properties": {
+          "n": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "d": {
+            "type": "integer",
+            "minimum": 2
+          },
+          "plus": {
+            "type": "integer"
+          }
+        }
+      },
+      "namedValue": {
+        "description": "A Proficiency (or Technique/Ritual) name with the value printed beside it.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "value"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "records": {
+      "martialArt": {
+        "description": "One of the 18 Martial Arts (MH p.7-10), banded d6 x d6. `power` is the style text's own power where the style carries one (R13), verbatim, else null.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "band",
+          "row",
+          "name",
+          "styleText",
+          "proficiencies",
+          "power",
+          "powerClass"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "band": {
+            "$ref": "#/$defs/atoms/band"
+          },
+          "faces": {
+            "$ref": "#/$defs/atoms/faces"
+          },
+          "row": {
+            "$ref": "#/$defs/atoms/die"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "styleText": {
+            "type": "string",
+            "minLength": 1
+          },
+          "proficiencies": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "power": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "powerClass": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "deity": {
+        "description": "One of the 12 Deities (MH p.29), banded d6 x d6; three columns combine into a name.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "band",
+          "row",
+          "name",
+          "action",
+          "object"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "band": {
+            "$ref": "#/$defs/atoms/band"
+          },
+          "faces": {
+            "$ref": "#/$defs/atoms/faces"
+          },
+          "row": {
+            "$ref": "#/$defs/atoms/die"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "action": {
+            "type": "string",
+            "minLength": 1
+          },
+          "object": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "finalBlow": {
+        "description": "One of the 18 Final Blow inspiration rows (MH p.26), banded d6 x d6: an action, an attribute and an animal to name a landed blow (R31).",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "band",
+          "row",
+          "action",
+          "attribute",
+          "animal"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "band": {
+            "$ref": "#/$defs/atoms/band"
+          },
+          "faces": {
+            "$ref": "#/$defs/atoms/faces"
+          },
+          "row": {
+            "$ref": "#/$defs/atoms/die"
+          },
+          "action": {
+            "type": "string",
+            "minLength": 1
+          },
+          "attribute": {
+            "type": "string",
+            "minLength": 1
+          },
+          "animal": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "cityEncounter": {
+        "description": "One of the 12 city-encounter rows (MH p.51), banded d6 x d6: how the person you already know is connected to you, and one trait.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "band",
+          "row",
+          "connection",
+          "trait"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "band": {
+            "$ref": "#/$defs/atoms/band"
+          },
+          "faces": {
+            "$ref": "#/$defs/atoms/faces"
+          },
+          "row": {
+            "$ref": "#/$defs/atoms/die"
+          },
+          "connection": {
+            "type": "string",
+            "minLength": 1
+          },
+          "trait": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "learnable": {
+        "description": "A Technique (MH p.12-15) or a Ritual (MH p.16-19) on its d66 address. `cost` is both the Resource points to learn (R16) and the ENDURANCE to perform (R18). `effect` and `pinyin` are verbatim, non-standard spellings included.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "d66",
+          "name",
+          "pinyin",
+          "cost",
+          "effect"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "d66": {
+            "$ref": "#/$defs/atoms/d66"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "pinyin": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cost": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "effect": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "d66Text": {
+        "description": "A d66 row whose whole content is one passage of text (the 36 adventure hooks, MH p.36-39).",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "d66",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "d66": {
+            "$ref": "#/$defs/atoms/d66"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "word": {
+        "description": "One word cell of a d66 word table: the two Inspirations tables (MH p.59-60, `table` is `action` or `theme`) and the six Sparks tables (MH p.60-63, `table` is `1`..`6`).",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "table",
+          "d66",
+          "word"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "table": {
+            "type": "string",
+            "minLength": 1
+          },
+          "d66": {
+            "$ref": "#/$defs/atoms/d66"
+          },
+          "word": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "socialStatus": {
+        "description": "One of the 5 social-status bands (MH p.5, R03): the faces that land on it, the status name, and the gold it starts you with as a dice spec.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "faces",
+          "status",
+          "goldDice"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "faces": {
+            "$ref": "#/$defs/atoms/faces"
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "goldDice": {
+            "$ref": "#/$defs/atoms/diceSpec"
+          }
+        }
+      },
+      "treasure": {
+        "description": "One cell of the Treasure table (MH p.68, R78): 1d6 down the side, the defeated opponent's ENDURANCE band across the top.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "face",
+          "band",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "face": {
+            "$ref": "#/$defs/atoms/die"
+          },
+          "band": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "unexpectedEvent": {
+        "description": "One row of the Unexpected Event table (MH p.28, R32). `retreatRow` marks the two Enemy-retreat rows: the sealed Morale reading lives on them and reopens only through /re-seed.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "total",
+          "text",
+          "retreatRow"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "total": {
+            "$ref": "#/$defs/atoms/twoD6"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "retreatRow": {
+            "type": "boolean"
+          }
+        }
+      },
+      "specialItem": {
+        "description": "One row of the Special Items table (MH p.69, R79), 2d6. `effect` is verbatim, lower-case openings included.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "total",
+          "name",
+          "effect"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "total": {
+            "$ref": "#/$defs/atoms/twoD6"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "effect": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "encounterCell": {
+        "description": "One cell of the Encounters matrix (MH p.67, R74): a 2d6 total in one of the five columns. `printed` is the cell verbatim; `opponentRef` is the canonical opponent id it resolves to, or null when the cell redirects to another column instead of naming an opponent.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "total",
+          "column",
+          "printed",
+          "opponentRef",
+          "redirectColumn"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "total": {
+            "$ref": "#/$defs/atoms/twoD6"
+          },
+          "column": {
+            "type": "string",
+            "minLength": 1
+          },
+          "printed": {
+            "type": "string",
+            "minLength": 1
+          },
+          "opponentRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "redirectColumn": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "columnCell": {
+        "description": "One cell of a d6-per-column table: the Region table (MH p.43) and the Monastery table (MH p.45). Roll one d6 for each column you need.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "column",
+          "face",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "column": {
+            "type": "string",
+            "minLength": 1
+          },
+          "face": {
+            "$ref": "#/$defs/atoms/die"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "oracleCell": {
+        "description": "One cell of the Oracle (MH p.58, R71): 11 named rows, one d6 across. `spanInferred` is true where the printed cell is centred under two or more faces and the estate inferred the span; the text is the same in every face of that span.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "row",
+          "face",
+          "text",
+          "spanInferred"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "row": {
+            "type": "string",
+            "minLength": 1
+          },
+          "face": {
+            "$ref": "#/$defs/atoms/die"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "spanInferred": {
+            "type": "boolean"
+          }
+        }
+      },
+      "opponent": {
+        "description": "One of the 50 opponent stat blocks (MH p.70-79, R80). `attack` is printed as an integer, as the range `2-4` (Brawler), or blank (Huang Feng Guai) - kept as printed rather than normalised. `martialArtsValue` carries the n of a `Martial Arts (n)` Proficiency (R75); the Proficiency itself stays in the list.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "name",
+          "description",
+          "skill",
+          "endurance",
+          "attack",
+          "proficiencies",
+          "martialArtsValue",
+          "page",
+          "notes"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "skill": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "endurance": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "attack": {
+            "type": [
+              "integer",
+              "string",
+              "null"
+            ]
+          },
+          "proficiencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/atoms/namedValue"
+            }
+          },
+          "martialArtsValue": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "page": {
+            "type": "string",
+            "minLength": 1
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "marketItem": {
+        "description": "One priced line of the four Market lists (MH p.52-55). Exactly one of `priceGp` / `priceSp` is set, as printed. `flags` is computed at data time and read (never recomputed) by the engine: `weapon` (R68, I-02), `underTwentyGp` (the starting-kit cap of R02), `alcohol` (I-03).",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "list",
+          "item",
+          "priceGp",
+          "priceSp",
+          "flags"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "list": {
+            "enum": [
+              "common",
+              "weapons",
+              "expedition",
+              "armor"
+            ]
+          },
+          "item": {
+            "type": "string",
+            "minLength": 1
+          },
+          "priceGp": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "priceSp": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "flags": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "weapon",
+                "alcohol",
+                "underTwentyGp"
+              ]
+            },
+            "uniqueItems": true
+          }
+        }
+      },
+      "cityService": {
+        "description": "One line of the City Services price list (MH p.50, R64). The price is kept verbatim because the list prices per question, per dose, per day and per km, and one line is a range (`50-200 GP`) and one is `free offering`.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "service",
+          "price"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "service": {
+            "type": "string",
+            "minLength": 1
+          },
+          "price": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "healing": {
+        "description": "One row of the healing summary (MH p.31, R40-R42): what partially restores an attribute, by how much, and what fully restores it. LUCK has no full-restore rule, so `full` is null.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "attribute",
+          "partial",
+          "amount",
+          "full"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "attribute": {
+            "enum": [
+              "SKILL",
+              "ENDURANCE",
+              "LUCK"
+            ]
+          },
+          "partial": {
+            "type": "string",
+            "minLength": 1
+          },
+          "amount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "full": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "xpCategory": {
+        "description": "One of the end-of-adventure score categories (MH p.34, R43). `max` is null for the Dishonor line, which is subtracted and unbounded.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "category",
+          "min",
+          "max",
+          "subtracted"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "min": {
+            "type": "integer"
+          },
+          "max": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "subtracted": {
+            "type": "boolean"
+          }
+        }
+      },
+      "xpCost": {
+        "description": "One cell of the XP cost table (MH p.34, R44): what +1 of `increase` costs at the given current-SKILL band.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "increase",
+          "band",
+          "cost"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "increase": {
+            "type": "string",
+            "minLength": 1
+          },
+          "band": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cost": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "band": {
+        "description": "One band of a banded roll whose whole content is one label: route type on 2d6 and road features on 1d6 (MH p.44, R54-R55). `totals` lists the results that land on the band explicitly, so nothing parses a range at runtime.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "table",
+          "dice",
+          "totals",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "table": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dice": {
+            "enum": [
+              "1d6",
+              "2d6"
+            ]
+          },
+          "totals": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            }
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "note": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "preset": {
+        "description": "One of Appendix C's eight ready-to-play Master sheets (MH p.91-92, R83), transcribed field for field. Spelling is the sheets' own; names resolve to canonical table ids through the file's `nameResolution` map. Yin's overspends and Sun Wukong's out-of-range implied SKILL are recorded, never corrected.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "name",
+          "age",
+          "status",
+          "equipment",
+          "skill",
+          "endurance",
+          "luck",
+          "martialArt",
+          "proficiencies",
+          "training",
+          "techniques",
+          "rituals",
+          "from"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "age": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1
+          },
+          "equipment": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "skill": {
+            "type": "integer"
+          },
+          "endurance": {
+            "type": "integer"
+          },
+          "luck": {
+            "type": "integer"
+          },
+          "martialArt": {
+            "type": "string",
+            "minLength": 1
+          },
+          "proficiencies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/atoms/namedValue"
+            }
+          },
+          "training": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "techniques": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "rituals": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "from": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "string": {
+        "description": "One UI string of the app shell. The only record kind that is ours rather than the book's, which is why its file is labelled `invention`.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "files": {
+      "d6-banded": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$schema",
+          "id",
+          "kind",
+          "title",
+          "cite",
+          "label",
+          "docs",
+          "records"
+        ],
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "kind": {
+            "const": "d6-banded"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "label": {
+            "$ref": "#/$defs/atoms/label"
+          },
+          "docs": {
+            "type": "string",
+            "minLength": 1
+          },
+          "records": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/records/martialArt"
+                },
+                {
+                  "$ref": "#/$defs/records/deity"
+                },
+                {
+                  "$ref": "#/$defs/records/finalBlow"
+                },
+                {
+                  "$ref": "#/$defs/records/cityEncounter"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "d66": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$schema",
+          "id",
+          "kind",
+          "title",
+          "cite",
+          "label",
+          "docs",
+          "records"
+        ],
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "kind": {
+            "const": "d66"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "label": {
+            "$ref": "#/$defs/atoms/label"
+          },
+          "docs": {
+            "type": "string",
+            "minLength": 1
+          },
+          "records": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/records/learnable"
+                },
+                {
+                  "$ref": "#/$defs/records/d66Text"
+                },
+                {
+                  "$ref": "#/$defs/records/word"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "1d6": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$schema",
+          "id",
+          "kind",
+          "title",
+          "cite",
+          "label",
+          "docs",
+          "records"
+        ],
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "kind": {
+            "const": "1d6"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "label": {
+            "$ref": "#/$defs/atoms/label"
+          },
+          "docs": {
+            "type": "string",
+            "minLength": 1
+          },
+          "records": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/records/socialStatus"
+                },
+                {
+                  "$ref": "#/$defs/records/treasure"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "2d6": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$schema",
+          "id",
+          "kind",
+          "title",
+          "cite",
+          "label",
+          "docs",
+          "records"
+        ],
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "kind": {
+            "const": "2d6"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "label": {
+            "$ref": "#/$defs/atoms/label"
+          },
+          "docs": {
+            "type": "string",
+            "minLength": 1
+          },
+          "records": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/records/unexpectedEvent"
+                },
+                {
+                  "$ref": "#/$defs/records/specialItem"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "2d6-by-column": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$schema",
+          "id",
+          "kind",
+          "title",
+          "cite",
+          "label",
+          "docs",
+          "records"
+        ],
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "kind": {
+            "const": "2d6-by-column"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "label": {
+            "$ref": "#/$defs/atoms/label"
+          },
+          "docs": {
+            "type": "string",
+            "minLength": 1
+          },
+          "records": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/records/encounterCell"
+            }
+          }
+        }
+      },
+      "d6-by-column": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$schema",
+          "id",
+          "kind",
+          "title",
+          "cite",
+          "label",
+          "docs",
+          "records"
+        ],
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "kind": {
+            "const": "d6-by-column"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "label": {
+            "$ref": "#/$defs/atoms/label"
+          },
+          "docs": {
+            "type": "string",
+            "minLength": 1
+          },
+          "records": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/records/columnCell"
+                },
+                {
+                  "$ref": "#/$defs/records/oracleCell"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "list": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$schema",
+          "id",
+          "kind",
+          "title",
+          "cite",
+          "label",
+          "docs",
+          "records"
+        ],
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "kind": {
+            "const": "list"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "label": {
+            "$ref": "#/$defs/atoms/label"
+          },
+          "docs": {
+            "type": "string",
+            "minLength": 1
+          },
+          "records": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/records/opponent"
+                },
+                {
+                  "$ref": "#/$defs/records/marketItem"
+                },
+                {
+                  "$ref": "#/$defs/records/cityService"
+                },
+                {
+                  "$ref": "#/$defs/records/healing"
+                },
+                {
+                  "$ref": "#/$defs/records/xpCategory"
+                },
+                {
+                  "$ref": "#/$defs/records/xpCost"
+                },
+                {
+                  "$ref": "#/$defs/records/band"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "presets": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$schema",
+          "id",
+          "kind",
+          "title",
+          "cite",
+          "label",
+          "docs",
+          "records",
+          "nameResolution"
+        ],
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "kind": {
+            "const": "presets"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "label": {
+            "$ref": "#/$defs/atoms/label"
+          },
+          "docs": {
+            "type": "string",
+            "minLength": 1
+          },
+          "nameResolution": {
+            "description": "Sheet spelling to canonical id. The sheets abbreviate and re-capitalise; this map is how a preset's free text becomes a table lookup without editing what the sheet prints.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "onSheet",
+                "canonicalId",
+                "canonicalName"
+              ],
+              "properties": {
+                "onSheet": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "canonicalId": {
+                  "$ref": "#/$defs/atoms/id"
+                },
+                "canonicalName": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "records": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/records/preset"
+            }
+          }
+        }
+      },
+      "strings": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "$schema",
+          "id",
+          "kind",
+          "title",
+          "cite",
+          "label",
+          "records"
+        ],
+        "properties": {
+          "$schema": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "kind": {
+            "const": "strings"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "label": {
+            "$ref": "#/$defs/atoms/label"
+          },
+          "docs": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional for this kind only: the app strings have no docs/ concept behind them."
+          },
+          "records": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/records/string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

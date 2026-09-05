@@ -1,46 +1,181 @@
 /**
- * The content package's gate: every data file parses, every record
- * carries a citation, every schema file (once any exist) parses.
- * This is the project's `data:validate` leg, folded into `npm test`
- * as plan/bearings.md states it.
+ * The content package's gate.
+ *
+ * This is the project's `data:validate` leg, folded into `npm test` as
+ * `plan/bearings.md` states it: there is no separate validation script,
+ * so if this file is green the data is shippable.
+ *
+ * Five things are checked, in rising order of specificity:
+ *
+ * 1. Every file under `data/` validates against the one JSON Schema in
+ *    `schema/content.schema.json` (ajv, draft 2020-12, `allErrors` so a
+ *    bad file reports every problem at once, not the first).
+ * 2. Every record id is unique across the whole package, so a lookup can
+ *    never be ambiguous.
+ * 3. Every `docs` pointer resolves to a real file, so a renamed concept
+ *    under `docs/` breaks the build rather than rotting silently.
+ * 4. Every file holds exactly the number of records the book prints. A
+ *    dropped cell is the failure mode transcription actually has, and the
+ *    schema cannot see it - only a count can.
+ * 5. Every d66 address is made of two real d6 faces (the schema can only
+ *    bound it to 11..66, which would admit 17 or 40).
  */
-import { readdirSync, readFileSync, statSync } from 'node:fs'
-import { join } from 'node:path'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { join, relative } from 'node:path'
+import Ajv2020 from 'ajv/dist/2020'
 import { describe, expect, it } from 'vitest'
 import { appStrings, stringById, t } from './index'
 
 const here = new URL('.', import.meta.url).pathname
-const dataDir = join(here, '..', 'data')
-const schemaDir = join(here, '..', 'schema')
+const packageDir = join(here, '..')
+const dataDir = join(packageDir, 'data')
+const schemaDir = join(packageDir, 'schema')
+const repoRoot = join(packageDir, '..', '..')
 
-/** Recursively list files under `dir` with the given extension. */
-const walk = (dir: string, ext: string): string[] =>
-  readdirSync(dir).flatMap((name) => {
-    const full = join(dir, name)
-    return statSync(full).isDirectory() ? walk(full, ext) : full.endsWith(ext) ? [full] : []
+/**
+ * How many records each file must hold, keyed by the file's `id`.
+ *
+ * These are the counts the rulebook prints, taken from the concept docs
+ * under `docs/` (which carry them in their own "Notes" sections). The map
+ * is exhaustive in both directions: a file whose id is missing here is a
+ * failure, and an id here with no file is a failure. That is what makes a
+ * half-transcribed table impossible to ship.
+ */
+const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
+  'app.strings': 4,
+}
+
+/** Recursively list files under `dir` with the given extension, sorted. */
+const walk = (dir: string, ext: string): readonly string[] =>
+  readdirSync(dir)
+    .flatMap((name) => {
+      const full = join(dir, name)
+      return statSync(full).isDirectory() ? walk(full, ext) : full.endsWith(ext) ? [full] : []
+    })
+    .sort()
+
+/** One content file as it sits on disk, with the path that found it. */
+type LoadedFile = {
+  readonly path: string
+  readonly rel: string
+  readonly parsed: {
+    readonly id: string
+    readonly kind: string
+    readonly docs?: string
+    readonly records: readonly { readonly id: string; readonly d66?: number }[]
+  }
+}
+
+/** Parse every data file once; every test below reads this. */
+const files: readonly LoadedFile[] = walk(dataDir, '.json').map((path) => ({
+  path,
+  rel: relative(packageDir, path),
+  parsed: JSON.parse(readFileSync(path, 'utf-8')) as LoadedFile['parsed'],
+}))
+
+describe('the one schema', () => {
+  // Compiled once for the whole file: ajv caches nothing across instances
+  // and the schema is large enough that per-test compilation shows up.
+  // `strict` catches schema mistakes (a misspelled keyword silently
+  // validating everything); `allowUnionTypes` is the one relaxation it
+  // needs, because a few printed cells genuinely hold more than one type
+  // - an opponent's ATTACK is an integer, the string "2-4", or blank.
+  const ajv = new Ajv2020({ allErrors: true, strict: true, allowUnionTypes: true })
+  // `JSON.parse` is `any`; naming the shape ajv wants keeps the parse
+  // honest without widening it to `unknown` (which ajv will not take).
+  const schema = JSON.parse(
+    readFileSync(join(schemaDir, 'content.schema.json'), 'utf-8'),
+  ) as Record<string, unknown>
+  const validate = ajv.compile(schema)
+
+  it('compiles', () => {
+    expect(typeof validate).toBe('function')
   })
 
-describe('content data files', () => {
-  const files = walk(dataDir, '.json')
-
-  it('there is at least one data file', () => {
-    expect(files.length).toBeGreaterThan(0)
-  })
-
-  it.each(files)('%s parses and every record carries id, text/value and cite', (file) => {
-    const parsed = JSON.parse(readFileSync(file, 'utf-8')) as { records?: unknown[] }
-    expect(Array.isArray(parsed.records)).toBe(true)
-    for (const record of parsed.records ?? []) {
-      const r = record as Record<string, unknown>
-      expect(typeof r['id'], `${file}: id`).toBe('string')
-      expect(typeof r['cite'], `${file}: cite on ${String(r['id'])}`).toBe('string')
-      expect((r['cite'] as string).length).toBeGreaterThan(0)
-    }
+  it.each(files.map((f) => [f.rel, f] as const))('%s validates', (_rel, file) => {
+    const ok = validate(file.parsed)
+    // Errors are rendered with the file path and the failing instance
+    // path, because "must have required property id" on its own is
+    // unactionable when 26 files are in play.
+    const detail = (validate.errors ?? [])
+      .map((e) => `  ${file.rel}${e.instancePath || '/'} ${e.message ?? ''}`)
+      .join('\n')
+    expect(ok, `${file.rel} failed schema validation:\n${detail}`).toBe(true)
   })
 })
 
-describe('content schemas', () => {
-  it('every schema file parses as JSON (vacuous until Phase 2)', () => {
+describe('the whole package', () => {
+  it('gives every record a unique id', () => {
+    const seen = new Map<string, string>()
+    const clashes: string[] = []
+    for (const file of files) {
+      for (const record of file.parsed.records) {
+        const first = seen.get(record.id)
+        if (first !== undefined) clashes.push(`${record.id}: ${first} and ${file.rel}`)
+        else seen.set(record.id, file.rel)
+      }
+    }
+    expect(clashes, `duplicate record ids:\n${clashes.join('\n')}`).toEqual([])
+  })
+
+  it('gives every file a unique id', () => {
+    const ids = files.map((f) => f.parsed.id)
+    expect(new Set(ids).size).toBe(ids.length)
+  })
+
+  it('points every `docs` pointer at a file that exists', () => {
+    const missing = files
+      .filter((f) => f.parsed.docs !== undefined)
+      .filter((f) => !existsSync(join(repoRoot, f.parsed.docs as string)))
+      .map((f) => `${f.rel} -> ${f.parsed.docs as string}`)
+    expect(missing, `dangling docs pointers:\n${missing.join('\n')}`).toEqual([])
+  })
+
+  it('holds exactly the records the book prints', () => {
+    const wrong = files
+      .map((f) => ({ file: f, expected: EXPECTED_RECORD_COUNTS[f.parsed.id] }))
+      .filter(({ file, expected }) => expected !== file.parsed.records.length)
+      .map(
+        ({ file, expected }) =>
+          `${file.rel} (${file.parsed.id}): ${file.parsed.records.length} records, expected ${
+            expected === undefined ? 'an entry in EXPECTED_RECORD_COUNTS' : String(expected)
+          }`,
+      )
+    expect(wrong, `record counts:\n${wrong.join('\n')}`).toEqual([])
+  })
+
+  it('ships every file the count map names', () => {
+    const shipped = new Set(files.map((f) => f.parsed.id))
+    const absent = Object.keys(EXPECTED_RECORD_COUNTS).filter((id) => !shipped.has(id))
+    expect(absent, `expected but not shipped: ${absent.join(', ')}`).toEqual([])
+  })
+
+  it('builds every d66 address out of two real d6 faces', () => {
+    const bad = files.flatMap((file) =>
+      file.parsed.records
+        .filter((r) => r.d66 !== undefined)
+        .filter((r) => {
+          const tens = Math.floor((r.d66 as number) / 10)
+          const ones = (r.d66 as number) % 10
+          return tens < 1 || tens > 6 || ones < 1 || ones > 6
+        })
+        .map((r) => `${file.rel}: ${r.id} has d66 ${String(r.d66)}`),
+    )
+    expect(bad, `impossible d66 addresses:\n${bad.join('\n')}`).toEqual([])
+  })
+
+  it('reports its size (the spec asks for counts readable from the build)', () => {
+    const records = files.reduce((sum, f) => sum + f.parsed.records.length, 0)
+    // The engine's half of this promise is `labels:check`, which prints
+    // the behaviour count.
+    console.log(`content - ${files.length} files, ${records} records`)
+    expect(files.length).toBeGreaterThan(0)
+    expect(records).toBeGreaterThan(0)
+  })
+})
+
+describe('schema directory', () => {
+  it('every schema file parses as JSON', () => {
     for (const file of walk(schemaDir, '.json')) {
       expect(() => JSON.parse(readFileSync(file, 'utf-8'))).not.toThrow()
     }
