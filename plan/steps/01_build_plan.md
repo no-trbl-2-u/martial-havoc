@@ -1,0 +1,253 @@
+# 01 — Build plan
+
+origin: idea-0003 @ state/0013
+
+> Style guardrails for every phase below. Always ship unit tests
+> alongside code — never "add tests later". Small focused files in
+> folders. Run `/seed-check` before any step a phase brief did not name.
+
+## Status (at-a-glance)
+
+`/march`, `/ship-a-phase`, and (transitively) `/loop` read this block to
+find the next phase. Status vocabulary: `[ ]` pending → `[x]` shipped
+(with commit hash); `[skipped]` (set only via `/oversight`);
+`[blocked: <reason> <date>]` (set by `ship-a-phase` on a phase-shaped
+failure — `/march` skips it, `/oversight` unblocks it); `[-]`
+partial-with-carry-overs. Tick in this file in the same commit that ships
+the phase.
+
+**The garden (phase 1):**
+- [ ] Phase 1 — The garden (stack, env manifest, verify gate, deploy
+      target, seed skills; done = one tick on nothing)
+
+**The engine (phases 2–4):**
+- [ ] Phase 2 — Tables as data, and creation
+- [ ] Phase 3 — Engine core
+- [ ] Phase 4 — Effects and Oracle lines
+
+**The cave and its home (phases 5–9):**
+- [ ] Phase 5 — The adventure format and The 5 Treasures
+- [ ] Phase 6 — The campaign record and the save
+- [ ] Phase 7 — The trail-head village
+- [ ] Phase 8 — The UI
+- [ ] Phase 9 — The web release
+
+**The milestone (phase 10, by 2026-12-05):**
+- [ ] Phase 10 — The cave played to its ending `[needs-user-call]`
+
+**The sandbox (phases 11–14, by 2027-03-05):**
+- [ ] Phase 11 — Word-table lines
+- [ ] Phase 12 — Sandbox procedures
+- [ ] Phase 13 — Native builds `[needs-user-call]` for accounts
+- [ ] Phase 14 — The whole sitting `[needs-user-call]`
+
+> **After phase 14:** the loop transitions to `/iterate` — gaps, audits,
+> link rot. `/march` makes that transition automatic.
+
+---
+
+## Per-phase scope
+
+Each row above corresponds to one phase. The detailed brief lives at
+`plan/phases/phase_<N>_<topic>.md`. Only the garden's brief ships with
+the payload; if a later brief is missing when the loop reaches its phase,
+`/plan-a-phase` generates one from the scope below and `spec.md`.
+
+### Phase 1 — The garden
+
+Makes the loop able to run. Nothing here is a feature. Detailed brief:
+`phase_1_bootstrap.md`. Done when `/ship-a-phase` on a trivial slice goes
+green end to end: verified, deployed, reported.
+
+### Phase 2 — Tables as data, and creation
+
+**Done when:** the schema validates every file; the eight presets load
+with Yin flagged; a Master rolls from fixture dice with the pools
+reported.
+**Waits on:** Phase 1
+**Cost:** one to two weeks
+
+One JSON Schema; every table of the rulebook and the adventure as data
+with `cite` and `label: rule` (Martial Arts, Techniques, Rituals, Final
+Blow, Unexpected Events, Deities, XP, hooks, region, route, road,
+monastery, city services and encounters, Market lists, Oracle rows,
+Inspirations, Sparks, encounter matrix, Treasures, Special Items, 50
+opponents, eight presets as printed). The dice interface with a
+fixed-sequence test source. Creation: rolled attributes, one Martial
+Art, gold by status, Training deduction, pools from rolled SKILL checked
+and flagged, never refused; attributes not typeable.
+
+### Phase 3 — Engine core
+
+**Done when:** every rule in the estate's inventory has a fixed-dice
+test; the label leg is green; a scripted fight resolves end to end.
+**Waits on:** Phase 2
+**Cost:** three to four weeks
+
+Checks with LUCK −1 after every LUCK check and a double six failing every
+check; doubles rolls are non-checks and a double six lands. Attack
+Strength with one relevant Proficiency; the winner's four options;
+Opening; Final Blow on doubles with the LUCK exception (−1 on failure
+only); a tie is an Unexpected Event ending the combat phase; retreat rows
+roll Morale (1–3 flee, 4–5 cautious retreat, 6 rally +1d6). Multiple
+combat: SKILL reduced by headcount, one Master roll against each attacker
+up to ATTACK, ATTACK inert against a lone Master. Escape (−2, Dishonor),
+healing (+4 by technique, regeneration, meal, elixir or a night's rest;
+full by a week), XP by SKILL band with caps, spirits immune to ordinary
+blows, the Oracle, encounters by column, Treasure roll, Special Items.
+Every behaviour exports `{label, cite}`; the reading ids as a list.
+
+### Phase 4 — Effects and Oracle lines
+
+**Done when:** 149 authored lines in the content package; every effect
+record has a test; the count is readable from the build.
+**Waits on:** Phase 3
+**Cost:** two to three weeks
+
+The 72 Technique and Ritual effect records under five classes
+(mechanical, combat-narrative, exploration, oracle-like, summoning),
+each with cost, timing, engine operation and an authored line; the 66
+Oracle cells and 11 Unexpected Events with a line each. The agent drafts
+all; the operator may reserve any (`[needs-user-call]` for those only).
+
+### Phase 5 — The adventure format and The 5 Treasures
+
+**Done when:** the format's document and the cave's file are in the
+content package; a scripted Master reaches the ending screen on fixed
+dice.
+**Waits on:** Phase 3
+**Cost:** two weeks
+
+A versioned, documented format (areas with gated hints, event and
+encounter tables, foes, loot, treasures, locks and keys, per-adventure
+flags, act markers, an ending screen). The cave: eight areas, nine foes,
+five treasures, one key held by the Ghost and the Beast, the Junior King
+as one entity across tables, the gourd toggling day and night, Ogres
+absent by night, the Monk as a rescue with Dishonor on attack, fled Kings
+gone from their tables, an original SVG room diagram.
+
+### Phase 6 — The campaign record and the save
+
+**Done when:** a record survives export, import and one migration in
+tests; the override count increments on a non-dice manual entry.
+**Waits on:** Phases 3 and 5
+**Cost:** one to two weeks
+
+One record per campaign: Master with the overspend mark, deeds ledger,
+per-adventure flags, passages, reading ids, override count. Continue or
+fresh start at each scene; the world dies with the Master. Versioned JSON
+export and import with migrations keyed on reading ids.
+
+### Phase 7 — The trail-head village
+
+**Done when:** the village loads from data; buy, LUCK recovery and a
+night's rest run in tests; every behaviour labelled.
+**Waits on:** Phase 3
+**Cost:** one week
+
+The rulebook's City procedures (Market, Temple with one Spirituality
+success per day, an inn with meals and rest) generalised and applied to
+a fixed village with three locations and the trail to Flat-top mountain.
+
+### Phase 8 — The UI
+
+**Done when:** a Playwright run creates a Master and wins a fight on the
+web export; the layout decision is recorded.
+**Waits on:** Phases 4, 5, 6, 7
+**Cost:** three weeks after the layout is picked
+
+`[needs-user-call]` **Layout:** the agent renders three layouts at phone
+width with a working beat and files them; the operator picks; the agent
+builds it. Creation in the book's order with presets; the beat (authored
+line, menu, free-text field always present); combat showing both rolls;
+the rules panel with three labels; dice with manual entry; the cave's
+areas; the village; the campaign record screen with export and import.
+
+### Phase 9 — The web release
+
+**Done when:** the Cloudflare URL serves the milestone build; the
+release checklist is in the repository and ticked.
+**Waits on:** Phases 1 and 8
+**Cost:** days
+
+Attribution screen (Gianluca Monaco, Cristian Cammarata, limofeus,
+watabou; CC BY-SA 4.0); release checklist (verify, deploy-check, the
+scripted cave run, the label leg, content counts printed); deploy; the
+operator installs the web app to a phone.
+
+### Phase 10 — The cave played to its ending, by 2026-12-05
+
+**Done when:** on 2026-12-05 a campaign record exists whose cave reached
+the ending screen with the PDF closed, or the falsifier is recorded as
+fired with its reason.
+**Waits on:** Phase 9
+**Cost:** the operator's evenings; the date is fixed
+
+`[needs-user-call]` The operator plays the cave to the ending screen; the
+agent fixes what the operator reports through the loop. Evidence: the
+record, its override count, the content counts. A field report goes back
+to the estate as `capture` on idea-0003.
+
+### Phase 11 — Word-table lines
+
+**Done when:** 437 authored lines in total, or a smaller number with the
+fallback named.
+**Waits on:** Phase 10 in time only
+**Cost:** three to four weeks of writing
+
+The 72 Inspirations and 216 Sparks with an authored line each; the
+operator may reserve any (`[needs-user-call]` for those only); the build
+prints the shipped count.
+
+### Phase 12 — Sandbox procedures
+
+**Done when:** a seeded test throws a region, enters a location,
+resolves an encounter and the record carries it; a Master leaves the
+cave into a region on the web build.
+**Waits on:** Phases 6, 10, 11
+**Cost:** four to six weeks
+
+The region generator (N points, nearest-neighbour links, miles as the
+sum of two dice with the route band from the same sum, positions
+decorative and declared so); region columns per the rule on visit and
+per move with the at-throw variant as a labelled reading; monastery
+generation; road features; the five encounter columns and the 36 hooks
+as menus; City procedures on a generated City; scene transitions from
+the cave's ending; continue or fresh start.
+
+### Phase 13 — Native builds
+
+**Done when:** a build on each internal track, or the phase blocked on
+the named account with the web release as distribution.
+**Waits on:** Phase 9; may run beside Phases 11 and 12
+**Cost:** one week of agent work; the operator's accounts on their own
+clock
+
+`[needs-user-call]` Expo account, Apple developer membership, Google Play
+console, a Mac for iOS; the agent writes the EAS configuration and names
+every credential up to the line; deploy-check extended to poll EAS; a
+smoke run on each track by the operator (`[needs-user-call]`).
+
+### Phase 14 — The whole sitting, by 2027-03-05
+
+**Done when:** on 2027-03-05 the operator has thrown a region, entered a
+location, resolved an encounter, and the record carries it, exported and
+imported once, on a phone; or the falsifier is recorded as fired.
+**Waits on:** Phase 12
+**Cost:** one evening; the date is fixed
+
+`[needs-user-call]` The operator performs the whole sitting. Evidence:
+the campaign record, the content counts, the village present. A field
+report goes back to the estate; the third falsifier's clock starts.
+
+---
+
+## Carry-overs / known gaps (update as phases ship)
+
+(Empty until phases ship. Add `[-]` rows for partial-but-shipped phases
+with linked notes here.)
+
+## Phase log (commit hashes)
+
+(Empty until phase 1 ships. One line per shipped phase:
+`phase <N> — <commit hash> — <one-line summary>`.)
