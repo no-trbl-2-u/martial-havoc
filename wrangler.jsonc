@@ -1,0 +1,17 @@
+// Cloudflare Workers static-assets deployment for the Martial Havoc web
+// export (spec.md, Routine calls: "Cloudflare Workers static assets").
+// Assets-only: there is no server (spec.md refusals: offline, no
+// account). `npm run deploy` uploads apps/app/dist; the Worker name is
+// what deploy-check.mjs polls (CLOUDFLARE_PROJECT defaults to it).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "martial-havoc",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./apps/app/dist",
+    // The app owns its routes; an unknown path serves index.html, the
+    // same fallback scripts/serve-static.mjs gives the e2e gate.
+    "not_found_handling": "single-page-application"
+  },
+  "workers_dev": true
+}
