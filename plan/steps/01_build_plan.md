@@ -19,9 +19,9 @@ the phase.
 **The garden (phase 1):**
 - [x] Phase 1 — The garden (stack, env manifest, verify gate, deploy
       target, seed skills; done = one tick on nothing) — 26c9f3c
-- [ ] Phase 1b — The decomposition (the rulebook and the adventure as
+- [x] Phase 1b — The decomposition (the rulebook and the adventure as
       OKF documentation under `docs/`; injected by the operator
-      2026-09-05, before the engine phases)
+      2026-09-05, before the engine phases) — 9f7f32e
 
 **The engine (phases 2–4):**
 - [ ] Phase 2 — Tables as data, and creation
@@ -280,3 +280,8 @@ with linked notes here.)
   app), verify gate green on nothing, Cloudflare Workers deploy target,
   placeholder page live at https://martial-havoc.no-trbl-2-u.workers.dev
   (commits 4c3c888, 3b6fa96, 9d1dad9, 26c9f3c)
+- phase 1b — 9f7f32e — the decomposition: 52 OKF concepts under docs/
+  (rules 19, world 13, campaigns 10, root and sources 5) from the
+  estate's inventory, R01-R84 and I-01..I-64 preserved, docs leg added
+  to the verify gate (commits 83f636b, 2ed9db5, 1e05736, 62629e4,
+  9f7f32e)
