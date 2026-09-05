@@ -1,0 +1,19 @@
+{
+  "_help": "Adopt manifest for `npx --yes github:no-trbl-2-u/idea-Nexus#v0.2-estate adopt`. Keys are the kit's literal placeholder tokens. Empty and missing both mean unresolved: the token stays in the copied files and becomes a [needs-user-call] row in plan/AUDIT.md. The script stamps `adopted` after a run.",
+  "placeholders": {
+    "<PROJECT>": "Martial Havoc",
+    "<PROJECT_LOWER>": "martial-havoc",
+    "<PROJECT_TAGLINE>": "A rules engine for Martial Havoc: the sandbox is the real game, adventures are scenes in it, and The 5 Treasures is the first",
+    "<HOSTING_URL>": "",
+    "<HOSTING_PROVIDER>": "Cloudflare",
+    "<REPO_SLUG>": "no-trbl-2-u/martial-havoc",
+    "<DEFAULT_BRANCH>": "main",
+    "<PROJECT_PKG_PREFIX>": "@martial-havoc"
+  },
+  "cloudLoop": false,
+  "data": false,
+  "adopted": {
+    "kit": "idea-nexus@0.2.0",
+    "at": "2026-09-05T18:12:51.165Z"
+  }
+}
