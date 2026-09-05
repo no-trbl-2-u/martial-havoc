@@ -5,6 +5,11 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    projects: ['packages/*'],
+    projects: [
+      'packages/*',
+      // The docs leg: every concept under docs/ is OKF with a citation
+      // (Phase 1b). Lives at the root because it spans the whole tree.
+      { test: { name: 'docs', include: ['scripts/docs-check.test.ts'] } },
+    ],
   },
 })
