@@ -218,7 +218,11 @@ Get one: https://github.com/settings/tokens
 
 ### `EXPO_TOKEN` — native builds (Phase 13 only)
 
-Read by `eas-cli`. Not used before Phase 13.
+Read by `eas-cli`. The app is linked to EAS project
+`344d4bd5-661e-469c-83de-223cea93aaaf` (owner `no.trbl.2.u`) in
+`apps/app/app.json`; build profiles are in `apps/app/eas.json`
+(`preview` = internal distribution, `production`). No build runs
+before Phase 13.
 
 ### `NOTIFY_NTFY_TOPIC` / `NOTIFY_WEBHOOK_URL` — pager (optional)
 
