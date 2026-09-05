@@ -1,0 +1,3 @@
+# nexus: never commit local secrets
+.env
+setup/bootstrap.local.json

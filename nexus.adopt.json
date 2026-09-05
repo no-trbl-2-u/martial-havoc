@@ -11,5 +11,9 @@
     "<PROJECT_PKG_PREFIX>": "@martial-havoc"
   },
   "cloudLoop": false,
-  "data": false
+  "data": false,
+  "adopted": {
+    "kit": "idea-nexus@0.2.0",
+    "at": "2026-09-05T18:12:51.165Z"
+  }
 }
