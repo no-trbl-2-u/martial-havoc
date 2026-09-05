@@ -1,11 +1,18 @@
 import { describe, expect, it } from 'vitest'
 import { LABELS, behaviours, isLabel, isLabelled } from './index'
 
-describe('engine surface (the garden)', () => {
-  it('exports an empty, frozen behaviour registry', () => {
+describe('engine surface', () => {
+  it('exports a frozen behaviour registry, one entry per behaviour', () => {
     expect(Array.isArray(behaviours)).toBe(true)
-    expect(behaviours).toHaveLength(0)
     expect(Object.isFrozen(behaviours)).toBe(true)
+    expect(behaviours.every(isLabelled)).toBe(true)
+  })
+
+  it('registers the dice behaviours', () => {
+    const ids = behaviours.map((b) => b.id)
+    expect(ids).toContain('dice.d6')
+    expect(ids).toContain('dice.d66')
+    expect(ids).toContain('dice.two-d6-doubles')
   })
 
   it('knows exactly the three labels the spec allows', () => {

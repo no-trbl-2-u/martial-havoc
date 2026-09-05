@@ -14,14 +14,23 @@
 export { LABELS, isLabel, isLabelled } from './labels'
 export type { Label, Behaviour } from './labels'
 
+// The dice: injected sources and the four rolls the book asks for.
+export { FACES, isDie } from './dice/types'
+export type { Die, DiceSource } from './dice/types'
+export { DiceExhausted, NotADie, fromSequence } from './dice/sources'
+export { d6, d66, nd6, rollSpec, twoD6 } from './dice/rolls'
+export type { D66Roll, DiceSpec, SumRoll, TwoD6Roll } from './dice/rolls'
+
 import type { Behaviour } from './labels'
+import { diceBehaviours } from './dice/behaviours'
 
 /**
  * The registry of every behaviour the engine exports.
  *
  * `scripts/labels-check.test.ts` reads this list and fails the build
  * on any entry that is not `rule | reading | invention` with a
- * citation. Empty in the garden; grows one entry per behaviour from
- * Phase 2 on. Frozen so nothing mutates it at runtime.
+ * citation. It is the concatenation of each folder's own list, so a
+ * folder cannot ship a behaviour without registering it next to the
+ * code that implements it. Frozen so nothing mutates it at runtime.
  */
-export const behaviours: readonly Behaviour[] = Object.freeze([])
+export const behaviours: readonly Behaviour[] = Object.freeze([...diceBehaviours])
