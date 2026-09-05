@@ -1,67 +1,60 @@
-# Martial Havoc — build-plan payload
+# Martial Havoc
 
-Exported from The Estate under `contract: build-plan`, `target: nexus`.
-Provenance: `origin: idea-0003 @ state/0013` (also in `spec.md`).
-Rendered for kit tag `v0.2-estate` of
-[`no-trbl-2-u/idea-Nexus`](https://github.com/no-trbl-2-u/idea-Nexus).
+A rules engine for Gianluca Monaco's *Martial Havoc*, a rule-light d6 solo
+wuxia RPG. The sandbox is the real game; adventures are scenes in it, and
+*The 5 Treasures* is the first. Offline, no account, text and SVG only,
+every behaviour labelled rule, reading or invention with a citation.
 
-This directory is the **droppable form** of the Seed: the files the loop
-reads, already decided, and nothing else. The loop itself is fetched by one
-command and leaves no source behind.
+Live: https://martial-havoc.no-trbl-2-u.workers.dev
 
-## Drop it in
+## Layout
 
-1. The repository is `no-trbl-2-u/martial-havoc`; it already holds the two
-   source PDFs (`MH_Full_Itchio.pdf`, `The 5 treasures.pdf`). Existing is
-   fine.
-2. Copy this directory's contents to the repository root.
-3. Adopt the loop around them (Node 18+ and git are the only prerequisites):
-   ```
-   npx --yes github:no-trbl-2-u/idea-Nexus#v0.2-estate adopt --commit
-   ```
-   The script copies the kit's skills, commands, scripts and plan files
-   **around** what is already here — it never overwrites, and it reports
-   each file it kept. Placeholders it cannot resolve from `nexus.adopt.json`
-   (the hosting URL, until the Cloudflare project exists) land as
-   `[needs-user-call]` rows in `plan/AUDIT.md`.
-4. Open your agent at the repository root and paste the one-paragraph
-   prompt from the kit's README, *"TL;DR — I have a Seed payload"*. It
-   clears the audit rows, prunes what `plan/bearings.md` rules out, and
-   stops.
-5. Run `/ship-a-phase`. Phase 1 is **the garden**; its done-condition is
-   *one loop tick on nothing*. Do not skip it, and do not let a feature
-   into it.
+```
+spec.md              The Seed: Horizon, refusals, acceptance criteria. Read-only.
+agents.md            The rule book for any agent working here. Read first.
+plan/                Build plan (steps/01_build_plan.md), phase briefs, audit.
+docs/                The rulebook and the adventure as OKF documentation:
+                     rules/ (procedures, readings), world/ (what exists),
+                     campaigns/ (The 5 Treasures, hooks), sources/ (provenance).
+packages/engine/     Pure TypeScript rules engine; no React; dice injected.
+packages/content/    Data files with a citation on every record.
+apps/app/            Expo + React Native; web export served from Cloudflare.
+skills/ .claude/     The autonomous loop's verbs and their slash commands.
+design/              The design prompt and design exports.
+```
 
-## What is here
+## Running it
 
-| File | What it is |
-|---|---|
-| `spec.md` | The Seed's Horizon, refusals, acceptance criteria, provenance — the loop's anchor; `/seed-check` reads it before any pivot |
-| `nexus.adopt.json` | The adopt manifest: project identity keyed by the kit's placeholder tokens |
-| `plan/bearings.md` | Standing context for every loop tick: stack locked, refusals as standing decisions, the verify and deploy gates |
-| `plan/steps/01_build_plan.md` | The Status block the loop reads, garden first, then thirteen phases to 2027-03-05 |
-| `plan/phases/phase_1_bootstrap.md` | The garden, as a brief the loop can ship |
+```
+npm install
+npm run verify          # typecheck, test (incl. the docs leg), labels:check, build:web, e2e
+npm run serve:web       # the export on http://127.0.0.1:4173
+npm run -w apps/app start   # Expo dev server (native and web)
+```
 
-`seed-check` and `re-seed` are not here: they ship with the kit
-(`templates/skills/`), so every adopted repo has them.
+## Shipping
 
-## Human attention
+The repository is connected to Cloudflare Workers Builds: a push to `main`
+builds the web export and deploys it; a push to any other branch uploads
+a preview at `https://<branch-slug>-martial-havoc.no-trbl-2-u.workers.dev`.
+`npm run deploy:check` confirms the commit at HEAD is what Cloudflare
+serves. Native builds come in Phase 13 through Expo Application Services
+(`apps/app/eas.json`).
 
-Steps the estate tagged `[HUMAN ATTENTION]` are rendered here as nexus's
-`[needs-user-call]` — the vocabulary the loop already parks on and
-`/oversight` already drains: the Cloudflare account and its environment
-variables, the layout choice, the native-build accounts and a Mac, the
-cave played by the operator, the whole sitting by the operator, and any
-authored line the operator reserves. The tag is a claim that the rest of
-the step *is* agent-performable; an untagged step that stalls is a bug in
-the plan, worth a `/re-seed` report.
+Work happens through the loop: `/march` picks the next pending phase in
+`plan/steps/01_build_plan.md` and ships it end to end. See `agents.md`.
 
-## The sources
+## Provenance
 
-The rulebook and the adventure are CC BY-SA 4.0 by Gianluca Monaco (cover
-and chapter art by Cristian Cammarata; adventure icons by limofeus; cave
-map by watabou). The estate's record holds a machine-readable inventory of
-every table, opponent and adventure area, and the readings the engine
-takes where the book is silent; the build plan cites them by id. The
-repository's licence file must carry the attribution before the first
-release.
+Exported from The Estate (`origin: idea-0003 @ state/0013`) as a nexus
+build-plan payload and adopted with the
+[idea-Nexus](https://github.com/no-trbl-2-u/idea-Nexus) kit; the adopt
+manifest is `nexus.adopt.json`.
+
+## Licence
+
+CC BY-SA 4.0 for the whole repository (`LICENSE`). The rulebook and the
+adventure are by Gianluca Monaco; cover and chapter art by Cristian
+Cammarata; adventure icons by limofeus; cave map by watabou. The two PDFs
+at the repository root are the sources as published and are never edited;
+none of the credited art ships in the app.
