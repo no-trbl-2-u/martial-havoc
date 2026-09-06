@@ -82,7 +82,12 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
       <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
         {c.step === 'who' ? (
           <>
-            <Step title={t('ui.creation.who.title')} note={t('ui.creation.who.note')} testID="step-who">
+            <Step
+              title={t('ui.creation.who.title')}
+              note={t('ui.creation.who.note')}
+              source={t('ui.creation.who.source')}
+              testID="step-who"
+            >
               <Text style={styles.label}>{t('ui.creation.name.label')}</Text>
               {/* The one thing the player types at creation. `creation.name`
                   is the reducer's; a Master who has begun ignores it. */}
@@ -117,6 +122,7 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
             <Step
               title={t('ui.creation.presets.title')}
               note={t('ui.creation.presets.note')}
+              source={t('ui.creation.presets.source')}
               testID="step-presets"
             >
               {presets.map((p) => (
@@ -125,7 +131,7 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
                   testID={`preset-${p.id}`}
                   title={p.name}
                   note={`SKL ${p.skill} · END ${p.endurance} · LCK ${p.luck}`}
-                  line={p.martialArt}
+                  line={`${p.martialArt} · ${p.status}, ${p.age} · ${p.from}`}
                   onPress={() => dispatch({ type: 'creation.preset', id: p.id })}
                 />
               ))}
@@ -137,6 +143,7 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
           <Step
             title={t('ui.creation.standing.title')}
             note={t('ui.creation.standing.note')}
+            source={t('ui.creation.standing.source')}
             testID="step-standing"
           >
             {c.status === null ? (
@@ -150,7 +157,12 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
         ) : null}
 
         {c.step === 'kit' ? (
-          <Step title={t('ui.creation.kit.title')} note={t('ui.creation.kit.note')} testID="step-kit">
+          <Step
+            title={t('ui.creation.kit.title')}
+            note={t('ui.creation.kit.note')}
+            source={t('ui.creation.kit.source')}
+            testID="step-kit"
+          >
             <Text style={styles.reading}>{t('ui.creation.kit.clothing')}</Text>
             <Text style={styles.label}>{t('ui.creation.kit.weapon.label')}</Text>
             <TextInput
@@ -180,6 +192,7 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
           <Step
             title={t('ui.creation.numbers.title')}
             note={t('ui.creation.numbers.note')}
+            source={t('ui.creation.numbers.source')}
             testID="step-numbers"
           >
             {c.skill === null ? (
@@ -195,7 +208,12 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
         ) : null}
 
         {c.step === 'art' ? (
-          <Step title={t('ui.creation.art.title')} note={t('ui.creation.art.note')} testID="step-art">
+          <Step
+            title={t('ui.creation.art.title')}
+            note={t('ui.creation.art.note')}
+            source={t('ui.creation.art.source')}
+            testID="step-art"
+          >
             <Button primary text={t('ui.creation.roll')} onPress={() => dispatch({ type: 'creation.roll' })} />
             <Text style={styles.label}>{t('ui.creation.art.choose')}</Text>
             {martialArts.map((m) => (
@@ -204,7 +222,7 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
                 testID={`art-${m.id}`}
                 title={m.name}
                 note={m.proficiencies.join(' · ')}
-                line=""
+                line={m.styleText}
                 onPress={() => dispatch({ type: 'creation.art', id: m.id })}
               />
             ))}
@@ -222,6 +240,7 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
           <Step
             title={t('ui.creation.training.title')}
             note={t('ui.creation.training.note')}
+            source={t('ui.creation.training.source')}
             testID="step-training"
           >
             <Counter
@@ -244,6 +263,7 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
           <Step
             title={t('ui.creation.spend.title')}
             note={t('ui.creation.spend.note')}
+            source={t('ui.creation.spend.source')}
             testID="step-spend"
           >
             <Text testID="creation-pool" style={styles.reading}>
@@ -265,6 +285,7 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
           <Step
             title={t('ui.creation.techniques.title')}
             note={t('ui.creation.techniques.note')}
+            source={t('ui.creation.techniques.source')}
             testID="step-techniques"
           >
             <Text testID="creation-resources" style={styles.reading}>

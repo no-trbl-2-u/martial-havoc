@@ -9,7 +9,7 @@
  * `menuFor` in `../state/menu`, a pure function of the record.
  */
 import { ending, hintFor } from '@martial-havoc/engine'
-import { t, theFiveTreasures, theFiveTreasuresAreaById } from '@martial-havoc/content'
+import { t, theFiveTreasures, theFiveTreasuresAreaById, theFiveTreasuresMeta } from '@martial-havoc/content'
 import { fill } from '../lib/fill'
 import { SheetBeat } from '../components/beat/SheetBeat'
 import type { RollCardReason } from '../components/beat/RollCard'
@@ -44,6 +44,18 @@ const actionOf = (option: BeatOption): Action => {
   }
 }
 
+/**
+ * The book's opening stays on the page until the Master has done or
+ * seen anything: still on the start area, nothing visited past it, no
+ * deed recorded. After that it lives under ABOUT.
+ */
+const premiseFor = (state: RecordState): string | null =>
+  state.cave.area === theFiveTreasures.meta.startArea &&
+  state.cave.visited.length <= 1 &&
+  state.deeds.length === 0
+    ? theFiveTreasuresMeta.premise
+    : null
+
 export const BeatScreen = ({ state, dispatch }: Props) => {
   const area = theFiveTreasuresAreaById(state.cave.area)
   if (area === undefined) return null
@@ -62,6 +74,7 @@ export const BeatScreen = ({ state, dispatch }: Props) => {
     <SheetBeat
       state={state}
       dispatch={dispatch}
+      premise={premiseFor(state)}
       area={area}
       hint={hintFor(theFiveTreasures, state.cave, area.id)}
       ending={ending(theFiveTreasures, state.cave)}

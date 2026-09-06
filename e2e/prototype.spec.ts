@@ -55,12 +55,18 @@ test('the beat opens on the Flat-top mountain, the book’s text word for word',
   await expect(page.getByTestId('attr-skill')).toHaveText('8')
   await expect(page.getByTestId('attr-endurance')).toHaveText('20')
   await expect(page.getByTestId('attr-luck')).toHaveText('9')
-  // The printed description, the printed Encounters line; the Hint hidden (I-60).
+  // The printed name over the printed description; the Encounters line
+  // folded behind SOURCE with its folio; the Hint hidden (I-60).
+  await expect(page.getByTestId('area-name')).toHaveText('FLAT-TOP MOUNTAIN')
   await expect(page.getByTestId('authored-line')).toHaveText(
     'A wild and vast territory covered with pines and willow trees, deep valleys and steep rocks, difficult paths for horses. In the distance an axe at work and the animals running on craggy ridges.',
   )
-  await expect(page.getByTestId('encounters-line')).toHaveText('Encounters: 1-3 Woodgatherer; 4-5 Ogre; 6 Junior King')
+  await expect(page.getByText('Encounters: 1-3 Woodgatherer')).toHaveCount(0)
+  await page.getByTestId('area-source').click()
+  await expect(page.getByTestId('area-source')).toHaveText('Encounters: 1-3 Woodgatherer; 4-5 Ogre; 6 Junior King · 5T a1')
   await expect(page.getByTestId('hint')).toHaveCount(0)
+  // The book's opening is on the first beat, and only there.
+  await expect(page.getByTestId('premise')).toContainText('On the Flat-top mountain two fiends threaten the travellers')
   await expect(button(page, /TO THE CAVE ENTRANCE/)).toBeVisible()
   await expect(button(page, /REST HERE/)).toBeVisible()
   await expect(button(page, /LEAVE FOR THE REGION/)).toBeVisible()
@@ -85,6 +91,9 @@ test('an exit rolls the Event table onto the card: the reason, the die, the prin
   await expect(page.getByTestId('die-card-b')).toHaveCount(0)
   await expect(page.getByTestId('roll-card-total')).toHaveText('Safe exploration')
   await expect(page.getByTestId('pill-rule')).toBeVisible()
+  // The citation is there, folded: a tap unfolds it.
+  await expect(card.getByText(/5T a1 · Event table/)).toHaveCount(0)
+  await page.getByTestId('roll-card-source').click()
   await expect(card.getByText(/5T a1 · Event table, roll every time you enter an area/)).toBeVisible()
   await expect(page.getByTestId('plate-event')).toBeVisible()
   // CONTINUE closes the card; the result slip carries the same on the sheet, in the new area.
@@ -94,6 +103,8 @@ test('an exit rolls the Event table onto the card: the reason, the die, the prin
   await expect(page.getByTestId('die-result-a')).toHaveAttribute('aria-label', '4')
   await expect(page.getByTestId('result-total')).toHaveText('Safe exploration')
   await expect(page.getByTestId('authored-line')).toContainText('A shut wooden gate hidden by a willow tree')
+  // Past the first beat, the opening has gone to ABOUT.
+  await expect(page.getByTestId('premise')).toHaveCount(0)
 })
 
 test('MY DICE: the same card, the face entered by hand, counted as an override; a Hint reveals the grey paragraph', async ({ page }) => {

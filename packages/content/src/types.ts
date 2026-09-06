@@ -406,6 +406,8 @@ export type BehaviourNote = BaseRecord & {
   /** The behaviour id in the engine registry. */
   readonly ref: string
   readonly text: string
+  /** The plain-words sentence the rules panel lists it under. */
+  readonly title?: string
   readonly says?: string
   readonly silent?: string
   readonly source?: string

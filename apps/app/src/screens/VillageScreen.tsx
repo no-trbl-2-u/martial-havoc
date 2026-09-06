@@ -25,6 +25,7 @@ import { Button } from '../components/Button'
 import { Die } from '../components/Die'
 import { MenuButton } from '../components/MenuButton'
 import { Slip } from '../components/Slip'
+import { Source } from '../components/Source'
 
 type Props = { readonly state: RecordState; readonly dispatch: (a: Action) => void }
 
@@ -61,7 +62,9 @@ export const VillageScreen = ({ state, dispatch }: Props) => {
               )}
               <Text style={styles.noteText}>{state.villageNote.text}</Text>
             </View>
-            <Text style={styles.cite}>{state.villageNote.cite}</Text>
+            <View style={styles.cite}>
+              <Source cite={state.villageNote.cite} />
+            </View>
           </Slip>
         )}
 
@@ -74,7 +77,10 @@ export const VillageScreen = ({ state, dispatch }: Props) => {
 
             {place.procedure === 'buy' ? (
               <View style={styles.body}>
-                <Text style={styles.note2}>{t('ui.village.market.note')}</Text>
+                <View style={styles.noteRow}>
+                  <Text style={styles.note2}>{t('ui.village.market.note')}</Text>
+                  <Source cite={t('ui.village.market.source')} />
+                </View>
                 {stalls().map((item) => (
                   <MenuButton
                     key={item.id}
@@ -90,7 +96,10 @@ export const VillageScreen = ({ state, dispatch }: Props) => {
 
             {place.procedure === 'temple' ? (
               <View style={styles.body}>
-                <Text style={styles.note2}>{t('ui.village.temple.note')}</Text>
+                <View style={styles.noteRow}>
+                  <Text style={styles.note2}>{t('ui.village.temple.note')}</Text>
+                  <Source cite={t('ui.village.temple.source')} />
+                </View>
                 <Button
                   testID="village-temple"
                   primary
@@ -102,7 +111,10 @@ export const VillageScreen = ({ state, dispatch }: Props) => {
 
             {place.procedure === 'inn' ? (
               <View style={styles.body}>
-                <Text style={styles.note2}>{t('ui.village.inn.note')}</Text>
+                <View style={styles.noteRow}>
+                  <Text style={styles.note2}>{t('ui.village.inn.note')}</Text>
+                  <Source cite={t('ui.village.inn.source')} />
+                </View>
                 <Button
                   testID="village-inn"
                   primary
@@ -144,19 +156,12 @@ const styles = StyleSheet.create({
   note: { marginTop: 10, marginHorizontal: 14 },
   noteBody: { flexDirection: 'row', alignItems: 'center', gap: 8, padding: 9 },
   noteText: { flex: 1, fontFamily: font.serif, fontSize: 14, lineHeight: 19, color: color.ink },
-  cite: {
-    borderTopWidth: 2,
-    borderTopColor: color.ink,
-    paddingVertical: 5,
-    paddingHorizontal: 9,
-    fontFamily: font.mono,
-    fontSize: 10,
-    color: color.ink,
-  },
+  cite: { borderTopWidth: 2, borderTopColor: color.ink, paddingVertical: 5, paddingHorizontal: 9 },
+  noteRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 },
   place: { marginTop: 10, marginHorizontal: 14 },
   head: { paddingVertical: 6, paddingHorizontal: 9, backgroundColor: color.ink },
   name: { fontFamily: font.sans, fontSize: 11, fontWeight: '800', letterSpacing: 0.9, color: color.paper },
   blurb: { fontFamily: font.serif, fontSize: 14, lineHeight: 20, padding: 9 },
   body: { paddingHorizontal: 9, paddingBottom: 9, gap: 7 },
-  note2: { fontFamily: font.mono, fontSize: 10, lineHeight: 14, color: color.dim },
+  note2: { flexShrink: 1, fontFamily: font.mono, fontSize: 10, lineHeight: 14, color: color.dim },
 })

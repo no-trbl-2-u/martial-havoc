@@ -83,6 +83,11 @@
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
+      "id": "ui.cave.area.number",
+      "text": "AREA {n} OF 8",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
       "id": "ui.empty.title",
       "text": "NOTHING HERE YET.",
       "cite": "plan/bearings.md, Loop defaults"
@@ -474,7 +479,7 @@
     },
     {
       "id": "ui.combat.act.go-on.line",
-      "text": "It carried the private quarter's key. Now you do.",
+      "text": "Back to the room.",
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
@@ -524,7 +529,7 @@
     },
     {
       "id": "ui.rules.lead",
-      "text": "Everything this prototype does, and the authority for it. Tap one to open it.",
+      "text": "Every rule this game plays by, and where each one comes from. Tap one to open it.",
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
@@ -583,6 +588,11 @@
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
+      "id": "ui.rules.no-note",
+      "text": "No note yet.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
       "id": "ui.rules.footer",
       "text": "{n} BEHAVIOURS · {u} UNLABELLED",
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
@@ -616,6 +626,11 @@
       "id": "ui.label.glyph.invention",
       "text": "+",
       "cite": "design/V1-DESIGN-PROMPT.md (labels legible by glyph as well as colour)"
+    },
+    {
+      "id": "ui.source",
+      "text": "SOURCE",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.region.place",
@@ -704,8 +719,13 @@
     },
     {
       "id": "ui.creation.who.note",
-      "text": "MH p.5 (R01) · a name and an age. Everything after this is the book's.",
+      "text": "A name and an age. Everything after this is the book's.",
       "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.who.source",
+      "text": "MH p.5 (R01)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.creation.name.label",
@@ -734,8 +754,13 @@
     },
     {
       "id": "ui.creation.presets.note",
-      "text": "MH p.91-92 (R83), as printed",
+      "text": "The eight Masters from the films, as the book prints them",
       "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.presets.source",
+      "text": "MH p.91-92 (R83)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.creation.standing.title",
@@ -744,8 +769,13 @@
     },
     {
       "id": "ui.creation.standing.note",
-      "text": "MH p.5 (R02, R03) · one d6 for the band, its own dice for the gold",
+      "text": "One die for your station in life; its own dice for your gold",
       "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.standing.source",
+      "text": "MH p.5 (R02, R03)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.creation.standing.value",
@@ -759,8 +789,13 @@
     },
     {
       "id": "ui.creation.numbers.note",
-      "text": "MH p.6 (R04, R05) · SKILL 1d6+6, ENDURANCE 2d6+12, LUCK 1d6+6",
+      "text": "SKILL 1d6+6, ENDURANCE 2d6+12, LUCK 1d6+6",
       "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.numbers.source",
+      "text": "MH p.6 (R04, R05)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.creation.art.title",
@@ -769,8 +804,13 @@
     },
     {
       "id": "ui.creation.art.note",
-      "text": "MH p.9 (R09) · roll the table, or choose",
+      "text": "Roll the table, or choose a style and read what it makes you",
       "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.art.source",
+      "text": "MH p.9 (R09)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.creation.art.choose",
@@ -784,8 +824,13 @@
     },
     {
       "id": "ui.creation.training.note",
-      "text": "MH p.11 (R15-R17) · each point costs 1 SKILL, gives 4 resource points, and is a Proficiency of its own",
+      "text": "Each point costs 1 SKILL, gives 4 resource points, and is a Proficiency of its own",
       "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.training.source",
+      "text": "MH p.11 (R15-R17)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.creation.training.value",
@@ -799,8 +844,13 @@
     },
     {
       "id": "ui.creation.spend.note",
-      "text": "MH p.7 (R10, R11, D06) · the pool is your rolled SKILL, before Training · no Proficiency above 4",
+      "text": "The pool is your rolled SKILL, before Training; no Proficiency above 4",
       "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.spend.source",
+      "text": "MH p.7 (R10, R11, D06)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.creation.spend.pool",
@@ -814,8 +864,13 @@
     },
     {
       "id": "ui.creation.techniques.note",
-      "text": "MH p.11-19 (R14, R16) · each costs its printed value in resource points, and as much ENDURANCE to perform",
+      "text": "Each costs its printed value in resource points, and as much ENDURANCE to perform",
       "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.techniques.source",
+      "text": "MH p.11-19 (R14, R16)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.creation.techniques.pool",
@@ -829,8 +884,13 @@
     },
     {
       "id": "ui.creation.kit.note",
-      "text": "MH p.5 (R02) · common clothing; a weapon, even one the table does not list; a Health Elixir or one Market item under 20 GP",
+      "text": "Common clothing; a weapon, even one the table does not list; a Health Elixir or one Market item under 20 GP",
       "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.kit.source",
+      "text": "MH p.5 (R02)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.creation.age.label",
@@ -864,12 +924,12 @@
     },
     {
       "id": "ui.creation.learn.techniques",
-      "text": "TECHNIQUES · MH p.12-15",
+      "text": "TECHNIQUES",
       "cite": "MH p.12-15 (R14)"
     },
     {
       "id": "ui.creation.learn.rituals",
-      "text": "RITUALS · MH p.16-19",
+      "text": "RITUALS",
       "cite": "MH p.16-19 (R14)"
     },
     {
@@ -889,7 +949,7 @@
     },
     {
       "id": "ui.creation.ready.note",
-      "text": "Nothing here is enforced. The book's limits are reported; you decide.",
+      "text": "The book's limits are reported, never enforced. You decide.",
       "cite": "spec.md, Horizon (creation)"
     },
     {
@@ -969,8 +1029,13 @@
     },
     {
       "id": "ui.village.market.note",
-      "text": "MH p.52-55 · printed prices",
+      "text": "Printed prices; nobody haggles",
       "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.market.source",
+      "text": "MH p.52-55",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.village.temple.title",
@@ -979,8 +1044,13 @@
     },
     {
       "id": "ui.village.temple.note",
-      "text": "MH p.47 (R58) · a Spirituality check, with incense, once a day (I-58)",
+      "text": "A Spirituality check, with incense, once a day",
       "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.temple.source",
+      "text": "MH p.47 (R58); I-58",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.village.temple.roll",
@@ -1014,8 +1084,13 @@
     },
     {
       "id": "ui.village.inn.note",
-      "text": "MH p.31 (R40) · a meal and a bed; SKILL restored, ENDURANCE +4",
+      "text": "A meal and a bed: SKILL restored, ENDURANCE +4",
       "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.inn.source",
+      "text": "MH p.31 (R40)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.village.inn.stay",
@@ -1319,7 +1394,7 @@
     },
     {
       "id": "ui.cave.rescue.note",
-      "text": "RESCUE · I-39",
+      "text": "RESCUE",
       "cite": "design/roll-modal/README.md"
     },
     {
@@ -1329,7 +1404,7 @@
     },
     {
       "id": "ui.cave.attack.note",
-      "text": "DISHONOR +1 · I-39",
+      "text": "DISHONOR +1",
       "cite": "design/roll-modal/README.md"
     },
     {
@@ -1339,7 +1414,7 @@
     },
     {
       "id": "ui.cave.learn.note",
-      "text": "I-38b",
+      "text": "WHAT IT TEACHES",
       "cite": "design/roll-modal/README.md"
     },
     {
@@ -1369,7 +1444,7 @@
     },
     {
       "id": "ui.cave.leave.note",
-      "text": "INVENTION · THE SANDBOX",
+      "text": "THE SANDBOX",
       "cite": "design/roll-modal/README.md"
     },
     {
@@ -1418,6 +1493,11 @@
       "cite": "design/roll-modal/README.md"
     },
     {
+      "id": "ui.cave.gift.title",
+      "text": "FREED · {name}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
       "id": "ui.cave.loot.nothing",
       "text": "nothing",
       "cite": "design/roll-modal/README.md"
@@ -1436,6 +1516,21 @@
       "id": "ui.cave.loot.treasure",
       "text": "one of the five",
       "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.loot.gift",
+      "text": "given in thanks",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.cave.loot.hint.item",
+      "text": "a hint",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.cave.loot.hint",
+      "text": "what it knew of this place is now yours",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
       "id": "ui.cave.loot.cite",
@@ -1489,7 +1584,7 @@
     },
     {
       "id": "ui.cave.hint.heading",
-      "text": "read this part only if your PG gets information about the area or with Event roll=Hint",
+      "text": "WHAT YOU HAVE LEARNED HERE",
       "cite": "5T a1"
     },
     {
@@ -1514,12 +1609,12 @@
     },
     {
       "id": "ui.cave.gourd.note.day",
-      "text": "DAY · I-45",
+      "text": "DAY",
       "cite": "design/roll-modal/README.md"
     },
     {
       "id": "ui.cave.gourd.note.night",
-      "text": "NIGHT · I-45",
+      "text": "NIGHT",
       "cite": "design/roll-modal/README.md"
     },
     {

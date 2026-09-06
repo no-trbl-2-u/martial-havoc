@@ -1,9 +1,11 @@
 /**
- * The rules panel: every behaviour the engine exports, its label and its
- * citation, filterable by label; one opened to show what it does and
- * where it comes from (spec.md, Horizon; design prototype, "RULES PANEL").
- * The list is the engine's registry itself, so nothing can be shown that
- * the label leg has not checked.
+ * The rules panel: every behaviour the engine exports, under the plain
+ * sentence its note gives it, with its label; one opened to show what
+ * it does, its engine id, its citation and where it comes from
+ * (spec.md, Horizon; design prototype, "RULES PANEL"). The list is the
+ * engine's registry itself, so nothing can be shown that the label leg
+ * has not checked; the sentence is the note's `title`, and a behaviour
+ * whose note has none is listed under its id until it gets one.
  */
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { LABELS, behaviours, isLabelled } from '@martial-havoc/engine'
@@ -65,13 +67,14 @@ export const RulesScreen = ({ state, dispatch }: Props) => {
                 style={styles.row}
               >
                 <View style={styles.ids}>
-                  <Text style={styles.id}>{b.id}</Text>
-                  <Text style={styles.cite}>{b.cite}</Text>
+                  <Text style={styles.heading}>{note?.title ?? b.id}</Text>
                 </View>
                 <Pill label={b.label as Label} />
               </Pressable>
               {open ? (
                 <View style={styles.detail}>
+                  <Text style={styles.id}>{b.id}</Text>
+                  <Text style={styles.cite}>{b.cite}</Text>
                   <Text style={styles.text}>{note?.text ?? t('ui.rules.no-note')}</Text>
                   <View style={styles.grid}>
                     <Field head={t('ui.rules.says')} text={note?.says ?? t('ui.rules.says.default')} />
@@ -105,8 +108,9 @@ const styles = StyleSheet.create({
   listContent: { paddingHorizontal: 14, gap: 7 },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8, paddingVertical: 7, paddingHorizontal: 9 },
   ids: { flexShrink: 1 },
-  id: { fontFamily: font.mono, fontSize: 12, color: color.ink },
-  cite: { fontFamily: font.mono, fontSize: 10, marginTop: 2, color: color.ink },
+  heading: { fontFamily: font.serif, fontSize: 14, lineHeight: 19, color: color.ink },
+  id: { fontFamily: font.mono, fontSize: 10, color: color.dim },
+  cite: { fontFamily: font.mono, fontSize: 10, marginTop: 2, marginBottom: 6, color: color.dim },
   detail: { borderTopWidth: 2, borderTopColor: color.ink, padding: 9 },
   text: { fontFamily: font.serif, fontSize: 15, lineHeight: 22, color: color.ink },
   grid: { flexDirection: 'row', flexWrap: 'wrap', marginTop: 9, paddingTop: 8, borderTopWidth: 2, borderTopColor: color.ink, rowGap: 7 },

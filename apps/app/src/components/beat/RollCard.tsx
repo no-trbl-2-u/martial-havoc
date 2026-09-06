@@ -28,6 +28,7 @@ import { Die } from '../Die'
 import { ManualDice } from '../ManualDice'
 import { Pill } from '../Pill'
 import { Plate } from '../Plate'
+import { Source } from '../Source'
 import type { PlateKey } from '../Plate'
 import { cycleFace, useTumble } from '../../hooks/useTumble'
 import type { ShownResult } from './shown'
@@ -88,7 +89,7 @@ export const RollCard = ({ state, card, reason, result, dispatch }: Props) => {
             <Text style={styles.headText} numberOfLines={1}>
               {headText}
             </Text>
-            {shown ? <Pill label={result.label} text={result.pill} /> : null}
+            {shown ? <Pill label={result.label} /> : null}
           </View>
 
           <View style={styles.reason}>
@@ -128,11 +129,21 @@ export const RollCard = ({ state, card, reason, result, dispatch }: Props) => {
             )}
           </View>
 
-          <View style={styles.plate}>
-            <Plate plate={reason.plate} />
-          </View>
+          {shown && result.passage !== null ? (
+            <Text testID="roll-card-passage" style={styles.passage}>
+              {result.passage}
+            </Text>
+          ) : (
+            <View style={styles.plate}>
+              <Plate plate={reason.plate} />
+            </View>
+          )}
 
-          {shown ? <Text style={styles.cite}>{result.cite}</Text> : null}
+          {shown ? (
+            <View style={styles.cite}>
+              <Source testID="roll-card-source" cite={result.cite} />
+            </View>
+          ) : null}
 
           <View style={styles.foot}>
             <Button
@@ -177,16 +188,16 @@ const styles = StyleSheet.create({
   totalText: { fontSize: 20, lineHeight: 24, textAlign: 'right' },
   against: { fontFamily: font.mono, fontSize: 10, color: color.ink, textAlign: 'right' },
   plate: { paddingHorizontal: 9, paddingBottom: 9 },
-  cite: {
-    borderTopWidth: 2,
-    borderTopColor: color.ink,
-    paddingVertical: 6,
+  passage: {
     paddingHorizontal: 9,
-    fontFamily: font.mono,
-    fontSize: 10,
-    lineHeight: 15,
+    paddingBottom: 12,
+    fontFamily: font.serif,
+    fontSize: 15,
+    lineHeight: 21,
+    fontStyle: 'italic',
     color: color.ink,
   },
+  cite: { borderTopWidth: 2, borderTopColor: color.ink, paddingVertical: 5, paddingHorizontal: 9 },
   foot: { flexDirection: 'row', gap: 8, padding: 9 },
   grow: { flex: 1 },
 })

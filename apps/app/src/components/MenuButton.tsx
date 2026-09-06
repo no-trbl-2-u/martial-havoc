@@ -6,17 +6,20 @@
  */
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { color, font } from '../theme/tokens'
+import { Source } from './Source'
 
 type Props = {
   readonly title: string
   readonly note: string
   readonly line: string
+  /** The citation the row stands on, folded behind a tap. */
+  readonly source?: string
   readonly onPress: () => void
   readonly enabled?: boolean
   readonly testID?: string
 }
 
-export const MenuButton = ({ title, note, line, onPress, enabled = true, testID }: Props) => (
+export const MenuButton = ({ title, note, line, source, onPress, enabled = true, testID }: Props) => (
   <Pressable
     testID={testID}
     accessibilityRole="button"
@@ -27,9 +30,10 @@ export const MenuButton = ({ title, note, line, onPress, enabled = true, testID 
   >
     <View style={styles.head}>
       <Text style={styles.title}>{title.toUpperCase()}</Text>
-      <Text style={styles.note}>{note}</Text>
+      {note === '' ? null : <Text style={styles.note}>{note}</Text>}
+      {source === undefined ? null : <Source cite={source} />}
     </View>
-    <Text style={styles.line}>{line}</Text>
+    {line === '' ? null : <Text style={styles.line}>{line}</Text>}
   </Pressable>
 )
 

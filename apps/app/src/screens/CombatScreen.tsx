@@ -15,6 +15,7 @@ import { ManualDice } from '../components/ManualDice'
 import { MenuButton } from '../components/MenuButton'
 import { RollBar } from '../components/RollBar'
 import { Slip } from '../components/Slip'
+import { Source } from '../components/Source'
 
 type Props = { readonly state: RecordState; readonly dispatch: (a: Action) => void }
 
@@ -114,6 +115,11 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
         <Side title={t('ui.combat.you')} strength={c.last?.master ?? null} prefix="mine" idle={fill(t('ui.combat.mine.idle'), { skill: state.sheet.skill, name: mine.name.toUpperCase(), value: mine.value })} />
         <Side title={foe.name.toUpperCase()} strength={c.last?.opponent ?? null} prefix="theirs" idle={fill(t('ui.combat.theirs.idle'), { end: c.foeEndurance, name: theirs.name.toUpperCase(), value: theirs.value })} />
       </View>
+      {foe.description.length === 0 ? null : (
+        <Text testID="foe-description" style={styles.foeLine}>
+          {foe.description}
+        </Text>
+      )}
 
       <View style={[styles.banner, { backgroundColor: b.bg }]}>
         <Text style={styles.bannerLabel}>{b.label}</Text>
@@ -125,7 +131,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
           <Slip borderColor={color.vermilion} testID="event">
             <View style={styles.eventHead}>
               <Text style={styles.eventTitle}>{fill(t('ui.combat.event.heading'), { n: c.event.roll.total })}</Text>
-              <Text style={styles.eventCite}>{t('ui.combat.event.cite')}</Text>
+              <Source cite={t('ui.combat.event.cite')} />
             </View>
             <View style={styles.eventBody}>
               <Text style={styles.eventText}>{c.event.text}</Text>
@@ -140,7 +146,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
               <Text style={styles.strong}>{moraleText(c.morale)}</Text>
               <Text style={styles.mono}>{fill(t('ui.combat.morale.die'), { n: c.morale.face })}</Text>
             </View>
-            <Text style={styles.small}>{t('ui.combat.morale.cite')}</Text>
+            <Source cite={t('ui.combat.morale.cite')} />
           </Slip>
         )}
         {c.blow === null ? null : (
@@ -149,7 +155,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
             <Die size={30} face={c.blow.roll.b} testID="die-blow-b" />
             <View style={styles.blowText}>
               <Text style={styles.strong}>{c.blow.landed ? t('ui.combat.blow.landed') : t('ui.combat.blow.missed')}</Text>
-              <Text style={styles.small}>{t('ui.combat.blow.cite')}</Text>
+              <Source cite={t('ui.combat.blow.cite')} />
             </View>
           </Slip>
         )}
@@ -159,7 +165,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
           </Slip>
         )}
         {actions(state, c).map((a) => (
-          <MenuButton key={a.id} testID={`act-${a.id}`} title={a.title} note={a.cite} line={a.line} enabled={a.enabled} onPress={() => dispatch(a.action)} />
+          <MenuButton key={a.id} testID={`act-${a.id}`} title={a.title} note="" line={a.line} source={a.cite} enabled={a.enabled} onPress={() => dispatch(a.action)} />
         ))}
       </ScrollView>
 
@@ -191,14 +197,14 @@ const styles = StyleSheet.create({
   dice: { flexDirection: 'row', gap: 5, marginVertical: 6 },
   sideLine: { fontFamily: font.mono, fontSize: 10, lineHeight: 16, color: color.ink },
   sideTotal: { fontFamily: font.sans, fontSize: 32, fontWeight: '800', lineHeight: 34, marginTop: 4, color: color.ink },
+  foeLine: { marginTop: 6, marginHorizontal: 14, fontFamily: font.serif, fontSize: 13, lineHeight: 18, fontStyle: 'italic', color: color.ink },
   banner: { marginTop: 8, marginHorizontal: 14, borderWidth: 3, borderColor: color.ink, paddingVertical: 8, paddingHorizontal: 11, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
   bannerLabel: { flexShrink: 1, fontFamily: font.sans, fontSize: 12, fontWeight: '800', letterSpacing: 1, color: color.paper },
   bannerValue: { fontFamily: font.sans, fontSize: 30, fontWeight: '800', lineHeight: 32, color: color.paper },
   body: { flex: 1, marginTop: 8 },
   bodyContent: { paddingHorizontal: 14, gap: 6 },
-  eventHead: { backgroundColor: color.vermilion, paddingVertical: 5, paddingHorizontal: 9, flexDirection: 'row', justifyContent: 'space-between', gap: 8 },
-  eventTitle: { fontFamily: font.sans, fontSize: 11, fontWeight: '800', letterSpacing: 0.9, color: color.paper },
-  eventCite: { fontFamily: font.sans, fontSize: 10, fontWeight: '800', color: color.paper },
+  eventHead: { backgroundColor: color.vermilion, paddingVertical: 5, paddingHorizontal: 9, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
+  eventTitle: { flexShrink: 1, fontFamily: font.sans, fontSize: 11, fontWeight: '800', letterSpacing: 0.9, color: color.paper },
   eventBody: { padding: 9, gap: 6 },
   eventText: { fontFamily: font.serif, fontSize: 15, lineHeight: 21, color: color.ink },
   eventLine: { fontFamily: font.serif, fontSize: 13, lineHeight: 18, fontStyle: 'italic', color: color.ink },

@@ -9,10 +9,9 @@
  * area is a later pass; the key is the seam it would grow along.
  */
 import type { ReactElement } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import Svg, { G, Path, Rect } from 'react-native-svg'
-import { t } from '@martial-havoc/content'
-import { color, font } from '../theme/tokens'
+import { color } from '../theme/tokens'
 import { Slip } from './Slip'
 
 export type PlateKey = 'skill' | 'luck' | 'event'
@@ -79,16 +78,10 @@ export const Plate = ({ plate, height = 120 }: Props) => {
     <View style={{ height }}>
       <Drawn />
     </View>
-    <View style={styles.caption}>
-      <Text style={styles.captionText}>{t(`ui.plate.${plate}`)}</Text>
-      <Text style={styles.captionText}>{t('ui.plate.ours')}</Text>
-    </View>
   </Slip>
   )
 }
 
 const styles = StyleSheet.create({
-  slip: { padding: 8, gap: 4 },
-  caption: { flexDirection: 'row', justifyContent: 'space-between', gap: 8 },
-  captionText: { fontFamily: font.mono, fontSize: 9, letterSpacing: 0.8, color: color.dim },
+  slip: { padding: 8 },
 })

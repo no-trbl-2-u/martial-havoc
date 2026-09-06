@@ -28,10 +28,11 @@
  * It never normalises the words.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { join, relative } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-const here = new URL('.', import.meta.url).pathname
+const here = fileURLToPath(new URL('.', import.meta.url))
 const packageDir = join(here, '..')
 const dataDir = join(packageDir, 'data')
 const repoRoot = join(packageDir, '..', '..')

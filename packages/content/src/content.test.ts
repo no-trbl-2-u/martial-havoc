@@ -21,13 +21,14 @@
  *    bound it to 11..66, which would admit 17 or 40).
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { join, relative } from 'node:path'
 import Ajv2020 from 'ajv/dist/2020'
 import { describe, expect, it } from 'vitest'
 import { contentCounts } from './counts'
 import { appStrings, stringById, t } from './index'
 
-const here = new URL('.', import.meta.url).pathname
+const here = fileURLToPath(new URL('.', import.meta.url))
 const packageDir = join(here, '..')
 const dataDir = join(packageDir, 'data')
 const schemaDir = join(packageDir, 'schema')
@@ -43,7 +44,7 @@ const repoRoot = join(packageDir, '..', '..')
  * half-transcribed table impossible to ship.
  */
 const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
-  'app.strings': 328,
+  'app.strings': 347,
   // The rules panel's notes: one per engine behaviour (the label leg
   // checks the pairing; this only pins the count).
   'app.behaviour-notes': 109,

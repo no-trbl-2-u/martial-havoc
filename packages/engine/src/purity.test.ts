@@ -8,10 +8,11 @@
  * has exactly the type a die needs.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { join, relative } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-const srcDir = join(new URL('.', import.meta.url).pathname)
+const srcDir = fileURLToPath(new URL('.', import.meta.url))
 
 /** Every non-test TypeScript file in the engine's source. */
 const sourceFiles = (dir: string): readonly string[] =>

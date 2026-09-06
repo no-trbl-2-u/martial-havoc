@@ -350,11 +350,26 @@ describe('the Kitchen Monk (I-39) and the Chieftain’s sheets (I-38b)', () => {
   it('freeing him is recorded and rewarded with his LOOT line', () => {
     const s = reduce(atKitchen(), { type: 'cave.rescue' }, fromSequence([1]))
     expect(s.cave.rescued).toEqual(['foe.monk'])
-    expect(s.result).toMatchObject({ kind: 'loot', foe: 'Monk', face: 1, item: 'rosary' })
+    // Read from a rescue, not a body: the slip calls it a gift.
+    expect(s.result).toMatchObject({ kind: 'loot', foe: 'Monk', face: 1, item: 'rosary', gift: true, hint: false })
     expect(s.cave.items).toEqual(['rosary'])
     expect(s.deeds).toEqual(['freed the Monk', 'took the rosary'])
     expect(menuFor(s).some((o) => o.id === 'rescue')).toBe(false)
     expect(reduce(s, { type: 'cave.rescue' }, fromSequence([1]))).toBe(s)
+  })
+
+  it('a Devil servant’s 6 is a Hint, not a thing carried: the area’s grey paragraph is revealed (I-08)', () => {
+    const met = play(atKitchen(), [
+      [{ type: 'cave.go', to: AREA.storage }, [2]],
+      [{ type: 'roll.close' }, []],
+    ])
+    expect(met.pending).toEqual(['foe.devil-servant'])
+    const won = play(reduce(met, { type: 'cave.fight', foe: 'foe.devil-servant' }, fromSequence([])), [...finish()])
+    const looted = reduce(won, { type: 'combat.loot' }, fromSequence([6]))
+    expect(looted.result).toMatchObject({ kind: 'loot', foe: 'Devil servant', face: 6, hint: true, gift: false, key: false, treasure: null })
+    expect((looted.result as { item: string }).item).not.toContain('[')
+    expect(looted.cave.hints).toContain(AREA.storage)
+    expect(looted.cave.items).toEqual([])
   })
 
   it('attacking him costs a Dishonor Point and starts the fight', () => {
@@ -401,7 +416,7 @@ describe('the gourd swallows the sky (I-45)', () => {
     const held = holding()
     const open = menuFor(held).find((o) => o.id === 'gourd')
     expect(open?.title).toBe('OPEN THE GOURD')
-    expect(open?.note).toBe('DAY · I-45')
+    expect(open?.note).toBe('DAY')
     // The line under the row is the treasure's own effect, not a gloss.
     expect(open?.line).toContain('swallow the sky')
 

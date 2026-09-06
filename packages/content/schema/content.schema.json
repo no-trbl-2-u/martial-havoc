@@ -1423,6 +1423,11 @@
             "type": "string",
             "minLength": 1
           },
+          "title": {
+            "description": "The sentence the rules panel lists the behaviour under, for a player: what the rule does in plain words. The engine id stays in the opened detail.",
+            "type": "string",
+            "minLength": 1
+          },
           "says": {
             "description": "What the book prints on the point, quoted or summarised.",
             "type": "string",

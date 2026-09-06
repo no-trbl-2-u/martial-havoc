@@ -110,17 +110,31 @@ Before stopping on any failure-mode condition, run
 notification never becomes its own stop). Applies to every
 skill; see `nexus/playbooks/hands-off.md`.
 
-### 9. `docs/` first. Always.
+### 9. The PDFs are the source of truth. `docs/` is the index to them.
 
-**Before writing anything that touches the rules, read the
-concept in `docs/` that covers it.** Not the PDFs, not memory,
-not a summary in a phase brief — the concept file. Phase 1b
-decomposed the whole rulebook and the whole of *The 5 Treasures*
-into one markdown concept per section, each with its folio
-citation, its `sources`, and the estate's rule ids (`R-nn`) and
-readings (`I-nn`). That bundle is the authority in this
-repository, and it exists precisely so no phase has to go back
-to two PDFs and guess.
+**Before writing anything that touches the rules, read the source.**
+The order of authority is fixed:
+
+1. **The two PDFs at the repo root.** They are the game. Nothing
+   in this repository outranks them. They are small: the rulebook
+   is about 10,700 words of text and the adventure about 1,000,
+   together a fifth of the size of the `docs/` bundle built from
+   them. Reading a PDF page costs less context than reading its
+   decomposition, so there is no budget reason to avoid them.
+2. **`docs/`.** The decomposed rulebook and adventure, one cited
+   concept per section, with the estate's rule ids (`R-nn`) and
+   readings (`I-nn`). Use it to find the folio fast and to cite
+   it; where a doc and the PDF disagree, the PDF wins and the doc
+   is corrected in its own change.
+3. **Nothing else.** Not the code, not memory, not a summary in a
+   phase brief, and never a guess. Code is downstream of the
+   book; when they disagree, the code is wrong.
+
+The original wording of this rule ("not the PDFs, not memory")
+was a misstatement, corrected by the operator on 2026-09-06. It
+meant "trust the docs over the code and over guessing"; it was
+read as "trust the docs over the PDFs", and it was written on the
+belief that the PDFs were too large to read, which is false.
 
 Which file, by what you are doing:
 

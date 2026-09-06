@@ -14,11 +14,12 @@
  * config gives it its own project.
  */
 import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { t } from '@martial-havoc/content'
 
-const appDir = join(new URL('.', import.meta.url).pathname, '..', 'apps', 'app')
+const appDir = join(fileURLToPath(new URL('.', import.meta.url)), '..', 'apps', 'app')
 const read = (name: string): string => readFileSync(join(appDir, 'public', name), 'utf-8')
 
 /**
