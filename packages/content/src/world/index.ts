@@ -14,6 +14,7 @@ import ritualsFile from '../../data/world/rituals.json'
 import deitiesFile from '../../data/world/deities.json'
 import opponentsFile from '../../data/world/opponents.json'
 import marketFile from '../../data/world/market.json'
+import villageFile from '../../data/world/village.json'
 import oracleFile from '../../data/world/oracle.json'
 import inspirationsFile from '../../data/world/inspirations.json'
 import sparksFile from '../../data/world/sparks.json'
@@ -28,6 +29,7 @@ import type {
   Effect,
   Learnable,
   MarketItem,
+  VillagePlace,
   MartialArt,
   NameResolution,
   Opponent,
@@ -83,6 +85,26 @@ export const marketList = inColumn(market, 'list')
 /** Everything R02 lets a new Master take as their one starting item. */
 export const startingKitItems: readonly MarketItem[] = Object.freeze(
   market.filter((item) => item.flags.includes('underTwentyGp')),
+)
+
+/**
+ * The trail-head village, as fixed data (spec.md, Horizon).
+ *
+ * Four records: three locations and the one trail out. Fixed, not
+ * rolled - the same doorstep to the cave on every run, which is the
+ * whole point of "a City on fixed data".
+ */
+export const villagePlaces: readonly VillagePlace[] = Object.freeze(
+  villageFile.records as readonly VillagePlace[],
+)
+export const villagePlaceById = byId(villagePlaces)
+/** The three places the Master can stand in and act. */
+export const villageLocations: readonly VillagePlace[] = Object.freeze(
+  villagePlaces.filter((place) => place.kind === 'location'),
+)
+/** The way out: the trail to the Flat-top mountain. */
+export const villageTrail: VillagePlace | undefined = villagePlaces.find(
+  (place) => place.kind === 'trail',
 )
 
 /** The Oracle's 11 rows x 6 faces (MH p.58, R71). */

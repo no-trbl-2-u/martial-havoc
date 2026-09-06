@@ -1925,6 +1925,72 @@
             "type": "boolean"
           }
         }
+      },
+      "villagePlace": {
+        "description": "One place in the trail-head village (spec.md, Horizon: \"a trail-head village is a City on fixed data\"). The village is an invention of this build - the rulebook describes a City (MH p.46-51) and the adventure describes a mountain, neither describes this settlement - so every record here is cited to the Horizon, while the procedure each place runs is the book's. A `location` is somewhere the Master stands and acts; the single `trail` is the departure edge out of the village, and it names the adventure it leads to rather than running a procedure.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "kind",
+          "name",
+          "blurb",
+          "procedure",
+          "destination",
+          "roomPriceSp"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "kind": {
+            "description": "`location` is a place with a procedure; `trail` is the way out.",
+            "enum": [
+              "location",
+              "trail"
+            ]
+          },
+          "name": {
+            "description": "The place's authored name. Ours (invention), never a transcription.",
+            "type": "string",
+            "minLength": 1
+          },
+          "blurb": {
+            "description": "The authored sentence a screen reads when the Master stands here. Copy lives here, never in a component (agents.md rule 7).",
+            "type": "string",
+            "minLength": 1
+          },
+          "procedure": {
+            "description": "Which engine procedure this place runs, or null for the trail. `buy` is the Market table at printed prices (MH p.52-55); `temple` is the Spirituality check for +1 LUCK (R58, I-58); `inn` is a meal and a night's rest (R40; spec.md's sealed +4 ENDURANCE).",
+            "enum": [
+              "buy",
+              "temple",
+              "inn",
+              null
+            ]
+          },
+          "destination": {
+            "description": "For a `trail`, the `adventureMeta` id it leads to. Null for a location.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "roomPriceSp": {
+            "description": "The inn's price for a bed and a meal, in silver pieces (1 GP = 10 SP, MH p.52). Invented: the book prices no inn. Null everywhere else.",
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        }
       }
     },
     "files": {
@@ -2373,6 +2439,9 @@
                 },
                 {
                   "$ref": "#/$defs/records/adventureAct"
+                },
+                {
+                  "$ref": "#/$defs/records/villagePlace"
                 }
               ]
             }

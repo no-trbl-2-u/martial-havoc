@@ -116,6 +116,33 @@ export type MarketItem = BaseRecord & {
   readonly flags: readonly MarketFlag[]
 }
 
+/** Which engine procedure a village location runs, or null for the trail. */
+export type VillageProcedure = 'buy' | 'temple' | 'inn'
+
+/**
+ * One place in the trail-head village (spec.md, Horizon).
+ *
+ * The village is this build's invention - "a trail-head village is a
+ * City on fixed data" - so every record cites the Horizon. The
+ * procedure each location runs is the book's: `buy` is the Market
+ * table at printed prices (MH p.52-55), `temple` is the Spirituality
+ * check for +1 LUCK (MH p.47, R58), `inn` is a meal and a night's rest
+ * (MH p.31, R40, plus spec.md's sealed +4 ENDURANCE).
+ */
+export type VillagePlace = BaseRecord & {
+  /** `location` is somewhere to stand and act; `trail` is the way out. */
+  readonly kind: 'location' | 'trail'
+  readonly name: string
+  /** The authored line a screen reads here. Copy lives in data, never in a component. */
+  readonly blurb: string
+  /** Null on the trail, which leads somewhere rather than doing something. */
+  readonly procedure: VillageProcedure | null
+  /** For the trail, the `adventure.*` id it leads to; null for a location. */
+  readonly destination: string | null
+  /** The inn's bed-and-meal price in silver; null elsewhere. Invented - the book prices no inn. */
+  readonly roomPriceSp: number | null
+}
+
 /** One cell of the Oracle (MH p.58). */
 export type OracleCell = BaseRecord & {
   readonly row: string

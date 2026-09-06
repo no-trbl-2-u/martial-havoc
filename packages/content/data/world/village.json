@@ -1,0 +1,52 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.village",
+  "kind": "list",
+  "title": "The trail-head village",
+  "cite": "spec.md, Horizon",
+  "label": "invention",
+  "docs": "docs/rules/cities.md",
+  "$comment": "Fen Pass. The rulebook describes a City with seven locations (MH p.46-51) and The 5 Treasures describes a mountain; neither describes this settlement. spec.md's Horizon says 'a trail-head village is a City on fixed data', and this file is that data: the same three locations every run, so the cave has a doorstep that does not change under the player. The village is ours (invention); the procedure each location runs is the book's - the Market table at printed prices (MH p.52-55), the Temple's Spirituality check for +1 LUCK (R58), a night's rest (R40 plus spec.md's sealed +4 ENDURANCE). The Gambling House (R57), the Chaguan (R63) and the City-encounters roll (R65) are city locations this village does not have; see the phase 7 brief's Follow-ups.",
+  "records": [
+    {
+      "id": "village.place.market",
+      "cite": "spec.md, Horizon; MH p.52-55",
+      "kind": "location",
+      "name": "The stall row",
+      "blurb": "Six stalls under one long awning, and the prices are the prices - nobody haggles with someone walking toward the mountain.",
+      "procedure": "buy",
+      "destination": null,
+      "roomPriceSp": null
+    },
+    {
+      "id": "village.place.temple",
+      "cite": "spec.md, Horizon; MH p.47",
+      "kind": "location",
+      "name": "The shrine of the three stars",
+      "blurb": "Sanxing in flaking red lacquer, one bowl of ash between them. Bring incense or bring nothing.",
+      "procedure": "temple",
+      "destination": null,
+      "roomPriceSp": null
+    },
+    {
+      "id": "village.place.inn",
+      "cite": "spec.md, Horizon; MH p.31",
+      "kind": "location",
+      "name": "The last inn",
+      "blurb": "Millet, hot water, and a mat by the wall. The innkeeper does not ask where you are going; she has watched the trail for thirty years.",
+      "procedure": "inn",
+      "destination": null,
+      "roomPriceSp": 4
+    },
+    {
+      "id": "village.place.trail",
+      "cite": "spec.md, Horizon; 5T a1",
+      "kind": "trail",
+      "name": "The trail to the Flat-top mountain",
+      "blurb": "The path leaves past the last well and climbs. From the switchbacks you can see the flat summit, and the smoke that should not be there.",
+      "procedure": null,
+      "destination": "adventure.the-5-treasures",
+      "roomPriceSp": null
+    }
+  ]
+}

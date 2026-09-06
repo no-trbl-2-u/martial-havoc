@@ -182,6 +182,34 @@ export type { CampaignFile, ImportRejection, ImportResult } from './campaign/sav
 export { linksFrom, otherEnd, throwRegion } from './region/region'
 export type { Region, RegionLink, RegionPoint } from './region/region'
 
+// The trail-head village: a City on fixed data (spec.md, Horizon).
+export {
+  SP_PER_GP,
+  toSilver,
+  fromSilver,
+  priceInSilver,
+  spend,
+  buy,
+  templeVisit,
+  stayTheNight,
+  locationsOf,
+  trailOf,
+  placeRunning,
+} from './village/village'
+export type {
+  Purse,
+  Spend,
+  Buy,
+  BuyInput,
+  BuyRefusal,
+  TempleVisit,
+  TempleVisitInput,
+  TempleRefusal,
+  RestingAttribute,
+  Stay,
+  StayInput,
+} from './village/village'
+
 import type { Behaviour } from './labels'
 import { diceBehaviours } from './dice/behaviours'
 import { creationBehaviours } from './creation/behaviours'
@@ -192,6 +220,7 @@ import { escapeBehaviours } from './escape/behaviours'
 import { healingBehaviours } from './healing/behaviours'
 import { progressionBehaviours } from './progression/behaviours'
 import { regionBehaviours } from './region/behaviours'
+import { villageBehaviours } from './village/behaviours'
 import { adventureBehaviours } from './adventure/behaviours'
 import { campaignBehaviours } from './campaign/behaviours'
 
@@ -214,6 +243,7 @@ export const behaviours: readonly Behaviour[] = Object.freeze([
   ...healingBehaviours,
   ...progressionBehaviours,
   ...regionBehaviours,
+  ...villageBehaviours,
   ...adventureBehaviours,
   ...campaignBehaviours,
 ])

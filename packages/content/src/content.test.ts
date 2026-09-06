@@ -46,7 +46,7 @@ const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
   'app.strings': 142,
   // The rules panel's notes: one per engine behaviour (the label leg
   // checks the pairing; this only pins the count).
-  'app.behaviour-notes': 98,
+  'app.behaviour-notes': 109,
 
   // The 5 Treasures: the nine foes as printed, and the prototype slice
   // of three areas with their menus (design/prototype).
@@ -56,6 +56,10 @@ const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
 
   // The world: the lists a Master is built from and the tables the
   // sandbox is rolled on.
+  // The trail-head village: three locations and the trail out
+  // (spec.md, Horizon - fixed data, not a printed table).
+  'world.village': 4,
+
   'world.martial-arts': 18,
   'world.techniques': 36,
   'world.rituals': 36,

@@ -18,6 +18,7 @@ import rituals from '../data/world/rituals.json'
 import deities from '../data/world/deities.json'
 import opponents from '../data/world/opponents.json'
 import market from '../data/world/market.json'
+import village from '../data/world/village.json'
 import oracle from '../data/world/oracle.json'
 import inspirations from '../data/world/inspirations.json'
 import sparks from '../data/world/sparks.json'
@@ -69,6 +70,7 @@ const registry: readonly CountedFile[] = Object.freeze([
   deities,
   opponents,
   market,
+  village,
   oracle,
   inspirations,
   sparks,
