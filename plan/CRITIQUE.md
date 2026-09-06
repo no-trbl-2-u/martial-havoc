@@ -136,16 +136,6 @@ not from that pass: they are the carry-overs the `/march` loop of
 - suggested fix: Let the manual panel accept one face when the pending roll is 1d6.
 - source: user
 
-### [MED] plan/steps/01_build_plan.md — the plan does not know the prototype landed
-- pass: user-jot (commit 40b3dd5)
-- viewport: unspecified
-- auth_state: anonymous
-- category: process
-- observation: PR #10 replaced the garden page with Phase 8 screens while Phases 5 to 7 are still pending. The status block says nothing, so /march will plan Phase 5 against a build plan that still describes a placeholder page, and Phase 8 brief generation will not know its layout call is answered (design/INDEX.md).
-- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing); the predicted harm did not land - Phases 5 and 6 shipped on 2026-09-06 (53981c2, 66db541) against apps/app/src as it now stands, because the ticks read the shipped code rather than the plan's description of it. What the row still asks for is undone: the Phase 8 row carries no note that its layout call is answered, and that is /oversight's to write, not a loop tick's
-- suggested fix: An /oversight note on the Phase 8 row: layout chosen 2026-09-06 via the Claude Design prototype, prototype slice shipped in PR #10; Phases 5 to 7 to build on apps/app/src as it now stands.
-- source: user
-
 ### [LOW] general — commit attribution policy conflicts with the cloud harness
 - pass: user-jot (commit 40b3dd5)
 - viewport: unspecified
@@ -267,6 +257,24 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [MED] plan/steps/01_build_plan.md — the plan does not know the prototype landed
+- pass: user-jot (commit 40b3dd5)
+- viewport: unspecified
+- auth_state: anonymous
+- category: process
+- observation: PR #10 replaced the garden page with Phase 8 screens while Phases 5 to 7 are still pending. The status block says nothing, so /march will plan Phase 5 against a build plan that still describes a placeholder page, and Phase 8 brief generation will not know its layout call is answered (design/INDEX.md).
+- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing); the predicted harm did not land - Phases 5 and 6 shipped on 2026-09-06 (53981c2, 66db541) against apps/app/src as it now stands, because the ticks read the shipped code rather than the plan's description of it. What the row still asks for is undone: the Phase 8 row carries no note that its layout call is answered, and that is /oversight's to write, not a loop tick's
+- suggested fix: An /oversight note on the Phase 8 row: layout chosen 2026-09-06 via the Claude Design prototype, prototype slice shipped in PR #10; Phases 5 to 7 to build on apps/app/src as it now stands.
+- source: user
+- resolved: on the operator's call 2026-09-06. The Phase 8 row now says
+  the layout call is answered (B, the Sheet, recorded in
+  `design/INDEX.md`, the losers deleted), names the commits that met
+  each half of the done-condition, and points at Phase 8c for the
+  carry-over. The row moves `[-]` -> `[x]` and the mirror issue #16 is
+  closed with it. The predicted harm never landed - Phases 5 to 7
+  shipped against `apps/app/src` as it stood, because the ticks read
+  the shipped code rather than the plan's description of it.
 
 ### [MED] apps/app — the adventure’s flags are saved but nothing on the beat sets them (I-45, I-40, I-41)
 - pass: user-jot (phase 8c residue, 2026-09-06)
