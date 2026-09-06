@@ -1,0 +1,108 @@
+{
+ "artboards": [
+  {
+   "file": "BeatToday.dc.html",
+   "x": 0,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "Today \u00b7 the beat as shipped"
+  },
+  {
+   "file": "Main.dc.html",
+   "x": 500,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "A \u00b7 The Card"
+  },
+  {
+   "file": "Sheet.dc.html",
+   "x": 1000,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "B \u00b7 The Sheet"
+  },
+  {
+   "file": "Leaf.dc.html",
+   "x": 1500,
+   "y": 0,
+   "w": 390,
+   "h": 844,
+   "title": "C \u00b7 The Leaf"
+  },
+  {
+   "file": "BeatAfter.dc.html",
+   "x": 0,
+   "y": 1014,
+   "w": 390,
+   "h": 844,
+   "title": "After \u00b7 the beat all three leave behind"
+  },
+  {
+   "file": "CardMyDice.dc.html",
+   "x": 500,
+   "y": 1014,
+   "w": 390,
+   "h": 844,
+   "title": "A \u00b7 my dice"
+  },
+  {
+   "file": "SheetMyDice.dc.html",
+   "x": 1000,
+   "y": 1014,
+   "w": 390,
+   "h": 844,
+   "title": "B \u00b7 my dice"
+  },
+  {
+   "file": "LeafMyDice.dc.html",
+   "x": 1500,
+   "y": 1014,
+   "w": 390,
+   "h": 844,
+   "title": "C \u00b7 my dice"
+  }
+ ],
+ "annotations": [
+  {
+   "id": "read-me",
+   "x": 0,
+   "y": -230,
+   "w": 390,
+   "text": "THE ROLL MODAL \u00b7 three readings of one idea\n\nTop row: the roll landing (the dice tumble on a 5s loop). Bottom row: the same modal when the player taps MY DICE and enters the faces from the table.\n\nEvery reading keeps the two dice, the label pill and the citation on screen after it closes (design/INDEX.md constraint) and takes the manual-dice slip and the MY DICE button off the beat.\n\nThe plate is a dashed SVG placeholder: spec.md refuses credited art, so the image slot is drawn geometry of ours, keyed by the roll's reason."
+  },
+  {
+   "id": "note-a",
+   "x": 500,
+   "y": -230,
+   "w": 390,
+   "text": "A \u00b7 THE CARD\nA centred card over a dimmed beat. Reason on top, dice and total in the middle, the plate under them, the citation as the card's foot. KEEP IT closes it; the result slip stays on the sheet.\n\nBet: the roll is an interruption worth a spotlight; the modal is the familiar shape.\nCost: the primary button leaves the thumb zone (card foot is mid-screen); the plate is small; the dimmed line behind is unreadable while it is up."
+  },
+  {
+   "id": "note-b",
+   "x": 1000,
+   "y": -230,
+   "w": 390,
+   "text": "B \u00b7 THE SHEET\nThe roll takes the bottom sheet's place: the menu folds away, the roll panel rises where it was, the authored line stays lit above. SEAL IT collapses the panel into the result slip and the menu returns.\n\nBet: keeps layout B's reason for being (everything pressable in the bottom third, nothing scrolls away). One-handed.\nCost: the plate gets a short band, not a picture; the sheet grows taller than the menu it replaces, so the line loses a few lines."
+  },
+  {
+   "id": "note-c",
+   "x": 1500,
+   "y": -230,
+   "w": 390,
+   "text": "C \u00b7 THE LEAF\nA full page under the header, like turning a leaf of the book. The plate leads, the dice fall over it, the total is the biggest thing on screen. TURN THE LEAF goes back to the beat with the result slip in place.\n\nBet: a roll is a moment; give it the whole page and let the plate carry the mood.\nCost: hides the line and the menu entirely (most taps per beat); the most work per plate; on a long sitting the ceremony may wear."
+  },
+  {
+   "id": "note-after",
+   "x": 0,
+   "y": 894,
+   "w": 390,
+   "text": "What the beat gains: the manual-dice slip and the MY DICE button leave the sheet. One full-width ROLL 2d6. The menu keeps its rows in the bottom half (the e2e that guards layout B still holds)."
+  }
+ ],
+ "launch": {
+  "view": "canvas"
+ }
+}
