@@ -14,7 +14,7 @@
  * refuses the same moves, so a row this menu disables is a move the
  * reducer would ignore.
  */
-import { canEnter, ending, hintRevealed } from '@martial-havoc/engine'
+import { canEnter, ending, flag, hintRevealed } from '@martial-havoc/engine'
 import type { Passage } from '@martial-havoc/engine'
 import {
   t,
@@ -35,6 +35,7 @@ export type BeatAction =
   | { readonly kind: 'learn' }
   | { readonly kind: 'fight'; readonly foe: string }
   | { readonly kind: 'rest' }
+  | { readonly kind: 'gourd' }
   | { readonly kind: 'leave' }
 
 /** One row of the beat's menu. */
@@ -53,6 +54,26 @@ const TABLES = theFiveTreasures
 
 /** The foes the adventure treats as rank and file: unlimited, never recorded as defeated. */
 export const RANK_AND_FILE: readonly string[] = ['foe.devil-servant', 'foe.ogre', 'foe.woodgatherer']
+
+/**
+ * The treasure whose printed effect is an act the Master can perform on
+ * the beat, and the flag that act sets.
+ *
+ * The gourd is the adventure's only one: "if opened it will swallow the
+ * sky, changing day to night. Close it to have the daylight back."
+ * Reading I-45 makes that night a flag the tables read - it is what
+ * `absences.json` empties the Cave entrance of Ogres by - so opening the
+ * gourd is a move, not a line of narration. The other four treasures do
+ * nothing a menu row could offer.
+ *
+ * The id lives here rather than in the engine because it names one
+ * adventure's content (agents.md standing rule 7), the same way
+ * {@link RANK_AND_FILE} does.
+ */
+export const GOURD = 'treasure.the-5-treasures.gold-and-red-gourd'
+
+/** The flag the gourd sets (I-45). */
+export const NIGHT = 'night'
 
 /** A foe's printed name, or its id where the roster does not know it. */
 export const foeName = (id: string): string => treasureFoeById(id)?.name ?? id
@@ -158,6 +179,21 @@ export const menuFor = (state: RecordState): readonly BeatOption[] => {
       line: hintRevealed(state.cave, here.id) ? here.hint : '',
       enabled: !engaged,
       action: { kind: 'learn' },
+    })
+  }
+
+  // The gourd, once held, is an act: it swallows the sky (I-45). The
+  // line under the row is the treasure's own printed effect, so the
+  // player reads the book rather than a paraphrase of it.
+  if (state.cave.treasures.includes(GOURD)) {
+    const night = flag(state.cave, NIGHT)
+    rows.push({
+      id: 'gourd',
+      title: night ? t('ui.cave.gourd.close') : t('ui.cave.gourd.open'),
+      note: night ? t('ui.cave.gourd.note.night') : t('ui.cave.gourd.note.day'),
+      line: theFiveTreasuresTreasureById(GOURD)?.effect ?? '',
+      enabled: !engaged,
+      action: { kind: 'gourd' },
     })
   }
 

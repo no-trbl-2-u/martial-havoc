@@ -1443,6 +1443,41 @@
       "cite": "design/roll-modal/README.md"
     },
     {
+      "id": "ui.cave.gourd.open",
+      "text": "OPEN THE GOURD",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.gourd.close",
+      "text": "CLOSE THE GOURD",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.gourd.note.day",
+      "text": "DAY · I-45",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.gourd.note.night",
+      "text": "NIGHT · I-45",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.gourd.title.night",
+      "text": "THE SKY, SWALLOWED",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.gourd.title.day",
+      "text": "THE DAYLIGHT, BACK",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.gourd.cite",
+      "text": "5T a2 · the gourd, as printed · night as a state the tables read is a reading (I-45)",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
       "id": "ui.card.move.note",
       "text": "EVENT TABLE · 1d6 · then the area's creature on 1-3",
       "cite": "design/roll-modal/README.md"
@@ -1470,6 +1505,16 @@
     {
       "id": "ui.deed.freed",
       "text": "freed the {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.deed.gourd.opened",
+      "text": "opened the gourd · night",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.deed.gourd.closed",
+      "text": "closed the gourd · day",
       "cite": "design/roll-modal/README.md"
     },
     {

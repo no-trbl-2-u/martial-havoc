@@ -22,6 +22,7 @@ import {
   endsFight,
   escape,
   finalBlow,
+  flag,
   fromSilver,
   importJson,
   learnFrom,
@@ -38,8 +39,10 @@ import {
   takeDrop,
   takeHere,
   templeVisit,
+  toggleFlag,
   toSilver,
   unexpectedEvent,
+  withFlag,
 } from '@martial-havoc/engine'
 import type { DiceSource } from '@martial-havoc/engine'
 import {
@@ -50,6 +53,7 @@ import {
   t,
   theFiveTreasures,
   theFiveTreasuresAreaById,
+  theFiveTreasuresTreasureById,
   treasureFoeById,
   unexpectedEventLineFor,
   villagePlaces,
@@ -59,7 +63,7 @@ import { queued } from '../dice/random'
 import { fill } from '../lib/fill'
 import { newRecord } from './record'
 import { fromCampaign } from './campaign'
-import { RANK_AND_FILE, foeName, treasureName } from './menu'
+import { GOURD, NIGHT, RANK_AND_FILE, foeName, treasureName } from './menu'
 import {
   MAX_TRAINING,
   finishCreation,
@@ -258,7 +262,10 @@ const doRescue = (state: RecordState, dice: DiceSource): RecordState => {
   const here = theFiveTreasuresAreaById(state.cave.area)
   const foe = here?.rescue?.foe
   if (foe === undefined || state.cave.rescued.includes(foe) || state.pending.length > 0) return state
-  const freed = { ...state, cave: rescue(TABLES, state.cave) }
+  // Freeing a foe is a source the treasures may name: the Old Vixen
+  // teaches the Cord's spells to a Master who does not simply kill her
+  // (I-41), and `knownFrom` is where the adventure says so.
+  const freed = { ...state, cave: learntInto(rescue(TABLES, state.cave), foe) }
   return doLootOf(
     addDeed(freed, fill(t('ui.deed.freed'), { name: foeName(foe) })),
     foe,
@@ -279,10 +286,40 @@ const doAttackRescue = (state: RecordState): RecordState => {
   )
 }
 
+/**
+ * The one treasure whose workings the adventure also declares as a flag,
+ * and that flag's name.
+ *
+ * `cave.effects` is the mechanism: `learnFrom` puts a treasure's id there
+ * and every reader asks that list. `flags.json` also declares
+ * `cord-spells-known` ("the spells that control the Dazzling Golden Cord
+ * are known; until then the Cord is inert loot", I-41), which is the same
+ * fact stated for the record - so it is *derived* from `effects` in
+ * {@link learntInto} rather than set independently. Two representations
+ * kept in step by hand is the bug the village purse already has; this is
+ * one representation and one restatement of it.
+ */
+const CORD = 'treasure.the-5-treasures.dazzling-golden-cord'
+const CORD_KNOWN = 'cord-spells-known'
+
+/**
+ * Learn what `source` teaches about the treasures, and restate the Cord's
+ * flag from the result (I-38b, I-41).
+ *
+ * `source` is an id the treasures' `knownFrom` may name: an area (the
+ * Chieftain's scattered sheets) or a foe (the Old Vixen, who teaches the
+ * Cord's spells to a Master who does not simply kill her). The engine's
+ * `learnFrom` filters on it and knows no names of its own.
+ */
+const learntInto = (cave: RecordState['cave'], source: string): RecordState['cave'] => {
+  const next = learnFrom(TABLES, cave, source)
+  return withFlag(next, CORD_KNOWN, next.effects.includes(CORD))
+}
+
 /** Learn what this area teaches about the treasures (I-38b, I-41). */
 const doLearn = (state: RecordState): RecordState => {
   if (state.pending.length > 0) return state
-  const cave = learnFrom(TABLES, state.cave, state.cave.area)
+  const cave = learntInto(state.cave, state.cave.area)
   const learnt = cave.effects.filter((id) => !state.cave.effects.includes(id))
   if (learnt.length === 0) return state
   return {
@@ -298,6 +335,39 @@ const doLearn = (state: RecordState): RecordState => {
       cite: t('ui.cave.learn.cite'),
     },
   }
+}
+
+/**
+ * Open the gourd, or close it again (I-45).
+ *
+ * The printed effect is the whole rule: "if opened it will swallow the
+ * sky, changing day to night. Close it to have the daylight back."
+ * Reading I-45 makes that night a flag, and `absences.json` is what reads
+ * it - by night the Cave entrance's Ogres are out hunting and are not
+ * met. So this toggles one boolean and nothing else; the consequence
+ * lives in the tables.
+ *
+ * A no-op when the gourd is not held or a foe is still pending, which is
+ * exactly what the menu row shows disabled.
+ */
+const doGourd = (state: RecordState): RecordState => {
+  if (state.pending.length > 0 || !state.cave.treasures.includes(GOURD)) return state
+  const cave = toggleFlag(state.cave, NIGHT)
+  const night = flag(cave, NIGHT)
+  return addDeed(
+    {
+      ...state,
+      cave,
+      result: {
+        kind: 'note',
+        title: night ? t('ui.cave.gourd.title.night') : t('ui.cave.gourd.title.day'),
+        text: theFiveTreasuresTreasureById(GOURD)?.effect ?? '',
+        label: 'reading',
+        cite: t('ui.cave.gourd.cite'),
+      },
+    },
+    night ? t('ui.deed.gourd.opened') : t('ui.deed.gourd.closed'),
+  )
 }
 
 /** Face one of the foes the Event brought. */
@@ -465,7 +535,11 @@ const doLeave = (state: RecordState, dice: DiceSource): RecordState => {
   const beaten = c.foeEndurance === 0
   const remaining = beaten ? withoutFirst(state.pending, foe.id) : []
   const cave =
-    beaten && !RANK_AND_FILE.includes(foe.id) ? resolveEncounter(state.cave, [foe.id]) : state.cave
+    beaten && !RANK_AND_FILE.includes(foe.id)
+      ? // A named foe beaten is also a source the treasures may name
+        // (I-41): what the Old Vixen knew is on her body either way.
+        learntInto(resolveEncounter(state.cave, [foe.id]), foe.id)
+      : state.cave
   const back: RecordState = { ...state, screen: 'beat', combat: null, cave, pending: remaining }
   if (c.over.ended) return back
   const fled = escape({ endurance: state.sheet.endurance })
@@ -695,6 +769,8 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return doFight(state, action.foe)
     case 'cave.rest':
       return state.pending.length > 0 ? state : doRest(state)
+    case 'cave.gourd':
+      return doGourd(state)
     case 'cave.leave':
       return state.pending.length > 0 ? state : { ...state, screen: 'region', result: null, roll: null }
     case 'roll.manual':

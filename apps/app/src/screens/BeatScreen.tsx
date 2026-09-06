@@ -37,6 +37,8 @@ const actionOf = (option: BeatOption): Action => {
       return { type: 'cave.fight', foe: option.action.foe }
     case 'rest':
       return { type: 'cave.rest' }
+    case 'gourd':
+      return { type: 'cave.gourd' }
     case 'leave':
       return { type: 'cave.leave' }
   }

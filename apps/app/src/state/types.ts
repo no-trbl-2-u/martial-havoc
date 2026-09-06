@@ -334,6 +334,8 @@ export type Action =
   | { readonly type: 'cave.fight'; readonly foe: string }
   /** A night's rest here (R40; spec.md sealed). */
   | { readonly type: 'cave.rest' }
+  /** Open the gourd, or close it again: the night flag (I-45). */
+  | { readonly type: 'cave.gourd' }
   /** Out of the adventure and into the region (spec.md, Horizon). */
   | { readonly type: 'cave.leave' }
   /** MY DICE on the beat: toggle entering the next move's die by hand. */
