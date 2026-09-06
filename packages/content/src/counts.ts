@@ -22,9 +22,12 @@ import oracle from '../data/world/oracle.json'
 import inspirations from '../data/world/inspirations.json'
 import sparks from '../data/world/sparks.json'
 import presets from '../data/world/presets.json'
+import effects from '../data/world/effects.json'
+import oracleLines from '../data/world/oracle-lines.json'
 import socialStatus from '../data/rules/social-status.json'
 import finalBlow from '../data/rules/final-blow.json'
 import unexpectedEvents from '../data/rules/unexpected-events.json'
+import unexpectedEventLines from '../data/rules/unexpected-event-lines.json'
 import healing from '../data/rules/healing.json'
 import xpCategories from '../data/rules/xp-categories.json'
 import xpCosts from '../data/rules/xp-costs.json'
@@ -57,9 +60,12 @@ const registry: readonly CountedFile[] = Object.freeze([
   inspirations,
   sparks,
   presets,
+  effects,
+  oracleLines,
   socialStatus,
   finalBlow,
   unexpectedEvents,
+  unexpectedEventLines,
   healing,
   xpCategories,
   xpCosts,
@@ -75,12 +81,22 @@ const registry: readonly CountedFile[] = Object.freeze([
   strings,
 ])
 
+/** The files whose every record carries a line authored for this build. */
+const authored: readonly CountedFile[] = Object.freeze([effects, oracleLines, unexpectedEventLines])
+
 /** What {@link contentCounts} reports. */
 export type ContentCounts = {
   readonly files: number
   readonly records: number
   /** Record count per file id, so a report can name what grew. */
   readonly byFile: Readonly<Record<string, number>>
+  /**
+   * How many records in this package carry an authored line of our own
+   * (Phase 4): the 72 effect records plus the 66 Oracle lines plus the
+   * 11 Unexpected Event lines. Counted from the same files, so the
+   * number in a report is the number on disk.
+   */
+  readonly authoredLines: number
 }
 
 /** Count the shipped content. Pure; the registry is frozen and static. */
@@ -90,4 +106,5 @@ export const contentCounts = (): ContentCounts => ({
   byFile: Object.freeze(
     Object.fromEntries(registry.map((file) => [file.id, file.records.length])),
   ),
+  authoredLines: authored.reduce((sum, file) => sum + file.records.length, 0),
 })

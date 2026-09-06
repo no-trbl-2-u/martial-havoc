@@ -180,6 +180,50 @@ export type UnexpectedEvent = BaseRecord & {
   readonly retreatRow: boolean
 }
 
+/** A23's five-way classification of a Technique or Ritual effect. */
+export type EffectClass =
+  | 'mechanical'
+  | 'combat-narrative'
+  | 'exploration'
+  | 'oracle-like'
+  | 'summoning'
+
+/** When a Technique or Ritual may be used (R14, R25, I-23, I-24). */
+export type EffectTiming = 'immediate' | 'combat-winner-option' | 'scene' | 'preparation'
+
+/**
+ * One authored effect record for a Technique or a Ritual (MH p.12-19; A23).
+ *
+ * The printed effect text is not here: it stays verbatim on the
+ * {@link Learnable} this record's `ref` names. A23 is the estate's one
+ * ambiguity row with no defensible inference, so every record of this
+ * shape is an invention of this build and the file carries that label.
+ */
+export type Effect = BaseRecord & {
+  /** The `technique.*` or `ritual.*` id this is the effect of. */
+  readonly ref: string
+  readonly class: EffectClass
+  /** Resource points to learn, ENDURANCE to perform; equals the referenced cost. */
+  readonly cost: number
+  readonly timing: EffectTiming
+  /** The engine call the class implies, or null for a narrative-only effect. */
+  readonly operation: string | null
+  /** R13's Ritual-timing exception for Wudang, as a flag rather than a branch. */
+  readonly wudangException?: boolean
+  /** The authored line the table reads when the effect fires. */
+  readonly line: string
+}
+
+/**
+ * One authored line for a transcribed record that prints none: an Oracle
+ * cell (MH p.58) or an Unexpected Event row (MH p.28).
+ */
+export type AuthoredLine = BaseRecord & {
+  /** The id of the transcribed record this line belongs to. */
+  readonly ref: string
+  readonly line: string
+}
+
 /** One row of the healing summary (MH p.31, R40-R42). */
 export type Healing = BaseRecord & {
   readonly attribute: 'SKILL' | 'ENDURANCE' | 'LUCK'
