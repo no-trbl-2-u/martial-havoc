@@ -43,7 +43,7 @@ correct the file.
 - The prototype's Ghost is SKILL 5, END 6, INCORPOREAL 2. The Dexterous
   Ghost is SKILL 7, END 8, evanescence (2), immaterial charge (4) (5T a2).
 
-## The beat's layout — decided 2026-09-06
+## The beat's layout — decided 2026-09-06 (v1)
 
 The build plan's Phase 8 row carried `[needs-user-call]`: *"the agent
 renders three layouts at phone width with a working beat and files
@@ -71,6 +71,14 @@ screen.** `spec.md` requires a labelled, cited behaviour to be visible,
 so an arrangement that hides the result slip is a refusal, not a
 candidate. Candidate C's first draft dropped it and was corrected
 before it shipped.
+
+**This is v1.** The pick was made on a prototype beat, before the cave
+had been played to its ending — the best evidence available at the
+time, and thin. Phase 10's sitting is the first real test of it, and
+the table above exists so the question can be re-opened with the
+reasoning intact rather than re-argued from scratch. The build plan's
+"The UI is v1" note carries the rule: `/iterate` polishes it, a v2
+needs its own phase.
 
 The bargain B makes is now asserted, not just described: an e2e holds
 the menu row's position steady across a landing result and keeps it in
