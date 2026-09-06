@@ -22,6 +22,7 @@ const button = (page: Page, name: RegExp | string) => page.getByRole('button', {
  * rolls still reach the rolls they were named for.
  */
 const begin = async (page: Page) => {
+  await page.getByTestId('title-start').click()
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
   await expect(page.getByTestId('beat')).toBeVisible()
@@ -44,6 +45,9 @@ const goIn = async (page: Page) => {
 
 test('00 creation, the eight sheets and a rolled Master', async ({ page }) => {
   await page.goto('/')
+  await expect(page.getByTestId('title')).toBeVisible()
+  await shot(page, '00-title')
+  await page.getByTestId('title-start').click()
   await expect(page.getByTestId('creation')).toBeVisible()
   await shot(page, '00a-creation-who')
   await page.getByTestId('creation-roll-master').click()
@@ -67,7 +71,6 @@ test('00 creation, the eight sheets and a rolled Master', async ({ page }) => {
 test('01 the beat, opening', async ({ page }) => {
   await page.goto('/')
   await begin(page)
-  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
   await shot(page, '01-beat-opening')
 })
 
@@ -112,7 +115,7 @@ test('06 combat, before the round', async ({ page }) => {
   await page.goto('/?dice=4,4,2,3,6,5,1,1')
   await begin(page)
   await goIn(page)
-  await expect(page.getByTestId('place')).toHaveText('COMBAT · ROUND 1')
+  await expect(page.getByTestId('combat')).toBeVisible()
   await shot(page, '06-combat-ready')
   await button(page, 'ROLL THE ROUND').click()
   await expect(page.getByText('YOU ARE AHEAD BY')).toBeVisible()

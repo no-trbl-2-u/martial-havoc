@@ -18,7 +18,7 @@
  *    `@martial-havoc/engine` through `../state/creation.ts`; every
  *    string comes from `@martial-havoc/content`. This file arranges.
  */
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import {
   martialArts,
   presets,
@@ -76,14 +76,18 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
           <>
             <Step title={t('ui.creation.who.title')} note={t('ui.creation.who.note')} testID="step-who">
               <Text style={styles.label}>{t('ui.creation.name.label')}</Text>
-              <View style={styles.field}>
-                <Text
-                  testID="creation-name"
-                  style={c.name === '' ? styles.placeholder : styles.fieldText}
-                >
-                  {c.name === '' ? t('ui.creation.name.placeholder') : c.name}
-                </Text>
-              </View>
+              {/* The one thing the player types at creation. `creation.name`
+                  is the reducer's; a Master who has begun ignores it. */}
+              <TextInput
+                testID="creation-name"
+                value={c.name}
+                onChangeText={(name) => dispatch({ type: 'creation.name', name })}
+                placeholder={t('ui.creation.name.placeholder')}
+                placeholderTextColor={color.dim}
+                autoCapitalize="words"
+                autoCorrect={false}
+                style={[styles.field, styles.fieldText]}
+              />
               <Button
                 testID="creation-roll-master"
                 primary
@@ -322,7 +326,6 @@ const styles = StyleSheet.create({
   label: { fontFamily: font.sans, fontSize: 10, fontWeight: '800', letterSpacing: 0.8, color: color.dim },
   field: { borderWidth: 3, borderColor: color.ink, paddingVertical: 8, paddingHorizontal: 9 },
   fieldText: { fontFamily: font.serif, fontSize: 15, color: color.ink },
-  placeholder: { fontFamily: font.serif, fontSize: 15, fontStyle: 'italic', color: color.dim },
   reading: { fontFamily: font.mono, fontSize: 12, lineHeight: 17, color: color.ink },
   values: { flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 4 },
   artSlip: { marginTop: 10, marginHorizontal: 14, padding: 9 },

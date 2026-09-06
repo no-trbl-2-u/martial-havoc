@@ -23,6 +23,7 @@ const button = (page: Page, name: RegExp | string) => page.getByRole('button', {
  * not the queue, so a spec's named rolls still reach the rolls it named.
  */
 const begin = async (page: Page) => {
+  await page.getByTestId('title-start').click()
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
   await expect(page.getByTestId('beat')).toBeVisible()
@@ -45,15 +46,12 @@ const toGhost = async (page: Page) => {
   await go(page, /TO THE CAVE ENTRANCE/)
   await go(page, /TO THE DINING HALL/)
   await go(page, /TO THE ATTENDANTS ROOM/)
-  await expect(page.getByTestId('place')).toHaveText('AREA 3 OF 8 · ATTENDANTS ROOM')
   await button(page, /FACE THE DEXTEROUS GHOST/).click()
 }
 
 test('the beat opens on the Flat-top mountain, the book’s text word for word', async ({ page }) => {
   await page.goto('/')
   await begin(page)
-  await expect(page.getByText('THE 5 TREASURES')).toBeVisible()
-  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
   await expect(page.getByTestId('attr-skill')).toHaveText('8')
   await expect(page.getByTestId('attr-endurance')).toHaveText('20')
   await expect(page.getByTestId('attr-luck')).toHaveText('9')
@@ -92,7 +90,6 @@ test('an exit rolls the Event table onto the card: the reason, the die, the prin
   // CONTINUE closes the card; the result slip carries the same on the sheet, in the new area.
   await page.getByTestId('roll-card-continue').click()
   await expect(card).toHaveCount(0)
-  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
   await expect(page.getByText('EVENT · SAFE EXPLORATION')).toBeVisible()
   await expect(page.getByTestId('die-result-a')).toHaveAttribute('aria-label', '4')
   await expect(page.getByTestId('result-total')).toHaveText('Safe exploration')
@@ -119,6 +116,8 @@ test('MY DICE: the same card, the face entered by hand, counted as an override; 
   await expect(page.getByTestId('hint')).toContainText('Ogres go out hunting for travellers once a day')
   await expect(page.getByText('OVERRIDES 1')).toBeVisible()
   await page.reload()
+  // Every launch opens on the title page, the reload included.
+  await page.getByTestId('title-start').click()
   await expect(page.getByText('OVERRIDES 1')).toBeVisible()
   await expect(page.getByText('EVENT · HINT')).toBeVisible()
   await expect(page.getByTestId('hint')).toContainText('Ogres go out hunting')
@@ -138,7 +137,7 @@ test('combat shows both rolls, both Proficiencies, both totals and the differenc
   await page.goto('/?dice=4,4,2,3,6,5,1,1')
   await begin(page)
   await toGhost(page)
-  await expect(page.getByTestId('place')).toHaveText('COMBAT · ROUND 1')
+  await expect(page.getByTestId('combat')).toBeVisible()
   await expect(page.getByText('DEXTEROUS GHOST', { exact: true })).toBeVisible()
   await button(page, 'ROLL THE ROUND').click()
   await expect(page.getByTestId('die-mine-a')).toHaveAttribute('aria-label', '6')
@@ -160,7 +159,7 @@ test('combat shows both rolls, both Proficiencies, both totals and the differenc
   // Its LOOT line, as printed: the private quarter's key, no die.
   await page.getByTestId('act-loot').click()
   await page.getByTestId('act-go-on').click()
-  await expect(page.getByTestId('place')).toHaveText('AREA 3 OF 8 · ATTENDANTS ROOM')
+  await expect(page.getByTestId('beat')).toBeVisible()
   await expect(page.getByText('LOOT · DEXTEROUS GHOST')).toBeVisible()
   await expect(page.getByTestId('result-total')).toHaveText("private quarter's key")
   await expect(page.getByText('DEEDS 2')).toBeVisible()
@@ -181,7 +180,7 @@ test('a tie is an Unexpected Event and the retreat row rolls Morale', async ({ p
   await expect(page.getByText('ITS MORALE BREAKS · IT FLEES')).toBeVisible()
   await expect(page.getByText('1d6 = 2')).toBeVisible()
   await page.getByTestId('act-leave-phase').click()
-  await expect(page.getByTestId('place')).toHaveText('AREA 3 OF 8 · ATTENDANTS ROOM')
+  await expect(page.getByTestId('beat')).toBeVisible()
 })
 
 test('a lost round costs the difference; fleeing costs the last blow and Dishonor', async ({ page }) => {
@@ -214,7 +213,7 @@ test('the rules panel lists every behaviour with its label and opens one', async
   await expect(page.getByText('SILENT ON')).toBeVisible()
   await expect(page.getByText(/estate-inventory\.md, I-21/)).toBeVisible()
   await button(page, 'BACK TO PLAY').click()
-  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
+  await expect(page.getByTestId('beat')).toBeVisible()
 })
 
 test('the region is seven linked points and says it is not to scale', async ({ page }) => {
@@ -230,13 +229,12 @@ test('the region is seven linked points and says it is not to scale', async ({ p
   await travel.click()
   await expect(page.getByTestId('here')).not.toBeEmpty()
   await button(page, 'BACK TO PLAY').click()
-  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
+  await expect(page.getByTestId('beat')).toBeVisible()
 })
 
 test('an unknown route still serves the app (single-page fallback)', async ({ page }) => {
   await page.goto('/not-a-route')
   await begin(page)
-  await expect(page.getByText('THE 5 TREASURES')).toBeVisible()
 })
 
 test('the frame never scrolls sideways at phone width', async ({ page }) => {

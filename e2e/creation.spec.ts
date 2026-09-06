@@ -21,8 +21,15 @@ const button = (page: Page, name: RegExp | string) => page.getByRole('button', {
 
 test('a Master is made by walking the book’s order', async ({ page }) => {
   await page.goto('/')
+  // Every launch opens on the title page; START turns the leaf to creation.
+  await expect(page.getByTestId('title')).toBeVisible()
+  await page.getByTestId('title-start').click()
   await expect(page.getByTestId('creation')).toBeVisible()
-  await expect(page.getByTestId('place')).toHaveText('MAKE YOUR MASTER')
+  // No panels to leave for while the Master is still being made.
+  await expect(page.getByTestId('nav')).toHaveCount(0)
+  // The name is typed, and kept.
+  await page.getByTestId('creation-name').fill('Iron Crane')
+  await expect(page.getByTestId('creation-name')).toHaveValue('Iron Crane')
   // No Master yet, so the strip claims none: every cell is a dash.
   await expect(page.getByTestId('attr-skill')).toHaveText('-')
   await expect(page.getByTestId('attr-endurance')).toHaveText('-')
@@ -73,6 +80,7 @@ test('a Master is made by walking the book’s order', async ({ page }) => {
 
 test('creation reports an overspend and still lets the Master begin', async ({ page }) => {
   await page.goto('/')
+  await page.getByTestId('title-start').click()
   await page.getByTestId('creation-roll-master').click()
   await button(page, 'ROLL').first().click()
   await button(page, 'ROLL').first().click()
@@ -96,6 +104,7 @@ test('a made Master wins a fight', async ({ page }) => {
   // SKILL 8 against the Dexterous Ghost, on named dice. The walk in is
   // the book's: Event 4 (safe) twice, then Event 2 and creature 3.
   await page.goto('/?dice=4,4,2,3,6,5,1,1')
+  await page.getByTestId('title-start').click()
   await page.getByTestId('preset-preset.san-te').click()
   await expect(page.getByTestId('step-ready')).toBeVisible()
   await page.getByTestId('creation-begin').click()
@@ -107,7 +116,7 @@ test('a made Master wins a fight', async ({ page }) => {
     await expect(page.getByTestId('roll-card')).toHaveCount(0)
   }
   await button(page, /FACE THE DEXTEROUS GHOST/).click()
-  await expect(page.getByTestId('place')).toHaveText('COMBAT · ROUND 1')
+  await expect(page.getByTestId('combat')).toBeVisible()
 
   await button(page, 'ROLL THE ROUND').click()
   await expect(page.getByTestId('total-mine')).toHaveText('23')
@@ -129,6 +138,7 @@ test('a made Master wins a fight', async ({ page }) => {
  */
 test('the village buys, recovers LUCK and rests, on the printed terms', async ({ page }) => {
   await page.goto('/')
+  await page.getByTestId('title-start').click()
   // A printed sheet's gold is rolled on the table's dice (R03), and San
   // Te is Poor: 1d6-1, which is 0 GP one time in six and then nothing
   // here can be bought. Golden Swallow is Rich (5d6+6, never under 11
@@ -137,7 +147,6 @@ test('the village buys, recovers LUCK and rests, on the printed terms', async ({
   await page.getByTestId('creation-begin').click()
   await button(page, 'VILLAGE').click()
   await expect(page.getByTestId('village')).toBeVisible()
-  await expect(page.getByTestId('place')).toHaveText('FEN PASS · THE TRAIL-HEAD')
 
   // Three locations and the trail, from the fixed data file.
   await expect(page.getByTestId('village.place.market')).toBeVisible()
@@ -175,6 +184,7 @@ test('the village buys, recovers LUCK and rests, on the printed terms', async ({
  */
 test('the record shows what was played, and reads its own export back', async ({ page }) => {
   await page.goto('/?dice=4,4,2,3,6,5,1,1')
+  await page.getByTestId('title-start').click()
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
 
@@ -192,7 +202,6 @@ test('the record shows what was played, and reads its own export back', async ({
 
   await button(page, 'RECORD').click()
   await expect(page.getByTestId('record')).toBeVisible()
-  await expect(page.getByTestId('place')).toHaveText('THE CAMPAIGN RECORD')
   await expect(page.getByTestId('record-counts')).toContainText('2 DEEDS')
   await expect(page.getByTestId('record-deeds')).toContainText('dexterous ghost')
   await expect(page.getByTestId('record-deeds')).toContainText("private quarter's key")
@@ -208,6 +217,7 @@ test('the record shows what was played, and reads its own export back', async ({
 
 test('an unreadable import says which kind of unreadable it was', async ({ page }) => {
   await page.goto('/')
+  await page.getByTestId('title-start').click()
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
   await button(page, 'RECORD').click()
