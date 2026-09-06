@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The seal: an authored mark, not extracted art.
+
+  app.licence says text and SVG only, and none of the credited art ships
+  (Cristian Cammarata's cover and chapter art, limofeus's adventure
+  icons, watabou's cave map). This is drawn in this repository from the
+  woodblock tokens in apps/app/src/theme/tokens.ts - the ochre ground,
+  the ink border, the vermilion seal - and it is ours to ship.
+
+  A d6's five face inside a carved border: the die the whole book rolls.
+  The 20% margin keeps every stroke inside a maskable icon's safe zone,
+  so a launcher that crops it to a circle crops only the ground.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Martial Havoc">
+  <title>Martial Havoc</title>
+  <rect width="512" height="512" fill="#C1873A"/>
+  <rect x="112" y="112" width="288" height="288" rx="10" fill="#FBF3E1" stroke="#16110C" stroke-width="22"/>
+  <g fill="#16110C">
+    <circle cx="181" cy="181" r="26"/>
+    <circle cx="331" cy="181" r="26"/>
+    <circle cx="256" cy="256" r="26"/>
+    <circle cx="181" cy="331" r="26"/>
+    <circle cx="331" cy="331" r="26"/>
+  </g>
+  <rect x="112" y="112" width="288" height="288" rx="10" fill="none" stroke="#8E2417" stroke-width="8"/>
+</svg>
