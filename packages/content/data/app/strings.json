@@ -704,7 +704,7 @@
     },
     {
       "id": "ui.creation.who.note",
-      "text": "A name is yours. Everything after this is the book's.",
+      "text": "MH p.5 (R01) · a name and an age. Everything after this is the book's.",
       "cite": "spec.md, Horizon (creation)"
     },
     {
@@ -784,7 +784,7 @@
     },
     {
       "id": "ui.creation.training.note",
-      "text": "MH p.15 (R15-R17) · each point costs 1 SKILL and gives 4 resource points",
+      "text": "MH p.11 (R15-R17) · each point costs 1 SKILL, gives 4 resource points, and is a Proficiency of its own",
       "cite": "spec.md, Horizon (creation)"
     },
     {
@@ -799,7 +799,7 @@
     },
     {
       "id": "ui.creation.spend.note",
-      "text": "MH p.10 (R10, D06) · the pool is your rolled SKILL, before Training",
+      "text": "MH p.7 (R10, R11, D06) · the pool is your rolled SKILL, before Training · no Proficiency above 4",
       "cite": "spec.md, Horizon (creation)"
     },
     {
@@ -809,12 +809,12 @@
     },
     {
       "id": "ui.creation.techniques.title",
-      "text": "TECHNIQUES",
+      "text": "TECHNIQUES AND RITUALS",
       "cite": "spec.md, Horizon (creation)"
     },
     {
       "id": "ui.creation.techniques.note",
-      "text": "MH p.16 (R16) · paid for out of resource points",
+      "text": "MH p.11-19 (R14, R16) · each costs its printed value in resource points, and as much ENDURANCE to perform",
       "cite": "spec.md, Horizon (creation)"
     },
     {
@@ -824,13 +824,63 @@
     },
     {
       "id": "ui.creation.kit.title",
-      "text": "ONE THING TO CARRY",
+      "text": "WHAT YOU CARRY",
       "cite": "spec.md, Horizon (creation)"
     },
     {
       "id": "ui.creation.kit.note",
-      "text": "MH p.5 (R02) · one item under 20 GP, and your weapon",
+      "text": "MH p.5 (R02) · common clothing; a weapon, even one the table does not list; a Health Elixir or one Market item under 20 GP",
       "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.age.label",
+      "text": "AGE",
+      "cite": "MH p.5 (R01)"
+    },
+    {
+      "id": "ui.creation.age.placeholder",
+      "text": "Unsaid",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.kit.clothing",
+      "text": "Common clothing · yours already",
+      "cite": "MH p.5 (R02)"
+    },
+    {
+      "id": "ui.creation.kit.weapon.label",
+      "text": "YOUR WEAPON",
+      "cite": "MH p.5 (R02)"
+    },
+    {
+      "id": "ui.creation.kit.weapon.placeholder",
+      "text": "Spear, staff, a chair leg: any weapon, even one the table does not list",
+      "cite": "MH p.5 (R02)"
+    },
+    {
+      "id": "ui.creation.kit.item.label",
+      "text": "AND ONE OF THESE",
+      "cite": "MH p.5 (R02)"
+    },
+    {
+      "id": "ui.creation.learn.techniques",
+      "text": "TECHNIQUES · MH p.12-15",
+      "cite": "MH p.12-15 (R14)"
+    },
+    {
+      "id": "ui.creation.learn.rituals",
+      "text": "RITUALS · MH p.16-19",
+      "cite": "MH p.16-19 (R14)"
+    },
+    {
+      "id": "ui.creation.ready.carrying",
+      "text": "CARRYING",
+      "cite": "MH p.5 (R01, R02)"
+    },
+    {
+      "id": "ui.creation.ready.learned",
+      "text": "LEARNED",
+      "cite": "MH p.11 (R16)"
     },
     {
       "id": "ui.creation.ready.title",
@@ -874,23 +924,23 @@
     },
     {
       "id": "ui.creation.flag.proficiencies-overspent",
-      "text": "Proficiencies overspent by {n} (R10).",
-      "cite": "MH p.10 (R10); spec.md, Horizon (creation reports, never refuses)"
+      "text": "Proficiencies: {spent} of {pool} points, over by {n} (R10).",
+      "cite": "MH p.7 (R10); spec.md, Horizon (creation reports, never refuses)"
     },
     {
       "id": "ui.creation.flag.techniques-overspent",
-      "text": "Techniques overspent by {n} points (R16).",
-      "cite": "MH p.16 (R16); spec.md, Horizon (creation reports, never refuses)"
+      "text": "Techniques and Rituals: {spent} of {pool} resource points, over by {n} (R16).",
+      "cite": "MH p.11 (R16); spec.md, Horizon (creation reports, never refuses)"
     },
     {
-      "id": "ui.creation.flag.training-below-one",
-      "text": "Training has taken SKILL to {skill} (R15).",
-      "cite": "MH p.15 (R15); spec.md, Horizon (creation reports, never refuses)"
+      "id": "ui.creation.flag.proficiency-over-cap",
+      "text": "{name} is {value}; a Proficiency may not exceed 4 at creation (R11).",
+      "cite": "MH p.7 (R11); spec.md, Horizon (creation reports, never refuses)"
     },
     {
       "id": "ui.creation.flag.stray-proficiencies",
-      "text": "Not proficiencies of this style: {names} (R11).",
-      "cite": "MH p.10 (R11); spec.md, Horizon (creation reports, never refuses)"
+      "text": "Not Proficiencies of this style: {names} (R10; R12 lets you act without one).",
+      "cite": "MH p.7 (R10, R12); spec.md, Horizon (creation reports, never refuses)"
     },
     {
       "id": "ui.nav.creation",
