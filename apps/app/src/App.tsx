@@ -25,6 +25,7 @@ import { RecordScreen } from './screens/RecordScreen'
 import { CombatScreen } from './screens/CombatScreen'
 import { RegionScreen } from './screens/RegionScreen'
 import { RulesScreen } from './screens/RulesScreen'
+import { AboutScreen } from './screens/AboutScreen'
 
 /** The header's second line, per screen. */
 const placeLine = (state: RecordState): string => {
@@ -41,6 +42,8 @@ const placeLine = (state: RecordState): string => {
       return t('ui.village.place')
     case 'record':
       return t('ui.record.place')
+    case 'about':
+      return t('ui.about.place')
     case 'beat': {
       const beat = beatForArea(state.area)
       return fill(t('ui.beat.place'), { area: state.area, name: (beat?.name ?? '').toUpperCase() })
@@ -83,6 +86,7 @@ export const App = () => {
           {state.screen === 'combat' ? <CombatScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'rules' ? <RulesScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'region' ? <RegionScreen state={state} dispatch={dispatch} /> : null}
+          {state.screen === 'about' ? <AboutScreen dispatch={dispatch} /> : null}
         </View>
       </View>
     </View>
