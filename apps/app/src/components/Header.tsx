@@ -6,9 +6,10 @@
  * whole app one tap from play — there is no back stack to get lost in
  * because there is no router (phase 8 brief, decision 3).
  *
- * `nav` false hides the panels: while a Master is being made there is
- * no play to leave, and the title page has nothing to leave from. The
- * row keeps its height either way so the leaf below does not jump.
+ * `nav` false renders nothing at all: while a Master is being made
+ * there is no play to leave, and the room the row took goes to the
+ * page below (operator request, 2026-09-06). The strip then takes its
+ * own margin from the top of the leaf (App.tsx).
  *
  * The adventure's title slip that used to sit here is gone (operator
  * request, 2026-09-06): the title page names the adventure once.
@@ -25,9 +26,9 @@ type Props = {
   readonly onNav: (screen: Screen) => void
 }
 
-export const Header = ({ screen, nav, onNav }: Props) => (
+export const Header = ({ screen, nav, onNav }: Props) =>
+  !nav ? null : (
   <View style={styles.row}>
-    {nav ? (
       <View style={styles.nav} testID="nav">
         <Button small text={t('ui.nav.rules')} onPress={() => onNav(screen === 'rules' ? 'beat' : 'rules')} />
         <Button
@@ -47,11 +48,10 @@ export const Header = ({ screen, nav, onNav }: Props) => (
           onPress={() => onNav(screen === 'about' ? 'beat' : 'about')}
         />
       </View>
-    ) : null}
   </View>
-)
+  )
 
 const styles = StyleSheet.create({
-  row: { paddingTop: 34, paddingHorizontal: 14, paddingBottom: 10, flexDirection: 'row', justifyContent: 'flex-end', minHeight: 44 + 34 + 10 },
+  row: { paddingTop: 34, paddingHorizontal: 14, paddingBottom: 10, flexDirection: 'row', justifyContent: 'flex-end' },
   nav: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 6, flexShrink: 1 },
 })

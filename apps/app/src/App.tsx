@@ -66,7 +66,8 @@ export const App = () => {
           {opened ? (
           <View style={styles.page}>
           <Header screen={state.screen} nav={!making} onNav={(screen) => dispatch({ type: 'nav', screen })} />
-          <View style={styles.strip}>
+          {/* No header while making a Master: the strip starts the page. */}
+          <View style={[styles.strip, making && styles.stripFirst]}>
             <AttributeStrip sheet={state.sheet} blank={state.creation !== null} />
           </View>
           {state.screen === 'creation' ? <CreationScreen state={state} dispatch={dispatch} /> : null}
@@ -96,4 +97,5 @@ const styles = StyleSheet.create({
   frame: { flex: 1, width: '100%', maxWidth: frameWidth, flexDirection: 'row', backgroundColor: color.ochre, borderColor: color.ink, borderLeftWidth: 1, borderRightWidth: 1 },
   page: { flex: 1 },
   strip: { marginHorizontal: 14 },
+  stripFirst: { marginTop: 14 },
 })
