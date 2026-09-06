@@ -158,12 +158,15 @@ describe('the fight with the Dexterous Ghost', () => {
   })
 
   it('a won round shows both strengths and offers the difference (R23, R25)', () => {
-    // Master 6+5 + SKILL 8 + Non lethal combat 4 = 23; Ghost 1+1 + 7 + immaterial charge 4 = 13.
+    // Master 6+5 + SKILL 8 + Non-lethal combat 4 = 23; Ghost 1+1 + 7 + immaterial charge 4 = 13.
+    // The Proficiency is named as the Martial Arts table spells it: the
+    // sheet's "Non lethal combat" is resolved to the style's own spelling
+    // when the sheet is loaded through the engine (`state/creation.ts`).
     const s = play(atGhost(), [[{ type: 'combat.round' }, [6, 5, 1, 1]]])
     expect(s.combat?.last).toMatchObject({
       outcome: 'master-wins',
       difference: 10,
-      master: { total: 23, proficiency: { name: 'Non lethal combat', value: 4 } },
+      master: { total: 23, proficiency: { name: 'Non-lethal combat', value: 4 } },
       opponent: { total: 13, proficiency: { name: 'immaterial charge', value: 4 } },
     })
     const struck = reduce(s, { type: 'combat.strike' }, fromSequence([]))

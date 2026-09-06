@@ -44,7 +44,7 @@ import {
 import type { MenuOption, Opponent } from '@martial-havoc/content'
 import { queued } from '../dice/random'
 import { fill } from '../lib/fill'
-import { newRecord } from './record'
+import { newRecord, withMaster } from './record'
 import type { Action, Combat, RecordState, Sheet } from './types'
 
 /** The citation the engine registry carries for a behaviour id. */
@@ -419,5 +419,13 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return state.region.points.some((p) => p.id === action.to) ? { ...state, here: action.to } : state
     case 'record.new':
       return newRecord(dice)
+    // Creation (R83). The candidate arrives whole, gold already thrown by
+    // the frame that built the list, so picking rolls nothing: the
+    // numbers a player reads are the numbers they start with, and a
+    // queued `?dice=` run is spent on play rather than on the choosing.
+    case 'creation.pick':
+      return { ...state, picked: action.candidate }
+    case 'creation.start':
+      return state.picked === null ? state : withMaster(state, state.picked.sheet)
   }
 }

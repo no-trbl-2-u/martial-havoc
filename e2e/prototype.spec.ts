@@ -81,7 +81,7 @@ test('combat shows both rolls, both Proficiencies, both totals and the differenc
   await expect(page.getByTestId('die-theirs-b')).toHaveAttribute('aria-label', '1')
   await expect(page.getByTestId('total-mine')).toHaveText('23')
   await expect(page.getByTestId('total-theirs')).toHaveText('13')
-  await expect(page.getByText(/NON LETHAL COMBAT \+4/)).toBeVisible()
+  await expect(page.getByText(/NON-LETHAL COMBAT \+4/)).toBeVisible()
   await expect(page.getByText(/IMMATERIAL CHARGE \+4/)).toBeVisible()
   await expect(page.getByText('YOU ARE AHEAD BY')).toBeVisible()
   await expect(page.getByTestId('banner-value')).toHaveText('10')
@@ -201,4 +201,79 @@ test('the unchosen layouts are gone: ?layout= serves the same beat', async ({ pa
   await expect(page.getByTestId('beat')).toBeVisible()
   await expect(page.getByTestId('authored-line')).toBeVisible()
   await expect(page.getByTestId('ledger')).toHaveCount(0)
+})
+
+/**
+ * Phase 8b: creation.
+ *
+ * The eight printed Masters (MH p.91-92, R83) are the creation surface's
+ * whole list. Two things have to hold on the web export: the sheet reads
+ * in R01's order and starts, and an overspent sheet is *reported and
+ * started anyway* (spec.md, Refusals: creation's pools are advisory).
+ *
+ * The last test is the build-plan row's own done-condition: one run that
+ * creates a Master and wins a fight.
+ */
+test('the creation screen lists the eight printed Masters and reads one in the book’s order', async ({
+  page,
+}) => {
+  await page.goto('/')
+  await button(page, 'MASTER').click()
+  await expect(page.getByTestId('place')).toHaveText('CHOOSE YOUR MASTER')
+  await expect(page.getByTestId('pick-preset.san-te')).toBeVisible()
+  await expect(page.getByTestId('pick-preset.sun-wukong')).toBeVisible()
+  await expect(page.getByTestId('pick-preset.jen-yu')).toBeVisible()
+  await page.getByTestId('pick-preset.golden-swallow').click()
+  await expect(page.getByTestId('creation-name')).toHaveText('GOLDEN SWALLOW')
+  await expect(page.getByTestId('creation-martial-art')).toHaveText('Double Knives')
+  // Golden Swallow as printed: SKILL 7, ENDURANCE 15, LUCK 10 (MH p.91).
+  await expect(page.getByTestId('creation-attributes')).toHaveText('SKL 7 · END 15 · LCK 10')
+  await expect(page.getByText('PROFICIENCIES')).toBeVisible()
+  await expect(page.getByText('TECHNIQUES AND RITUALS')).toBeVisible()
+  await expect(page.getByText('EQUIPMENT')).toBeVisible()
+  await expect(button(page, 'BEGIN AS GOLDEN SWALLOW')).toBeVisible()
+})
+
+test('the creation screen never scrolls sideways at 375px', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto('/')
+  await button(page, 'MASTER').click()
+  await page.getByTestId('pick-preset.sun-wukong').click()
+  await expect(page.getByTestId('creation-name')).toHaveText('SUN WUKONG')
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - window.innerWidth,
+  )
+  expect(overflow).toBeLessThanOrEqual(1)
+})
+
+test('an overspent sheet is flagged and started anyway', async ({ page }) => {
+  await page.goto('/')
+  await button(page, 'MASTER').click()
+  await page.getByTestId('pick-preset.yin').click()
+  await expect(page.getByTestId('creation-name')).toHaveText('YIN')
+  await expect(page.getByTestId('creation-flag').first()).toContainText(/against a pool of/)
+  await expect(page.getByTestId('creation-clean')).toHaveCount(0)
+  await button(page, 'BEGIN AS YIN').click()
+  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
+  await page.reload()
+  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
+})
+
+test('a run creates a Master and wins a fight', async ({ page }) => {
+  await page.goto('/?dice=6,5,1,1')
+  await button(page, 'MASTER').click()
+  await page.getByTestId('pick-preset.san-te').click()
+  await expect(page.getByTestId('creation-clean')).toBeVisible()
+  await button(page, 'BEGIN AS SAN TE').click()
+  await expect(page.getByTestId('attr-skill')).toHaveText('8')
+  await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
+  await button(page, /FACE THE DEXTEROUS GHOST/).click()
+  await button(page, 'ROLL THE ROUND').click()
+  await expect(page.getByTestId('total-mine')).toHaveText('23')
+  await expect(page.getByTestId('total-theirs')).toHaveText('13')
+  await page.getByTestId('act-strike').click()
+  await expect(button(page, 'FIGHT IS OVER')).toBeVisible()
+  await page.getByTestId('act-treasure').click()
+  await page.getByTestId('act-go-on').click()
+  await expect(page.getByText('DEEDS 1')).toBeVisible()
 })

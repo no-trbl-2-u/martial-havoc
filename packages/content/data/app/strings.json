@@ -716,6 +716,116 @@
       "id": "ui.treasure.vase-of-muttonfat-jade",
       "text": "Vase of muttonfat jade",
       "cite": "5T a2"
+    },
+    {
+      "id": "ui.nav.master",
+      "text": "MASTER",
+      "cite": "MH_Full_Itchio.pdf, p.5 (R01)"
+    },
+    {
+      "id": "ui.creation.place",
+      "text": "CHOOSE YOUR MASTER",
+      "cite": "MH_Full_Itchio.pdf, p.91-92 (R83)"
+    },
+    {
+      "id": "ui.creation.title",
+      "text": "THE MASTER",
+      "cite": "MH_Full_Itchio.pdf, p.5 (R01)"
+    },
+    {
+      "id": "ui.creation.lead",
+      "text": "Eight Masters are printed in the book. Pick one, read the sheet, and begin. Nothing here is corrected: what the page says is what you play.",
+      "cite": "MH_Full_Itchio.pdf, p.91-92 (R83)"
+    },
+    {
+      "id": "ui.creation.pick",
+      "text": "READ THE SHEET",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.creation.picked",
+      "text": "READING",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.creation.start",
+      "text": "BEGIN AS {name}",
+      "cite": "MH_Full_Itchio.pdf, p.5 (R01)"
+    },
+    {
+      "id": "ui.creation.age",
+      "text": "AGE {n}",
+      "cite": "MH_Full_Itchio.pdf, p.5 (R01)"
+    },
+    {
+      "id": "ui.creation.status",
+      "text": "STATUS",
+      "cite": "MH_Full_Itchio.pdf, p.5 (R02)"
+    },
+    {
+      "id": "ui.creation.gold",
+      "text": "GOLD",
+      "cite": "MH_Full_Itchio.pdf, p.5 (R03)"
+    },
+    {
+      "id": "ui.creation.gold.cite",
+      "text": "R03 throws the status's dice; a printed sheet names the status and not the coin.",
+      "cite": "MH_Full_Itchio.pdf, p.5 (R03)"
+    },
+    {
+      "id": "ui.creation.attributes",
+      "text": "ATTRIBUTES",
+      "cite": "MH_Full_Itchio.pdf, p.6 (R04)"
+    },
+    {
+      "id": "ui.creation.martial-art",
+      "text": "MARTIAL ART",
+      "cite": "MH_Full_Itchio.pdf, p.8 (R09)"
+    },
+    {
+      "id": "ui.creation.proficiencies",
+      "text": "PROFICIENCIES",
+      "cite": "MH_Full_Itchio.pdf, p.9 (R10)"
+    },
+    {
+      "id": "ui.creation.learned",
+      "text": "TECHNIQUES AND RITUALS",
+      "cite": "MH_Full_Itchio.pdf, p.10 (R16)"
+    },
+    {
+      "id": "ui.creation.learned.none",
+      "text": "None. This Master fights with the style alone.",
+      "cite": "MH_Full_Itchio.pdf, p.10 (R16)"
+    },
+    {
+      "id": "ui.creation.equipment",
+      "text": "EQUIPMENT",
+      "cite": "MH_Full_Itchio.pdf, p.5 (R02)"
+    },
+    {
+      "id": "ui.creation.pool",
+      "text": "{spent} OF {pool}",
+      "cite": "MH_Full_Itchio.pdf, p.9 (R10)"
+    },
+    {
+      "id": "ui.creation.flags",
+      "text": "THE SHEET SAYS",
+      "cite": "spec.md, Refusals"
+    },
+    {
+      "id": "ui.creation.flags.cite",
+      "text": "Reported, never refused: creation's pools are advisory and the printed sheet plays as printed.",
+      "cite": "spec.md, Refusals"
+    },
+    {
+      "id": "ui.creation.clean",
+      "text": "The arithmetic on this sheet balances.",
+      "cite": "spec.md, Refusals"
+    },
+    {
+      "id": "ui.creation.footer",
+      "text": "MH p.91-92 (R83) - Appendix C, as printed",
+      "cite": "MH_Full_Itchio.pdf, p.91-92 (R83)"
     }
   ]
 }

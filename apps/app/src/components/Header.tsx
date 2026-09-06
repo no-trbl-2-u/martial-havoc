@@ -1,4 +1,4 @@
-/** The header slip: the adventure, where the Master is, and the two panels. */
+/** The header slip: the adventure, where the Master is, and the three panels. */
 import { StyleSheet, Text, View } from 'react-native'
 import { t } from '@martial-havoc/content'
 import { color, font } from '../theme/tokens'
@@ -19,6 +19,7 @@ export const Header = ({ place, screen, onNav }: Props) => (
       <Text testID="place" style={styles.place}>{place}</Text>
     </Slip>
     <View style={styles.nav}>
+      <Button small text={t('ui.nav.master')} onPress={() => onNav(screen === 'creation' ? 'beat' : 'creation')} />
       <Button small text={t('ui.nav.rules')} onPress={() => onNav(screen === 'rules' ? 'beat' : 'rules')} />
       <Button small text={t('ui.nav.map')} onPress={() => onNav(screen === 'region' ? 'beat' : 'region')} />
     </View>
@@ -30,5 +31,5 @@ const styles = StyleSheet.create({
   title: { paddingVertical: 5, paddingHorizontal: 9, flexShrink: 1 },
   adventure: { fontFamily: font.sans, fontSize: 12, fontWeight: '800', letterSpacing: 1.7, color: color.ink },
   place: { fontFamily: font.mono, fontSize: 10, marginTop: 2, color: color.ink },
-  nav: { flexDirection: 'row', gap: 6 },
+  nav: { flexDirection: 'row', gap: 5 },
 })

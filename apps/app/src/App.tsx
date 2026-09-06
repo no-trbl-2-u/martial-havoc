@@ -1,6 +1,6 @@
 /**
  * The frame: a binding down the left, the header and the attribute
- * strip, and one of four screens under them. The Phase 1 garden page
+ * strip, and one of five screens under them. The Phase 1 garden page
  * this replaces was a placeholder; this is the design prototype
  * (design/prototype) built on the real engine and the real content.
  *
@@ -18,7 +18,9 @@ import { color, frameWidth } from './theme/tokens'
 import { AttributeStrip } from './components/AttributeStrip'
 import { Binding } from './components/Binding'
 import { Header } from './components/Header'
+import { allCandidates } from './state/creation'
 import { BeatScreen } from './screens/BeatScreen'
+import { CreationScreen } from './screens/CreationScreen'
 import { CombatScreen } from './screens/CombatScreen'
 import { RegionScreen } from './screens/RegionScreen'
 import { RulesScreen } from './screens/RulesScreen'
@@ -32,6 +34,8 @@ const placeLine = (state: RecordState): string => {
       return t('ui.rules.place')
     case 'region':
       return t('ui.region.place')
+    case 'creation':
+      return t('ui.creation.place')
     case 'beat': {
       const beat = beatForArea(state.area)
       return fill(t('ui.beat.place'), { area: state.area, name: (beat?.name ?? '').toUpperCase() })
@@ -52,6 +56,10 @@ export const App = () => {
   const table = useMemo(() => randomSource(), [])
   const dice = useMemo(() => queued(parseDiceQuery(search()), table), [table])
   const [state, dispatch] = useRecord(dice, table)
+  // The eight sheets, each with its gold thrown once: built here rather
+  // than in the screen so re-picking never re-rolls the coin beside a
+  // name, and off the play source so `?dice=` is spent on play (R03).
+  const candidates = useMemo(() => allCandidates(table), [table])
   return (
     <View style={styles.root}>
       <View style={styles.frame} testID="frame">
@@ -65,6 +73,7 @@ export const App = () => {
           {state.screen === 'combat' ? <CombatScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'rules' ? <RulesScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'region' ? <RegionScreen state={state} dispatch={dispatch} /> : null}
+          {state.screen === 'creation' ? <CreationScreen state={state} candidates={candidates} dispatch={dispatch} /> : null}
         </View>
       </View>
     </View>

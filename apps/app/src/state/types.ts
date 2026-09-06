@@ -7,6 +7,7 @@
  * campaign record"). `reduce` in `./reduce.ts` is the only thing that
  * makes a new one. Nothing here is a class and nothing is mutated.
  */
+import type { Candidate } from './creation'
 import type {
   AttackStrength,
   Die,
@@ -21,8 +22,14 @@ import type {
   UnexpectedEventRoll,
 } from '@martial-havoc/engine'
 
-/** The four screens of the prototype frame. */
-export type Screen = 'beat' | 'combat' | 'rules' | 'region'
+/**
+ * The screens of the frame.
+ *
+ * `creation` is the one screen that runs before there is a Master to
+ * play: it picks which sheet the record starts from (R83). The rest all
+ * read the Master the record already holds.
+ */
+export type Screen = 'creation' | 'beat' | 'combat' | 'rules' | 'region'
 
 /** The Master's numbers as the strip shows them, with the initial values R05 asks us to keep. */
 export type Sheet = {
@@ -37,6 +44,14 @@ export type Sheet = {
   readonly proficiencies: readonly NamedValue[]
   /** Technique ids (`technique.*`), resolved from the sheet's printed names. */
   readonly techniques: readonly string[]
+  /**
+   * True when creation's pools were exceeded (R10, R16).
+   *
+   * Advisory, never a refusal (spec.md, Refusals): the Master plays
+   * either way and the campaign record keeps the fact. Yin's printed
+   * sheet is the proof case.
+   */
+  readonly overspent: boolean
 }
 
 /** A check resolved on the beat screen (R20, R21). */
@@ -145,6 +160,15 @@ export type RecordState = {
   readonly region: Region
   /** The region point the Master stands at. */
   readonly here: number
+  /**
+   * The Master the creation screen has picked but not yet started, or
+   * null when it is not mid-creation.
+   *
+   * Held in the record rather than in the screen so the gold rolled
+   * beside a name survives a re-render, and so the reducer stays the
+   * only thing that rolls.
+   */
+  readonly picked: Candidate | null
 }
 
 /** Everything a screen may ask the record to do. */
@@ -170,3 +194,5 @@ export type Action =
   | { readonly type: 'rules.open'; readonly id: string | null }
   | { readonly type: 'region.travel'; readonly to: number }
   | { readonly type: 'record.new' }
+  | { readonly type: 'creation.pick'; readonly candidate: Candidate }
+  | { readonly type: 'creation.start' }

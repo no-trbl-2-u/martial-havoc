@@ -41,10 +41,10 @@ const treasureId = (key: string): string | undefined =>
 /**
  * The sheet as the record keeps it.
  *
- * `overspent` is false because the prototype plays a printed preset
- * (MH p.91-92, R83), which cannot overspend a creation pool by
- * definition. Phase 8's creation screen is what will set it, from
- * `creationClean`.
+ * `overspent` comes from the sheet, which the creation screen sets from
+ * the engine's `creationClean` (`./creation.ts`). It is advisory and
+ * never a refusal: Yin's printed sheet overspends both pools, loads
+ * anyway, and the record remembers that it did (spec.md, Refusals).
  */
 const masterFrom = (sheet: Sheet): RecordedMaster => ({
   name: sheet.name,
@@ -57,7 +57,7 @@ const masterFrom = (sheet: Sheet): RecordedMaster => ({
   dishonor: sheet.dishonor,
   proficiencies: sheet.proficiencies,
   techniques: sheet.techniques,
-  overspent: false,
+  overspent: sheet.overspent,
 })
 
 /**
@@ -120,6 +120,7 @@ export const fromCampaign = (record: CampaignRecord, session: RecordState): Reco
       dishonor: record.master.dishonor,
       proficiencies: record.master.proficiencies,
       techniques: record.master.techniques,
+      overspent: record.master.overspent,
     },
     deeds: record.deeds.map((deed) => deed.text),
     passages: record.passages,
