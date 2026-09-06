@@ -1,8 +1,10 @@
 /**
- * The frame: a binding down the left, the header and the attribute
- * strip, and one of four screens under them. The Phase 1 garden page
- * this replaces was a placeholder; this is the design prototype
- * (design/prototype) built on the real engine and the real content.
+ * The frame: a binding down the left, and to its right one leaf: the
+ * header, the attribute strip, and one screen under them. Changing
+ * screen turns the whole leaf over the spine (`components/Leaf.tsx`);
+ * the binding stays. The Phase 1 garden page this replaces was a
+ * placeholder; this is the design prototype (design/prototype) built
+ * on the real engine and the real content.
  *
  * Dice: the table's random d6, with any `?dice=` faces served first so
  * a browser test can name its rolls. The source is made once.
@@ -18,6 +20,7 @@ import { color, frameWidth } from './theme/tokens'
 import { AttributeStrip } from './components/AttributeStrip'
 import { Binding } from './components/Binding'
 import { Header } from './components/Header'
+import { Leaf } from './components/Leaf'
 import { BeatScreen } from './screens/BeatScreen'
 import { CreationScreen } from './screens/CreationScreen'
 import { VillageScreen } from './screens/VillageScreen'
@@ -72,7 +75,8 @@ export const App = () => {
     <View style={styles.root}>
       <View style={styles.frame} testID="frame">
         <Binding />
-        <View style={styles.page}>
+        <Leaf page={state.screen}>
+          <View style={styles.page}>
           <Header place={placeLine(state)} screen={state.screen} onNav={(screen) => dispatch({ type: 'nav', screen })} />
           <View style={styles.strip}>
             <AttributeStrip sheet={state.sheet} blank={state.creation !== null} />
@@ -87,14 +91,17 @@ export const App = () => {
           {state.screen === 'rules' ? <RulesScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'region' ? <RegionScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'about' ? <AboutScreen dispatch={dispatch} /> : null}
-        </View>
+          </View>
+        </Leaf>
       </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: color.frame, alignItems: 'center' },
+  // `overflow: 'hidden'`: a leaf mid-turn projects past the frame, and
+  // the document must not grow a sideways scroll for it.
+  root: { flex: 1, backgroundColor: color.frame, alignItems: 'center', overflow: 'hidden' },
   frame: { flex: 1, width: '100%', maxWidth: frameWidth, flexDirection: 'row', backgroundColor: color.ochre, borderColor: color.ink, borderLeftWidth: 1, borderRightWidth: 1 },
   page: { flex: 1 },
   strip: { marginHorizontal: 14 },
