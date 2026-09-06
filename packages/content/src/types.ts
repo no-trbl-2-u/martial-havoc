@@ -97,6 +97,17 @@ export type Opponent = BaseRecord & {
   readonly proficiencies: readonly NamedValue[]
   /** The n of a `Martial Arts (n)` Proficiency (R75), else null. */
   readonly martialArtsValue: number | null
+  /**
+   * A spirit or ghost, immune to ordinary blows (R77).
+   *
+   * The printed stat block does not say so in any cell; the tag comes
+   * from reading I-29, which names the roster, and a tagged record
+   * carries `reading: 'I-29'` alongside its `cite`. The engine reads
+   * this and never recomputes it: `ordinaryBlowsPass` takes the flag
+   * as an argument precisely so no opponent name lives in the engine
+   * (agents.md standing rule 7).
+   */
+  readonly incorporeal: boolean
   readonly page: string
   readonly notes: string
 }
@@ -328,6 +339,25 @@ export type SpecialItem = BaseRecord & {
   readonly total: number
   readonly name: string
   readonly effect: string
+}
+
+/**
+ * One weapon that passes R77's gate against an incorporeal opponent.
+ *
+ * R77 names the category ("a technique, ritual, or exceptional weapon")
+ * and lists no members; reading I-29 names the three this build counts.
+ * `ref` is the id of the record that already holds the weapon - a
+ * {@link SpecialItem}, an {@link AdventureTreasure}, or the
+ * {@link Preset} sheet that carries it as an equipment line - so the
+ * name is transcribed in exactly one place and this record only says
+ * that the gate opens for it.
+ */
+export type ExceptionalWeapon = BaseRecord & {
+  readonly name: string
+  /** The id of the record that holds this weapon. */
+  readonly ref: string
+  /** Why this one counts, in one line. */
+  readonly note: string
 }
 
 /** A d66 row whose whole content is one passage (the 36 hooks, MH p.36-39). */

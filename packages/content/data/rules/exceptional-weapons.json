@@ -1,0 +1,36 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "$comment": "The 'exceptional weapon' half of R77. The rule names the category and never lists its members; reading I-29 names the three the estate would count. Each row points at the record that already holds the weapon, so the name is transcribed in exactly one place and this file only says which of them the gate opens for.",
+  "id": "rules.exceptional-weapons",
+  "kind": "list",
+  "title": "Exceptional weapons (R77, I-29)",
+  "cite": "MH p.66",
+  "label": "reading",
+  "docs": "docs/rules/readings/combat.md",
+  "records": [
+    {
+      "id": "exceptional-weapon.lu-dongbin-sword",
+      "cite": "MH p.69",
+      "reading": "I-29",
+      "name": "The sword of the Immortal Lu Dongbin",
+      "ref": "special-item.6",
+      "note": "Special Item 6, whose printed effect is \"effective against spirits\" - the one weapon the book itself says passes."
+    },
+    {
+      "id": "exceptional-weapon.seven-star-sword",
+      "cite": "5T a2",
+      "reading": "I-29",
+      "name": "Seven-star sword",
+      "ref": "treasure.the-5-treasures.seven-star-sword",
+      "note": "The Junior King's LOOT in The 5 Treasures."
+    },
+    {
+      "id": "exceptional-weapon.yin-magical-sword",
+      "cite": "MH p.92",
+      "reading": "I-29",
+      "name": "Magical sword",
+      "ref": "preset.yin",
+      "note": "Carried on Yin's printed sheet as \"Magical sword\"; the ref is the sheet, since the equipment line is a string on the preset and not a record of its own."
+    }
+  ]
+}

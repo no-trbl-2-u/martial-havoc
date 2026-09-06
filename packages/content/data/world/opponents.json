@@ -26,6 +26,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.70",
       "notes": ""
     },
@@ -48,6 +49,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.70",
       "notes": ""
     },
@@ -70,6 +72,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.70",
       "notes": ""
     },
@@ -92,6 +95,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.70",
       "notes": ""
     },
@@ -114,6 +118,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.70",
       "notes": ""
     },
@@ -136,6 +141,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.71",
       "notes": "ATTACK printed as a range, \"2-4\""
     },
@@ -158,6 +164,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.71",
       "notes": ""
     },
@@ -180,6 +187,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.71",
       "notes": "Highest SKILL, ENDURANCE and ATTACK on the roster, shared with Kun"
     },
@@ -202,6 +210,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.71",
       "notes": "Not on the Encounters matrix; reached from the Gambling House (p. 46), where the Dealer rolls 2d6 + SKILL"
     },
@@ -224,6 +233,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.71",
       "notes": ""
     },
@@ -246,12 +256,14 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.72",
       "notes": ""
     },
     {
       "id": "opponent.first-abbot",
       "cite": "MH p.72",
+      "reading": "I-29",
       "name": "First Abbot",
       "description": "The spirit of the founder.",
       "skill": 11,
@@ -264,6 +276,7 @@
         }
       ],
       "martialArtsValue": 3,
+      "incorporeal": true,
       "page": "MH p.72",
       "notes": "Single Proficiency (R75)"
     },
@@ -286,12 +299,14 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.72",
       "notes": "Description has no full stop, as printed"
     },
     {
       "id": "opponent.ghost-pirate",
       "cite": "MH p.72",
+      "reading": "I-29",
       "name": "Ghost Pirate",
       "description": "It sails on a spectral ship.",
       "skill": 9,
@@ -308,6 +323,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": true,
       "page": "MH p.72",
       "notes": ""
     },
@@ -330,6 +346,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.72",
       "notes": ""
     },
@@ -352,6 +369,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.73",
       "notes": ""
     },
@@ -374,6 +392,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.73",
       "notes": ""
     },
@@ -396,6 +415,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.73",
       "notes": ""
     },
@@ -418,6 +438,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.73",
       "notes": ""
     },
@@ -440,12 +461,14 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.73",
       "notes": ""
     },
     {
       "id": "opponent.gui",
       "cite": "MH p.74",
+      "reading": "I-29",
       "name": "Gui",
       "description": "A human ghost.",
       "skill": 5,
@@ -462,6 +485,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": true,
       "page": "MH p.74",
       "notes": "Appears in both the Urban and the Supernatural columns of the matrix"
     },
@@ -484,12 +508,14 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.74",
       "notes": "ATTACK is blank in the source (the inventory records the cell as blank): the bullet reads \"ATTACK\" with no number, verified on the render and in the extraction"
     },
     {
       "id": "opponent.huli-jing",
       "cite": "MH p.74",
+      "reading": "I-29",
       "name": "Huli Jing",
       "description": "A mischievous fox spirit.",
       "skill": 9,
@@ -506,6 +532,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": true,
       "page": "MH p.74",
       "notes": "Printed \"SKILLS 9\""
     },
@@ -528,6 +555,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.74",
       "notes": ""
     },
@@ -550,6 +578,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.74",
       "notes": ""
     },
@@ -572,6 +601,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.75",
       "notes": ""
     },
@@ -594,6 +624,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.75",
       "notes": ""
     },
@@ -616,6 +647,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.75",
       "notes": ""
     },
@@ -638,6 +670,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.75",
       "notes": "Lowest ENDURANCE on the roster, shared with Brawler"
     },
@@ -656,6 +689,7 @@
         }
       ],
       "martialArtsValue": 2,
+      "incorporeal": false,
       "page": "MH p.75",
       "notes": "Single Proficiency (R75)"
     },
@@ -678,6 +712,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.76",
       "notes": "The adventure's Monk (SKILL 4, ENDURANCE 5) is a different block"
     },
@@ -700,6 +735,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.76",
       "notes": ""
     },
@@ -722,6 +758,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.76",
       "notes": ""
     },
@@ -744,6 +781,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.76",
       "notes": ""
     },
@@ -766,6 +804,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.76",
       "notes": "A group written as one block"
     },
@@ -788,6 +827,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.76-77",
       "notes": "Block runs across the page break"
     },
@@ -810,6 +850,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.77",
       "notes": ""
     },
@@ -832,6 +873,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.77",
       "notes": ""
     },
@@ -850,6 +892,7 @@
         }
       ],
       "martialArtsValue": 1,
+      "incorporeal": false,
       "page": "MH p.77",
       "notes": "Single Proficiency (R75); in both the Urban and the Monastery columns"
     },
@@ -868,6 +911,7 @@
         }
       ],
       "martialArtsValue": 2,
+      "incorporeal": false,
       "page": "MH p.77",
       "notes": "Single Proficiency (R75); in both the Urban and the Monastery columns"
     },
@@ -886,6 +930,7 @@
         }
       ],
       "martialArtsValue": 4,
+      "incorporeal": false,
       "page": "MH p.77",
       "notes": "Single Proficiency (R75)"
     },
@@ -908,6 +953,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.78",
       "notes": ""
     },
@@ -930,6 +976,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.78",
       "notes": ""
     },
@@ -952,6 +999,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.78",
       "notes": "Opening quotation mark unclosed, as printed"
     },
@@ -974,6 +1022,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.78",
       "notes": "In both the Urban and the Monastery columns"
     },
@@ -996,12 +1045,14 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.78",
       "notes": ""
     },
     {
       "id": "opponent.tutelary-spirit",
       "cite": "MH p.79",
+      "reading": "I-29",
       "name": "Tutelary Spirit",
       "description": "Emanation of the local deity.",
       "skill": 11,
@@ -1018,6 +1069,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": true,
       "page": "MH p.79",
       "notes": ""
     },
@@ -1040,6 +1092,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": false,
       "page": "MH p.79",
       "notes": ""
     },
@@ -1062,12 +1115,14 @@
         }
       ],
       "martialArtsValue": 2,
+      "incorporeal": false,
       "page": "MH p.79",
       "notes": "Spelled \"Yauxia\" on the Encounters matrix; carries \"Martial Arts (2)\" beside a named Proficiency"
     },
     {
       "id": "opponent.yogi",
       "cite": "MH p.79",
+      "reading": "I-29",
       "name": "Yogi",
       "description": "A religious person in meditation.",
       "skill": 6,
@@ -1084,6 +1139,7 @@
         }
       ],
       "martialArtsValue": null,
+      "incorporeal": true,
       "page": "MH p.79",
       "notes": "The only block whose Proficiency names incorporeality"
     }

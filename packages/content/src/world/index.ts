@@ -75,6 +75,30 @@ export const opponents: readonly Opponent[] = Object.freeze(
 export const opponentById = byId(opponents)
 export const opponentByName = byName(opponents, 'name')
 
+/**
+ * The opponents R77 makes immune to ordinary blows (reading I-29).
+ *
+ * Derived from the roster's own `incorporeal` tag rather than held as a
+ * second list, so the two can never disagree. The adventure's foes carry
+ * the same tag in `campaigns/index.ts`; use {@link isIncorporeal} over
+ * whichever roster a fight is drawn from.
+ */
+export const incorporealOpponents: readonly Opponent[] = Object.freeze(
+  opponents.filter((o) => o.incorporeal),
+)
+
+/**
+ * Is the opponent with this id a spirit or ghost (R77, I-29)?
+ *
+ * Curried on a roster so the rulebook's 50 and an adventure's foes are
+ * asked the same way. Total: an unknown id is `false`, which is the
+ * safe answer - an ordinary blow lands.
+ */
+export const isIncorporeal =
+  (roster: readonly Opponent[]) =>
+  (id: string): boolean =>
+    roster.find((o) => o.id === id)?.incorporeal === true
+
 /** The four Market price lists (MH p.52-55). */
 export const market: readonly MarketItem[] = Object.freeze(
   marketFile.records as readonly MarketItem[],

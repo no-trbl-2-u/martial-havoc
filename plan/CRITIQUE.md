@@ -46,16 +46,6 @@ not from that pass: they are the carry-overs the `/march` loop of
 2026-09-05/06 left behind after shipping Phases 3 and 4, filed here so
 `/iterate` drains them rather than losing them.
 
-### [HIGH] packages/content — opponent roster carries no incorporeal tag (I-29)
-- pass: user-jot (commit 884f341)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: R77 makes spirits and ghosts immune to ordinary blows, and the engine's progression.ordinaryBlowsPass gates on it, but no opponent record carries the tag - so the gate can never fire from data. Reading I-29 names the roster to tag: Gui, Ghost Pirate, First Abbot, Tutelary Spirit, Huli Jing, Yogi, Bai Gu Jing (doubtful), Jiangshi (doubtful), plus the adventure's Dexterous Ghost and Old Vixen. Exceptional weapons: Lu Dongbin's sword (Special Item 6), the seven-star sword, Yin's Magical sword.
-- evidence: carried over from the /march loop of 2026-09-05/06 (Phases 3 and 4), user-spotted at 2026-09-06T01:20:04Z
-- suggested fix: Add an `incorporeal` boolean and an `exceptionalWeapon` flag to the opponent and market record kinds, tag the named records with cite I-29, and assert in a content test that every tagged name resolves.
-- source: user
-
 ### [MED] packages/content — effects.json operation strings are unverified
 - pass: user-jot (commit 884f341)
 - viewport: unspecified
@@ -216,16 +206,6 @@ not from that pass: they are the carry-overs the `/march` loop of
 - suggested fix: Roll the Oracle's No. of enemies row in doTurn when the encounter's count is 'oracle', push that many servant ids onto pending, and show the roll on the card as a third die.
 - source: user
 
-### [MED] apps/app — the adventure’s flags are saved but nothing on the beat sets them (I-45, I-40, I-41)
-- pass: user-jot (phase 8c residue, 2026-09-06)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: night (the gourd opened), junior-king-asleep (wine), cord-spells-known (the Old Vixen met kindly, or the sheets) are declared in flags.json and carried in the record, but no menu row toggles them, so the absence rule (Ogres absent by night) never fires and the Cord is never usable.
-- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
-- suggested fix: Add menu rows where the book allows the act: OPEN THE GOURD once held (toggles night; label reading I-45), and set cord-spells-known from learnFrom's sources; wine and the nap wait for the sandbox's market.
-- source: user
-
 ### [LOW] apps/app — the Devil servant’s LOOT on a 6 is recorded as nothing (I-08)
 - pass: user-jot (phase 8c residue, 2026-09-06)
 - viewport: unspecified
@@ -287,6 +267,51 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [MED] apps/app — the adventure’s flags are saved but nothing on the beat sets them (I-45, I-40, I-41)
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: night (the gourd opened), junior-king-asleep (wine), cord-spells-known (the Old Vixen met kindly, or the sheets) are declared in flags.json and carried in the record, but no menu row toggles them, so the absence rule (Ogres absent by night) never fires and the Cord is never usable.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Add menu rows where the book allows the act: OPEN THE GOURD once held (toggles night; label reading I-45), and set cord-spells-known from learnFrom's sources; wine and the nap wait for the sandbox's market.
+- source: user
+- resolved: 2edf072 (2026-09-06). Two of the four flags now have a
+  source. A menu row appears once the gourd is held and toggles `night`
+  (I-45), its line the treasure's own printed effect; a test walks into
+  the Cave entrance on the same two dice by day and by night and meets
+  an Ogre, then nothing, so `absences.json` is live. `learnFrom` is now
+  passed a beaten named foe and a freed rescue as well as the area, so
+  the Old Vixen yields the Cord's spells (I-41), and
+  `cord-spells-known` is derived from `cave.effects` rather than set
+  beside it. Still open, deliberately: `junior-king-asleep` waits on
+  wine, which waits on the sandbox's market. Nine new strings under
+  `ui.cave.gourd.*` and `ui.deed.gourd.*`, each cited.
+
+### [HIGH] packages/content — opponent roster carries no incorporeal tag (I-29)
+- pass: user-jot (commit 884f341)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: R77 makes spirits and ghosts immune to ordinary blows, and the engine's progression.ordinaryBlowsPass gates on it, but no opponent record carries the tag - so the gate can never fire from data. Reading I-29 names the roster to tag: Gui, Ghost Pirate, First Abbot, Tutelary Spirit, Huli Jing, Yogi, Bai Gu Jing (doubtful), Jiangshi (doubtful), plus the adventure's Dexterous Ghost and Old Vixen. Exceptional weapons: Lu Dongbin's sword (Special Item 6), the seven-star sword, Yin's Magical sword.
+- evidence: carried over from the /march loop of 2026-09-05/06 (Phases 3 and 4), user-spotted at 2026-09-06T01:20:04Z
+- suggested fix: Add an `incorporeal` boolean and an `exceptionalWeapon` flag to the opponent and market record kinds, tag the named records with cite I-29, and assert in a content test that every tagged name resolves.
+- source: user
+- resolved: d15a7f2 (2026-09-06). `opponent` gained a required
+  `incorporeal` boolean, answered for all 59 stat blocks and true for
+  the eight I-29 names outright, each carrying `reading: "I-29"`. The
+  other half of R77 ships as `data/rules/exceptional-weapons.json`, a
+  reading-labelled table pointing at Special Item 6, the seven-star
+  sword and Yin's sheet by id. `isIncorporeal` and
+  `isExceptionalWeapon` are the lookups; five content tests hold the
+  tagged set, the resolution of every I-29 name, the reading citation,
+  the completeness of the tag and the resolution of every weapon ref.
+  Not done here: the market flag the row suggested (no Market weapon is
+  exceptional, so the enum value would have been dead), and the two
+  doubtful names - Bai Gu Jing and Jiangshi - which are left false and
+  filed as a `[needs-user-call]` row in `plan/AUDIT.md`. Wiring the
+  gate into CombatScreen is a separate row's work.
 
 ### [MED] general — Workers Builds fails off main with no log, config verified
 - resolved: 526b63a (2026-09-06). deploy.mjs now runs `npm run build:web` itself when apps/app/dist is missing; build b1ea4755 on 526b63a was the first green non-production Workers Build. The cause was reproduced locally (exit 3 at the empty-export guard on a fresh checkout) but never confirmed against a build log, and it sits awkwardly beside the recorded dashboard config - see the open row "the branch-build fix and the dashboard config disagree".

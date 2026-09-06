@@ -43,7 +43,7 @@ const repoRoot = join(packageDir, '..', '..')
  * half-transcribed table impossible to ship.
  */
 const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
-  'app.strings': 307,
+  'app.strings': 316,
   // The rules panel's notes: one per engine behaviour (the label leg
   // checks the pairing; this only pins the count).
   'app.behaviour-notes': 109,
@@ -89,6 +89,9 @@ const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
   'rules.encounters': 55,
   'rules.treasures': 18,
   'rules.special-items': 11,
+  // R77's "exceptional weapon" has no printed list; reading I-29 names
+  // three, so three is the count a dropped row breaks against.
+  'rules.exceptional-weapons': 3,
 
   // The campaign layer: what an adventure can be about.
   'campaigns.adventure-hooks': 36,
@@ -126,7 +129,14 @@ type LoadedFile = {
     readonly id: string
     readonly kind: string
     readonly docs?: string
-    readonly records: readonly { readonly id: string; readonly d66?: number }[]
+    readonly records: readonly {
+      readonly id: string
+      readonly d66?: number
+      readonly name?: string
+      readonly reading?: string
+      readonly ref?: string
+      readonly incorporeal?: boolean
+    }[]
   }
 }
 
@@ -245,6 +255,75 @@ describe('the whole package', () => {
     console.log(`content - ${files.length} files, ${records} records`)
     expect(files.length).toBeGreaterThan(0)
     expect(records).toBeGreaterThan(0)
+  })
+})
+
+/**
+ * R77's two halves, as data (reading I-29).
+ *
+ * The engine's `ordinaryBlowsPass` gates a blow on two facts it is
+ * handed rather than knows: whether the opponent is incorporeal, and
+ * whether the weapon is an exceptional one. Both facts are content, so
+ * both are checked here - a gate whose data side is empty can never
+ * fire, which is the failure this describe block exists to make loud.
+ */
+describe('R77: the incorporeal gate has data on both sides (I-29)', () => {
+  /** Every opponent record that ships, from both rosters. */
+  const opponentRecords = files
+    .filter(
+      (f) => f.parsed.id === 'world.opponents' || f.parsed.id === 'campaigns.the-5-treasures-foes',
+    )
+    .flatMap((f) => f.parsed.records)
+
+  /** The names reading I-29 gives, confident ones only. */
+  const I29_NAMES: readonly string[] = [
+    'Gui',
+    'Ghost Pirate',
+    'First Abbot',
+    'Tutelary Spirit',
+    'Huli Jing',
+    'Yogi',
+    'Dexterous Ghost',
+    'Old Vixen',
+  ]
+
+  it('tags exactly the roster reading I-29 names', () => {
+    const tagged = opponentRecords
+      .filter((r) => r.incorporeal === true)
+      .map((r) => r.name ?? r.id)
+      .sort()
+    expect(tagged).toEqual([...I29_NAMES].sort())
+  })
+
+  it('resolves every name I-29 gives to a record that ships', () => {
+    const shipped = new Set(opponentRecords.map((r) => r.name))
+    const unresolved = I29_NAMES.filter((name) => !shipped.has(name))
+    expect(unresolved, `I-29 names no record ships: ${unresolved.join(', ')}`).toEqual([])
+  })
+
+  it('cites the reading on every tagged record, since no printed cell says it', () => {
+    const uncited = opponentRecords
+      .filter((r) => r.incorporeal === true)
+      .filter((r) => r.reading !== 'I-29')
+      .map((r) => r.id)
+    expect(uncited, `tagged without reading I-29: ${uncited.join(', ')}`).toEqual([])
+  })
+
+  it('answers the question for every opponent, so the gate is never undefined', () => {
+    const untagged = opponentRecords.filter((r) => typeof r.incorporeal !== 'boolean').map((r) => r.id)
+    expect(untagged, `no incorporeal tag: ${untagged.join(', ')}`).toEqual([])
+  })
+
+  it('points every exceptional weapon at a record that ships', () => {
+    const ids = new Set(files.flatMap((f) => f.parsed.records).map((r) => r.id))
+    const weapons = files
+      .filter((f) => f.parsed.id === 'rules.exceptional-weapons')
+      .flatMap((f) => f.parsed.records)
+    expect(weapons.length).toBe(3)
+    const dangling = weapons
+      .filter((w) => !ids.has(w.ref as string))
+      .map((w) => `${w.id} -> ${String(w.ref)}`)
+    expect(dangling, `exceptional weapons pointing nowhere:\n${dangling.join('\n')}`).toEqual([])
   })
 })
 

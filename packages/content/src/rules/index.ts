@@ -21,6 +21,7 @@ import cityEncountersFile from '../../data/rules/city-encounters.json'
 import encountersFile from '../../data/rules/encounters.json'
 import treasuresFile from '../../data/rules/treasures.json'
 import specialItemsFile from '../../data/rules/special-items.json'
+import exceptionalWeaponsFile from '../../data/rules/exceptional-weapons.json'
 
 import { byBanded, byFaces, byId, byTotal, byTotals, inColumn } from '../lookup'
 import type {
@@ -30,6 +31,7 @@ import type {
   CityService,
   ColumnCell,
   EncounterCell,
+  ExceptionalWeapon,
   FinalBlow,
   Healing,
   SocialStatus,
@@ -143,3 +145,28 @@ export const specialItems: readonly SpecialItem[] = Object.freeze(
   specialItemsFile.records as readonly SpecialItem[],
 )
 export const rollSpecialItem = byTotal(specialItems)
+
+/**
+ * The three weapons R77's gate opens for (MH p.66, reading I-29).
+ *
+ * Not a table the book prints: R77 names the category and lists no
+ * members, so this is a `reading`-labelled file of our own. Each row
+ * points at the record that holds the weapon (`ref`); nothing here
+ * re-transcribes a name, and `content.test.ts` asserts every `ref`
+ * resolves.
+ */
+export const exceptionalWeapons: readonly ExceptionalWeapon[] = Object.freeze(
+  exceptionalWeaponsFile.records as readonly ExceptionalWeapon[],
+)
+export const exceptionalWeaponById = byId(exceptionalWeapons)
+
+/**
+ * Does the record with this id hold an exceptional weapon (R77)?
+ *
+ * Total: an id that names nothing, or names an ordinary Market weapon,
+ * is `false`. Pair with the engine's `ordinaryBlowsPass`, which takes
+ * the answer rather than the id - the engine names no weapon of its own
+ * (agents.md standing rule 7).
+ */
+export const isExceptionalWeapon = (ref: string): boolean =>
+  exceptionalWeapons.some((w) => w.ref === ref)

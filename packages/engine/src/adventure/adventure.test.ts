@@ -48,6 +48,7 @@ const foe = (id: string, name: string): Opponent => ({
   attack: 1,
   proficiencies: [],
   martialArtsValue: null,
+  incorporeal: false,
   page: 'test',
   notes: '',
 })

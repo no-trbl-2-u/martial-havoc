@@ -40,6 +40,7 @@ import cityEncounters from '../data/rules/city-encounters.json'
 import encounters from '../data/rules/encounters.json'
 import treasures from '../data/rules/treasures.json'
 import specialItems from '../data/rules/special-items.json'
+import exceptionalWeapons from '../data/rules/exceptional-weapons.json'
 import adventureHooks from '../data/campaigns/adventure-hooks.json'
 import treasureFoes from '../data/campaigns/the-5-treasures-foes.json'
 import caveAdventure from '../data/campaigns/the-5-treasures/adventure.json'
@@ -90,6 +91,7 @@ const registry: readonly CountedFile[] = Object.freeze([
   encounters,
   treasures,
   specialItems,
+  exceptionalWeapons,
   adventureHooks,
   treasureFoes,
   caveAdventure,

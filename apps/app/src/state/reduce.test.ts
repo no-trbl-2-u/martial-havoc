@@ -36,6 +36,9 @@ const AREA = {
 } as const
 
 const GHOST = 'foe.dexterous-ghost'
+const VIXEN = 'foe.old-vixen'
+const GOURD = 'treasure.the-5-treasures.gold-and-red-gourd'
+const CORD = 'treasure.the-5-treasures.dazzling-golden-cord'
 const KEY = 'key.the-5-treasures.private-quarter'
 const VASE = 'treasure.the-5-treasures.vase-of-muttonfat-jade'
 
@@ -373,6 +376,120 @@ describe('the Kitchen Monk (I-39) and the Chieftain’s sheets (I-38b)', () => {
     expect(s.result).toMatchObject({ kind: 'note', label: 'reading' })
     expect(menuFor(s).some((o) => o.id === 'learn')).toBe(false)
     expect(reduce(s, { type: 'cave.learn' }, fromSequence([]))).toBe(s)
+  })
+})
+
+describe('the gourd swallows the sky (I-45)', () => {
+  /** A record standing in the Storage room with the gourd already taken. */
+  const holding = (): RecordState => {
+    const base = fresh()
+    return {
+      ...base,
+      cave: { ...base.cave, area: AREA.storage, treasures: [GOURD] },
+    }
+  }
+
+  it('offers no row until the gourd is held', () => {
+    const base = fresh()
+    const empty = { ...base, cave: { ...base.cave, area: AREA.storage } }
+    expect(menuFor(empty).some((o) => o.id === 'gourd')).toBe(false)
+    // And the action is refused, not silently accepted.
+    expect(reduce(empty, { type: 'cave.gourd' }, fromSequence([]))).toBe(empty)
+  })
+
+  it('opens to night and closes back to day, on the printed text', () => {
+    const held = holding()
+    const open = menuFor(held).find((o) => o.id === 'gourd')
+    expect(open?.title).toBe('OPEN THE GOURD')
+    expect(open?.note).toBe('DAY · I-45')
+    // The line under the row is the treasure's own effect, not a gloss.
+    expect(open?.line).toContain('swallow the sky')
+
+    const night = reduce(held, { type: 'cave.gourd' }, fromSequence([]))
+    expect(night.cave.flags.night).toBe(true)
+    expect(night.result).toMatchObject({ kind: 'note', label: 'reading' })
+    expect(night.deeds).toEqual(['opened the gourd · night'])
+    expect(menuFor(night).find((o) => o.id === 'gourd')?.title).toBe('CLOSE THE GOURD')
+
+    const day = reduce(night, { type: 'cave.gourd' }, fromSequence([]))
+    expect(day.cave.flags.night).toBe(false)
+    expect(day.deeds).toEqual(['opened the gourd · night', 'closed the gourd · day'])
+  })
+
+  it('is refused while a foe is standing, and the row says so', () => {
+    const held = holding()
+    const engaged = { ...held, pending: [GHOST] }
+    expect(menuFor(engaged).find((o) => o.id === 'gourd')?.enabled).toBe(false)
+    expect(reduce(engaged, { type: 'cave.gourd' }, fromSequence([]))).toBe(engaged)
+  })
+
+  it('empties the Cave entrance of Ogres by night (absences.json, I-45)', () => {
+    // The absence is the tables' business, not the reducer's: by night
+    // the entrance's 4-5 row meets nothing where by day it meets an Ogre.
+    const base = fresh()
+    const atEntrance = { ...base, cave: { ...base.cave, area: AREA.storage, treasures: [GOURD] } }
+    const byDay = play(atEntrance, [[{ type: 'cave.go', to: AREA.entrance }, [2, 4]]])
+    expect(byDay.pending).toEqual(['foe.ogre'])
+
+    const night = reduce(atEntrance, { type: 'cave.gourd' }, fromSequence([]))
+    const byNight = play(night, [[{ type: 'cave.go', to: AREA.entrance }, [2, 4]]])
+    expect(byNight.pending).toEqual([])
+  })
+})
+
+describe('the Old Vixen teaches the Cord\u2019s spells (I-41)', () => {
+  /** A record with the Vixen beaten and the fight over, one CONTINUE from the beat. */
+  const beaten = (): RecordState => {
+    const base = fresh()
+    return {
+      ...base,
+      screen: 'combat',
+      cave: { ...base.cave, area: AREA.women },
+      pending: [VIXEN],
+      combat: {
+        foeId: VIXEN,
+        foeEndurance: 0,
+        round: 2,
+        last: null,
+        event: null,
+        morale: null,
+        opening: false,
+        blow: null,
+        techniqueLine: null,
+        looted: true,
+        over: { ended: true, reason: 'final-blow' },
+      },
+    }
+  }
+
+  it('leaves the fight knowing what the Cord does, and says so in the record', () => {
+    const before = beaten()
+    expect(before.cave.effects).toEqual([])
+    expect(before.cave.flags['cord-spells-known']).toBe(false)
+
+    const back = reduce(before, { type: 'combat.leave' }, fromSequence([]))
+    expect(back.screen).toBe('beat')
+    expect(back.cave.defeated).toEqual([VIXEN])
+    expect(back.cave.effects).toEqual([CORD])
+    // The flag is the same fact restated for the record, derived from
+    // effects rather than set on its own.
+    expect(back.cave.flags['cord-spells-known']).toBe(true)
+  })
+
+  it('leaves a foe who teaches nothing exactly as it found it', () => {
+    const base = fresh()
+    const ghost = reduce(
+      {
+        ...beaten(),
+        cave: { ...base.cave, area: AREA.attendants },
+        pending: [GHOST],
+        combat: { ...(beaten().combat as NonNullable<RecordState['combat']>), foeId: GHOST },
+      },
+      { type: 'combat.leave' },
+      fromSequence([]),
+    )
+    expect(ghost.cave.effects).toEqual([])
+    expect(ghost.cave.flags['cord-spells-known']).toBe(false)
   })
 })
 
