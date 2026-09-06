@@ -66,8 +66,7 @@ import { newRecord } from './record'
 import { fromCampaign } from './campaign'
 import { GOURD, NIGHT, RANK_AND_FILE, foeName, treasureName } from './menu'
 import {
-  MAX_TRAINING,
-  finishCreation,
+    finishCreation,
   rollArt,
   rollNumbers,
   rollStanding,
@@ -583,9 +582,11 @@ const onCreation = (
  */
 const rollStep = (c: CreationState, dice: DiceSource): CreationState => {
   switch (c.step) {
+    // R02 and R03 share the book's second step: the standing rolled, the
+    // kit chosen on the same page (docs/rules/master-creation.md).
     case 'who':
     case 'standing':
-      return { ...rollStanding(c, dice), step: 'numbers' }
+      return { ...rollStanding(c, dice), step: 'kit' }
     case 'numbers':
       return { ...rollNumbers(c, dice), step: 'art' }
     case 'art':
@@ -849,10 +850,17 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return onCreation(state, (c) => rollStep(c, dice))
     case 'creation.art':
       return onCreation(state, (c) => ({ ...c, martialArtId: action.id, step: 'training' }))
+    case 'creation.age':
+      return onCreation(state, (c) => ({ ...c, age: action.age }))
+    case 'creation.weapon':
+      return onCreation(state, (c) => ({ ...c, weapon: action.weapon }))
+    // R15 sets no ceiling on Training; the only bound is arithmetic. Each
+    // point subtracts one SKILL, so there are at most as many as the
+    // rolled SKILL holds (and none before it is rolled).
     case 'creation.training':
       return onCreation(state, (c) => ({
         ...c,
-        training: Math.max(0, Math.min(MAX_TRAINING, action.points)),
+        training: Math.max(0, Math.min(c.skill?.initial ?? 0, action.points)),
       }))
     case 'creation.proficiency':
       return onCreation(state, (c) => withProficiency(c, action.name, action.delta))
@@ -862,6 +870,13 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
         techniqueIds: c.techniqueIds.includes(action.id)
           ? c.techniqueIds.filter((id) => id !== action.id)
           : [...c.techniqueIds, action.id],
+      }))
+    case 'creation.ritual':
+      return onCreation(state, (c) => ({
+        ...c,
+        ritualIds: c.ritualIds.includes(action.id)
+          ? c.ritualIds.filter((id) => id !== action.id)
+          : [...c.ritualIds, action.id],
       }))
     case 'creation.kit':
       return onCreation(state, (c) => ({

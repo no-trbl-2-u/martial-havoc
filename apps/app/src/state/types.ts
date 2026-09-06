@@ -35,31 +35,36 @@ export type Screen =
   | 'about'
 
 /**
- * Where creation has got to, in the book's own order (R02-R19).
+ * Where creation has got to, in the book's own order (R01-R19).
  *
- * `who` asks the one question the book does not — a name, and whether
- * to take a printed sheet (R83) or roll one — and every step after it
- * is a rule. `ready` is a made Master who has not yet begun.
+ * `who` is R01's first line, name and age, and the offer of a printed
+ * sheet (R83) instead. Then the text's own order
+ * (docs/rules/master-creation.md, "Order of operations"): standing and
+ * the starting kit (R02, R03), the three numbers (R04), the Martial Art
+ * (R09), Training (R15), Proficiencies (R10, R11), Techniques and
+ * Rituals (R16). `ready` is a made Master who has not yet begun.
  */
 export type CreationStep =
   | 'who'
   | 'standing'
+  | 'kit'
   | 'numbers'
   | 'art'
   | 'training'
   | 'spend'
-  | 'kit'
+  | 'learn'
   | 'ready'
 
 /** The order the steps run in, which is the order the book prints them. */
 export const CREATION_STEPS: readonly CreationStep[] = [
   'who',
   'standing',
+  'kit',
   'numbers',
   'art',
   'training',
   'spend',
-  'kit',
+  'learn',
   'ready',
 ]
 
@@ -76,7 +81,9 @@ export type RolledAttribute = { readonly current: number; readonly initial: numb
  */
 export type CreationState = {
   readonly step: CreationStep
+  /** R01: name and age. Age is typed as text and read as a number when it is one. */
   readonly name: string
+  readonly age: string
   /** Set when the player took one of the eight printed sheets (R83). */
   readonly presetId: string | null
   /** R02, R03: the social band and the gold its dice gave. */
@@ -91,15 +98,33 @@ export type CreationState = {
   readonly training: number
   /** R10: Proficiency name to the points put on it. */
   readonly proficiencies: Readonly<Record<string, number>>
-  /** R16: the `technique.*` ids learned. */
+  /** R16: the `technique.*` and `ritual.*` ids learned. */
   readonly techniqueIds: readonly string[]
-  /** R02: the one starting item, a `market.*` id. */
+  readonly ritualIds: readonly string[]
+  /** R02: the weapon, free text ("even if not listed"). */
+  readonly weapon: string
+  /** R02: the one starting item, a `market.*` id: the Health Elixir, or a line under 20 GP. */
   readonly kitItemId: string | null
 }
 
-/** The Master's numbers as the strip shows them, with the initial values R05 asks us to keep. */
+/**
+ * The Master as the app plays them: R01's schema, with the initial
+ * values R05 asks us to keep.
+ *
+ * "A Master is defined by: name and age; Martial Art; SKILL, ENDURANCE
+ * and LUCK points; Martial Proficiencies; Techniques and Rituals (if
+ * any); Equipment; Experience points" (MH p.5). Training is kept beside
+ * the Proficiencies rather than among them: R17 makes it a Proficiency,
+ * and I-22 reads that as applying to checks to perform or resist
+ * Techniques and Rituals, not to Attack Strength, which is what the
+ * combat screen draws the best Proficiency for.
+ */
 export type Sheet = {
   readonly name: string
+  /** R01. Null when never given: the book asks, it does not require. */
+  readonly age: number | null
+  /** R01, R09: the `martial-art.*` id, or null for a Master made without one. */
+  readonly martialArtId: string | null
   readonly skill: number
   readonly skillInitial: number
   readonly endurance: number
@@ -110,8 +135,16 @@ export type Sheet = {
   readonly gold: number
   readonly dishonor: number
   readonly proficiencies: readonly NamedValue[]
+  /** R17: Training's value, a Proficiency of its own (I-22 says for which checks). */
+  readonly training: number
   /** Technique ids (`technique.*`), resolved from the sheet's printed names. */
   readonly techniques: readonly string[]
+  /** Ritual ids (`ritual.*`), likewise (R14, R16). */
+  readonly rituals: readonly string[]
+  /** R01, R02: equipment lines as printed or typed; common clothing first. */
+  readonly equipment: readonly string[]
+  /** R01: Experience points. Zero at creation. */
+  readonly xp: number
 }
 
 /** A check resolved on the beat screen (R20, R21). */
@@ -368,6 +401,9 @@ export type Action =
   | { readonly type: 'region.travel'; readonly to: number }
   | { readonly type: 'record.new' }
   | { readonly type: 'creation.name'; readonly name: string }
+  | { readonly type: 'creation.age'; readonly age: string }
+  | { readonly type: 'creation.weapon'; readonly weapon: string }
+  | { readonly type: 'creation.ritual'; readonly id: string }
   | { readonly type: 'creation.preset'; readonly id: string }
   | { readonly type: 'creation.roll' }
   | { readonly type: 'creation.art'; readonly id: string }

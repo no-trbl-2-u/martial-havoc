@@ -39,7 +39,9 @@ const masterFrom = (sheet: Sheet): RecordedMaster => ({
   gold: sheet.gold,
   dishonor: sheet.dishonor,
   proficiencies: sheet.proficiencies,
-  techniques: sheet.techniques,
+  // The record's one list holds both kinds by id prefix
+  // (`RecordedMaster.techniques`: "Technique and Ritual ids").
+  techniques: [...sheet.techniques, ...sheet.rituals],
   overspent: false,
 })
 
@@ -99,7 +101,8 @@ export const fromCampaign = (record: CampaignRecord, session: RecordState): Reco
       gold: record.master.gold,
       dishonor: record.master.dishonor,
       proficiencies: record.master.proficiencies,
-      techniques: record.master.techniques,
+      techniques: record.master.techniques.filter((id) => id.startsWith('technique.')),
+      rituals: record.master.techniques.filter((id) => id.startsWith('ritual.')),
     },
     deeds: record.deeds.map((deed) => deed.text),
     passages: record.passages,

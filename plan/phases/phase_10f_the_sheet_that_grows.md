@@ -6,6 +6,11 @@
 > app. It needs a field on the sheet, so it takes the sheet's other
 > missing field, age, with it, under one migration.
 
+> Age shipped on main before this brief was merged (PR #31, "creation
+> follows the book, whole"): creation asks it and the sheet keeps it.
+> What remains here is the Technique; the age scenarios below are
+> already green.
+
 ## Outcome
 
 A landed Final Blow can become a Technique of the Master's own, named

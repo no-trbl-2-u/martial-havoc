@@ -6,11 +6,14 @@
  * (R03). The region is seven points on a plane (spec.md, Horizon). All
  * of it is a pure function of the dice passed in.
  */
-import { beginAdventure, chooseSocialStatus, rollSpec, throwRegion } from '@martial-havoc/engine'
+import { COMMON_CLOTHING, beginAdventure, chooseSocialStatus, martialArtBySheetName, rollSpec, throwRegion } from '@martial-havoc/engine'
 import type { DiceSource } from '@martial-havoc/engine'
 import {
   canonicalIdForSheetName,
+  martialArts,
   presetById,
+  presetNameResolution,
+  ritualByName,
   socialStatuses,
   techniqueByName,
   theFiveTreasures,
@@ -36,10 +39,13 @@ export const sheetFor =
     if (preset === undefined) throw new Error(`unknown preset ${presetId}`)
     const status = chooseSocialStatus(socialStatuses)(preset.status)
     const gold = status === undefined ? 0 : rollSpec(status.goldDice)(dice).sum
+    const art = martialArtBySheetName(martialArts, presetNameResolution)(preset.martialArt)
     return {
       name: preset.name,
+      age: preset.age,
+      martialArtId: art?.id ?? null,
       skill: preset.skill,
-      skillInitial: preset.skill,
+      skillInitial: preset.skill + preset.training,
       endurance: preset.endurance,
       enduranceInitial: preset.endurance,
       luck: preset.luck,
@@ -47,9 +53,15 @@ export const sheetFor =
       gold,
       dishonor: 0,
       proficiencies: preset.proficiencies,
+      training: preset.training,
       techniques: preset.techniques
         .map(techniqueId)
         .filter((id): id is string => id !== undefined),
+      rituals: preset.rituals
+        .map((name) => canonicalIdForSheetName(name) ?? ritualByName(name)?.id)
+        .filter((id): id is string => id !== undefined),
+      equipment: [COMMON_CLOTHING.name, ...preset.equipment],
+      xp: 0,
     }
   }
 

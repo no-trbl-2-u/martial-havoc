@@ -1,5 +1,5 @@
 /**
- * Making a Master, in the book's order (MH p.5-21, R02-R19).
+ * Making a Master, in the book's order (MH p.5-19, R01-R19).
  *
  * One step on screen at a time, each carrying the folio it comes from,
  * because the player is being walked through a procedure they may not
@@ -20,17 +20,21 @@
  */
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import {
+  marketItemByName,
   martialArts,
   presets,
+  rituals,
   startingKitItems,
   t,
   techniqueById,
+  ritualById,
   techniques,
 } from '@martial-havoc/content'
+import { NAMED_STARTING_ITEM } from '@martial-havoc/engine'
 import { fill } from '../lib/fill'
 import {
-  MAX_TRAINING,
   artOf,
+  equipmentOf,
   flagsOf,
   pool,
   resourcePool,
@@ -55,11 +59,15 @@ const nextStep = (step: CreationStep): CreationStep =>
 const prevStep = (step: CreationStep): CreationStep =>
   CREATION_STEPS[Math.max(0, CREATION_STEPS.indexOf(step) - 1)] ?? 'who'
 
-/** The Techniques a style can teach, cheapest first. */
-const learnable = (c: CreationState) => {
-  const art = artOf(c)
-  if (art === undefined) return []
-  return [...techniques].sort((a, b) => a.cost - b.cost).slice(0, 12)
+/**
+ * R02's one item: the Health Elixir the rule names, then every Market
+ * line under 20 GP, in the Market's order. The Elixir is 25 GP and is
+ * the alternative to the cap, not an instance of it, so it is looked up
+ * by name rather than by the flag.
+ */
+const kitItems = () => {
+  const named = marketItemByName(NAMED_STARTING_ITEM)
+  return [...(named === undefined ? [] : [named]), ...startingKitItems.filter((i) => i !== named)]
 }
 
 export const CreationScreen = ({ state, dispatch }: Props) => {
@@ -74,7 +82,12 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
       <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
         {c.step === 'who' ? (
           <>
-            <Step title={t('ui.creation.who.title')} note={t('ui.creation.who.note')} testID="step-who">
+            <Step
+              title={t('ui.creation.who.title')}
+              note={t('ui.creation.who.note')}
+              source={t('ui.creation.who.source')}
+              testID="step-who"
+            >
               <Text style={styles.label}>{t('ui.creation.name.label')}</Text>
               {/* The one thing the player types at creation. `creation.name`
                   is the reducer's; a Master who has begun ignores it. */}
@@ -86,6 +99,17 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
                 placeholderTextColor={color.dim}
                 autoCapitalize="words"
                 autoCorrect={false}
+                style={[styles.field, styles.fieldText]}
+              />
+              <Text style={styles.label}>{t('ui.creation.age.label')}</Text>
+              {/* R01's second word. Text in, number out (`ageOf`), so a blank stays blank. */}
+              <TextInput
+                testID="creation-age"
+                value={c.age}
+                onChangeText={(age) => dispatch({ type: 'creation.age', age })}
+                placeholder={t('ui.creation.age.placeholder')}
+                placeholderTextColor={color.dim}
+                keyboardType="number-pad"
                 style={[styles.field, styles.fieldText]}
               />
               <Button
@@ -129,6 +153,38 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
                 {fill(t('ui.creation.standing.value'), { name: c.status.name, gold: c.status.gold })}
               </Text>
             )}
+          </Step>
+        ) : null}
+
+        {c.step === 'kit' ? (
+          <Step
+            title={t('ui.creation.kit.title')}
+            note={t('ui.creation.kit.note')}
+            source={t('ui.creation.kit.source')}
+            testID="step-kit"
+          >
+            <Text style={styles.reading}>{t('ui.creation.kit.clothing')}</Text>
+            <Text style={styles.label}>{t('ui.creation.kit.weapon.label')}</Text>
+            <TextInput
+              testID="creation-weapon"
+              value={c.weapon}
+              onChangeText={(weapon) => dispatch({ type: 'creation.weapon', weapon })}
+              placeholder={t('ui.creation.kit.weapon.placeholder')}
+              placeholderTextColor={color.dim}
+              autoCorrect={false}
+              style={[styles.field, styles.fieldText]}
+            />
+            <Text style={styles.label}>{t('ui.creation.kit.item.label')}</Text>
+            {kitItems().map((item) => (
+              <MenuButton
+                key={item.id}
+                testID={`kit-${item.id}`}
+                title={`${c.kitItemId === item.id ? '* ' : ''}${item.item}`}
+                note={item.priceGp === null ? `${item.priceSp ?? 0} SP` : `${item.priceGp} GP`}
+                line=""
+                onPress={() => dispatch({ type: 'creation.kit', id: item.id })}
+              />
+            ))}
           </Step>
         ) : null}
 
@@ -195,7 +251,7 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
             />
             <Text style={styles.reading}>
               {fill(t('ui.creation.training.value'), {
-                points: `${c.training} OF ${MAX_TRAINING}`,
+                points: `${c.training}`,
                 skill: skillAfterTraining(c),
                 resources: resourcePool(c),
               })}
@@ -204,67 +260,62 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
         ) : null}
 
         {c.step === 'spend' ? (
-          <>
-            <Step
-              title={t('ui.creation.spend.title')}
-              note={t('ui.creation.spend.note')}
-              source={t('ui.creation.spend.source')}
-              testID="step-spend"
-            >
-              <Text testID="creation-pool" style={styles.reading}>
-                {fill(t('ui.creation.spend.pool'), { spent: spentProficiency(c), pool: pool(c) })}
-              </Text>
-              {(art?.proficiencies ?? []).map((name) => (
-                <Counter
-                  key={name}
-                  testID={`proficiency-${name}`}
-                  label={name}
-                  value={c.proficiencies[name] ?? 0}
-                  onChange={(delta) => dispatch({ type: 'creation.proficiency', name, delta })}
-                />
-              ))}
-            </Step>
-            <Step
-              title={t('ui.creation.techniques.title')}
-              note={t('ui.creation.techniques.note')}
-              source={t('ui.creation.techniques.source')}
-              testID="step-techniques"
-            >
-              <Text testID="creation-resources" style={styles.reading}>
-                {fill(t('ui.creation.techniques.pool'), {
-                  spent: spentResources(c),
-                  pool: resourcePool(c),
-                })}
-              </Text>
-              {learnable(c).map((tech) => (
-                <MenuButton
-                  key={tech.id}
-                  testID={`technique-${tech.id}`}
-                  title={`${c.techniqueIds.includes(tech.id) ? '* ' : ''}${tech.name}`}
-                  note={`${tech.cost}`}
-                  line={tech.effect}
-                  onPress={() => dispatch({ type: 'creation.technique', id: tech.id })}
-                />
-              ))}
-            </Step>
-          </>
+          <Step
+            title={t('ui.creation.spend.title')}
+            note={t('ui.creation.spend.note')}
+            source={t('ui.creation.spend.source')}
+            testID="step-spend"
+          >
+            <Text testID="creation-pool" style={styles.reading}>
+              {fill(t('ui.creation.spend.pool'), { spent: spentProficiency(c), pool: pool(c) })}
+            </Text>
+            {(art?.proficiencies ?? []).map((name) => (
+              <Counter
+                key={name}
+                testID={`proficiency-${name}`}
+                label={name}
+                value={c.proficiencies[name] ?? 0}
+                onChange={(delta) => dispatch({ type: 'creation.proficiency', name, delta })}
+              />
+            ))}
+          </Step>
         ) : null}
 
-        {c.step === 'kit' ? (
+        {c.step === 'learn' ? (
           <Step
-            title={t('ui.creation.kit.title')}
-            note={t('ui.creation.kit.note')}
-            source={t('ui.creation.kit.source')}
-            testID="step-kit"
+            title={t('ui.creation.techniques.title')}
+            note={t('ui.creation.techniques.note')}
+            source={t('ui.creation.techniques.source')}
+            testID="step-techniques"
           >
-            {startingKitItems.slice(0, 14).map((item) => (
+            <Text testID="creation-resources" style={styles.reading}>
+              {fill(t('ui.creation.techniques.pool'), {
+                spent: spentResources(c),
+                pool: resourcePool(c),
+              })}
+            </Text>
+            {/* All 36 of each (R16), in the tables' order: the book does not
+                tie a Technique or a Ritual to a style, so nothing is hidden. */}
+            <Text style={styles.label}>{t('ui.creation.learn.techniques')}</Text>
+            {techniques.map((tech) => (
               <MenuButton
-                key={item.id}
-                testID={`kit-${item.id}`}
-                title={`${c.kitItemId === item.id ? '* ' : ''}${item.item}`}
-                note={item.priceGp === null ? `${item.priceSp ?? 0} SP` : `${item.priceGp} GP`}
-                line=""
-                onPress={() => dispatch({ type: 'creation.kit', id: item.id })}
+                key={tech.id}
+                testID={`technique-${tech.id}`}
+                title={`${c.techniqueIds.includes(tech.id) ? '* ' : ''}${tech.name}`}
+                note={`${tech.cost}`}
+                line={tech.effect}
+                onPress={() => dispatch({ type: 'creation.technique', id: tech.id })}
+              />
+            ))}
+            <Text style={styles.label}>{t('ui.creation.learn.rituals')}</Text>
+            {rituals.map((rite) => (
+              <MenuButton
+                key={rite.id}
+                testID={`ritual-${rite.id}`}
+                title={`${c.ritualIds.includes(rite.id) ? '* ' : ''}${rite.name}`}
+                note={`${rite.cost}`}
+                line={rite.effect}
+                onPress={() => dispatch({ type: 'creation.ritual', id: rite.id })}
               />
             ))}
           </Step>
@@ -278,12 +329,17 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
               <Value label={t('ui.attr.luck')} value={c.luck?.current ?? 0} />
               <Value label={t('ui.attr.gold')} value={c.status?.gold ?? 0} />
             </View>
-            <Text style={styles.reading}>
-              {c.techniqueIds
-                .map((id) => techniqueById(id)?.name)
+            <Text style={styles.label}>{t('ui.creation.ready.learned')}</Text>
+            <Text testID="ready-learned" style={styles.reading}>
+              {[
+                ...c.techniqueIds.map((id) => techniqueById(id)?.name),
+                ...c.ritualIds.map((id) => ritualById(id)?.name),
+              ]
                 .filter((n): n is string => n !== undefined)
                 .join(' · ')}
             </Text>
+            <Text style={styles.label}>{t('ui.creation.ready.carrying')}</Text>
+            <Text testID="ready-carrying" style={styles.reading}>{equipmentOf(c).join(' · ')}</Text>
           </Step>
         ) : null}
 
