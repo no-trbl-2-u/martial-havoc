@@ -165,6 +165,96 @@ not from that pass: they are the carry-overs the `/march` loop of
 - suggested fix: Settle it in docs/rules/readings/discrepancies.md - either widen I-38b to name three, or note that I-41's second route is superseded - then bring treasures.json's knownFrom into line. Rule 6 keeps the correction its own change, never a side effect of a phase.
 - source: agent
 
+### [MED] apps/app — "Both" and the Woodgatherer band are fought one after another, not as multiple combat (R35)
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: The Attendants room's 5-6 row brings the Skillful Beast and the Dexterous Ghost together, and the mountain's 1-3 row brings a band of Woodgatherers (I-05b). The engine has multiple combat (roundAgainstMany, skillForFight, attackersThisRound) but the CombatScreen fights one foe at a time; the reducer queues the second foe as pending and the Master fights them in sequence at full SKILL.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Give CombatScreen a many-foes mode over packages/engine/src/multiple: SKILL reduced by headcount, one Master roll against each attacker up to ATTACK, and start it from cave.fight when pending holds more than one foe.
+- source: user
+
+### [MED] apps/app — the Oracle is not asked how many Devil servants there are (I-34)
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: Rows with count 'oracle' (Cave entrance 1, Dining Hall 1-4, Storage room, Kitchen) leave the number to the caller; the reducer fights exactly one Devil servant. The book says use the Oracle's No. of enemies row.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Roll the Oracle's No. of enemies row in doTurn when the encounter's count is 'oracle', push that many servant ids onto pending, and show the roll on the card as a third die.
+- source: user
+
+### [MED] apps/app — the adventure’s flags are saved but nothing on the beat sets them (I-45, I-40, I-41)
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: night (the gourd opened), junior-king-asleep (wine), cord-spells-known (the Old Vixen met kindly, or the sheets) are declared in flags.json and carried in the record, but no menu row toggles them, so the absence rule (Ogres absent by night) never fires and the Cord is never usable.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Add menu rows where the book allows the act: OPEN THE GOURD once held (toggles night; label reading I-45), and set cord-spells-known from learnFrom's sources; wine and the nap wait for the sandbox's market.
+- source: user
+
+### [LOW] apps/app — the Devil servant’s LOOT on a 6 is recorded as nothing (I-08)
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: The printed row is a warning-triangle icon with no text; the loot record carries hint: true and the reducer takes nothing and writes no deed. The reading says the 6 reveals a Hint, but which area's is unstated.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Reveal the Hint of the area the servant was met in (revealHint on cave.area) and say so on the result slip with cite I-08.
+- source: user
+
+### [LOW] apps/app — the region diagram’s labels overlap
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: visual
+- observation: At 390px two MOUNTAIN labels sit on top of each other and one covers a 12 MI badge; the FOREST label overlaps its own circle (design/screenshots/16-region.png).
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Offset a label to the opposite side of its point when its box would intersect a neighbour's, and keep mile badges above their link's midpoint.
+- source: user
+
+### [LOW] apps/app — the header title wraps to two lines now that ABOUT is a fifth nav button
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: visual
+- observation: THE 5 TREASURES breaks after THE 5 at 390px, and the place line wraps under it, so the header is three lines tall on every screen.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Let the nav wrap to a second row before the title does (flexBasis on the title slip), or drop the tracking on the title by a point.
+- source: user
+
+### [LOW] apps/app — the rules panel lists raw behaviour ids
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: content
+- observation: Rows read dice.d6, creation.initial-values, combat.opponent-proficiency-is-the-higher. Deliberate as the registry's key, but a player sees developer text.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Give each behaviour note a printed title in app.behaviour-notes and show the id under it in mono.
+- source: user
+
+### [LOW] apps/app — the roll card covers the beat’s rolls, not the fight’s
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: ux
+- observation: ROLL THE ROUND still rolls inline with the fight's own MY DICE slip; the operator's card (design/roll-modal) only serves the Event roll on the beat. A two-sided card (the Master's dice and the foe's) was named as follow-up work.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Design the two-sided card on the canvas first (both sides' dice tumble, the difference lands), then route combat.round through it.
+- source: user
+
+### [MED] docs/campaigns/the-5-treasures — no full proofread of the docs against the PDF has been done (VISION.md)
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: VISION.md requires the adventure verbatim. The docs are pdf-parse transcriptions with folio citations; page a1's opening and the eight descriptions were spot-checked against docs/sources/The-5-treasures.extracted.txt and match, but the Hints, the stat blocks, the treasures' effects and the rulebook's tables have not been read side by side with the PDFs.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: A read-only pass: diff every quoted block in docs/campaigns and docs/rules against the extracted text, file each mismatch as its own docs correction (rule 9: correcting docs is never a side effect of shipping a phase).
+- source: user
+
 ## Done
 
 ### [MED] general — Workers Builds fails off main with no log, config verified
