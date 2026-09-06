@@ -36,12 +36,21 @@ test('a Master is made by walking the book’s order', async ({ page }) => {
   await expect(page.getByTestId('attr-luck')).toHaveText('-')
   await expect(page.getByTestId('attr-gold')).toHaveText('-')
 
-  // R02, R03 — standing and its gold. One tap rolls both.
+  // R01 — an age beside the name.
+  await page.getByTestId('creation-age').fill('27')
+
+  // R02, R03 — standing and its gold. One tap rolls both, and the kit
+  // is chosen on the same page of the book: clothing given, a weapon
+  // typed, one item picked (the Health Elixir the rule names).
   await page.getByTestId('creation-roll-master').click()
   await expect(page.getByTestId('creation-standing')).toBeVisible()
+  await expect(page.getByTestId('step-kit')).toBeVisible()
+  await page.getByTestId('creation-weapon').fill('Spear')
+  await page.getByTestId('kit-market.common.health-elixir').click()
+  await page.getByTestId('creation-next').click()
 
   // R04, R05 — the three numbers, in the printed order.
-  await page.getByTestId('creation-roll-master').or(button(page, 'ROLL')).first().click()
+  await button(page, 'ROLL').first().click()
   await expect(page.getByTestId('creation-skill')).toBeVisible()
   const skill = Number(await page.getByTestId('creation-skill').innerText())
   const endurance = Number(await page.getByTestId('creation-endurance').innerText())
@@ -61,15 +70,22 @@ test('a Master is made by walking the book’s order', async ({ page }) => {
   await expect(page.getByTestId('step-training')).toBeVisible()
   await page.getByTestId('creation-training-plus').click()
   await expect(page.getByTestId('creation-training')).toHaveText('1')
-  await expect(page.getByText(/1 OF 3 · SKILL/)).toBeVisible()
+  await expect(page.getByText(/^1 · SKILL/)).toBeVisible()
   await page.getByTestId('creation-next').click()
 
   // R10, D06 — the Proficiency pool is the ROLLED SKILL, before Training.
   await expect(page.getByTestId('creation-pool')).toHaveText(`0 OF ${skill} SPENT`)
-  await page.getByTestId('creation-next').click() // to the kit
+  await page.getByTestId('creation-next').click() // to Techniques and Rituals
+
+  // R14, R16 — both tables, whole, priced; a Ritual bought with the point.
+  await expect(page.getByTestId('creation-resources')).toHaveText('0 OF 4 RESOURCE POINTS')
+  await page.getByTestId('ritual-ritual.acupuncture').click()
+  await expect(page.getByTestId('creation-resources')).toHaveText('1 OF 4 RESOURCE POINTS')
   await page.getByTestId('creation-next').click() // to ready
 
   await expect(page.getByTestId('step-ready')).toBeVisible()
+  await expect(page.getByTestId('ready-carrying')).toHaveText('common clothing · Spear · Health Elixir')
+  await expect(page.getByTestId('ready-learned')).toHaveText('Acupuncture')
   await page.getByTestId('creation-begin').click()
 
   // The made Master is the one now playing.
@@ -82,6 +98,7 @@ test('creation reports an overspend and still lets the Master begin', async ({ p
   await page.goto('/')
   await page.getByTestId('title-start').click()
   await page.getByTestId('creation-roll-master').click()
+  await page.getByTestId('creation-next').click() // past the kit
   await button(page, 'ROLL').first().click()
   await button(page, 'ROLL').first().click()
   await page.getByTestId('creation-next').click() // past training, to the spend
@@ -90,7 +107,7 @@ test('creation reports an overspend and still lets the Master begin', async ({ p
   // engine reports the numbers and never refuses.
   const plus = page.locator('[data-testid$="-plus"]').first()
   for (let i = 0; i < 14; i += 1) await plus.click()
-  await expect(page.getByTestId('creation-flags')).toContainText('overspent by')
+  await expect(page.getByTestId('creation-flags')).toContainText('over by')
 
   await page.getByTestId('creation-next').click()
   await page.getByTestId('creation-next').click()

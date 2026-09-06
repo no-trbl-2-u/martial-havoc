@@ -1,5 +1,5 @@
 /**
- * Making a Master, in the book's order (MH p.5-21, R02-R19).
+ * Making a Master, in the book's order (MH p.5-19, R01-R19).
  *
  * The engine exports one function per rule and one `createMaster` that
  * runs them all at once. The screen uses the **per-rule** functions,
@@ -7,17 +7,21 @@
  * sequence of moments — you roll your standing, you see it, you roll
  * your numbers, you see those — and `createMaster` consumes every die
  * in one call, which cannot be shown a step at a time. The composite
- * stays the right tool for a test or a preset; this is the right tool
- * for a player.
+ * stays the right tool for a test; this is the right tool for a player.
  *
  * Everything here is pure. The dice arrive as an argument, the state
  * goes in and a new state comes out, and nothing is validated away:
  * `spec.md` is explicit that creation **reports and never refuses**, so
  * an overspent pool is a flag on the way past, not a blocked button.
+ *
+ * What a flag *is* comes from the engine's own reports
+ * (`spendProficiencies`, `spendResources`): the pool, the cap of 4
+ * (R11), a name the style does not carry. This module only turns those
+ * reports into the sentences the screen shows.
  */
 import {
+  COMMON_CLOTHING,
   chooseSocialStatus,
-  fixedAttribute,
   martialArtBySheetName,
   proficiencyPool,
   rollAttributes,
@@ -28,13 +32,16 @@ import {
   spendResources,
   training as buildTraining,
 } from '@martial-havoc/engine'
-import type { DiceSource } from '@martial-havoc/engine'
+import type { DiceSource, ProficiencyReport, ResourceReport } from '@martial-havoc/engine'
 import {
   canonicalIdForSheetName,
+  marketItemById,
   martialArtById,
   martialArts,
   presetById,
   presetNameResolution,
+  ritualById,
+  ritualByName,
   rituals,
   socialStatuses,
   techniqueById,
@@ -49,13 +56,11 @@ import type { CreationState, RolledAttribute, Sheet } from './types'
 /** The name a Master gets if the player never types one. */
 export const DEFAULT_NAME = 'A wandering master'
 
-/** Training points the screen offers. R15 sets no ceiling; this one is ours. */
-export const MAX_TRAINING = 3
-
 /** A creation that has been started and nothing more. */
 export const emptyCreation = (): CreationState => ({
   step: 'who',
   name: '',
+  age: '',
   presetId: null,
   status: null,
   skill: null,
@@ -65,12 +70,20 @@ export const emptyCreation = (): CreationState => ({
   training: 0,
   proficiencies: {},
   techniqueIds: [],
+  ritualIds: [],
+  weapon: '',
   kitItemId: null,
 })
 
 /** The martial art chosen or rolled so far, if any. */
 export const artOf = (c: CreationState): MartialArt | undefined =>
   c.martialArtId === null ? undefined : martialArtById(c.martialArtId)
+
+/** R01: the typed age as a number, or null when it is blank or not one. */
+export const ageOf = (c: CreationState): number | null => {
+  const n = Number.parseInt(c.age.trim(), 10)
+  return Number.isFinite(n) && n >= 0 ? n : null
+}
 
 /**
  * R02, R03 — the social band and its gold, in one roll.
@@ -114,7 +127,8 @@ export const rollArt = (c: CreationState, dice: DiceSource): CreationState => ({
  * R15's Training deduction is permanent and lands on the sheet, but it
  * does not shrink this pool; discrepancy D06 is exactly that question,
  * and the engine already takes the position. Reading it off `initial`
- * rather than `current` is how that position reaches the screen.
+ * rather than `current` is how that position reaches the screen. A
+ * printed sheet's `initial` is its implied rolled SKILL (`takePreset`).
  */
 export const pool = (c: CreationState): number =>
   c.skill === null ? 0 : proficiencyPool(c.skill.initial)
@@ -126,13 +140,43 @@ export const spentProficiency = (c: CreationState): number =>
 /** R16 — resource points, four per Training point. */
 export const resourcePool = (c: CreationState): number => buildTraining(c.training).resourcePool
 
-/** What the chosen Techniques cost against that pool. */
+/** What the chosen Techniques and Rituals cost against that pool (R16). */
 export const spentResources = (c: CreationState): number =>
-  c.techniqueIds.reduce((sum, id) => sum + (techniqueById(id)?.cost ?? 0), 0)
+  c.techniqueIds.reduce((sum, id) => sum + (techniqueById(id)?.cost ?? 0), 0) +
+  c.ritualIds.reduce((sum, id) => sum + (ritualById(id)?.cost ?? 0), 0)
 
 /** SKILL after R15's deduction — what the sheet will carry. */
 export const skillAfterTraining = (c: CreationState): number =>
   c.skill === null ? 0 : c.skill.current - c.training
+
+/** The names the tables give the learned ids, for the engine's spend. */
+const learnedNames = (c: CreationState) => ({
+  techniques: c.techniqueIds.flatMap((id) => {
+    const name = techniqueById(id)?.name
+    return name === undefined ? [] : [name]
+  }),
+  rituals: c.ritualIds.flatMap((id) => {
+    const name = ritualById(id)?.name
+    return name === undefined ? [] : [name]
+  }),
+})
+
+/**
+ * The engine's own report on the Proficiency spend (R10, R11), or null
+ * before a Martial Art exists to spend against. Names go through the
+ * sheet-name resolution map, so San Te's printed "Non lethal combat" is
+ * Shaolin Quan's "Non-lethal combat" and not a stranger.
+ */
+export const proficiencyReport = (c: CreationState): ProficiencyReport | null => {
+  const art = artOf(c)
+  return art === undefined
+    ? null
+    : spendProficiencies(art, presetNameResolution)(pool(c))(c.proficiencies)
+}
+
+/** The engine's own report on the Resource spend (R16). */
+export const resourceReport = (c: CreationState): ResourceReport =>
+  spendResources(techniques, rituals, presetNameResolution)(resourcePool(c))(learnedNames(c))
 
 /**
  * Every way this Master is outside the printed limits, as sentences.
@@ -140,30 +184,30 @@ export const skillAfterTraining = (c: CreationState): number =>
  * Reported, never enforced. `spec.md`: the engine "reports the numbers
  * and never refuses" — Yin's own printed sheet overspends, so a build
  * that blocked an overspend could not load the author's own eight.
+ *
+ * Four flags, each a rule: the Proficiency pool (R10), the cap of 4
+ * (R11), a Proficiency the style does not carry (R10; R12 lets a Master
+ * act without one, so this is a note, not a fault), and the Resource
+ * pool (R16). The flag lines are content (agents.md rule 7): read by
+ * id, filled here.
  */
 export const flagsOf = (c: CreationState): readonly string[] => {
-  const art = artOf(c)
   const flags: string[] = []
-  const overProficiency = spentProficiency(c) - pool(c)
-  // The flag lines are content (agents.md rule 7): read by id, filled here.
-  if (overProficiency > 0) {
-    flags.push(fill(t('ui.creation.flag.proficiencies-overspent'), { n: overProficiency }))
+  const p = proficiencyReport(c)
+  if (p !== null && p.overBy > 0) {
+    flags.push(fill(t('ui.creation.flag.proficiencies-overspent'), { n: p.overBy, spent: p.spent, pool: p.pool }))
   }
-  const overResources = spentResources(c) - resourcePool(c)
-  if (overResources > 0) {
-    flags.push(fill(t('ui.creation.flag.techniques-overspent'), { n: overResources }))
-  }
-  if (c.training > 0 && skillAfterTraining(c) < 1) {
-    flags.push(fill(t('ui.creation.flag.training-below-one'), { skill: skillAfterTraining(c) }))
-  }
-  if (art !== undefined) {
-    const known = new Set(art.proficiencies.map((p) => p.toLowerCase()))
-    const strays = Object.keys(c.proficiencies).filter(
-      (name) => c.proficiencies[name] !== 0 && !known.has(name.toLowerCase()),
-    )
-    if (strays.length > 0) {
-      flags.push(fill(t('ui.creation.flag.stray-proficiencies'), { names: strays.join(', ') }))
+  if (p !== null) {
+    for (const breach of p.capBreaches) {
+      flags.push(fill(t('ui.creation.flag.proficiency-over-cap'), { name: breach.name, value: breach.value }))
     }
+    if (p.unknown.length > 0) {
+      flags.push(fill(t('ui.creation.flag.stray-proficiencies'), { names: p.unknown.join(', ') }))
+    }
+  }
+  const r = resourceReport(c)
+  if (r.overBy > 0) {
+    flags.push(fill(t('ui.creation.flag.techniques-overspent'), { n: r.overBy, spent: r.spent, pool: r.pool }))
   }
   return flags
 }
@@ -172,6 +216,10 @@ export const flagsOf = (c: CreationState): readonly string[] => {
 const techniqueIdFor = (onSheet: string): string | undefined =>
   canonicalIdForSheetName(onSheet) ?? techniqueByName(onSheet)?.id
 
+/** A printed Ritual name to its `ritual.*` id, likewise. */
+const ritualIdFor = (onSheet: string): string | undefined =>
+  canonicalIdForSheetName(onSheet) ?? ritualByName(onSheet)?.id
+
 /**
  * One of the eight printed sheets (MH p.91-92, R83), gold rolled.
  *
@@ -179,6 +227,16 @@ const techniqueIdFor = (onSheet: string): string | undefined =>
  * it here. Everything else is read as printed and never corrected —
  * including Yin's overspend, which is the proof that creation reports
  * rather than refuses.
+ *
+ * Two derivations, both the estate's (docs/world/pregenerated-masters.md):
+ *
+ * - The sheets print the **final** SKILL. R15 means the Proficiency
+ *   pool was the rolled one, which is that plus the Training bought, so
+ *   `skill.initial` is set to the implied rolled SKILL. That is what
+ *   makes Yin load flagged "10 of 9" as spec.md asks, and what stops
+ *   Golden Swallow and Sun Wukong being flagged for spends that fit.
+ * - Printed names ("Pluck the phoenix's Eye", "Guardians of the gate")
+ *   reach the tables through the name-resolution map.
  */
 export const takePreset = (
   c: CreationState,
@@ -190,23 +248,45 @@ export const takePreset = (
   const status = chooseSocialStatus(socialStatuses)(preset.status)
   const gold = status === undefined ? 0 : rollSpec(status.goldDice)(dice).sum
   const art = martialArtBySheetName(martialArts, presetNameResolution)(preset.martialArt)
+  const impliedRolledSkill = preset.skill + preset.training
   return {
     ...c,
     presetId,
     name: preset.name,
+    age: String(preset.age),
     status: { id: status?.id ?? '', name: preset.status, gold },
-    skill: { current: preset.skill, initial: preset.skill },
+    // `current` carries the printed SKILL plus Training so that
+    // `skillAfterTraining` lands back on the printed number.
+    skill: { current: impliedRolledSkill, initial: impliedRolledSkill },
     endurance: { current: preset.endurance, initial: preset.endurance },
     luck: { current: preset.luck, initial: preset.luck },
     martialArtId: art?.id ?? null,
-    training: 0,
+    training: preset.training,
     proficiencies: Object.fromEntries(preset.proficiencies.map((p) => [p.name, p.value])),
-    techniqueIds: preset.techniques
-      .map(techniqueIdFor)
-      .filter((id): id is string => id !== undefined),
+    techniqueIds: preset.techniques.map(techniqueIdFor).filter((id): id is string => id !== undefined),
+    ritualIds: preset.rituals.map(ritualIdFor).filter((id): id is string => id !== undefined),
+    // The sheets print their equipment whole; `finishCreation` copies
+    // the printed lines rather than these two fields.
+    weapon: '',
     kitItemId: null,
     step: 'ready',
   }
+}
+
+/**
+ * R02 — the equipment lines a made Master carries.
+ *
+ * "Common clothing; a weapon (even if not listed); a Health Elixir or an
+ * item from the Market costing less than 20 GP." A printed sheet's lines
+ * are copied as printed (R83); a made Master's are the rule's three,
+ * with the weapon and the item as chosen, and a blank left out.
+ */
+export const equipmentOf = (c: CreationState): readonly string[] => {
+  const preset = c.presetId === null ? undefined : presetById(c.presetId)
+  if (preset !== undefined) return [COMMON_CLOTHING.name, ...preset.equipment]
+  const weapon = c.weapon.trim()
+  const item = c.kitItemId === null ? undefined : marketItemById(c.kitItemId)?.item
+  return [COMMON_CLOTHING.name, ...(weapon === '' ? [] : [weapon]), ...(item === undefined ? [] : [item])]
 }
 
 /**
@@ -218,17 +298,8 @@ export const takePreset = (
  * not an error screen.
  */
 export const finishCreation = (c: CreationState): Sheet => {
-  const art = artOf(c)
-  const report =
-    art === undefined
-      ? null
-      : spendProficiencies(art, presetNameResolution)(pool(c))(c.proficiencies)
-  const learned = spendResources(techniques, rituals, presetNameResolution)(resourcePool(c))({
-    techniques: c.techniqueIds.flatMap((id) => {
-      const name = techniqueById(id)?.name
-      return name === undefined ? [] : [name]
-    }),
-  })
+  const report = proficiencyReport(c)
+  const learned = resourceReport(c).learned
   const skill = c.skill?.current ?? 7
   // A printed sheet is a transcription (R83, standing rule 9): its
   // Proficiencies keep the spelling the book gives them. A *made*
@@ -240,6 +311,8 @@ export const finishCreation = (c: CreationState): Sheet => {
   const endurance = c.endurance?.current ?? 14
   return {
     name: c.name.trim() === '' ? DEFAULT_NAME : c.name.trim(),
+    age: ageOf(c),
+    martialArtId: c.martialArtId,
     skill: skill - c.training,
     skillInitial: c.skill?.initial ?? skill,
     endurance,
@@ -252,6 +325,10 @@ export const finishCreation = (c: CreationState): Sheet => {
       printed || report === null
         ? Object.entries(c.proficiencies).map(([name, value]) => ({ name, value }))
         : report.assigned,
-    techniques: learned.learned.techniques.map((t) => t.id),
+    training: c.training,
+    techniques: learned.techniques.map((l) => l.id),
+    rituals: learned.rituals.map((l) => l.id),
+    equipment: equipmentOf(c),
+    xp: 0,
   }
 }
