@@ -17,8 +17,6 @@
  */
 import hooksFile from '../../data/campaigns/adventure-hooks.json'
 import foesFile from '../../data/campaigns/the-5-treasures-foes.json'
-import beatsFile from '../../data/campaigns/the-5-treasures-prototype-beats.json'
-import optionsFile from '../../data/campaigns/the-5-treasures-prototype-options.json'
 
 import metaFile from '../../data/campaigns/the-5-treasures/adventure.json'
 import eventsFile from '../../data/campaigns/the-5-treasures/events.json'
@@ -42,9 +40,7 @@ import type {
   AdventureTables,
   AdventureTreasure,
   Band,
-  Beat,
   D66Text,
-  MenuOption,
   Opponent,
 } from '../types'
 
@@ -61,19 +57,6 @@ export const treasureFoes: readonly Opponent[] = Object.freeze(
 )
 export const treasureFoeById = byId(treasureFoes)
 
-/** The prototype slice's areas: printed name, authored line (5T a1; ours). */
-export const prototypeBeats: readonly Beat[] = Object.freeze(beatsFile.records as readonly Beat[])
-/** The beat for one printed area number, or undefined outside the slice. */
-export const beatForArea = (area: number): Beat | undefined =>
-  prototypeBeats.find((b) => b.area === area)
-
-/** The prototype slice's menu, every entry with its action and its line. */
-export const prototypeOptions: readonly MenuOption[] = Object.freeze(
-  optionsFile.records as readonly MenuOption[],
-)
-export const optionById = byId(prototypeOptions)
-/** Every menu entry offered in one area, in printed order. */
-export const optionsForArea = inColumn(prototypeOptions, 'area')
 
 // ------------------------------------------------- The 5 Treasures, in format
 

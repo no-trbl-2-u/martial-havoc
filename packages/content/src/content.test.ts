@@ -43,16 +43,13 @@ const repoRoot = join(packageDir, '..', '..')
  * half-transcribed table impossible to ship.
  */
 const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
-  'app.strings': 239,
+  'app.strings': 303,
   // The rules panel's notes: one per engine behaviour (the label leg
   // checks the pairing; this only pins the count).
   'app.behaviour-notes': 109,
 
-  // The 5 Treasures: the nine foes as printed, and the prototype slice
-  // of three areas with their menus (design/prototype).
+  // The 5 Treasures: the nine foes as printed.
   'campaigns.the-5-treasures-foes': 9,
-  'campaigns.the-5-treasures-prototype-beats': 3,
-  'campaigns.the-5-treasures-prototype-options': 10,
 
   // The world: the lists a Master is built from and the tables the
   // sandbox is rolled on.

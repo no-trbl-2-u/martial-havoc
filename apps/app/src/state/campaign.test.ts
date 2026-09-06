@@ -24,12 +24,18 @@ const fresh = (): RecordState => newRecord(randomSource(() => 0.5))
 const played = (): RecordState => ({
   ...fresh(),
   screen: 'rules',
-  area: 3,
+  cave: {
+    ...fresh().cave,
+    area: 'area.the-5-treasures.attendants-room',
+    visited: ['area.the-5-treasures.flat-top-mountain', 'area.the-5-treasures.attendants-room'],
+    treasures: ['treasure.the-5-treasures.vase-of-muttonfat-jade'],
+    defeated: ['foe.dexterous-ghost'],
+    keys: ['key.the-5-treasures.private-quarter'],
+  },
   sheet: { ...fresh().sheet, endurance: 11, dishonor: 2, gold: 30 },
   deeds: ['forced the gate', 'faced the Ghost'],
   passages: ['Tea things behind glass.'],
   overrides: 4,
-  held: ['vase-of-muttonfat-jade'],
 })
 
 /**
@@ -71,12 +77,10 @@ describe('the durable half of a session', () => {
     expect(cave?.treasures).toEqual(['treasure.the-5-treasures.vase-of-muttonfat-jade'])
   })
 
-  it('claims nothing the session never said', () => {
-    // The prototype tracks two of the eleven adventure fields. The rest
-    // start empty rather than being guessed at.
+  it('carries the whole adventure state, as the engine keeps it', () => {
     const cave = toCampaign(played()).adventures[ADVENTURE_ID]
-    expect(cave?.defeated).toEqual([])
-    expect(cave?.keys).toEqual([])
+    expect(cave?.defeated).toEqual(['foe.dexterous-ghost'])
+    expect(cave?.keys).toEqual(['key.the-5-treasures.private-quarter'])
     expect(cave?.hints).toEqual([])
   })
 })
@@ -85,11 +89,10 @@ describe('laying a campaign back over a session', () => {
   it('round-trips every durable field', () => {
     const before = played()
     const after = fromCampaign(toCampaign(before), fresh())
-    expect(after.area).toBe(before.area)
+    expect(after.cave).toEqual(before.cave)
     expect(after.deeds).toEqual(before.deeds)
     expect(after.passages).toEqual(before.passages)
     expect(after.overrides).toBe(before.overrides)
-    expect(after.held).toEqual(before.held)
     expect(after.sheet.endurance).toBe(11)
     expect(after.sheet.dishonor).toBe(2)
     expect(after.sheet.gold).toBe(30)
@@ -121,7 +124,7 @@ describe('the two-key save', () => {
     save(played(), AT)
     const opened = load(fresh())
     expect(opened.overrides).toBe(4)
-    expect(opened.area).toBe(3)
+    expect(opened.cave.area).toBe('area.the-5-treasures.attendants-room')
     expect(opened.deeds).toHaveLength(2)
     expect(opened.screen).toBe('rules')
   })

@@ -99,6 +99,14 @@ Later UI phases carry their own version marker.
       checklist, every agent-checkable line ticked. The one line left
       open is the operator's own: installing it to a phone.
 
+- [x] Phase 8c — The cave, verbatim (brief: `phase_8c_the_cave_verbatim.md`;
+      the operator's call 2026-09-06, see `VISION.md`). The beat plays
+      the eight areas over `packages/engine/src/adventure`: the printed
+      description, Encounters line and gated Hint; the Event roll on
+      every entry, on the roll card; the LOOT lines; the Monk; the
+      sheets; the ending act. The hand-authored slice and its invented
+      checks are gone. — 89bb9a4
+
 **The milestone (phase 10, by 2026-12-05):**
 - [ ] Phase 10 — The cave played to its ending `[needs-user-call]`
 

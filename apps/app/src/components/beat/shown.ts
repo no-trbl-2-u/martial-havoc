@@ -10,8 +10,8 @@
  *
  * Every string comes from the content package (`t`); nothing here is
  * copy (agents.md rule 7). Every citation comes from the engine's own
- * behaviour registry via `citeOf`, so a slip can never print a cite
- * the engine does not claim.
+ * behaviour registry via `citeOf` or from the adventure's folio, so a
+ * slip can never print a cite the engine does not claim.
  */
 import { t } from '@martial-havoc/content'
 import type { Die as DieFace, Label } from '@martial-havoc/engine'
@@ -29,9 +29,17 @@ export type ShownResult = {
   readonly b: DieFace | null
   /** The big number, or the short text that stands in for one. */
   readonly total: string
-  /** The line under it: what the roll was against. */
+  /** The line under it: what the roll was against, or what it brought. */
   readonly against: string
   readonly cite: string
+}
+
+/** What a turn's Event brought, worded. */
+const brought = (r: Extract<Result, { kind: 'turn' }>): string => {
+  if (r.foes.length > 0) return fill(t('ui.cave.event.met'), { names: r.foes.join(', ') })
+  if (r.hint) return t('ui.cave.event.hint')
+  if (r.event === 'safe') return t('ui.cave.event.safe')
+  return t('ui.cave.event.nothing')
 }
 
 /** Map one result and the sheet it happened to onto what a slip shows. */
@@ -85,20 +93,42 @@ export const shown = (r: Result, sheet: RecordState['sheet']): ShownResult => {
         pill: 'I-38',
         a: null,
         b: null,
-        total: t(`ui.treasure.${r.treasure}`),
+        total: r.treasure,
         against: fill(t('ui.result.take.against'), { n: r.held }),
         cite: t('ui.result.take.cite'),
       }
-    case 'treasure':
+    case 'turn':
       return {
-        title: fill(t('ui.result.treasure.title'), { face: r.face }),
+        title: fill(t('ui.cave.event.title'), { event: r.eventText.toUpperCase() }),
         label: 'rule',
-        pill: citeOf('progression.treasure-band-by-endurance'),
+        pill: t('ui.cave.cite.a1'),
+        a: r.eventFace,
+        b: r.encounterFace,
+        total: r.eventText,
+        against: brought(r),
+        cite: fill(t('ui.cave.event.cite'), { area: r.area }),
+      }
+    case 'loot':
+      return {
+        title: fill(t('ui.cave.loot.title'), { name: r.foe.toUpperCase() }),
+        label: 'rule',
+        pill: t('ui.cave.cite.a2'),
         a: r.face,
         b: null,
+        total: r.treasure ?? r.item,
+        against: r.treasure === null ? (r.key ? t('ui.cave.loot.key') : t('ui.cave.loot.item')) : t('ui.cave.loot.treasure'),
+        cite: t('ui.cave.loot.cite'),
+      }
+    case 'note':
+      return {
+        title: r.title,
+        label: r.label,
+        pill: r.cite,
+        a: null,
+        b: null,
         total: r.text,
-        against: fill(t('ui.result.treasure.against'), { band: r.band }),
-        cite: t('ui.result.treasure.cite'),
+        against: '',
+        cite: r.cite,
       }
   }
 }
