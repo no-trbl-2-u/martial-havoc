@@ -124,7 +124,7 @@ references actually exists. If missing:
 ```bash
 git add plan/phases/phase_<N>_<topic>.md
 git commit -m "$(cat <<'EOF'
-phases: brief for phase <N> — <topic>
+plan: brief for phase <N> — <topic>
 
 - Routes locked: <list>.
 - N decisions resolved upfront (see brief).

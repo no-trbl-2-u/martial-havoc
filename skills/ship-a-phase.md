@@ -291,7 +291,7 @@ git push origin main
 ```
 
 If you generated a brief in step 2, that's a separate prior
-commit (subject `phases: brief for phase <N>`).
+commit (subject `plan: brief for phase <N>`).
 
 ### Step 12 — Confirm deploy
 
