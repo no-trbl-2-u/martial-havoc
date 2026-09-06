@@ -56,7 +56,7 @@ re-opening it would be a different question.
 |---|---|---|---|
 | **A** | **Scroll** — the shipped prototype. Line, result, scrolling menu, roll bar at the foot. | The authored line is the point; the player reads before they act. | The menu can fall below the fold on a long line; the primary action is a thumb-stretch from the top of the page. |
 | **B** | **Sheet** — the line scrolls alone in the upper page; the menu is a fixed bottom sheet of full-width rows above the roll bar; the result overlays the top of the sheet. | Everything actionable lives in the bottom third, where the thumb is. Nothing the player can press ever scrolls away. | The line gets less room; the result covers part of the menu when it lands. |
-| **C** | **Ledger** — the beat is a running transcript: the line, then every result appended beneath it as a ledger row. The menu is a compact two-column grid above the roll bar. | The screen *is* the campaign record, growing. A player can see the last four rolls without leaving the beat. | Denser; the newest result is not always in the same place; two-column menu rows truncate longer titles. |
+| **C** | **Ledger** — the line, the result slip, then the deeds already done here as a running transcript beneath it. The menu is a compact two-column grid above the roll bar. | The screen *is* the campaign record, growing. A player can see the last four deeds without leaving the beat. | Denser; the transcript competes with the result slip for the middle of the page; two-column menu rows drop each option's note and truncate longer titles. |
 
 Each is a component in `apps/app/src/layouts/`, composing the shared
 pieces extracted to `apps/app/src/components/beat/`. Extracting first

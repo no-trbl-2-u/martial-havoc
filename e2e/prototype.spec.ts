@@ -171,3 +171,33 @@ test('the frame never scrolls sideways at phone width', async ({ page }) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
   expect(overflow).toBeLessThanOrEqual(1)
 })
+
+/**
+ * Phase 8a: all three candidate layouts serve the same working beat.
+ *
+ * The operator is picking between arrangements, so what has to hold is
+ * that none of them is broken: each renders the authored line, offers
+ * the menu, and resolves the same named roll to the same result. The
+ * structure is asserted; the pixels are not (that is `npm run
+ * screenshots`, deliberately not a verify leg).
+ */
+for (const layout of ['a', 'b', 'c'] as const) {
+  test(`layout ${layout} serves a working beat with the same result`, async ({ page }) => {
+    await page.goto(`/?layout=${layout}&dice=4,6`)
+    await expect(page.getByTestId(`layout-${layout}`)).toBeVisible()
+    await expect(page.getByTestId('authored-line')).toBeVisible()
+    await page.getByRole('button', { name: /FORCE THE SHUT GATE/ }).click()
+    await expect(page.getByText('SKILL CHECK · PASSED')).toBeVisible()
+    await expect(page.getByTestId('result-total')).toHaveText('10')
+  })
+
+  test(`layout ${layout} never scrolls sideways at phone width`, async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto(`/?layout=${layout}`)
+    await expect(page.getByTestId(`layout-${layout}`)).toBeVisible()
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - window.innerWidth,
+    )
+    expect(overflow).toBeLessThanOrEqual(1)
+  })
+}
