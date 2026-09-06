@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../schema/content.schema.json",
+  "$comment": "The adventure's one procedure: 'Event table, roll every time you enter an area'. Written in the existing `band` shape, which already says 'a banded roll whose whole content is one label'; totals are listed explicitly so nothing parses a range at runtime. The two notes printed under the table are not rows: 'for Event=1,2,3 roll for the creature encountered in the area' is the encounters file, and 'read this part only if your PG gets information about the area or with Event roll=Hint' is the areas file's gated hint.",
+  "id": "campaigns.the-5-treasures.events",
+  "kind": "list",
+  "title": "The 5 Treasures: event table",
+  "cite": "5T a1",
+  "label": "rule",
+  "docs": "docs/campaigns/the-5-treasures/event-table.md",
+  "records": [
+    { "id": "event.the-5-treasures.ambush", "cite": "5T a1", "table": "the-5-treasures.event", "dice": "1d6", "totals": [1], "text": "Ambush!" },
+    { "id": "event.the-5-treasures.encounter", "cite": "5T a1", "table": "the-5-treasures.event", "dice": "1d6", "totals": [2, 3], "text": "Encounter" },
+    { "id": "event.the-5-treasures.safe-exploration", "cite": "5T a1", "table": "the-5-treasures.event", "dice": "1d6", "totals": [4, 5], "text": "Safe exploration" },
+    { "id": "event.the-5-treasures.hint", "cite": "5T a1", "table": "the-5-treasures.event", "dice": "1d6", "totals": [6], "text": "Hint" }
+  ]
+}

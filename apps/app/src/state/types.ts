@@ -114,7 +114,15 @@ export type Combat = {
 /** The rules panel's filter: every label, or one. */
 export type Filter = 'all' | Label
 
-/** The whole record. `version` gates the persisted shape. */
+/**
+ * The whole record: the campaign and the session together, at runtime.
+ *
+ * Only the campaign half is durable, and the engine owns its shape and
+ * its migrations (`CampaignRecord`); `./campaign.ts` maps between the
+ * two and `./persist.ts` writes them under separate keys. `version` is
+ * this runtime shape's own tag, not the save format's - a saved
+ * campaign's version lives on the record the engine wrote.
+ */
 export type RecordState = {
   readonly version: 1
   readonly screen: Screen

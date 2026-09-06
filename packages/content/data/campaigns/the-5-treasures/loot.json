@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../schema/content.schema.json",
+  "$comment": "The LOOT line of each of the nine stat blocks on page a2, one record per printed band. A line naming a single drop has no roll and carries `faces: []`. The Devil servant's 6 is the warning-triangle icon with no text at 5x: a Hint (I-08). `treasure` and `key` lift a drop out of plain text into something the engine can hold; `once` marks the drops that exist in one copy because the foe is one entity across several tables (I-33c). Both attendants carry the same key id: one key opens both Private Quarters, two copies because either may be met alone (I-07).",
+  "id": "campaigns.the-5-treasures.loot",
+  "kind": "list",
+  "title": "The 5 Treasures: loot",
+  "cite": "5T a2",
+  "label": "rule",
+  "docs": "docs/campaigns/the-5-treasures/foes.md",
+  "records": [
+    { "id": "loot.the-5-treasures.devil-servant.1", "cite": "5T a2", "adventure": "adventure.the-5-treasures", "foe": "foe.devil-servant", "faces": [1, 2, 3], "item": "junk", "treasure": null, "key": null, "hint": false, "once": false },
+    { "id": "loot.the-5-treasures.devil-servant.2", "cite": "5T a2", "adventure": "adventure.the-5-treasures", "foe": "foe.devil-servant", "faces": [4, 5], "item": "simple weapon", "treasure": null, "key": null, "hint": false, "once": false },
+    { "id": "loot.the-5-treasures.devil-servant.3", "cite": "5T a2", "reading": "I-08", "adventure": "adventure.the-5-treasures", "foe": "foe.devil-servant", "faces": [6], "item": "[warning-triangle icon, no text]", "treasure": null, "key": null, "hint": true, "once": false },
+
+    { "id": "loot.the-5-treasures.dexterous-ghost.1", "cite": "5T a2", "reading": "I-07", "adventure": "adventure.the-5-treasures", "foe": "foe.dexterous-ghost", "faces": [], "item": "private quarter's key", "treasure": null, "key": "key.the-5-treasures.private-quarter", "hint": false, "once": false },
+    { "id": "loot.the-5-treasures.skillful-beast.1", "cite": "5T a2", "reading": "I-07", "adventure": "adventure.the-5-treasures", "foe": "foe.skillful-beast", "faces": [], "item": "private quarter's key", "treasure": null, "key": "key.the-5-treasures.private-quarter", "hint": false, "once": false },
+
+    { "id": "loot.the-5-treasures.junior-king-silver-horn.1", "cite": "5T a2", "reading": "I-33c", "adventure": "adventure.the-5-treasures", "foe": "foe.junior-king-silver-horn", "faces": [], "item": "seven-star sword", "treasure": "treasure.the-5-treasures.seven-star-sword", "key": null, "hint": false, "once": true },
+    { "id": "loot.the-5-treasures.senior-king-golden-horn.1", "cite": "5T a2", "adventure": "adventure.the-5-treasures", "foe": "foe.senior-king-golden-horn", "faces": [], "item": "Plantain fan", "treasure": "treasure.the-5-treasures.plantain-fan", "key": null, "hint": false, "once": true },
+    { "id": "loot.the-5-treasures.old-vixen.1", "cite": "5T a2", "adventure": "adventure.the-5-treasures", "foe": "foe.old-vixen", "faces": [], "item": "Dazzling Golden Cord", "treasure": "treasure.the-5-treasures.dazzling-golden-cord", "key": null, "hint": false, "once": true },
+
+    { "id": "loot.the-5-treasures.ogre.1", "cite": "5T a2", "adventure": "adventure.the-5-treasures", "foe": "foe.ogre", "faces": [], "item": "Spear", "treasure": null, "key": null, "hint": false, "once": false },
+    { "id": "loot.the-5-treasures.woodgatherer.1", "cite": "5T a2", "reading": "I-43b", "adventure": "adventure.the-5-treasures", "foe": "foe.woodgatherer", "faces": [], "item": "Great Bear scripture [recited keeps beasts away]", "treasure": null, "key": null, "hint": false, "once": false },
+
+    { "id": "loot.the-5-treasures.monk.1", "cite": "5T a2", "reading": "I-64", "adventure": "adventure.the-5-treasures", "foe": "foe.monk", "faces": [1, 2], "item": "rosary", "treasure": null, "key": null, "hint": false, "once": false },
+    { "id": "loot.the-5-treasures.monk.2", "cite": "5T a2", "adventure": "adventure.the-5-treasures", "foe": "foe.monk", "faces": [3, 4], "item": "baoding balls", "treasure": null, "key": null, "hint": false, "once": false },
+    { "id": "loot.the-5-treasures.monk.3", "cite": "5T a2", "reading": "I-64", "adventure": "adventure.the-5-treasures", "foe": "foe.monk", "faces": [5, 6], "item": "elixir", "treasure": null, "key": null, "hint": false, "once": false }
+  ]
+}

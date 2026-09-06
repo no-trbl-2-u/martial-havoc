@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schema/content.schema.json",
+  "$comment": "The per-area encounter tables: 'for Event=1,2,3 roll for the creature encountered in the area' (5T a1). One record per printed band. Three areas print no dice - Storage room and Kitchen ('Devil servants'), Women quarter ('Old Vixen and she-Devil servant') - and those are fixed encounters met on any Ambush or Encounter result, `faces: []` (I-34). The Chieftain quarter's 5-6 'Empty' meets nothing and the event degrades to Safe exploration (I-36). The Attendants room's 5-6 'Both' is two foes at once, a multiple combat (R35).",
+  "id": "campaigns.the-5-treasures.encounters",
+  "kind": "list",
+  "title": "The 5 Treasures: encounter tables",
+  "cite": "5T a1",
+  "label": "rule",
+  "docs": "docs/campaigns/the-5-treasures/areas.md",
+  "records": [
+    { "id": "encounter.the-5-treasures.flat-top-mountain.1", "cite": "5T a1", "reading": "I-05b", "adventure": "adventure.the-5-treasures", "area": 1, "faces": [1, 2, 3], "foes": ["foe.woodgatherer"], "count": "band", "empty": false },
+    { "id": "encounter.the-5-treasures.flat-top-mountain.2", "cite": "5T a1", "adventure": "adventure.the-5-treasures", "area": 1, "faces": [4, 5], "foes": ["foe.ogre"], "count": "one", "empty": false },
+    { "id": "encounter.the-5-treasures.flat-top-mountain.3", "cite": "5T a1", "reading": "I-33c", "adventure": "adventure.the-5-treasures", "area": 1, "faces": [6], "foes": ["foe.junior-king-silver-horn"], "count": "one", "empty": false },
+
+    { "id": "encounter.the-5-treasures.cave-entrance.1", "cite": "5T a1", "reading": "I-34", "adventure": "adventure.the-5-treasures", "area": 2, "faces": [1], "foes": ["foe.devil-servant"], "count": "oracle", "empty": false },
+    { "id": "encounter.the-5-treasures.cave-entrance.2", "cite": "5T a1", "adventure": "adventure.the-5-treasures", "area": 2, "faces": [2, 3, 4], "foes": ["foe.ogre"], "count": "one", "empty": false },
+    { "id": "encounter.the-5-treasures.cave-entrance.3", "cite": "5T a1", "reading": "I-33c", "adventure": "adventure.the-5-treasures", "area": 2, "faces": [5, 6], "foes": ["foe.junior-king-silver-horn"], "count": "one", "empty": false },
+
+    { "id": "encounter.the-5-treasures.attendants-room.1", "cite": "5T a1", "adventure": "adventure.the-5-treasures", "area": 3, "faces": [1, 2], "foes": ["foe.skillful-beast"], "count": "one", "empty": false },
+    { "id": "encounter.the-5-treasures.attendants-room.2", "cite": "5T a1", "adventure": "adventure.the-5-treasures", "area": 3, "faces": [3, 4], "foes": ["foe.dexterous-ghost"], "count": "one", "empty": false },
+    { "id": "encounter.the-5-treasures.attendants-room.3", "cite": "5T a1", "adventure": "adventure.the-5-treasures", "area": 3, "faces": [5, 6], "foes": ["foe.skillful-beast", "foe.dexterous-ghost"], "count": "one", "empty": false },
+
+    { "id": "encounter.the-5-treasures.dining-hall.1", "cite": "5T a1", "reading": "I-34", "adventure": "adventure.the-5-treasures", "area": 4, "faces": [1, 2, 3, 4], "foes": ["foe.devil-servant"], "count": "oracle", "empty": false },
+    { "id": "encounter.the-5-treasures.dining-hall.2", "cite": "5T a1", "reading": "I-33c", "adventure": "adventure.the-5-treasures", "area": 4, "faces": [5], "foes": ["foe.junior-king-silver-horn"], "count": "one", "empty": false },
+    { "id": "encounter.the-5-treasures.dining-hall.3", "cite": "5T a1", "adventure": "adventure.the-5-treasures", "area": 4, "faces": [6], "foes": ["foe.senior-king-golden-horn"], "count": "one", "empty": false },
+
+    { "id": "encounter.the-5-treasures.storage-room.1", "cite": "5T a1", "reading": "I-34", "adventure": "adventure.the-5-treasures", "area": 5, "faces": [], "foes": ["foe.devil-servant"], "count": "oracle", "empty": false },
+
+    { "id": "encounter.the-5-treasures.women-quarter.1", "cite": "5T a1", "reading": "I-34", "adventure": "adventure.the-5-treasures", "area": 6, "faces": [], "foes": ["foe.old-vixen", "foe.devil-servant"], "count": "one", "empty": false },
+
+    { "id": "encounter.the-5-treasures.kitchen.1", "cite": "5T a1", "reading": "I-34", "adventure": "adventure.the-5-treasures", "area": 7, "faces": [], "foes": ["foe.devil-servant"], "count": "oracle", "empty": false },
+
+    { "id": "encounter.the-5-treasures.chieftain-quarter.1", "cite": "5T a1", "adventure": "adventure.the-5-treasures", "area": 8, "faces": [1, 2, 3, 4], "foes": ["foe.senior-king-golden-horn"], "count": "one", "empty": false },
+    { "id": "encounter.the-5-treasures.chieftain-quarter.2", "cite": "5T a1", "reading": "I-36", "adventure": "adventure.the-5-treasures", "area": 8, "faces": [5, 6], "foes": [], "count": "none", "empty": true }
+  ]
+}

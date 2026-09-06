@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schema/content.schema.json",
+  "$comment": "The header of The 5 Treasures, the first adventure written in the adventure format (packages/content/schema/adventure-format.md). One record: the format version, the printed title, the premise paragraph verbatim, the area the Master starts in, and the credit line as printed on page a2.",
+  "id": "campaigns.the-5-treasures.adventure",
+  "kind": "list",
+  "title": "The 5 Treasures: the adventure",
+  "cite": "5T a1",
+  "label": "rule",
+  "docs": "docs/campaigns/the-5-treasures/premise.md",
+  "records": [
+    {
+      "id": "adventure.the-5-treasures",
+      "cite": "5T a1",
+      "version": "1",
+      "title": "THE 5 TREASURES",
+      "premise": "On the Flat-top mountain two fiends threaten the travellers: Senior King Gold Horn and Junior King Silver Horn, human eater demons. In the Lotus Flower cave, where they live protected by devil servants, are kept 5 magic treasures.",
+      "startArea": "area.the-5-treasures.flat-top-mountain",
+      "credits": "An adventure for Martial Havoc"
+    }
+  ]
+}

@@ -12,7 +12,9 @@
 //   - Cloudflare Workers Builds, on every push (the repo is connected in
 //     the dashboard): Deploy command `npm run deploy` on the production
 //     branch, Version command `npm run deploy:version` on other branches.
-//     The commit comes from WORKERS_CI_COMMIT_SHA there.
+//     The commit comes from WORKERS_CI_COMMIT_SHA there. Neither command
+//     assumes a prior build step: the export is gitignored, so on a
+//     fresh checkout this builds it first.
 //   - The loop itself, right after `git push`, from a laptop with .env
 //     or a cloud runner with the variables in its environment. Both
 //     produce the same tagged version, so deploy:check matches whichever
@@ -48,8 +50,24 @@ if (!onWorkersBuilds) {
     process.exit(3)
   }
 }
-if (!existsSync('apps/app/dist/index.html')) {
-  console.error('deploy: apps/app/dist is empty — run `npm run build:web` first. Exit 3.')
+// The export is gitignored, so a fresh checkout has none — which is
+// exactly what Workers Builds hands us. Build it here rather than
+// demanding a prior step: a deploy command that only works when
+// something else ran first is a command that fails on every clean
+// machine, and it did (every non-production branch build, before this).
+// When the export is already there (the loop's own path, right after
+// `npm run verify`) this is skipped, so nothing is built twice.
+const EXPORT = 'apps/app/dist/index.html'
+if (!existsSync(EXPORT)) {
+  console.log('deploy: no export yet — running `npm run build:web`.')
+  const built = spawnSync('npm', ['run', 'build:web'], { stdio: 'inherit', env: process.env })
+  if (built.status !== 0) {
+    console.error('deploy: `npm run build:web` failed. Exit 3.')
+    process.exit(3)
+  }
+}
+if (!existsSync(EXPORT)) {
+  console.error('deploy: apps/app/dist is still empty after `npm run build:web`. Exit 3.')
   process.exit(3)
 }
 

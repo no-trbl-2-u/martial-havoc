@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../schema/content.schema.json",
+  "$comment": "The five magic treasures, name and effect verbatim from the spoiler-gated section of page a2 ('Read this if you want to know the treasure's way of working'). Three are a foe's loot; the gourd and the vase are picked up by exploration, not loot (I-38). `knownFrom` is what reveals the effect short of holding the treasure: the Chieftain's scattered sheets explain two of them - the fan and the gourd, a guess (I-38b) - and the Old Vixen knows the Cord's spells (I-41). The printed name of the fan is 'Plantain Fan' here and 'Plantain fan' on the Senior King's LOOT line; both spellings are in the source and both are kept where they are printed.",
+  "id": "campaigns.the-5-treasures.treasures",
+  "kind": "list",
+  "title": "The 5 Treasures: the treasures",
+  "cite": "5T a2",
+  "label": "rule",
+  "docs": "docs/campaigns/the-5-treasures/treasures.md",
+  "records": [
+    {
+      "id": "treasure.the-5-treasures.gold-and-red-gourd",
+      "cite": "5T a2",
+      "reading": "I-38",
+      "adventure": "adventure.the-5-treasures",
+      "name": "Gold and red gourd",
+      "effect": "if opened it will swallow the sky, changing day to night. Close it to have the daylight back.",
+      "source": "area",
+      "sourceRef": "area.the-5-treasures.storage-room",
+      "knownFrom": ["area.the-5-treasures.chieftain-quarter"]
+    },
+    {
+      "id": "treasure.the-5-treasures.dazzling-golden-cord",
+      "cite": "5T a2",
+      "reading": "I-41",
+      "adventure": "adventure.the-5-treasures",
+      "name": "Dazzling Golden Cord",
+      "effect": "with a spell it moves to tie a person. Another spell unties. It can't be cut with normal weapons.",
+      "source": "loot",
+      "sourceRef": "foe.old-vixen",
+      "knownFrom": ["foe.old-vixen"]
+    },
+    {
+      "id": "treasure.the-5-treasures.vase-of-muttonfat-jade",
+      "cite": "5T a2",
+      "reading": "I-38",
+      "adventure": "adventure.the-5-treasures",
+      "name": "Vase of muttonfat jade",
+      "effect": "remove the label and call out a person's name, if they respond they'll be trapped inside.",
+      "source": "area",
+      "sourceRef": "area.the-5-treasures.attendants-room",
+      "knownFrom": []
+    },
+    {
+      "id": "treasure.the-5-treasures.plantain-fan",
+      "cite": "5T a2",
+      "reading": "I-38b",
+      "adventure": "adventure.the-5-treasures",
+      "name": "Plantain Fan",
+      "effect": "it creates magic-fire's waves inextinguishable using conventional methods.",
+      "source": "loot",
+      "sourceRef": "foe.senior-king-golden-horn",
+      "knownFrom": ["area.the-5-treasures.chieftain-quarter"]
+    },
+    {
+      "id": "treasure.the-5-treasures.seven-star-sword",
+      "cite": "5T a2",
+      "adventure": "adventure.the-5-treasures",
+      "name": "Seven-star sword",
+      "effect": "magical and indestructible weapon. It can block hits from stronger enemies without any effort from the holder.",
+      "source": "loot",
+      "sourceRef": "foe.junior-king-silver-horn",
+      "knownFrom": []
+    }
+  ]
+}

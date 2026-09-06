@@ -18,6 +18,8 @@ import {
   oracleLines,
   rituals,
   techniques,
+  theFiveTreasuresActs,
+  theFiveTreasuresAreas,
   unexpectedEventLineFor,
   unexpectedEventLines,
   unexpectedEvents,
@@ -30,8 +32,9 @@ const CLASSES = ['mechanical', 'combat-narrative', 'exploration', 'oracle-like',
 const TECHNIQUE_TIMINGS = ['immediate', 'combat-winner-option', 'scene']
 
 describe('the count (spec.md: readable from the build)', () => {
-  it('ships exactly 149 authored lines', () => {
-    expect(contentCounts().authoredLines).toBe(149)
+  it('ships exactly 162 authored lines', () => {
+    // Phase 4's 149, plus Phase 5's 8 area lines and 5 act markers.
+    expect(contentCounts().authoredLines).toBe(162)
   })
 
   it('is 72 effects, 66 Oracle lines and 11 Unexpected Event lines', () => {
@@ -39,6 +42,12 @@ describe('the count (spec.md: readable from the build)', () => {
     expect(oracleLines).toHaveLength(66)
     expect(unexpectedEventLines).toHaveLength(11)
     expect(effects.length + oracleLines.length + unexpectedEventLines.length).toBe(149)
+  })
+
+  it('adds the cave: one line per area and one per act marker', () => {
+    expect(theFiveTreasuresAreas).toHaveLength(8)
+    expect(theFiveTreasuresActs).toHaveLength(5)
+    expect(contentCounts().authoredLines).toBe(149 + 8 + 5)
   })
 })
 
