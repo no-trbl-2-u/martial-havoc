@@ -17,6 +17,12 @@ export default defineConfig({
   use: {
     baseURL: `http://127.0.0.1:${port}`,
     viewport: { width: 390, height: 844 },
+    // No page turn: the leaf (apps/app/src/components/Leaf.tsx) honours
+    // prefers-reduced-motion, so every screen change is instant and
+    // deterministic here. e2e/turn.spec.ts opts back in to prove the turn.
+    // Through `contextOptions`: the 1.56 runner has no `reducedMotion`
+    // fixture of its own and drops a top-level one on the floor.
+    contextOptions: { reducedMotion: 'reduce' },
     deviceScaleFactor: 2,
   },
   webServer: {

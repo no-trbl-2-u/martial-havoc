@@ -29,6 +29,12 @@ export default defineConfig({
     trace: 'retain-on-failure',
     // A phone-width viewport: the spec's target is a phone.
     viewport: { width: 390, height: 844 },
+    // No page turn: the leaf (apps/app/src/components/Leaf.tsx) honours
+    // prefers-reduced-motion, so every screen change is instant and
+    // deterministic here. e2e/turn.spec.ts opts back in to prove the turn.
+    // Through `contextOptions`: the 1.56 runner has no `reducedMotion`
+    // fixture of its own and drops a top-level one on the floor.
+    contextOptions: { reducedMotion: 'reduce' },
   },
   webServer: {
     command: `node scripts/serve-static.mjs apps/app/dist ${port}`,
