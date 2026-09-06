@@ -32,7 +32,7 @@ export const Source = ({ cite, wide = false, testID }: Props) => {
       testID={testID}
       onPress={() => setOpen((o) => !o)}
       hitSlop={6}
-      style={[styles.row, wide && styles.wide]}
+      style={[styles.row, open && styles.rowOpen, wide && styles.wide]}
     >
       <Text style={[styles.text, open && styles.open]}>{open ? cite : t('ui.source')}</Text>
     </Pressable>
@@ -40,7 +40,9 @@ export const Source = ({ cite, wide = false, testID }: Props) => {
 }
 
 const styles = StyleSheet.create({
-  row: { alignSelf: 'flex-end', flexShrink: 1 },
+  /** Folded, the word never wraps; unfolded, the citation may. */
+  row: { alignSelf: 'flex-end', flexShrink: 0 },
+  rowOpen: { flexShrink: 1 },
   wide: { alignSelf: 'stretch' },
   text: { fontFamily: font.mono, fontSize: 9, letterSpacing: 0.8, color: color.dim, textAlign: 'right' },
   open: { letterSpacing: 0, lineHeight: 14 },
