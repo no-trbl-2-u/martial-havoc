@@ -38,8 +38,12 @@
 
 ## Promoted
 
-(empty — populated as `/oversight` promotes candidates to the
-build plan)
+### [x] Reconcile VISION.md with the authored lines
+- promoted: 2026-09-06, the operator, in the session that wrote the
+  feel-of-play block; resolved as Phase 10a (`phase_10a_the_voice.md`)
+- resolution: the spec wins and is re-issued through `RE-SEED.md`;
+  the app has a named narrator (option 2), bounded by `plan/VOICE.md`;
+  `VISION.md` rewritten to carry the two voices.
 
 ## Rejected
 
