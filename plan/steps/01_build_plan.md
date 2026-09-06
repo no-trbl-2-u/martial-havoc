@@ -114,9 +114,9 @@ Later UI phases carry their own version marker.
 The first bucket of that verdict shipped as 2299932 and 34c5e63 (the
 area named, citations folded behind SOURCE, foe descriptions, the
 rules panel's titles, three lies fixed). What remains is phase-sized:
-- [ ] Phase 10a — The voice `[needs-user-call]` (brief:
-      `phase_10a_the_voice.md`; the root of the block; settles
-      `spec.md` against `VISION.md` through `/re-seed`)
+- [ ] Phase 10a — The voice (brief: `phase_10a_the_voice.md`; the
+      root of the block; the call was made 2026-09-06: a named
+      narrator, Old Ping; `plan/VOICE.md`, `VISION.md`, `RE-SEED.md`)
 - [ ] Phase 10b — The opening: the village as the Call (brief:
       `phase_10b_the_opening.md`)
 - [ ] Phase 10c — The three acts on screen (brief:
@@ -318,16 +318,16 @@ operator installs the web app to a phone.
 
 ### Phase 10a — The voice
 
-**Done when:** `spec.md` and `VISION.md` agree on whether the app may
-print a line of its own; `plan/VOICE.md` is the style guide; every
-result on the beat and in combat prints one marked authored line; the
-count is printed by the build.
-**Waits on:** the operator's call, then `/re-seed`
-**Cost:** one week of wiring after the call
+**Done when:** every result on the beat and in combat prints the
+narrator's line in his mark; the area and act lines print; a content
+test holds every line to `plan/VOICE.md`; the count is printed by the
+build.
+**Waits on:** nothing; the call is made
+**Cost:** one week of wiring
 
-The root of the feel-of-play block. Three options are put to the
-operator in the brief; the recommendation is sparse, marked, second
-person. MH p.3, p.27–28, p.81–89; 5T a1–a2.
+The root of the feel-of-play block. The operator chose a named
+narrator on 2026-09-06: Old Ping, the shuoshu of Fen Pass. MH p.3,
+p.27–28, p.49, p.81–89; 5T a1–a2.
 
 ### Phase 10b — The opening: the village as the Call
 
