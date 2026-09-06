@@ -85,4 +85,6 @@ export const newRecord = (dice: DiceSource): RecordState => ({
   incense: false,
   templeVisitedToday: false,
   villageNote: null,
+  importDraft: '',
+  importNote: null,
 })

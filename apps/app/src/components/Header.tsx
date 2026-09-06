@@ -1,4 +1,11 @@
-/** The header slip: the adventure, where the Master is, and the two panels. */
+/**
+ * The header slip: the adventure, where the Master is, and the panels.
+ *
+ * Four destinations at 390px is more than one row of buttons holds, so
+ * the nav wraps. Each is a toggle back to the beat, which keeps the
+ * whole app one tap from play — there is no back stack to get lost in
+ * because there is no router (phase 8 brief, decision 3).
+ */
 import { StyleSheet, Text, View } from 'react-native'
 import { t } from '@martial-havoc/content'
 import { color, font } from '../theme/tokens'
@@ -22,6 +29,11 @@ export const Header = ({ place, screen, onNav }: Props) => (
       <Button small text={t('ui.nav.rules')} onPress={() => onNav(screen === 'rules' ? 'beat' : 'rules')} />
       <Button
         small
+        text={t('ui.nav.record')}
+        onPress={() => onNav(screen === 'record' ? 'beat' : 'record')}
+      />
+      <Button
+        small
         text={t('ui.nav.village')}
         onPress={() => onNav(screen === 'village' ? 'beat' : 'village')}
       />
@@ -35,5 +47,5 @@ const styles = StyleSheet.create({
   title: { paddingVertical: 5, paddingHorizontal: 9, flexShrink: 1 },
   adventure: { fontFamily: font.sans, fontSize: 12, fontWeight: '800', letterSpacing: 1.7, color: color.ink },
   place: { fontFamily: font.mono, fontSize: 10, marginTop: 2, color: color.ink },
-  nav: { flexDirection: 'row', gap: 6 },
+  nav: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-end', gap: 6, flexShrink: 1 },
 })

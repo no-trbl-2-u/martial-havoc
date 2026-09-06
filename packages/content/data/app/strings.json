@@ -1011,6 +1011,136 @@
       "id": "ui.village.poor",
       "text": "Not enough money for {item}.",
       "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.record.place",
+      "text": "THE CAMPAIGN RECORD",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.nav.record",
+      "text": "RECORD",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.master.title",
+      "text": "THE MASTER",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.master.line",
+      "text": "{name} · {art}",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.counts",
+      "text": "{deeds} DEEDS · {passages} PASSAGES · {overrides} OVERRIDES",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.overrides.note",
+      "text": "An override is a roll you typed instead of rolled.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.deeds.title",
+      "text": "DEEDS",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.deeds.empty",
+      "text": "Nothing done yet.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.passages.title",
+      "text": "YOUR PASSAGES",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.passages.empty",
+      "text": "Nothing written yet.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.treasures.title",
+      "text": "TREASURES HELD",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.treasures.empty",
+      "text": "None of the five.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.export.title",
+      "text": "EXPORT",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.export.note",
+      "text": "The whole campaign as JSON. Copy it, or save the file.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.export.download",
+      "text": "SAVE THE FILE",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.import.title",
+      "text": "IMPORT",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.import.note",
+      "text": "Paste a campaign here. An older file is migrated forward, never refused for being old.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.import.placeholder",
+      "text": "Paste a saved campaign.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.import.do",
+      "text": "READ IT",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.import.ok",
+      "text": "Campaign read.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.import.migrated",
+      "text": "Campaign read, and migrated forward {n} step(s).",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.import.not-json",
+      "text": "That is not JSON.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.import.not-a-campaign",
+      "text": "That is not a Martial Havoc campaign.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.import.no-record",
+      "text": "That file carries no campaign.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.import.from-the-future",
+      "text": "That file is version {version}; this build reads {current}.",
+      "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.record.import.no-path",
+      "text": "No way to migrate a version {version} file.",
+      "cite": "spec.md, Horizon (the campaign record)"
     }
   ]
 }

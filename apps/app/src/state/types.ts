@@ -22,7 +22,14 @@ import type {
 } from '@martial-havoc/engine'
 
 /** The screens of the frame. */
-export type Screen = 'creation' | 'beat' | 'combat' | 'rules' | 'region' | 'village'
+export type Screen =
+  | 'creation'
+  | 'beat'
+  | 'combat'
+  | 'rules'
+  | 'region'
+  | 'village'
+  | 'record'
 
 /**
  * Where creation has got to, in the book's own order (R02-R19).
@@ -241,6 +248,10 @@ export type RecordState = {
   readonly templeVisitedToday: boolean
   /** The last thing the village said, or null. */
   readonly villageNote: VillageNote | null
+  /** What has been pasted into the import field, unread. */
+  readonly importDraft: string
+  /** What the last import attempt said, or null. Already worded. */
+  readonly importNote: string | null
 }
 
 /** Everything a screen may ask the record to do. */
@@ -280,3 +291,5 @@ export type Action =
   | { readonly type: 'village.temple' }
   | { readonly type: 'village.inn' }
   | { readonly type: 'village.trail' }
+  | { readonly type: 'record.draft'; readonly text: string }
+  | { readonly type: 'record.import' }

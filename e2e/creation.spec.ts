@@ -151,3 +151,53 @@ test('the village buys, recovers LUCK and rests, on the printed terms', async ({
   await page.getByTestId('village-go').click()
   await expect(page.getByTestId('beat')).toBeVisible()
 })
+
+/**
+ * The campaign record, its export and an import that migrates.
+ *
+ * The round-trip is the point: what the screen shows as JSON is what
+ * the screen can read back, on the same build, through the same engine
+ * functions Phase 6 shipped.
+ */
+test('the record shows what was played, and reads its own export back', async ({ page }) => {
+  await page.goto('/?dice=6,5,1,1')
+  await page.getByTestId('preset-preset.san-te').click()
+  await page.getByTestId('creation-begin').click()
+
+  // Do something worth recording: win a fight.
+  await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
+  await button(page, /FACE THE DEXTEROUS GHOST/).click()
+  await button(page, 'ROLL THE ROUND').click()
+  await page.getByTestId('act-strike').click()
+  await page.getByTestId('act-treasure').click()
+  await page.getByTestId('act-go-on').click()
+
+  await button(page, 'RECORD').click()
+  await expect(page.getByTestId('record')).toBeVisible()
+  await expect(page.getByTestId('place')).toHaveText('THE CAMPAIGN RECORD')
+  await expect(page.getByTestId('record-counts')).toContainText('1 DEEDS')
+  await expect(page.getByTestId('record-deeds')).toContainText('dexterous ghost')
+
+  // The export is the whole campaign, and it reads back.
+  const json = await page.getByTestId('record-json').inputValue()
+  expect(json).toContain('martial-havoc/campaign')
+  await page.getByTestId('record-paste').fill(json)
+  await page.getByTestId('record-read').click()
+  await expect(page.getByTestId('record-import-note')).toHaveText('Campaign read.')
+  await expect(page.getByTestId('record-counts')).toContainText('1 DEEDS')
+})
+
+test('an unreadable import says which kind of unreadable it was', async ({ page }) => {
+  await page.goto('/')
+  await page.getByTestId('preset-preset.san-te').click()
+  await page.getByTestId('creation-begin').click()
+  await button(page, 'RECORD').click()
+
+  await page.getByTestId('record-paste').fill('not json at all')
+  await page.getByTestId('record-read').click()
+  await expect(page.getByTestId('record-import-note')).toContainText('not JSON')
+
+  await page.getByTestId('record-paste').fill('{"hello":"world"}')
+  await page.getByTestId('record-read').click()
+  await expect(page.getByTestId('record-import-note')).toContainText('not a Martial Havoc campaign')
+})

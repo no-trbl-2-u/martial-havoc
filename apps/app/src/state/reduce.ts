@@ -17,35 +17,36 @@
 import {
   attackStrength,
   behaviours,
+  buy,
   d6,
   endsFight,
   escape,
   finalBlow,
+  fromSilver,
+  importJson,
   luckCheck,
   morale,
   nightsRest,
+  placeRunning,
   resolveRound,
   skillCheck,
   spendTechnique,
+  stayTheNight,
+  templeVisit,
+  toSilver,
   treasureBand,
   unexpectedEvent,
-  buy,
-  fromSilver,
-  placeRunning,
-  stayTheNight,
-  toSilver,
-  templeVisit,
 } from '@martial-havoc/engine'
 import type { DiceSource } from '@martial-havoc/engine'
 import {
   INCENSE_ID,
   effectFor,
+  market,
   optionById,
   optionsForArea,
   rollTreasure,
   rollUnexpectedEvent,
   t,
-  market,
   treasureFoeById,
   unexpectedEventLineFor,
   villagePlaces,
@@ -54,6 +55,7 @@ import type { MenuOption, Opponent } from '@martial-havoc/content'
 import { queued } from '../dice/random'
 import { fill } from '../lib/fill'
 import { newRecord } from './record'
+import { fromCampaign } from './campaign'
 import {
   MAX_TRAINING,
   finishCreation,
@@ -540,6 +542,42 @@ const doInn = (state: RecordState): RecordState => {
   )
 }
 
+// ---------------------------------------------------------------- import
+
+/**
+ * Read a pasted campaign (Phase 6's `importJson`, given a door).
+ *
+ * The engine migrates rather than refuses, and every rejection it can
+ * return has a worded string in the content package — so a player who
+ * pastes the wrong thing is told which wrong thing it was, not "import
+ * failed". A successful read replaces the campaign half of the record
+ * and leaves the session half (the screen, the draft) alone, which is
+ * the same split `load` keeps.
+ */
+const doImport = (state: RecordState): RecordState => {
+  const result = importJson(state.importDraft)
+  if (!result.ok) {
+    const r = result.rejection
+    return {
+      ...state,
+      importNote: fill(t(`ui.record.import.${r.reason}`), {
+        version: 'version' in r ? r.version : '',
+        current: 'current' in r ? r.current : '',
+      }),
+    }
+  }
+  const restored = fromCampaign(result.record, state)
+  return {
+    ...restored,
+    screen: 'record',
+    importDraft: '',
+    importNote:
+      result.migrations.length === 0
+        ? t('ui.record.import.ok')
+        : fill(t('ui.record.import.migrated'), { n: result.migrations.length }),
+  }
+}
+
 // ------------------------------------------------------------------ reduce
 
 /** The one way a record changes. Pure: same state, action and dice, same result. */
@@ -594,6 +632,10 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return { ...state, openId: state.openId === action.id ? null : action.id }
     case 'region.travel':
       return state.region.points.some((p) => p.id === action.to) ? { ...state, here: action.to } : state
+    case 'record.draft':
+      return { ...state, importDraft: action.text }
+    case 'record.import':
+      return doImport(state)
     case 'record.new':
       return newRecord(dice)
 

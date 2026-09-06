@@ -21,6 +21,7 @@ import { Header } from './components/Header'
 import { BeatScreen } from './screens/BeatScreen'
 import { CreationScreen } from './screens/CreationScreen'
 import { VillageScreen } from './screens/VillageScreen'
+import { RecordScreen } from './screens/RecordScreen'
 import { CombatScreen } from './screens/CombatScreen'
 import { RegionScreen } from './screens/RegionScreen'
 import { RulesScreen } from './screens/RulesScreen'
@@ -38,6 +39,8 @@ const placeLine = (state: RecordState): string => {
       return t('ui.creation.place')
     case 'village':
       return t('ui.village.place')
+    case 'record':
+      return t('ui.record.place')
     case 'beat': {
       const beat = beatForArea(state.area)
       return fill(t('ui.beat.place'), { area: state.area, name: (beat?.name ?? '').toUpperCase() })
@@ -57,6 +60,10 @@ const search = (): string => {
 export const App = () => {
   const table = useMemo(() => randomSource(), [])
   const dice = useMemo(() => queued(parseDiceQuery(search()), table), [table])
+  // One timestamp for the life of the screen: a component reads no
+  // clock, and a value that changed every render would rewrite the
+  // export field under the player's cursor.
+  const exportedAt = useMemo(() => new Date().toISOString(), [])
   const [state, dispatch] = useRecord(dice, table)
   return (
     <View style={styles.root}>
@@ -69,6 +76,9 @@ export const App = () => {
           </View>
           {state.screen === 'creation' ? <CreationScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'village' ? <VillageScreen state={state} dispatch={dispatch} /> : null}
+          {state.screen === 'record' ? (
+            <RecordScreen state={state} dispatch={dispatch} at={exportedAt} />
+          ) : null}
           {state.screen === 'beat' ? <BeatScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'combat' ? <CombatScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'rules' ? <RulesScreen state={state} dispatch={dispatch} /> : null}
