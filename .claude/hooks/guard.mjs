@@ -39,6 +39,8 @@ const DEFAULT_BRANCH = 'main'
 const VERBS = [
   'digest', 'expand', 'jot', 'oversight', 'triage', 'plan',
   'feat', 'fix', 'docs', 'chore',
+  // skills/re-seed.md commits the field report as `re-seed: <drift>`.
+  're-seed',
 ]
 
 // Pulls the first `-m`/`--message` string out of a `git commit`

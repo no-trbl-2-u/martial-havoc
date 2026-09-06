@@ -157,3 +157,17 @@ npm run verify
 npm run deploy:check
 node scripts/pulse.mjs        # offline: queue / build-plan / candidate counts
 ```
+
+## Commit verb vocabulary
+
+Every commit message is `<verb>: <subject>`, enforced by
+`.claude/hooks/guard.mjs` (standing rule 2's teeth). The verbs:
+
+| Verb | Written by |
+|---|---|
+| `digest`, `expand`, `jot`, `oversight`, `triage`, `plan` | the skills of the same name, and `/plan-a-phase` |
+| `feat`, `fix`, `docs`, `chore` | shipping work: a feature, a fix, documentation, housekeeping |
+| `re-seed` | `/re-seed`'s field report, `RE-SEED.md`, committed alone |
+
+A new verb is added here and to `VERBS` in the guard in the same
+commit, never one without the other.
