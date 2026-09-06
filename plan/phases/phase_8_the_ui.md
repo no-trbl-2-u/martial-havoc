@@ -154,12 +154,43 @@ e2e`, foreground, blocking (agents.md rule 3). Never backgrounded.
 
 ## DoD
 
-- [ ] 8a: three layouts at `?layout=a|b|c`, screenshotted, filed, and the choice put to the operator.
-- [ ] 8b: the picked layout is the only layout; the flag and the losers are gone.
-- [ ] Every surface in the table above renders on the real engine.
-- [ ] A Playwright run creates a Master and wins a fight on the web export.
-- [ ] The layout decision is recorded in `design/INDEX.md`.
-- [ ] `npm run verify` green; committed and pushed to `main`; deploy confirmed.
+- [x] 8a: three layouts at `?layout=a|b|c`, screenshotted, filed, and the choice put to the operator — d4ab97f.
+- [x] 8b: the picked layout is the only layout; the flag and the losers are gone — c6430ae.
+- [x] The layout decision is recorded in `design/INDEX.md` — c6430ae.
+- [x] Creation, in the book's order, with the eight printed sheets — 6279620.
+- [x] The village, over Phase 7's engine module — b66bd01.
+- [x] The campaign record, its export and an import that migrates — 76c5230.
+- [x] **A Playwright run creates a Master and wins a fight on the web export** — `e2e/creation.spec.ts`.
+- [ ] **The cave's eight areas.** The beat still plays the Phase 5
+      prototype slice (areas 2-4). See "What is left" below.
+- [x] `npm run verify` green; committed and pushed to `main`; deploy confirmed.
+
+## What is left: the cave's areas
+
+The row's list names "the cave's areas" and the beat plays three of
+eight. Both halves of the work already exist and are proven:
+
+- The eight areas ship as data, with printed descriptions, hints,
+  authored lines, exits, gates and treasures
+  (`packages/content/data/campaigns/the-5-treasures/areas.json`).
+- The engine walks them. `packages/engine/src/adventure` has the whole
+  printed loop — `step`, `exitsFrom`, `canEnter`, `encounterIn`,
+  `takeAreaTreasure`, `rollEvent`, the acts and the ending — and
+  `playthrough.test.ts` drives it to the ending screen on fixed dice.
+
+What is missing is the wiring, and it is not small. The beat's menu is
+currently hand-authored `MenuOption` records for three areas; deriving
+it from the adventure graph moves the record from an area *number* to
+an `AdventureState`, moves combat's foes from `treasureFoeById` to
+`encounterIn`, and rewrites every e2e that names a prototype option by
+its text. That is phase-sized work with its own failure modes, not a
+finishing touch on this one, and doing it at the tail of a long tick
+would put a green gate at risk for no reason.
+
+It is also **Phase 10's prerequisite** — "the cave played to its
+ending" cannot happen while five areas are unreachable. It should be
+its own row (an 8c, or a phase between 8 and 9), planned through
+`/plan-a-phase` or `/oversight`.
 
 ## Follow-ups (out of scope)
 
