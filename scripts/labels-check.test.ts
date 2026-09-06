@@ -35,3 +35,36 @@ describe('labels:check', () => {
     expect(behaviours.length).toBeGreaterThanOrEqual(0)
   })
 })
+
+/**
+ * The rules panel reads the registry and, for each entry, the note the
+ * content package carries for it. The two lists are kept in step here
+ * because this is the one spec that may import both packages: a
+ * behaviour with no note would show a bare id, and a note with no
+ * behaviour would describe something the engine does not do.
+ */
+import { behaviourNotes } from '../packages/content/src/index'
+
+describe('labels:check — the rules panel notes', () => {
+  it('every behaviour has exactly one note', () => {
+    const missing = behaviours
+      .map((b) => b.id)
+      .filter((id) => behaviourNotes.filter((n) => n.ref === id).length !== 1)
+    expect(missing, `behaviours without exactly one note: ${missing.join(', ')}`).toEqual([])
+  })
+
+  it('every note describes a behaviour the engine exports', () => {
+    const ids = new Set(behaviours.map((b) => b.id))
+    const orphans = behaviourNotes.filter((n) => !ids.has(n.ref)).map((n) => n.ref)
+    expect(orphans, `notes with no behaviour: ${orphans.join(', ')}`).toEqual([])
+  })
+
+  it('a reading answers all four panel questions', () => {
+    const incomplete = behaviours
+      .filter((b) => b.label === 'reading')
+      .map((b) => behaviourNotes.find((n) => n.ref === b.id))
+      .filter((n) => n !== undefined && !(n.says && n.silent && n.source && n.reversed))
+      .map((n) => n?.ref)
+    expect(incomplete, `readings missing says/silent/source/reversed: ${incomplete.join(', ')}`).toEqual([])
+  })
+})

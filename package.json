@@ -21,7 +21,8 @@
     "deploy:version": "node scripts/deploy.mjs --upload-only",
     "deploy:check": "node scripts/deploy-check.mjs",
     "serve:web": "node scripts/serve-static.mjs apps/app/dist 4173",
-    "pulse": "node scripts/pulse.mjs"
+    "pulse": "node scripts/pulse.mjs",
+    "screenshots": "playwright test --config playwright.screenshots.config.ts"
   },
   "devDependencies": {
     "@playwright/test": "~1.56.1",

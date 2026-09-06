@@ -1247,6 +1247,161 @@
             "minLength": 1
           }
         }
+      },
+      "beat": {
+        "description": "One area of an adventure as the beat screen shows it: the printed area name and an authored line of ours read when the Master stands there (spec.md, Horizon: an authored line beside every menu). The area's printed description stays in docs/ until Phase 5's adventure format transcribes it; this record is the prototype slice.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "area",
+          "name",
+          "line"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "area": {
+            "description": "The area's printed number (1-8 in The 5 Treasures).",
+            "type": "integer",
+            "minimum": 1
+          },
+          "name": {
+            "description": "The area's printed title, verbatim.",
+            "type": "string",
+            "minLength": 1
+          },
+          "line": {
+            "description": "The authored line. Ours, never a paraphrase of the printed description.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "menuOption": {
+        "description": "One entry of the beat menu: what the rules allow the Master to do in an area, the authored line beside it, and the engine action it triggers. The menu is the app's whole grammar of play (spec.md, Horizon), so every entry is data with a citation.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "area",
+          "title",
+          "note",
+          "line",
+          "action"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "area": {
+            "description": "The area this option is offered in.",
+            "type": "integer",
+            "minimum": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "note": {
+            "description": "The short mechanical note printed beside the title (SKILL CHECK, +4 END, AREA 3).",
+            "type": "string",
+            "minLength": 1
+          },
+          "line": {
+            "description": "The authored line. Ours.",
+            "type": "string",
+            "minLength": 1
+          },
+          "action": {
+            "description": "The engine action the option performs. The app's reducer switches on it and nothing else.",
+            "enum": [
+              "skill-check",
+              "luck-check",
+              "rest",
+              "go",
+              "fight",
+              "take",
+              "leave-cave"
+            ]
+          },
+          "target": {
+            "description": "What the action acts on: an area number for `go`, a foe id for `fight`, a treasure key for `take`.",
+            "type": "string",
+            "minLength": 1
+          },
+          "proficiency": {
+            "description": "For `skill-check`: the name of the one Proficiency that adds to the threshold (R20, D10). Omitted for a bare SKILL check.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "behaviourNote": {
+        "description": "The rules panel's note on one engine behaviour: what the engine does, in a sentence, and for a reading the four questions the panel asks (what the book says, what it is silent on, the source, what reversing it would change). `ref` is the behaviour id in the engine registry; scripts/labels-check.test.ts holds the two in step.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "ref",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "ref": {
+            "description": "The engine behaviour id this note describes (e.g. `combat.final-blow-doubles`).",
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)+$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "says": {
+            "description": "What the book prints on the point, quoted or summarised.",
+            "type": "string",
+            "minLength": 1
+          },
+          "silent": {
+            "description": "What the book does not say, which is why a position had to be taken.",
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "description": "Where the position comes from.",
+            "type": "string",
+            "minLength": 1
+          },
+          "reversed": {
+            "description": "What changes if the position is reversed.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     },
     "files": {
@@ -1662,6 +1817,15 @@
                 },
                 {
                   "$ref": "#/$defs/records/authoredLine"
+                },
+                {
+                  "$ref": "#/$defs/records/beat"
+                },
+                {
+                  "$ref": "#/$defs/records/menuOption"
+                },
+                {
+                  "$ref": "#/$defs/records/behaviourNote"
                 }
               ]
             }

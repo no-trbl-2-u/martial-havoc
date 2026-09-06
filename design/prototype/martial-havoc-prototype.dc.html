@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  body { margin:0; background:#8E6428; }
+  a { color:#8E2417; text-decoration:none; border-bottom:1px solid #8E241755; }
+  a:hover { color:#B03424; border-bottom-color:#B03424; }
+  input, textarea, button { font: inherit; color: inherit; }
+</style>
+</helmet>
+
+<div style="min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:24px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+  <div style="width:390px; height:844px; background:#C1873A; color:#16110C; display:flex; overflow:hidden; box-shadow:0 0 0 1px #16110C;">
+
+    <!-- binding -->
+    <div style="width:26px; flex:none; background:#A87030; display:flex; align-items:center; justify-content:center;">
+      <svg width="26" height="844" viewBox="0 0 26 844"><path d="M13 40 V804" stroke="#FBF3E1" stroke-width="2"></path><g fill="#16110C"><circle cx="13" cy="150" r="5"></circle><circle cx="13" cy="320" r="5"></circle><circle cx="13" cy="490" r="5"></circle><circle cx="13" cy="660" r="5"></circle></g><g fill="none" stroke="#FBF3E1" stroke-width="2"><path d="M13 150 q10 -18 0 -36 M13 320 q10 -18 0 -36 M13 490 q10 -18 0 -36 M13 660 q10 -18 0 -36"></path></g></svg>
+    </div>
+
+    <div style="flex:1; display:flex; flex-direction:column; overflow:hidden; position:relative;">
+
+      <!-- header slip -->
+      <div style="padding:34px 14px 10px; display:flex; justify-content:space-between; align-items:flex-start; gap:8px; flex:none;">
+        <div style="border:3px solid #16110C; background:#FBF3E1; padding:5px 9px;">
+          <div style="font-size:12px; font-weight:800; letter-spacing:0.14em;">THE 5 TREASURES</div>
+          <div style="font-family:ui-monospace,monospace; font-size:10px; margin-top:2px;">{{ placeLine }}</div>
+        </div>
+        <div style="display:flex; gap:6px; flex:none;">
+          <button type="button" onClick="{{ openRules }}" style="background:#FBF3E1; border:3px solid #16110C; padding:6px 7px; font-size:10px; font-weight:800; letter-spacing:0.06em; cursor:pointer;">RULES</button>
+          <button type="button" onClick="{{ openRegion }}" style="background:#FBF3E1; border:3px solid #16110C; padding:6px 7px; font-size:10px; font-weight:800; letter-spacing:0.06em; cursor:pointer;">MAP</button>
+        </div>
+      </div>
+
+      <!-- attribute strip -->
+      <div style="margin:0 14px; background:#FBF3E1; border:3px solid #16110C; display:flex; flex:none;">
+        <div style="flex:1; padding:5px 0; text-align:center; border-right:2px solid #16110C;"><div style="font-size:9px; font-weight:800;">SKL</div><div style="font-size:17px; font-weight:800;">{{ m.skill }}</div></div>
+        <div style="flex:1.3; padding:5px 0; text-align:center; border-right:2px solid #16110C; background:#16110C; color:#FBF3E1;"><div style="font-size:9px; font-weight:800;">END</div><div style="font-size:17px; font-weight:800;">{{ m.end }}</div></div>
+        <div style="flex:1; padding:5px 0; text-align:center; border-right:2px solid #16110C;"><div style="font-size:9px; font-weight:800;">LCK</div><div style="font-size:17px; font-weight:800;">{{ m.luck }}</div></div>
+        <div style="flex:1; padding:5px 0; text-align:center; border-right:2px solid #16110C;"><div style="font-size:9px; font-weight:800;">SPR</div><div style="font-size:17px; font-weight:800;">{{ m.spirit }}</div></div>
+        <div style="flex:1; padding:5px 0; text-align:center;"><div style="font-size:9px; font-weight:800;">GP</div><div style="font-size:17px; font-weight:800;">{{ m.gold }}</div></div>
+      </div>
+
+      <!-- ══ BEAT ══ -->
+      <sc-if value="{{ isBeat }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+          <div style="margin:10px 14px 0; background:#FBF3E1; border:3px solid #16110C; padding:11px; flex:none;">
+            <div style="font-family:Georgia,serif; font-size:17px; line-height:1.45; text-wrap:pretty;">{{ area.line }}</div>
+          </div>
+
+          <!-- result slip -->
+          <sc-if value="{{ hasResult }}" hint-placeholder-val="{{ true }}">
+            <div style="margin:10px 14px 0; background:#FBF3E1; border:3px solid #16110C; flex:none;">
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 9px; background:#16110C; color:#FBF3E1; gap:8px;">
+                <span style="font-size:11px; font-weight:800; letter-spacing:0.08em;">{{ result.title }}</span>
+                <span style="background:#8E2417; padding:2px 6px; font-size:10px; font-weight:800; flex:none;">{{ result.label }}</span>
+              </div>
+              <div style="padding:10px 9px; display:flex; align-items:center; gap:9px;">
+                <svg width="40" height="40" viewBox="0 0 52 52"><rect x="2.5" y="2.5" width="47" height="47" fill="none" stroke="#16110C" stroke-width="3.5"></rect><sc-for list="{{ result.pipsA }}" as="p" hint-placeholder-count="2"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="4.6" fill="#16110C"></circle></sc-for></svg>
+                <svg width="40" height="40" viewBox="0 0 52 52"><rect x="2.5" y="2.5" width="47" height="47" fill="none" stroke="#16110C" stroke-width="3.5"></rect><sc-for list="{{ result.pipsB }}" as="p" hint-placeholder-count="2"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="4.6" fill="#16110C"></circle></sc-for></svg>
+                <div style="margin-left:auto; text-align:right;">
+                  <div style="font-size:34px; font-weight:800; line-height:1;">{{ result.total }}</div>
+                  <div style="font-family:ui-monospace,monospace; font-size:10px;">{{ result.against }}</div>
+                </div>
+              </div>
+              <div style="border-top:2px solid #16110C; padding:6px 9px; font-family:ui-monospace,monospace; font-size:10px; line-height:1.5;">{{ result.cite }}</div>
+            </div>
+          </sc-if>
+
+          <!-- menu -->
+          <div style="padding:10px 14px 0; display:flex; flex-direction:column; gap:7px; overflow-y:auto; flex:1;">
+            <sc-for list="{{ options }}" as="opt" hint-placeholder-count="4">
+              <button type="button" onClick="{{ opt.onPress }}" style="background:#FBF3E1; border:3px solid #16110C; padding:7px 9px; text-align:left; cursor:pointer; display:block; width:100%;">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
+                  <span style="font-size:14px; font-weight:800; letter-spacing:0.02em; text-transform:uppercase;">{{ opt.title }}</span>
+                  <span style="font-family:ui-monospace,monospace; font-size:10px; flex:none;">{{ opt.note }}</span>
+                </div>
+                <div style="font-family:Georgia,serif; font-size:13px; margin-top:3px; line-height:1.4;">{{ opt.line }}</div>
+              </button>
+            </sc-for>
+            <sc-if value="{{ noOptions }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#FBF3E1; border:3px dashed #16110C; padding:16px; text-align:center;">
+                <div style="font-size:14px; font-weight:800; letter-spacing:0.04em;">NOTHING HERE YET.</div>
+                <div style="font-family:Georgia,serif; font-size:15px; font-style:italic; margin-top:4px;">Roll, or write.</div>
+              </div>
+            </sc-if>
+          </div>
+
+          <!-- free text + dice -->
+          <div style="padding:10px 14px 14px; flex:none;">
+            <div style="background:#FBF3E1; border:2px dashed #16110C; padding:7px 9px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                <span style="font-family:ui-monospace,monospace; font-size:10px; letter-spacing:0.08em;">YOUR PASSAGE · {{ passageCount }} WRITTEN</span>
+                <span style="font-family:ui-monospace,monospace; font-size:10px; flex:none;">OPTIONAL</span>
+              </div>
+              <textarea rows="2" value="{{ draft }}" onChange="{{ onDraft }}" placeholder="Write it down, or don't." style="width:100%; box-sizing:border-box; margin-top:5px; background:#FBF3E1; border:none; outline:none; resize:none; font-family:Georgia,serif; font-size:14px; line-height:1.45;"></textarea>
+              <sc-if value="{{ hasDraft }}" hint-placeholder-val="{{ false }}">
+                <button type="button" onClick="{{ saveDraft }}" style="margin-top:4px; background:#16110C; color:#FBF3E1; border:none; padding:5px 9px; font-size:10px; font-weight:800; letter-spacing:0.08em; cursor:pointer;">KEEP IT</button>
+              </sc-if>
+            </div>
+            <sc-if value="{{ manualOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:8px; background:#FBF3E1; border:3px solid #8E2417; padding:8px 9px;">
+                <div style="font-family:ui-monospace,monospace; font-size:10px; letter-spacing:0.08em;">THE DICE ON YOUR TABLE · COUNTS AS AN OVERRIDE</div>
+                <div style="display:flex; gap:5px; margin-top:7px;">
+                  <sc-for list="{{ faces }}" as="fa" hint-placeholder-count="6">
+                    <button type="button" onClick="{{ fa.onPress }}" style="flex:1; background:{{ fa.bg }}; color:{{ fa.fg }}; border:2px solid #16110C; padding:7px 0; font-size:15px; font-weight:800; cursor:pointer;">{{ fa.n }}</button>
+                  </sc-for>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:7px; gap:8px;">
+                  <span style="font-family:ui-monospace,monospace; font-size:11px;">{{ manualLine }}</span>
+                  <button type="button" onClick="{{ cancelManual }}" style="background:#FBF3E1; border:2px solid #16110C; padding:4px 8px; font-size:10px; font-weight:800; cursor:pointer; flex:none;">CANCEL</button>
+                </div>
+              </div>
+            </sc-if>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <button type="button" onClick="{{ rollPrimary }}" style="flex:1.3; background:#16110C; color:#FBF3E1; border:none; padding:12px; font-size:14px; font-weight:800; letter-spacing:0.08em; cursor:pointer;">{{ primaryLabel }}</button>
+              <button type="button" onClick="{{ toggleManual }}" style="flex:1; background:#FBF3E1; border:3px solid #16110C; padding:9px; font-size:14px; font-weight:800; letter-spacing:0.08em; cursor:pointer;">MY DICE</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:7px;">
+              <span style="font-family:ui-monospace,monospace; font-size:10px; color:#3A2A12;">OVERRIDES {{ overrides }}</span>
+              <span style="font-family:ui-monospace,monospace; font-size:10px; color:#3A2A12;">{{ deedLine }}</span>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ══ COMBAT ══ -->
+      <sc-if value="{{ isCombat }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+          <div style="margin:10px 14px 0; display:flex; gap:8px; flex:none;">
+            <div style="flex:1; background:#FBF3E1; border:3px solid #16110C; padding:8px;">
+              <div style="font-size:9px; font-weight:800; letter-spacing:0.1em;">YOUR MASTER</div>
+              <div style="display:flex; gap:5px; margin:6px 0;">
+                <svg width="30" height="30" viewBox="0 0 52 52"><rect x="2.5" y="2.5" width="47" height="47" fill="none" stroke="#16110C" stroke-width="3.5"></rect><sc-for list="{{ cb.mineA }}" as="p" hint-placeholder-count="3"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="4.6" fill="#16110C"></circle></sc-for></svg>
+                <svg width="30" height="30" viewBox="0 0 52 52"><rect x="2.5" y="2.5" width="47" height="47" fill="none" stroke="#16110C" stroke-width="3.5"></rect><sc-for list="{{ cb.mineB }}" as="p" hint-placeholder-count="3"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="4.6" fill="#16110C"></circle></sc-for></svg>
+              </div>
+              <div style="font-family:ui-monospace,monospace; font-size:10px; line-height:1.6;">{{ cb.mineLine }}</div>
+              <div style="font-size:32px; font-weight:800; line-height:1; margin-top:4px;">{{ cb.myTotal }}</div>
+            </div>
+            <div style="flex:1; background:#FBF3E1; border:3px solid #16110C; padding:8px;">
+              <div style="font-size:9px; font-weight:800; letter-spacing:0.1em;">{{ cb.foeName }}</div>
+              <div style="display:flex; gap:5px; margin:6px 0;">
+                <svg width="30" height="30" viewBox="0 0 52 52"><rect x="2.5" y="2.5" width="47" height="47" fill="none" stroke="#16110C" stroke-width="3.5"></rect><sc-for list="{{ cb.theirsA }}" as="p" hint-placeholder-count="3"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="4.6" fill="#16110C"></circle></sc-for></svg>
+                <svg width="30" height="30" viewBox="0 0 52 52"><rect x="2.5" y="2.5" width="47" height="47" fill="none" stroke="#16110C" stroke-width="3.5"></rect><sc-for list="{{ cb.theirsB }}" as="p" hint-placeholder-count="3"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="4.6" fill="#16110C"></circle></sc-for></svg>
+              </div>
+              <div style="font-family:ui-monospace,monospace; font-size:10px; line-height:1.6;">{{ cb.theirLine }}</div>
+              <div style="font-size:32px; font-weight:800; line-height:1; margin-top:4px;">{{ cb.theirTotal }}</div>
+            </div>
+          </div>
+
+          <div style="margin:8px 14px 0; background:{{ cb.bannerBg }}; color:#FBF3E1; border:3px solid #16110C; padding:8px 11px; display:flex; justify-content:space-between; align-items:center; gap:8px; flex:none;">
+            <div style="font-size:12px; font-weight:800; letter-spacing:0.08em;">{{ cb.bannerLabel }}</div>
+            <div style="font-size:30px; font-weight:800; line-height:1;">{{ cb.bannerValue }}</div>
+          </div>
+
+          <sc-if value="{{ cb.hasEvent }}" hint-placeholder-val="{{ false }}">
+            <div style="margin:8px 14px 0; background:#FBF3E1; border:3px solid #8E2417; flex:none;">
+              <div style="background:#8E2417; color:#FBF3E1; padding:5px 9px; display:flex; justify-content:space-between; gap:8px;">
+                <span style="font-size:11px; font-weight:800; letter-spacing:0.08em;">UNEXPECTED EVENT · 2d6 = {{ cb.eventTotal }}</span>
+                <span style="font-size:10px; font-weight:800; flex:none;">RULE p.28</span>
+              </div>
+              <div style="padding:9px;">
+                <div style="font-family:Georgia,serif; font-size:15px; line-height:1.4;">{{ cb.eventText }}</div>
+                <div style="font-family:ui-monospace,monospace; font-size:10px; margin-top:6px; line-height:1.5;">{{ cb.eventNote }}</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ cb.hasMorale }}" hint-placeholder-val="{{ false }}">
+            <div style="margin:8px 14px 0; background:#FBF3E1; border:3px dashed #8E2417; padding:9px; flex:none;">
+              <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
+                <span style="font-size:13px; font-weight:800; letter-spacing:0.04em;">{{ cb.moraleText }}</span>
+                <span style="font-family:ui-monospace,monospace; font-size:11px; flex:none;">2d6 = {{ cb.moraleTotal }}</span>
+              </div>
+              <div style="font-family:ui-monospace,monospace; font-size:10px; margin-top:5px;">READING I-30 · the engine treats 7 or under as Morale holding</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ cb.hasBlow }}" hint-placeholder-val="{{ false }}">
+            <div style="margin:8px 14px 0; background:#FBF3E1; border:3px solid #16110C; padding:9px; display:flex; align-items:center; gap:9px; flex:none;">
+              <svg width="30" height="30" viewBox="0 0 52 52"><rect x="2.5" y="2.5" width="47" height="47" fill="none" stroke="#16110C" stroke-width="3.5"></rect><sc-for list="{{ cb.blowA }}" as="p" hint-placeholder-count="3"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="4.6" fill="#16110C"></circle></sc-for></svg>
+              <svg width="30" height="30" viewBox="0 0 52 52"><rect x="2.5" y="2.5" width="47" height="47" fill="none" stroke="#16110C" stroke-width="3.5"></rect><sc-for list="{{ cb.blowB }}" as="p" hint-placeholder-count="3"><circle cx="{{ p.x }}" cy="{{ p.y }}" r="4.6" fill="#16110C"></circle></sc-for></svg>
+              <div style="margin-left:auto; text-align:right;">
+                <div style="font-size:14px; font-weight:800; letter-spacing:0.04em;">{{ cb.blowText }}</div>
+                <div style="font-family:ui-monospace,monospace; font-size:10px;">MH p.25 R30 · doubles land it</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="padding:8px 14px 0; display:flex; flex-direction:column; gap:6px; overflow-y:auto; flex:1;">
+            <sc-for list="{{ cb.actions }}" as="act" hint-placeholder-count="4">
+              <button type="button" onClick="{{ act.onPress }}" style="background:{{ act.bg }}; border:3px solid #16110C; padding:7px 9px; text-align:left; cursor:{{ act.cursor }}; display:block; width:100%; opacity:{{ act.opacity }};">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; gap:8px;">
+                  <span style="font-size:13px; font-weight:800; letter-spacing:0.02em; text-transform:uppercase;">{{ act.title }}</span>
+                  <span style="font-family:ui-monospace,monospace; font-size:10px; flex:none;">{{ act.cite }}</span>
+                </div>
+                <div style="font-family:Georgia,serif; font-size:13px; margin-top:2px; line-height:1.35;">{{ act.line }}</div>
+              </button>
+            </sc-for>
+          </div>
+
+          <div style="padding:8px 14px 14px; flex:none;">
+            <sc-if value="{{ manualOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-bottom:8px; background:#FBF3E1; border:3px solid #8E2417; padding:8px 9px;">
+                <div style="font-family:ui-monospace,monospace; font-size:10px; letter-spacing:0.08em;">THE DICE ON YOUR TABLE · COUNTS AS AN OVERRIDE</div>
+                <div style="display:flex; gap:5px; margin-top:7px;">
+                  <sc-for list="{{ faces }}" as="fa" hint-placeholder-count="6">
+                    <button type="button" onClick="{{ fa.onPress }}" style="flex:1; background:{{ fa.bg }}; color:{{ fa.fg }}; border:2px solid #16110C; padding:7px 0; font-size:15px; font-weight:800; cursor:pointer;">{{ fa.n }}</button>
+                  </sc-for>
+                </div>
+                <div style="font-family:ui-monospace,monospace; font-size:11px; margin-top:7px;">{{ manualLine }}</div>
+              </div>
+            </sc-if>
+            <div style="display:flex; gap:8px;">
+              <button type="button" onClick="{{ rollPrimary }}" style="flex:1.3; background:#16110C; color:#FBF3E1; border:none; padding:12px; font-size:14px; font-weight:800; letter-spacing:0.08em; cursor:pointer;">{{ cb.primary }}</button>
+              <button type="button" onClick="{{ toggleManual }}" style="flex:1; background:#FBF3E1; border:3px solid #16110C; padding:9px; font-size:14px; font-weight:800; letter-spacing:0.08em; cursor:pointer;">MY DICE</button>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:7px;">
+              <span style="font-family:ui-monospace,monospace; font-size:10px; color:#3A2A12;">OVERRIDES {{ overrides }}</span>
+              <button type="button" onClick="{{ cb.leave }}" style="background:transparent; border:none; padding:0; font-family:ui-monospace,monospace; font-size:10px; color:#3A2A12; text-decoration:underline; cursor:pointer;">{{ cb.leaveLabel }}</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ══ RULES PANEL ══ -->
+      <sc-if value="{{ isRules }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+          <div style="margin:10px 14px 0; background:#FBF3E1; border:3px solid #16110C; padding:10px; flex:none;">
+            <div style="font-size:19px; font-weight:800; letter-spacing:0.02em; text-transform:uppercase; line-height:1.1;">Rules, readings<br>and inventions</div>
+            <div style="font-family:Georgia,serif; font-size:14px; margin-top:5px; line-height:1.4;">Everything this prototype does, and the authority for it. Tap one to open it.</div>
+          </div>
+          <div style="margin:8px 14px 0; display:flex; gap:6px; flex:none;">
+            <sc-for list="{{ rules.chips }}" as="ch" hint-placeholder-count="4">
+              <button type="button" onClick="{{ ch.onPress }}" style="flex:1; background:{{ ch.bg }}; color:{{ ch.fg }}; border:3px solid #16110C; padding:6px 0; font-size:10px; font-weight:800; letter-spacing:0.06em; cursor:pointer;">{{ ch.text }}</button>
+            </sc-for>
+          </div>
+          <div style="padding:8px 14px 0; display:flex; flex-direction:column; gap:7px; overflow-y:auto; flex:1;">
+            <sc-for list="{{ rules.list }}" as="b" hint-placeholder-count="6">
+              <div style="background:#FBF3E1; border:3px solid #16110C;">
+                <button type="button" onClick="{{ b.onPress }}" style="width:100%; background:transparent; border:none; padding:7px 9px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                  <span>
+                    <span style="font-family:ui-monospace,monospace; font-size:12px; display:block;">{{ b.id }}</span>
+                    <span style="font-family:ui-monospace,monospace; font-size:10px; display:block; margin-top:2px;">{{ b.cite }}</span>
+                  </span>
+                  <span style="background:{{ b.labelBg }}; color:{{ b.labelFg }}; border:{{ b.labelBorder }}; padding:2px 6px; font-size:9px; font-weight:800; letter-spacing:0.06em; flex:none;">{{ b.label }}</span>
+                </button>
+                <sc-if value="{{ b.open }}" hint-placeholder-val="{{ false }}">
+                  <div style="border-top:2px solid #16110C; padding:9px;">
+                    <div style="font-family:Georgia,serif; font-size:15px; line-height:1.45;">{{ b.text }}</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:7px 9px; margin-top:9px; padding-top:8px; border-top:2px solid #16110C;">
+                      <div><div style="font-size:9px; font-weight:800; letter-spacing:0.1em;">THE BOOK SAYS</div><div style="font-family:ui-monospace,monospace; font-size:11px; margin-top:2px; line-height:1.4;">{{ b.says }}</div></div>
+                      <div><div style="font-size:9px; font-weight:800; letter-spacing:0.1em;">SILENT ON</div><div style="font-family:ui-monospace,monospace; font-size:11px; margin-top:2px; line-height:1.4;">{{ b.silent }}</div></div>
+                      <div><div style="font-size:9px; font-weight:800; letter-spacing:0.1em;">SOURCE</div><div style="font-family:ui-monospace,monospace; font-size:11px; margin-top:2px; line-height:1.4;">{{ b.source }}</div></div>
+                      <div><div style="font-size:9px; font-weight:800; letter-spacing:0.1em;">IF REVERSED</div><div style="font-family:ui-monospace,monospace; font-size:11px; margin-top:2px; line-height:1.4;">{{ b.reversed }}</div></div>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:9px 14px 14px; flex:none; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <span style="font-family:ui-monospace,monospace; font-size:10px; color:#3A2A12;">{{ rules.footer }}</span>
+            <button type="button" onClick="{{ openRules }}" style="background:#16110C; color:#FBF3E1; border:none; padding:9px 13px; font-size:12px; font-weight:800; letter-spacing:0.08em; cursor:pointer; flex:none;">BACK TO PLAY</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ══ REGION ══ -->
+      <sc-if value="{{ isRegion }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+          <div style="margin:10px 14px 0; background:#FBF3E1; border:3px solid #16110C; padding:9px; display:flex; justify-content:space-between; align-items:center; gap:8px; flex:none;">
+            <div>
+              <div style="font-size:9px; font-weight:800; letter-spacing:0.1em;">YOU ARE AT</div>
+              <div style="font-size:16px; font-weight:800; letter-spacing:0.02em;">{{ region.hereName }}</div>
+            </div>
+            <div style="font-family:ui-monospace,monospace; font-size:10px; text-align:right; flex:none;">{{ region.count }}<br>NOT TO SCALE</div>
+          </div>
+          <div style="margin:8px 14px 0; background:#FBF3E1; border:3px solid #16110C; padding:6px; flex:none;">
+            <svg width="304" height="368" viewBox="0 0 316 382">
+              <path d="M58 92 L166 54 M166 54 L274 114 M58 92 L106 194 M106 194 L166 54 M106 194 L224 234 M224 234 L274 114 M106 194 L76 314 M76 314 L204 344 M204 344 L224 234" stroke="#16110C" stroke-width="3"></path>
+              <g font-family="-apple-system, Arial, sans-serif" font-size="11" font-weight="800">
+                <rect x="100" y="56" width="34" height="15" fill="#FBF3E1" stroke="#16110C" stroke-width="2"></rect><text x="104" y="68">9 MI</text>
+                <rect x="210" y="72" width="40" height="15" fill="#FBF3E1" stroke="#16110C" stroke-width="2"></rect><text x="214" y="84">11 MI</text>
+                <rect x="62" y="136" width="34" height="15" fill="#FBF3E1" stroke="#16110C" stroke-width="2"></rect><text x="66" y="148">7 MI</text>
+                <rect x="128" y="112" width="34" height="15" fill="#FBF3E1" stroke="#16110C" stroke-width="2"></rect><text x="132" y="124">5 MI</text>
+                <rect x="152" y="208" width="40" height="15" fill="#FBF3E1" stroke="#16110C" stroke-width="2"></rect><text x="156" y="220">12 MI</text>
+                <rect x="248" y="166" width="34" height="15" fill="#FBF3E1" stroke="#16110C" stroke-width="2"></rect><text x="252" y="178">6 MI</text>
+                <rect x="72" y="246" width="34" height="15" fill="#FBF3E1" stroke="#16110C" stroke-width="2"></rect><text x="76" y="258">8 MI</text>
+                <rect x="122" y="330" width="34" height="15" fill="#FBF3E1" stroke="#16110C" stroke-width="2"></rect><text x="126" y="342">4 MI</text>
+                <rect x="216" y="286" width="40" height="15" fill="#FBF3E1" stroke="#16110C" stroke-width="2"></rect><text x="220" y="298">10 MI</text>
+              </g>
+              <g>
+                <rect x="46" y="80" width="24" height="24" fill="#C1873A" stroke="#16110C" stroke-width="3"></rect>
+                <circle cx="166" cy="54" r="14" fill="#8E2417" stroke="#16110C" stroke-width="3"></circle>
+                <rect x="262" y="102" width="24" height="24" fill="#C1873A" stroke="#16110C" stroke-width="3"></rect>
+                <path d="M106 180 L122 208 L90 208 Z" fill="#C1873A" stroke="#16110C" stroke-width="3"></path>
+                <rect x="212" y="222" width="24" height="24" fill="#C1873A" stroke="#16110C" stroke-width="3"></rect>
+                <path d="M76 300 L92 328 L60 328 Z" fill="#C1873A" stroke="#16110C" stroke-width="3"></path>
+                <circle cx="204" cy="344" r="13" fill="#C1873A" stroke="#16110C" stroke-width="3"></circle>
+              </g>
+              <g font-family="-apple-system, Arial, sans-serif" font-size="12" font-weight="800" fill="#16110C">
+                <text x="30" y="122">LOTUS CAVE</text>
+                <text x="134" y="30">YOU ARE HERE</text>
+                <text x="226" y="148">MONASTERY</text>
+                <text x="76" y="170">CROSSROAD</text>
+                <text x="186" y="216">VILLAGE</text>
+                <text x="42" y="290">SHRINE</text>
+                <text x="176" y="374">FORD</text>
+              </g>
+            </svg>
+          </div>
+          <div style="padding:8px 14px 0; display:flex; flex-direction:column; gap:6px; overflow-y:auto; flex:1;">
+            <sc-for list="{{ region.reach }}" as="lk" hint-placeholder-count="3">
+              <button type="button" onClick="{{ lk.onPress }}" style="background:#FBF3E1; border:3px solid #16110C; padding:7px 9px; text-align:left; cursor:pointer; display:flex; justify-content:space-between; align-items:baseline; gap:8px; width:100%;">
+                <span style="font-size:13px; font-weight:800; letter-spacing:0.02em;">TRAVEL TO {{ lk.name }}</span>
+                <span style="font-family:ui-monospace,monospace; font-size:10px; flex:none;">{{ lk.miles }} · {{ lk.band }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="padding:9px 14px 14px; flex:none; display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <span style="font-family:ui-monospace,monospace; font-size:10px; color:#3A2A12;">INVENTION · MILES = DICE SUM</span>
+            <button type="button" onClick="{{ openRegion }}" style="background:#16110C; color:#FBF3E1; border:none; padding:9px 13px; font-size:12px; font-weight:800; letter-spacing:0.08em; cursor:pointer; flex:none;">BACK TO PLAY</button>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:440,&quot;height&quot;:900}}">
+const PIPS = {
+  1: [[26,26]],
+  2: [[16,16],[36,36]],
+  3: [[14,14],[26,26],[38,38]],
+  4: [[16,16],[36,16],[16,36],[36,36]],
+  5: [[16,16],[36,16],[26,26],[16,36],[36,36]],
+  6: [[16,13],[36,13],[16,26],[36,26],[16,39],[36,39]],
+};
+const pips = (n) => (PIPS[n] || []).map(([x, y]) => ({ x, y }));
+
+const UNEXPECTED = {
+  2: 'Adverse divine intervention', 3: 'Injury or loss of weapon for the Master',
+  4: 'Enemy retreat (called back, secret plan)', 5: 'Environmental change — the ceiling gives',
+  6: 'The fight resumes', 7: 'Reinforcements: Minions of the same type',
+  8: 'The fight resumes', 9: 'Environmental change — the light fails',
+  10: 'Enemy retreat (called back, flees)', 11: 'Injury or loss of weapon for the opponent',
+  12: 'Favorable divine intervention',
+};
+
+const AREAS = {
+  2: { place: 'AREA 2 OF 8 · THE STONE BOWL', line: 'Water has hollowed a bowl in the stone. Something drank here, and not long ago.' },
+  3: { place: 'AREA 3 OF 8 · THE LOW GALLERY', line: 'The gallery narrows until you go sideways. Ahead, the cold has a shape to it.' },
+  4: { place: 'AREA 4 OF 8 · THE SPILL', line: 'Coins and bones lie where the water left them, sorted by weight like a market stall.' },
+};
+
+const BEHAVIOURS = [
+  { id: 'combat.attack-strength', label: 'rule', cite: 'MH p.23 · R23', text: 'Attack Strength for each side is 2d6 + one relevant Martial Proficiency + SKILL.' },
+  { id: 'combat.winner-options', label: 'rule', cite: 'MH p.23 · R25', text: 'The higher side chooses one of four: strike for the difference, use a Technique, change or recover a weapon, or create an Opening.' },
+  { id: 'combat.opponent-proficiency', label: 'reading', cite: 'I-21 · MH p.23, p.66', text: 'Where a stat block lists two Proficiencies, the engine adds the higher one that fits the weapon in hand.', says: '“exactly one relevant Martial Proficiency (if any)”', silent: 'which of two, for a foe carrying both', source: 'estate-inventory.md → I-21', reversed: 'migrates this campaign record' },
+  { id: 'combat.technique-as-option', label: 'reading', cite: 'I-23 · MH p.23, p.24', text: 'A Technique is available only as the winner\u2019s option in a round, and costs its value in ENDURANCE with no roll.', says: '“use one of the Techniques you know”', silent: 'whether a Technique may be used when behind', source: 'estate-inventory.md → I-23', reversed: 'changes every fight already played' },
+  { id: 'combat.unexpected-event', label: 'rule', cite: 'MH p.27-28 · R32', text: 'Equal Attack Strengths are an Unexpected Event; after it you are no longer in the combat phase. If the narrative is unclear, roll 2d6 on the table.' },
+  { id: 'combat.retreat-morale', label: 'reading', cite: 'I-30 · MH p.28, p.31', text: 'An Unexpected Event retreat row rolls the Morale table; the engine treats 7 or under as Morale holding.', says: 'the retreat rows, and the Morale table, separately', silent: 'the mechanical effect of nine of the eleven rows', source: 'estate-inventory.md → I-30', reversed: 'reverses this round\u2019s outcome' },
+  { id: 'combat.final-blow.doubles', label: 'rule', cite: 'MH p.25 · R30', text: 'After creating an Opening, roll 2d6; doubles land the blow — 6 chances in 36.' },
+  { id: 'dice.double-six-fumble', label: 'rule', cite: 'MH p.22 · sealed', text: 'A double six fails every check, and lands every doubles roll.' },
+  { id: 'actions.skill-check', label: 'rule', cite: 'MH p.22 · R20', text: 'A SKILL check rolls 2d6 against SKILL plus one relevant Proficiency; equal or under passes.' },
+  { id: 'healing.night-rest', label: 'rule', cite: 'MH p.31 · sealed', text: 'A night\u2019s rest heals +4 ENDURANCE.' },
+  { id: 'record.override-count', label: 'invention', cite: 'spec.md · Routine calls', text: 'Every number typed instead of rolled increments the campaign record\u2019s override count.', says: 'nothing — the book has no app', silent: 'all of it', source: 'spec.md, Routine calls (Dice)', reversed: 'no rules change; the record loses a column' },
+  { id: 'region.link-miles', label: 'invention', cite: 'MH p.42 R51 + ours', text: 'A link\u2019s miles are the sum of the two dice that made it, and the route band comes from the same sum. Positions on the plane are decorative.' },
+  { id: 'record.passages', label: 'invention', cite: 'spec.md · Horizon', text: 'The player\u2019s own passages are kept in the campaign record beside the deeds ledger, and are never required.' },
+];
+
+const FOES = {
+  ghost: { name: 'THE GHOST', skill: 5, prof: 2, profName: 'INCORPOREAL', end: 6, cite: 'MH p.74' },
+};
+
+class Component extends DCLogic {
+  state = {
+    screen: 'beat',
+    areaId: 2,
+    m: { skill: 8, end: 18, endMax: 22, luck: 7, spirit: 3, gold: 12 },
+    result: null,
+    pending: null,
+    manual: [],
+    manualOpen: false,
+    draft: '',
+    passages: [],
+    overrides: 0,
+    deeds: [],
+    taken: [],
+    combat: null,
+    filter: 'all',
+    openId: null,
+    node: 'cave',
+  };
+
+  componentDidMount() {
+    try {
+      const raw = window.localStorage.getItem('mh.prototype.record');
+      if (raw) this.setState(JSON.parse(raw));
+    } catch (e) {}
+  }
+
+  persist(next) {
+    try { window.localStorage.setItem('mh.prototype.record', JSON.stringify(Object.assign({}, this.state, next))); } catch (e) {}
+  }
+
+  set(next) { this.setState(next); this.persist(next); }
+
+  d6() { return 1 + Math.floor(Math.random() * 6); }
+
+  // ── dice source: rolled, or the two faces the player typed
+  takeDice() {
+    if (this.state.manual.length === 2) {
+      const [a, b] = this.state.manual;
+      return { a, b, manual: true };
+    }
+    return { a: this.d6(), b: this.d6(), manual: false };
+  }
+
+  skillCheck(prof, profName) {
+    const { a, b, manual } = this.takeDice();
+    const total = a + b;
+    const target = this.state.m.skill + prof;
+    const fumble = a === 6 && b === 6;
+    const passed = !fumble && total <= target;
+    this.set({
+      result: {
+        title: passed ? 'SKILL CHECK · PASSED' : 'SKILL CHECK · FAILED',
+        label: 'READING I-21',
+        pipsA: pips(a), pipsB: pips(b), total,
+        against: 'against SKILL ' + this.state.m.skill + ' +' + prof + ' (' + profName + ')',
+        cite: fumble ? 'MH p.22 R20 · a double six always fails' : 'MH p.22 R20 · equal or under passes · ' + total + (passed ? ' ≤ ' : ' > ') + target,
+      },
+      manual: [], manualOpen: false,
+      overrides: this.state.overrides + (manual ? 1 : 0),
+    });
+  }
+
+  // ── combat
+  startCombat(key) {
+    const foe = FOES[key];
+    this.set({ screen: 'combat', combat: { key: key, foeEnd: foe.end, round: 1, roll: null, event: null, opening: false, morale: null } });
+  }
+
+  combatRound() {
+    const c = this.state.combat;
+    if (!c) return;
+    const foe = FOES[c.key];
+    const mine = this.takeDice();
+    const theirs = { a: this.d6(), b: this.d6() };
+    const myTotal = mine.a + mine.b + this.state.m.skill + 3;
+    const theirTotal = theirs.a + theirs.b + foe.skill + foe.prof;
+    const diff = myTotal - theirTotal;
+    let event = null;
+    if (diff === 0) {
+      const t = this.d6() + this.d6();
+      event = { total: t, text: UNEXPECTED[t], retreat: t === 4 || t === 10 };
+    }
+    const m = Object.assign({}, this.state.m);
+    if (diff < 0) m.end = Math.max(0, m.end + diff);
+    this.set({
+      m: m,
+      combat: Object.assign({}, c, {
+        round: c.round + 1,
+        roll: { mineA: pips(mine.a), mineB: pips(mine.b), mineDice: mine.a + mine.b, myTotal: myTotal,
+                theirsA: pips(theirs.a), theirsB: pips(theirs.b), theirDice: theirs.a + theirs.b, theirTotal: theirTotal, diff: diff },
+        event: event, morale: null,
+      }),
+      manual: [], manualOpen: false,
+      overrides: this.state.overrides + (mine.manual ? 1 : 0),
+    });
+  }
+
+  strike() {
+    const c = this.state.combat;
+    const diff = c && c.roll ? c.roll.diff : 0;
+    if (!c || diff <= 0) return;
+    const foeEnd = Math.max(0, c.foeEnd - diff);
+    const deeds = foeEnd === 0 ? this.state.deeds.concat(['killed ' + FOES[c.key].name.toLowerCase()]) : this.state.deeds;
+    this.set({ combat: Object.assign({}, c, { foeEnd: foeEnd, roll: null }), deeds: deeds });
+  }
+
+  useTechnique() {
+    const c = this.state.combat;
+    if (!c || !c.roll || c.roll.diff <= 0) return;
+    const m = Object.assign({}, this.state.m, { end: Math.max(0, this.state.m.end - 2) });
+    this.set({ m: m, combat: Object.assign({}, c, { foeEnd: Math.max(0, c.foeEnd - 2), roll: null }) });
+  }
+
+  createOpening() {
+    const c = this.state.combat;
+    if (!c || !c.roll || c.roll.diff <= 0) return;
+    this.set({ combat: Object.assign({}, c, { opening: true, roll: null }) });
+  }
+
+  finalBlow() {
+    const c = this.state.combat;
+    if (!c || !c.opening) return;
+    const { a, b, manual } = this.takeDice();
+    const landed = a === b;
+    this.set({
+      combat: Object.assign({}, c, {
+        opening: !landed,
+        foeEnd: landed ? 0 : c.foeEnd,
+        blow: { pipsA: pips(a), pipsB: pips(b), landed: landed },
+        roll: null,
+      }),
+      deeds: landed ? this.state.deeds.concat(['final blow on ' + FOES[c.key].name.toLowerCase()]) : this.state.deeds,
+      manual: [], manualOpen: false,
+      overrides: this.state.overrides + (manual ? 1 : 0),
+    });
+  }
+
+  rollMorale() {
+    const c = this.state.combat;
+    if (!c) return;
+    const { a, b, manual } = this.takeDice();
+    const t = a + b;
+    this.set({
+      combat: Object.assign({}, c, { morale: { total: t, holds: t <= 7 }, event: null }),
+      manual: [], manualOpen: false,
+      overrides: this.state.overrides + (manual ? 1 : 0),
+    });
+  }
+
+  leaveCombat() {
+    const c = this.state.combat;
+    const fled = c && c.foeEnd > 0;
+    this.set({
+      screen: 'beat', combat: null, result: null, areaId: 4,
+      deeds: fled ? this.state.deeds.concat(['fled the ghost · dishonor +1']) : this.state.deeds,
+    });
+  }
+
+  combatVals() {
+    const s = this.state;
+    const c = s.combat;
+    const foe = c ? FOES[c.key] : FOES.ghost;
+    const r = c && c.roll ? c.roll : null;
+    const won = !!r && r.diff > 0;
+    const dead = !!c && c.foeEnd === 0;
+    const act = (title, cite, line, enabled, onPress) => ({
+      title: title, cite: cite, line: line,
+      bg: enabled ? '#FBF3E1' : '#E4D6B4',
+      opacity: enabled ? 1 : 0.55,
+      cursor: enabled ? 'pointer' : 'default',
+      onPress: enabled ? onPress : () => {},
+    });
+    const actions = [];
+    if (dead) {
+      actions.push(act('Take the treasure and go on', 'MH p.68 R78', 'A 1d6 treasure roll, banded by its ENDURANCE.', true, () => this.leaveCombat()));
+    } else if (c && c.event) {
+      if (c.event.retreat) actions.push(act('Roll Morale for the retreat', 'READING I-30', 'The row says it retreats; the table says whether it can.', true, () => this.rollMorale()));
+      else actions.push(act('Leave the combat phase', 'MH p.27 R32', 'After an Unexpected Event you are no longer fighting.', true, () => this.leaveCombat()));
+    } else if (c && c.opening) {
+      actions.push(act('Deliver the Final Blow', 'MH p.25 R30', 'Roll 2d6 — doubles land it, 6 chances in 36.', true, () => this.finalBlow()));
+      actions.push(act('Strike instead', 'MH p.23 R25a', 'Give up the Opening for the difference in damage.', won, () => this.strike()));
+    } else {
+      actions.push(act('Strike', 'MH p.23 R25a', won ? 'Take ' + r.diff + ' from its ENDURANCE.' : 'Only the higher side may choose.', won, () => this.strike()));
+      actions.push(act('Use a Technique', 'READING I-23', 'Spinning Slap of the Phoenix (2) — costs 2 END, no roll.', won, () => this.useTechnique()));
+      actions.push(act('Change or recover a weapon', 'MH p.23 R25c', 'Armed Proficiencies add nothing without a weapon.', won, () => this.set({ combat: Object.assign({}, c, { roll: null }) })));
+      actions.push(act('Create an Opening', 'MH p.24 R29', 'No damage — then the Final Blow lands on doubles.', won, () => this.createOpening()));
+    }
+    let bannerLabel = 'ROLL THE ROUND';
+    let bannerValue = '—';
+    let bannerBg = '#16110C';
+    if (r) {
+      if (r.diff > 0) { bannerLabel = 'YOU ARE AHEAD BY'; bannerValue = r.diff; bannerBg = '#8E2417'; }
+      else if (r.diff < 0) { bannerLabel = 'IT IS AHEAD BY · END LOST'; bannerValue = -r.diff; bannerBg = '#16110C'; }
+      else { bannerLabel = 'EQUAL · UNEXPECTED EVENT'; bannerValue = 0; bannerBg = '#8E2417'; }
+    }
+    return {
+      foeName: foe.name,
+      mineA: r ? r.mineA : [], mineB: r ? r.mineB : [],
+      theirsA: r ? r.theirsA : [], theirsB: r ? r.theirsB : [],
+      mineLine: r ? '2d6 ' + r.mineDice + ' · SKILL +' + s.m.skill + '\nSWORD +3' : '2d6 — · SKILL +' + s.m.skill + '\nSWORD +3',
+      theirLine: r ? '2d6 ' + r.theirDice + ' · SKILL +' + foe.skill + '\n' + foe.profName + ' +' + foe.prof : 'END ' + (c ? c.foeEnd : foe.end) + ' · ' + foe.profName + ' +' + foe.prof,
+      myTotal: r ? r.myTotal : '—',
+      theirTotal: r ? r.theirTotal : '—',
+      bannerLabel: bannerLabel, bannerValue: bannerValue, bannerBg: bannerBg,
+      hasEvent: !!(c && c.event),
+      eventTotal: c && c.event ? c.event.total : '',
+      eventText: c && c.event ? c.event.text : '',
+      eventNote: c && c.event ? 'Attack Strengths equal. You are no longer in the combat phase (R32).' : '',
+      hasMorale: !!(c && c.morale),
+      moraleTotal: c && c.morale ? c.morale.total : '',
+      moraleText: c && c.morale ? (c.morale.holds ? 'ITS MORALE HOLDS — IT WITHDRAWS IN ORDER' : 'ITS MORALE BREAKS — IT FLEES THE CAVE') : '',
+      hasBlow: !!(c && c.blow),
+      blowA: c && c.blow ? c.blow.pipsA : [], blowB: c && c.blow ? c.blow.pipsB : [],
+      blowText: c && c.blow ? (c.blow.landed ? 'THE BLOW LANDS' : 'NO DOUBLES — THE OPENING HOLDS') : '',
+      actions: actions,
+      primary: dead ? 'FIGHT IS OVER' : (s.manual.length === 2 ? 'USE MY DICE' : 'ROLL THE ROUND'),
+      leave: () => this.leaveCombat(),
+      leaveLabel: dead ? 'GO ON →' : 'FLEE · DISHONOR +1',
+    };
+  }
+
+  ruleVals() {
+    const s = this.state;
+    const shown = BEHAVIOURS.filter((b) => s.filter === 'all' || b.label === s.filter);
+    const counts = { all: BEHAVIOURS.length, rule: 0, reading: 0, invention: 0 };
+    BEHAVIOURS.forEach((b) => { counts[b.label] += 1; });
+    const chip = (key, text) => ({
+      key: key, text: text + ' ' + counts[key],
+      bg: s.filter === key ? '#16110C' : '#FBF3E1',
+      fg: s.filter === key ? '#FBF3E1' : '#16110C',
+      onPress: () => this.set({ filter: key }),
+    });
+    return {
+      chips: [chip('all', 'ALL'), chip('rule', 'RULE'), chip('reading', 'READING'), chip('invention', 'OURS')],
+      list: shown.map((b) => ({
+        id: b.id, cite: b.cite, label: b.label.toUpperCase(),
+        labelBg: b.label === 'rule' ? '#16110C' : (b.label === 'reading' ? '#8E2417' : '#FBF3E1'),
+        labelFg: b.label === 'invention' ? '#16110C' : '#FBF3E1',
+        labelBorder: b.label === 'invention' ? '2px dashed #16110C' : '2px solid #16110C',
+        open: s.openId === b.id,
+        text: b.text,
+        says: b.says || 'the page as printed',
+        silent: b.silent || 'nothing — this one is printed',
+        source: b.source || b.cite,
+        reversed: b.reversed || 'nothing; it is the book',
+        onPress: () => this.set({ openId: s.openId === b.id ? null : b.id }),
+      })),
+      footer: BEHAVIOURS.length + ' BEHAVIOURS · 0 UNLABELLED · BUILD GREEN',
+    };
+  }
+
+  regionVals() {
+    const s = this.state;
+    const nodes = [
+      { id: 'cave', name: 'LOTUS CAVE', kind: 'settled', x: 46, y: 80 },
+      { id: 'road', name: 'YOU ARE HERE', kind: 'you', x: 166, y: 54 },
+      { id: 'monastery', name: 'MONASTERY', kind: 'settled', x: 262, y: 102 },
+      { id: 'crossroad', name: 'CROSSROAD', kind: 'wild', x: 106, y: 194 },
+      { id: 'village', name: 'VILLAGE', kind: 'settled', x: 212, y: 222 },
+      { id: 'shrine', name: 'SHRINE', kind: 'wild', x: 76, y: 300 },
+      { id: 'ford', name: 'FORD', kind: 'water', x: 204, y: 344 },
+    ];
+    const here = nodes.filter((n) => n.id === s.node)[0] || nodes[0];
+    const links = [
+      { a: 'road', b: 'cave', miles: 9 }, { a: 'road', b: 'monastery', miles: 11 },
+      { a: 'cave', b: 'crossroad', miles: 7 }, { a: 'crossroad', b: 'road', miles: 5 },
+      { a: 'crossroad', b: 'village', miles: 12 }, { a: 'village', b: 'monastery', miles: 6 },
+      { a: 'crossroad', b: 'shrine', miles: 8 }, { a: 'shrine', b: 'ford', miles: 4 },
+      { a: 'ford', b: 'village', miles: 10 },
+    ];
+    const reach = links
+      .filter((l) => l.a === s.node || l.b === s.node)
+      .map((l) => {
+        const otherId = l.a === s.node ? l.b : l.a;
+        const other = nodes.filter((n) => n.id === otherId)[0];
+        return {
+          name: other.name, miles: l.miles + ' MI',
+          band: l.miles <= 6 ? 'ROAD' : (l.miles <= 10 ? 'TRACK' : 'WILD PATH'),
+          onPress: () => this.set({ node: otherId }),
+        };
+      });
+    return {
+      hereName: here.name,
+      reach: reach,
+      count: nodes.length + ' POINTS · ' + links.length + ' LINKS',
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const area = AREAS[s.areaId] || AREAS[2];
+    const face = (n) => ({
+      n: n,
+      bg: s.manual.indexOf(n) > -1 ? '#16110C' : '#FBF3E1',
+      fg: s.manual.indexOf(n) > -1 ? '#FBF3E1' : '#16110C',
+      onPress: () => {
+        const next = s.manual.length >= 2 ? [n] : s.manual.concat([n]);
+        this.setState({ manual: next });
+      },
+    });
+
+    const options = [];
+    if (s.screen === 'beat') {
+      if (s.areaId === 2) {
+        if (s.taken.indexOf('comb') === -1) options.push({ title: 'Take the jade comb', note: 'TREASURE 1/5', line: 'It sits in the silt, teeth up.', onPress: () => this.set({ taken: s.taken.concat(['comb']), m: Object.assign({}, s.m, { gold: s.m.gold + 8 }), deeds: s.deeds.concat(['jade comb']), result: null }) });
+        options.push({ title: 'Search the pool', note: 'SKILL CHECK', line: 'Silt, and something under it.', onPress: () => this.skillCheck(2, 'SWIM') });
+        options.push({ title: 'Drink and rest', note: '+4 END', line: 'A night here costs you the morning.', onPress: () => this.set({ m: Object.assign({}, s.m, { end: Math.min(s.m.endMax, s.m.end + 4) }), result: { title: 'A NIGHT\u2019S REST', label: 'RULE p.31', pipsA: [], pipsB: [], total: '+4', against: 'ENDURANCE restored', cite: 'MH p.31 · a night\u2019s rest heals +4 ENDURANCE' } }) });
+        options.push({ title: 'Go on, east', note: 'AREA 3', line: 'The gallery breathes cold air at you.', onPress: () => this.set({ areaId: 3, result: null }) });
+      } else if (s.areaId === 3) {
+        options.push({ title: 'Face the Ghost', note: 'END 6 · INCORPOREAL', line: 'It does not bleed, and it does not hurry.', onPress: () => this.startCombat('ghost') });
+        options.push({ title: 'Perform a Ritual', note: 'SPIRIT 3', line: 'Salt, breath, and a name you half remember.', onPress: () => this.set({ m: Object.assign({}, s.m, { spirit: Math.max(0, s.m.spirit - 1) }), result: { title: 'RITUAL PERFORMED', label: 'RULE p.20', pipsA: [], pipsB: [], total: '\u22121', against: 'Spirituality spent', cite: 'MH p.20 · a Ritual costs its value in Spirituality' } }) });
+        options.push({ title: 'Back to the bowl', note: 'AREA 2', line: 'The water is still where you left it.', onPress: () => this.set({ areaId: 2, result: null }) });
+      } else {
+        options.push({ title: 'Sort the spill', note: 'LUCK CHECK', line: 'Coins on top, and older things below.', onPress: () => this.skillCheck(0, 'NONE') });
+        options.push({ title: 'Leave the cave', note: 'REGION', line: 'Daylight, and a road that goes four ways.', onPress: () => this.set({ screen: 'region', result: null }) });
+      }
+    }
+
+    return {
+      // shell
+      placeLine: s.screen === 'combat' ? 'COMBAT · ROUND ' + (s.combat ? s.combat.round : 1) : (s.screen === 'rules' ? 'THE RULES PANEL' : (s.screen === 'region' ? 'THE REGION' : area.place)),
+      m: s.m,
+      isBeat: s.screen === 'beat',
+      isCombat: s.screen === 'combat',
+      isRules: s.screen === 'rules',
+      isRegion: s.screen === 'region',
+      openRules: () => this.set({ screen: s.screen === 'rules' ? 'beat' : 'rules' }),
+      openRegion: () => this.set({ screen: s.screen === 'region' ? 'beat' : 'region' }),
+      // beat
+      area: area,
+      options: options,
+      noOptions: options.length === 0,
+      hasResult: !!s.result,
+      result: s.result || { title: '', label: '', pipsA: [], pipsB: [], total: '', against: '', cite: '' },
+      // dice + manual entry
+      faces: [1, 2, 3, 4, 5, 6].map(face),
+      manualOpen: s.manualOpen,
+      manualLine: s.manual.length === 2 ? 'YOUR DICE: ' + s.manual[0] + ' AND ' + s.manual[1] + ' — NOW CHOOSE AN ACTION' : 'TAP THE TWO FACES YOU ROLLED',
+      toggleManual: () => this.setState({ manualOpen: !s.manualOpen, manual: [] }),
+      cancelManual: () => this.setState({ manualOpen: false, manual: [] }),
+      rollPrimary: () => (s.screen === 'combat' ? this.combatRound() : this.skillCheck(2, 'SWIM')),
+      primaryLabel: s.manual.length === 2 ? 'USE MY DICE' : 'ROLL 2d6',
+      overrides: s.overrides,
+      deedLine: s.deeds.length ? 'DEEDS ' + s.deeds.length : 'DEEDS 0',
+      cb: this.combatVals(),
+      rules: this.ruleVals(),
+      region: this.regionVals(),
+      // free text
+      draft: s.draft,
+      hasDraft: s.draft.trim().length > 0,
+      passageCount: s.passages.length,
+      onDraft: (e) => this.setState({ draft: e.target.value }),
+      saveDraft: () => this.set({ passages: s.passages.concat([s.draft.trim()]), draft: '' }),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

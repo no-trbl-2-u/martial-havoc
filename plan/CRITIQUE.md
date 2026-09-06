@@ -75,6 +75,86 @@ not from that pass: they are the carry-overs the `/march` loop of
 - suggested fix: Review world/effects.json class and operation columns under /oversight; reserve any record the operator would rather author, and record the confirmation (or a revision) against A23 in docs.
 - source: user
 
+### [MED] general — Workers Builds fails off main with no log, config verified
+- pass: user-jot (commit 40b3dd5)
+- viewport: unspecified
+- auth_state: anonymous
+- category: reliability
+- observation: The non-production build for 40b3dd5 (PR #10) ran about sixty seconds and failed; the check run carries no output text. The dashboard configuration was read from a screenshot and is correct: build `npm run build:web`, deploy `npm run deploy`, version `npm run deploy:version`, production branch main, non-production builds on. So the earlier reading (a missing Version command) does not hold. The two zero-second failures before it (PR #8, and PR #10 at d17d46e) predate the configuration being saved. What fails inside the minute is unknown: `npm run build:web` and `npm run deploy:version` are both green locally.
+- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
+- suggested fix: Read the build log behind View logs in the dashboard, or widen CLOUDFLARE_API_TOKEN with Workers Builds read and set it in the cloud environment so the loop can read it. Then fix whichever of the two commands fails in the builder (Node 22 is pinned by .node-version; the likely suspects are the Playwright browser download during npm install, or wrangler needing the alias flag).
+- source: user
+
+### [MED] apps/app — light palette only; dark and dynamic type deferred
+- pass: user-jot (commit 40b3dd5)
+- viewport: unspecified
+- auth_state: anonymous
+- category: accessibility
+- observation: The prototype ships one palette. design/V1-DESIGN-PROMPT.md requires light and dark, system-driven, and dynamic type to 130 percent without breaking the beat screen. Neither is built; tokens are in apps/app/src/theme/tokens.ts and every colour goes through them.
+- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
+- suggested fix: Phase 8: a dark token set behind useColorScheme, and a Playwright pass at 130 percent font scale on the beat and combat screens.
+- source: user
+
+### [MED] apps/app — combat offers only the first usable Technique
+- pass: user-jot (commit 40b3dd5)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: CombatScreen picks the first Technique whose effect timing is combat-winner-option (San Te: Iron head). A Master who knows several gets no chooser, and the Technique does nothing mechanical beyond its ENDURANCE cost and its authored line.
+- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
+- suggested fix: A sub-menu of usable Techniques when more than one qualifies, and the effect operation (effects.json) wired to the engine call it names.
+- source: user
+
+### [MED] design/prototype — the Claude Design file disagrees with docs in four places
+- pass: user-jot (commit 40b3dd5)
+- viewport: unspecified
+- auth_state: anonymous
+- category: content
+- observation: Recorded in design/INDEX.md: a Spirituality attribute (the Master has three, R01), Morale on 2d6 with 7 or under holding (the sealed rule is a d6 table), invented cave areas (a stone bowl, a low gallery), and a Ghost at SKILL 5 END 6 (the Dexterous Ghost is 7 and 8, 5T a2). The app follows docs; the design file still shows the old values.
+- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
+- suggested fix: A design pass in Claude Design correcting the four, so the reference and the app agree; then re-export to design/prototype.
+- source: user
+
+### [LOW] apps/app — region labels can still collide after the spread pass
+- pass: user-jot (commit 40b3dd5)
+- viewport: unspecified
+- auth_state: anonymous
+- category: visual
+- observation: apps/app/src/lib/spread.ts keeps glyphs 58 units apart, but the mile boxes at link midpoints and the YOU ARE HERE label can still sit on a neighbour when three points line up (design/screenshots/16-region.png).
+- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
+- suggested fix: Place mile labels off the midpoint along the link normal, and skip a label whose box would overlap a glyph.
+- source: user
+
+### [LOW] apps/app — manual dice not offered for the treasure d6
+- pass: user-jot (commit 40b3dd5)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: The dice on the table cover the Master 2d6 rolls (checks, Attack Strength, the Final Blow). The R78 treasure roll is one d6 and always reads the table source, so a player who rolled it at the table cannot enter it.
+- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
+- suggested fix: Let the manual panel accept one face when the pending roll is 1d6.
+- source: user
+
+### [MED] plan/steps/01_build_plan.md — the plan does not know the prototype landed
+- pass: user-jot (commit 40b3dd5)
+- viewport: unspecified
+- auth_state: anonymous
+- category: process
+- observation: PR #10 replaced the garden page with Phase 8 screens while Phases 5 to 7 are still pending. The status block says nothing, so /march will plan Phase 5 against a build plan that still describes a placeholder page, and Phase 8 brief generation will not know its layout call is answered (design/INDEX.md).
+- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
+- suggested fix: An /oversight note on the Phase 8 row: layout chosen 2026-09-06 via the Claude Design prototype, prototype slice shipped in PR #10; Phases 5 to 7 to build on apps/app/src as it now stands.
+- source: user
+
+### [LOW] general — commit attribution policy conflicts with the cloud harness
+- pass: user-jot (commit 40b3dd5)
+- viewport: unspecified
+- auth_state: anonymous
+- category: process
+- observation: The cloud harness asks for a co-author trailer and a session-link trailer on every commit; agents.md rule 2 forbids trailers and .claude/hooks/guard.mjs blocks them. PR #10 followed the repository. The PR body carried the harness footer since rule 2 does not name PR bodies.
+- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
+- suggested fix: Decide once in agents.md whether a session-link trailer is sanctioned (guard.mjs names Cloud-Run as the only allowed trailer) and align the two.
+- source: user
+
 ## Done
 
 (empty)

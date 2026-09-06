@@ -1,6 +1,6 @@
 {
   "$schema": "../../schema/content.schema.json",
-  "$comment": "UI strings for the app shell. Phase 1 placeholder page; Phase 8 (The UI) replaces the page and the shell. Every record carries a cite.",
+  "$comment": "UI strings for the app shell and the prototype screens (design/prototype/martial-havoc-prototype.dc.html). Placeholders in braces are filled by the app; every record carries a cite. Phase 8 (The UI) builds on these.",
   "id": "app.strings",
   "kind": "strings",
   "title": "App shell strings",
@@ -26,6 +26,696 @@
       "id": "app.garden",
       "text": "The garden is planted. Nothing grows here yet.",
       "cite": "plan/phases/phase_1_bootstrap.md"
+    },
+    {
+      "id": "ui.adventure.title",
+      "text": "THE 5 TREASURES",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.nav.rules",
+      "text": "RULES",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.nav.map",
+      "text": "MAP",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.nav.back",
+      "text": "BACK TO PLAY",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.attr.skill",
+      "text": "SKL",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.attr.endurance",
+      "text": "END",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.attr.luck",
+      "text": "LCK",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.attr.gold",
+      "text": "GP",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.beat.place",
+      "text": "AREA {area} OF 8 · {name}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.empty.title",
+      "text": "NOTHING HERE YET.",
+      "cite": "plan/bearings.md, Loop defaults"
+    },
+    {
+      "id": "ui.empty.line",
+      "text": "Roll, or write.",
+      "cite": "plan/bearings.md, Loop defaults"
+    },
+    {
+      "id": "ui.passage.heading",
+      "text": "YOUR PASSAGE · {n} WRITTEN",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.passage.optional",
+      "text": "OPTIONAL",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.passage.placeholder",
+      "text": "Write it down, or don't.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.passage.keep",
+      "text": "KEEP IT",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.manual.heading",
+      "text": "THE DICE ON YOUR TABLE · COUNTS AS AN OVERRIDE",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.manual.prompt",
+      "text": "TAP THE TWO FACES YOU ROLLED",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.manual.ready",
+      "text": "YOUR DICE: {a} AND {b} · NOW CHOOSE AN ACTION",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.manual.cancel",
+      "text": "CANCEL",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.manual.open",
+      "text": "MY DICE",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.roll.primary",
+      "text": "ROLL 2d6",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.roll.manual",
+      "text": "USE MY DICE",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.overrides",
+      "text": "OVERRIDES {n}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.deeds",
+      "text": "DEEDS {n}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.skill.passed",
+      "text": "SKILL CHECK · PASSED",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.skill.failed",
+      "text": "SKILL CHECK · FAILED",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.luck.passed",
+      "text": "LUCK CHECK · PASSED",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.luck.failed",
+      "text": "LUCK CHECK · FAILED",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.against.skill",
+      "text": "against SKILL {skill} +{value} ({name})",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.against.skill.bare",
+      "text": "against SKILL {skill}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.against.luck",
+      "text": "against LUCK {luck} · LUCK is now {after}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.cite.check",
+      "text": "{cite} · equal or under passes · {total} {op} {threshold}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.cite.double-six",
+      "text": "{cite} · a double six always fails (spec.md, sealed)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.rest.title",
+      "text": "A NIGHT'S REST",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.rest.against",
+      "text": "ENDURANCE {before} to {after}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.rest.cite",
+      "text": "MH p.31 · SKILL recovers fully (R40); ENDURANCE +4 (spec.md, sealed)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.take.title",
+      "text": "TREASURE TAKEN",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.take.against",
+      "text": "{n} OF 5 HELD",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.take.cite",
+      "text": "5T a2 · picked up by exploration, not loot (inferred, I-38)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.treasure.title",
+      "text": "TREASURE ROLL · 1d6 = {face}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.treasure.against",
+      "text": "band {band}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.result.treasure.cite",
+      "text": "MH p.68 R78 · offered after a victory, declinable (I-30b)",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.place",
+      "text": "COMBAT · ROUND {n}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.you",
+      "text": "YOUR MASTER",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.mine",
+      "text": "2d6 {dice} · SKILL +{skill}\n{name} +{value}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.mine.idle",
+      "text": "2d6 · SKILL +{skill}\n{name} +{value}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.theirs",
+      "text": "2d6 {dice} · SKILL +{skill}\n{name} +{value}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.theirs.idle",
+      "text": "END {end} · {name} +{value}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.banner.roll",
+      "text": "ROLL THE ROUND",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.banner.ahead",
+      "text": "YOU ARE AHEAD BY",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.banner.behind",
+      "text": "IT IS AHEAD BY · END LOST",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.banner.tie",
+      "text": "EQUAL · UNEXPECTED EVENT",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.banner.down",
+      "text": "ENDURANCE 0 · THE MASTER FALLS",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.event.heading",
+      "text": "UNEXPECTED EVENT · 2d6 = {n}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.event.cite",
+      "text": "RULE MH p.28",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.event.note",
+      "text": "Attack Strengths equal. You are no longer in the combat phase (R32).",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.morale.flee",
+      "text": "ITS MORALE BREAKS · IT FLEES",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.morale.cautious",
+      "text": "IT WITHDRAWS IN ORDER",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.morale.rally",
+      "text": "IT RALLIES · {n} MORE ARRIVE",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.morale.die",
+      "text": "1d6 = {n}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.morale.cite",
+      "text": "INVENTION · spec.md, sealed · the retreat rows roll Morale",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.blow.landed",
+      "text": "THE BLOW LANDS",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.blow.missed",
+      "text": "NO DOUBLES · THE OPENING HOLDS",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.blow.cite",
+      "text": "MH p.25 R30 · doubles land it",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.strike",
+      "text": "Strike",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.strike.cite",
+      "text": "MH p.23 R25a",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.strike.won",
+      "text": "Take {n} from its ENDURANCE.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.strike.lost",
+      "text": "Only the higher side may choose.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.strike-instead",
+      "text": "Strike instead",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.strike-instead.line",
+      "text": "Give up the Opening for the difference in damage.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.technique",
+      "text": "Use a Technique",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.technique.cite",
+      "text": "READING I-23",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.technique.line",
+      "text": "{name} ({cost}) · costs {cost} END, no roll.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.technique.none",
+      "text": "No Technique of yours works inside a round.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.weapon",
+      "text": "Change or recover a weapon",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.weapon.cite",
+      "text": "MH p.23 R25c",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.weapon.line",
+      "text": "Armed Proficiencies add nothing without a weapon.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.opening",
+      "text": "Create an Opening",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.opening.cite",
+      "text": "MH p.24 R29",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.opening.line",
+      "text": "No damage · then the Final Blow lands on doubles.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.blow",
+      "text": "Deliver the Final Blow",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.blow.cite",
+      "text": "MH p.25 R30",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.blow.line",
+      "text": "Roll 2d6 · doubles land it, 6 chances in 36.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.morale",
+      "text": "Roll Morale for the retreat",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.morale.cite",
+      "text": "INVENTION · sealed",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.morale.line",
+      "text": "The row says it retreats; the table says whether it can.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.leave-phase",
+      "text": "Leave the combat phase",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.leave-phase.cite",
+      "text": "MH p.27 R32",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.leave-phase.line",
+      "text": "After an Unexpected Event you are no longer fighting.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.treasure",
+      "text": "Roll for treasure",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.treasure.cite",
+      "text": "MH p.68 R78",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.treasure.line",
+      "text": "A 1d6 treasure roll, banded by its ENDURANCE. You may decline.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.go-on",
+      "text": "Go on",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.go-on.cite",
+      "text": "5T a2",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.go-on.line",
+      "text": "It carried the private quarter's key. Now you do.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.fall",
+      "text": "Begin again",
+      "cite": "spec.md, Horizon (the world dies with the Master)"
+    },
+    {
+      "id": "ui.combat.act.fall.cite",
+      "text": "MH p.6 R06 · spec.md",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.act.fall.line",
+      "text": "ENDURANCE at zero: the Master dies or is unconscious. The world dies with the Master; what follows is a new record.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.primary.roll",
+      "text": "ROLL THE ROUND",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.primary.over",
+      "text": "FIGHT IS OVER",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.leave.flee",
+      "text": "FLEE · DISHONOR +1",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.combat.leave.go",
+      "text": "GO ON",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.place",
+      "text": "THE RULES PANEL",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.title",
+      "text": "RULES, READINGS AND INVENTIONS",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.lead",
+      "text": "Everything this prototype does, and the authority for it. Tap one to open it.",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.chip.all",
+      "text": "ALL",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.chip.rule",
+      "text": "RULE",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.chip.reading",
+      "text": "READING",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.chip.invention",
+      "text": "OURS",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.says",
+      "text": "THE BOOK SAYS",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.silent",
+      "text": "SILENT ON",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.source",
+      "text": "SOURCE",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.reversed",
+      "text": "IF REVERSED",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.says.default",
+      "text": "the page as printed",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.silent.default",
+      "text": "nothing · this one is printed",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.reversed.default",
+      "text": "nothing; it is the book",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.rules.footer",
+      "text": "{n} BEHAVIOURS · {u} UNLABELLED",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.label.rule",
+      "text": "RULE",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.label.reading",
+      "text": "READING",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.label.invention",
+      "text": "INVENTION",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.label.glyph.rule",
+      "text": "R",
+      "cite": "design/V1-DESIGN-PROMPT.md (labels legible by glyph as well as colour)"
+    },
+    {
+      "id": "ui.label.glyph.reading",
+      "text": "I",
+      "cite": "design/V1-DESIGN-PROMPT.md (labels legible by glyph as well as colour)"
+    },
+    {
+      "id": "ui.label.glyph.invention",
+      "text": "+",
+      "cite": "design/V1-DESIGN-PROMPT.md (labels legible by glyph as well as colour)"
+    },
+    {
+      "id": "ui.region.place",
+      "text": "THE REGION",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.region.here",
+      "text": "YOU ARE AT",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.region.you",
+      "text": "YOU ARE HERE",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.region.count",
+      "text": "{p} POINTS · {l} LINKS",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.region.not-to-scale",
+      "text": "NOT TO SCALE",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.region.travel",
+      "text": "TRAVEL TO {name}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.region.miles",
+      "text": "{n} MI",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.region.joined",
+      "text": "JOINED",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.region.footer",
+      "text": "INVENTION · MILES = DICE SUM",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.deed.killed",
+      "text": "killed {name}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.deed.final-blow",
+      "text": "final blow on {name}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.deed.fled",
+      "text": "fled {name} · dishonor +1",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.deed.took",
+      "text": "took the {name}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.deed.fell",
+      "text": "fell to {name}",
+      "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.treasure.vase-of-muttonfat-jade",
+      "text": "Vase of muttonfat jade",
+      "cite": "5T a2"
     }
   ]
 }

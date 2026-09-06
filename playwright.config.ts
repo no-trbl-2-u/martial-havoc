@@ -17,6 +17,9 @@ const executablePath = named && existsSync(named) ? named : undefined
 
 export default defineConfig({
   testDir: 'e2e',
+  // The screenshot playthrough has its own config (playwright.screenshots.config.ts);
+  // it is not a gate leg.
+  testIgnore: ['**/screenshots/**'],
   fullyParallel: true,
   forbidOnly: !!process.env['CI'],
   retries: 0,

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "$comment": "The nine stat blocks under 'Encounters' on page a2 of The 5 Treasures, in the same shape as the rulebook's 50 opponents so the engine's attackStrength takes either. LOOT is carried in notes until Phase 5's adventure format gives it a field. page is the adventure folio, not a rulebook page.",
+  "id": "campaigns.the-5-treasures-foes",
+  "kind": "list",
+  "title": "The 5 Treasures: foes",
+  "cite": "5T a2",
+  "label": "rule",
+  "docs": "docs/campaigns/the-5-treasures/foes.md",
+  "records": [
+    { "id": "foe.devil-servant", "cite": "5T a2", "name": "Devil servant", "description": "Sneaky minion, easily frightened if alone (use the Oracle for the number of devils)", "skill": 5, "endurance": 7, "attack": 1, "proficiencies": [ { "name": "Surround", "value": 3 }, { "name": "Sneak attack", "value": 2 } ], "martialArtsValue": null, "page": "5T a2", "notes": "LOOT: 1-3 junk; 4-5 simple weapon; 6 a Hint (inferred, I-08)." },
+    { "id": "foe.dexterous-ghost", "cite": "5T a2", "name": "Dexterous Ghost", "description": "A spirit servant, quick yet clumsy.", "skill": 7, "endurance": 8, "attack": 1, "proficiencies": [ { "name": "evanescence", "value": 2 }, { "name": "immaterial charge", "value": 4 } ], "martialArtsValue": null, "page": "5T a2", "notes": "LOOT: private quarter's key. Met in the Attendants room." },
+    { "id": "foe.junior-king-silver-horn", "cite": "5T a2", "name": "Junior King Silver Horn", "description": "Cunny demon, master swordsman. He takes orders only from his elder brother.", "skill": 9, "endurance": 15, "attack": 1, "proficiencies": [ { "name": "Shapeshifting", "value": 4 }, { "name": "levitation", "value": 3 } ], "martialArtsValue": null, "page": "5T a2", "notes": "LOOT: seven-star sword. One entity across tables (inferred, I-33c)." },
+    { "id": "foe.monk", "cite": "5T a2", "name": "Monk", "description": "Unlucky traveller with a vegetarian diet.", "skill": 4, "endurance": 5, "attack": 1, "proficiencies": [ { "name": "Curse", "value": 3 }, { "name": "Exorcism", "value": 1 } ], "martialArtsValue": null, "page": "5T a2", "notes": "LOOT: 1-2 rosary; 3-4 baoding balls; 5-6 elixir. A rescue, not an enemy (inferred, I-39)." },
+    { "id": "foe.ogre", "cite": "5T a2", "name": "Ogre", "description": "Half human brute with long fangs.", "skill": 6, "endurance": 13, "attack": 3, "proficiencies": [ { "name": "Bite", "value": 2 }, { "name": "Sweep", "value": 1 } ], "martialArtsValue": null, "page": "5T a2", "notes": "LOOT: Spear." },
+    { "id": "foe.old-vixen", "cite": "5T a2", "name": "Old Vixen", "description": "Animal spirit in the appearance of an old lady.", "skill": 8, "endurance": 5, "attack": 1, "proficiencies": [ { "name": "Tightening spell", "value": 4 }, { "name": "charm", "value": 2 } ], "martialArtsValue": null, "page": "5T a2", "notes": "LOOT: Dazzling Golden Cord." },
+    { "id": "foe.senior-king-golden-horn", "cite": "5T a2", "name": "Senior King Golden Horn", "description": "Lord of the cave; sturdy demon with helmet, breast plate and a cloak of red silk.", "skill": 9, "endurance": 18, "attack": 4, "proficiencies": [ { "name": "Magic flames", "value": 4 }, { "name": "Call to arms!", "value": 4 } ], "martialArtsValue": null, "page": "5T a2", "notes": "LOOT: Plantain fan." },
+    { "id": "foe.skillful-beast", "cite": "5T a2", "name": "Skillful Beast", "description": "A monsterlike devil with fighting quality, but not a sharp mind", "skill": 7, "endurance": 13, "attack": 5, "proficiencies": [ { "name": "somersault leap", "value": 3 }, { "name": "whirlwind attack", "value": 2 } ], "martialArtsValue": null, "page": "5T a2", "notes": "LOOT: private quarter's key." },
+    { "id": "foe.woodgatherer", "cite": "5T a2", "name": "Woodgatherer", "description": "They know the mountain, but living in a dangerous place made them irritable.", "skill": 5, "endurance": 8, "attack": 5, "proficiencies": [ { "name": "axe throwing", "value": 3 }, { "name": "chopping strike", "value": 2 } ], "martialArtsValue": null, "page": "5T a2", "notes": "LOOT: Great Bear scripture [recited keeps beasts away]. A band, ATT 5 (inferred, I-05b)." }
+  ]
+}
