@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../schema/content.schema.json",
+  "$comment": "The act markers. The source prints none: it is two pages of areas, foes and treasures with no arc drawn over them, so every row here is ours (label invention) and cites this build's phase brief. Acts are tested in ascending order and the highest satisfied one is current; the last carries ending: true and is the ending screen the scripted playthrough has to reach. Reaching act 5 implies act 4, because the Plantain Fan is the Senior King's loot.",
+  "id": "campaigns.the-5-treasures.acts",
+  "kind": "list",
+  "title": "The 5 Treasures: acts and the ending",
+  "cite": "plan/phases/phase_5_adventure_format_and_the_5_treasures.md",
+  "label": "invention",
+  "docs": "docs/campaigns/the-5-treasures/index.md",
+  "records": [
+    {
+      "id": "act.the-5-treasures.1",
+      "cite": "plan/phases/phase_5_adventure_format_and_the_5_treasures.md; 5T a1",
+      "adventure": "adventure.the-5-treasures",
+      "act": 1,
+      "name": "The mountain",
+      "condition": "start",
+      "threshold": null,
+      "line": "Two fiends on a flat-topped mountain, and five treasures nobody has come back with.",
+      "ending": false
+    },
+    {
+      "id": "act.the-5-treasures.2",
+      "cite": "plan/phases/phase_5_adventure_format_and_the_5_treasures.md; 5T a1",
+      "adventure": "adventure.the-5-treasures",
+      "act": 2,
+      "name": "Inside the Lotus Flower",
+      "condition": "enter",
+      "threshold": "area.the-5-treasures.cave-entrance",
+      "line": "The gate is behind you now, and the stream that went in ahead of you has stopped talking.",
+      "ending": false
+    },
+    {
+      "id": "act.the-5-treasures.3",
+      "cite": "plan/phases/phase_5_adventure_format_and_the_5_treasures.md; 5T a1",
+      "adventure": "adventure.the-5-treasures",
+      "act": 3,
+      "name": "Past the locked door",
+      "condition": "enter",
+      "threshold": "area.the-5-treasures.chieftain-quarter",
+      "line": "A key that two servants died holding, and a paper door that gives like nothing at all.",
+      "ending": false
+    },
+    {
+      "id": "act.the-5-treasures.4",
+      "cite": "plan/phases/phase_5_adventure_format_and_the_5_treasures.md; 5T a2",
+      "adventure": "adventure.the-5-treasures",
+      "act": 4,
+      "name": "The lord of the cave",
+      "condition": "defeated",
+      "threshold": "foe.senior-king-golden-horn",
+      "line": "Golden Horn is down. The cave notices, the way a house notices when the fire goes out.",
+      "ending": false
+    },
+    {
+      "id": "act.the-5-treasures.5",
+      "cite": "plan/phases/phase_5_adventure_format_and_the_5_treasures.md; 5T a2",
+      "adventure": "adventure.the-5-treasures",
+      "act": 5,
+      "name": "The 5 Treasures",
+      "condition": "treasures",
+      "threshold": 5,
+      "line": "Gourd, cord, vase, fan and sword. You walk out under whichever sky you left in the gourd, and the travellers on the Flat-top mountain go unthreatened.",
+      "ending": true
+    }
+  ]
+}

@@ -109,6 +109,47 @@ export type { BlowInput, TreasureBand } from './progression/spoils'
 export { ambush, enemyAttack } from './progression/oracle'
 export type { Ambush, EnemyAttack } from './progression/oracle'
 
+// The adventure: a scene read from the adventure format (v1), played as
+// areas, events, encounters, loot, gated hints, acts and an ending.
+export {
+  SUPPORTED_FORMAT_VERSIONS,
+  UnsupportedAdventure,
+  beginAdventure,
+  flag,
+  toggleFlag,
+  withArea,
+  withDefeated,
+  withDishonor,
+  withEffect,
+  withFlag,
+  withHint,
+  withItem,
+  withKey,
+  withRescued,
+  withTreasure,
+} from './adventure/state'
+export type { AdventureState } from './adventure/state'
+export { EVENT_KINDS, bringsEncounter, eventFor, rollEvent } from './adventure/event'
+export type { EventKind, EventRoll } from './adventure/event'
+export { areaById, canEnter, currentArea, enterArea, exitsFrom } from './adventure/graph'
+export type { Passage } from './adventure/graph'
+export { available, encounterFor, encounterIn, isAbsent, rowsForArea } from './adventure/encounter'
+export type { Encounter } from './adventure/encounter'
+export {
+  effectFor,
+  effectRevealed,
+  hintFor,
+  hintRevealed,
+  learnFrom,
+  revealHint,
+} from './adventure/hints'
+export { dropFor, lootFrom, rowsForFoe, takeAreaTreasure, takeDrop } from './adventure/loot'
+export type { Drop } from './adventure/loot'
+export { actFor, actSatisfied, ending, endingAct, isEnded } from './adventure/acts'
+export type { Ending } from './adventure/acts'
+export { attackRescue, rescue, resolveEncounter, step, takeHere } from './adventure/run'
+export type { Turn } from './adventure/run'
+
 // The region: dice thrown on a plane, linked and measured (MH p.42-44).
 export { linksFrom, otherEnd, throwRegion } from './region/region'
 export type { Region, RegionLink, RegionPoint } from './region/region'
@@ -123,6 +164,7 @@ import { escapeBehaviours } from './escape/behaviours'
 import { healingBehaviours } from './healing/behaviours'
 import { progressionBehaviours } from './progression/behaviours'
 import { regionBehaviours } from './region/behaviours'
+import { adventureBehaviours } from './adventure/behaviours'
 
 /**
  * The registry of every behaviour the engine exports.
@@ -143,4 +185,5 @@ export const behaviours: readonly Behaviour[] = Object.freeze([
   ...healingBehaviours,
   ...progressionBehaviours,
   ...regionBehaviours,
+  ...adventureBehaviours,
 ])

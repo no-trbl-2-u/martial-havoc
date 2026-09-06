@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../schema/content.schema.json",
+  "$comment": "The adventure's clock and its states. The rulebook has neither; this adventure states both and the estate read them as flags (I-40). Each is a named boolean the engine carries in the adventure state and the encounter tables read through absences.json - never a branch in the engine.",
+  "id": "campaigns.the-5-treasures.flags",
+  "kind": "list",
+  "title": "The 5 Treasures: flags",
+  "cite": "5T a1",
+  "label": "reading",
+  "docs": "docs/campaigns/the-5-treasures/areas.md",
+  "records": [
+    { "id": "flag.the-5-treasures.night", "cite": "I-45; 5T a2", "reading": "I-45", "adventure": "adventure.the-5-treasures", "flag": "night", "initial": false, "text": "The gourd, opened, swallows the sky and day becomes night; closing it brings the daylight back." },
+    { "id": "flag.the-5-treasures.junior-king-asleep", "cite": "I-40; 5T a1", "reading": "I-40", "adventure": "adventure.the-5-treasures", "flag": "junior-king-asleep", "initial": false, "text": "The Junior King naps in the Dining Hall once he has overdrunk wine: a state the Master causes by bringing it." },
+    { "id": "flag.the-5-treasures.sheets-read", "cite": "I-38b; 5T a1", "reading": "I-38b", "adventure": "adventure.the-5-treasures", "flag": "sheets-read", "initial": false, "text": "The Chieftain's scattered sheets have been interpreted, so two of the treasures' workings are known without holding them." },
+    { "id": "flag.the-5-treasures.cord-spells-known", "cite": "I-41; 5T a1", "reading": "I-41", "adventure": "adventure.the-5-treasures", "flag": "cord-spells-known", "initial": false, "text": "The spells that control the Dazzling Golden Cord are known; until then the Cord is inert loot." }
+  ]
+}

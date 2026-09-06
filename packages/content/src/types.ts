@@ -354,3 +354,177 @@ export type BehaviourNote = BaseRecord & {
   readonly source?: string
   readonly reversed?: string
 }
+
+// ------------------------------------------------------- adventure format
+
+/**
+ * The adventure format, v1. One record type per file of an adventure
+ * directory; the shapes are defined in `schema/content.schema.json` and
+ * documented in `schema/adventure-format.md`.
+ *
+ * Every record but {@link AdventureMeta} carries `adventure`: the id of
+ * the meta record it belongs to. That field is what makes a directory
+ * one document, and it is what lets a lookup take "the areas of *this*
+ * adventure" out of a package that may hold several.
+ */
+
+/** What every record of an adventure carries besides {@link BaseRecord}. */
+export type AdventureRecord = BaseRecord & {
+  /** The {@link AdventureMeta} id this record belongs to. */
+  readonly adventure: string
+}
+
+/** The header record of one adventure: exactly one per directory. */
+export type AdventureMeta = BaseRecord & {
+  /** The format version these files are written in; the engine refuses an unknown one. */
+  readonly version: string
+  readonly title: string
+  /** The premise paragraph, verbatim. */
+  readonly premise: string
+  /** The {@link AdventureArea} id the Master begins in. */
+  readonly startArea: string
+  /** The licence and credit line, verbatim. */
+  readonly credits: string
+}
+
+/** A lock on entering an area: the key that opens it, and what the door is. */
+export type AreaGate = {
+  /** A key id an {@link AdventureLoot} row can drop. */
+  readonly key: string
+  /** The door as the source describes it, verbatim. */
+  readonly text: string
+}
+
+/** A stat-blocked NPC who is a rescue rather than an enemy (I-39). */
+export type AreaRescue = {
+  /** The opponent id of the NPC. */
+  readonly foe: string
+  /** How the source introduces them, verbatim. */
+  readonly text: string
+  /** True where attacking them costs the Master honour rather than earning a fight. */
+  readonly dishonorOnAttack: boolean
+}
+
+/** One area of an adventure: a place, its ways out, its lock and its prizes. */
+export type AdventureArea = AdventureRecord & {
+  /** The area's printed number. */
+  readonly area: number
+  readonly name: string
+  /** The printed description, verbatim. */
+  readonly description: string
+  /** The grey Hint paragraph, verbatim; hidden until earned (I-60). */
+  readonly hint: string
+  /** The authored line the beat screen reads. Ours. */
+  readonly line: string
+  /** The ids of the areas reachable from here; undirected, so listed both ways. */
+  readonly exits: readonly string[]
+  readonly gate: AreaGate | null
+  /** Treasure ids found here by exploration rather than as loot (I-38). */
+  readonly treasures: readonly string[]
+  readonly rescue: AreaRescue | null
+}
+
+/** How many of a foe an encounter row brings. */
+export type EncounterCount = 'one' | 'band' | 'oracle' | 'none'
+
+/** One row of an area's encounter table. */
+export type AdventureEncounter = AdventureRecord & {
+  /** The printed number of the area whose table this row is in. */
+  readonly area: number
+  /** The 1d6 faces landing on this row; empty for a fixed encounter (I-34). */
+  readonly faces: readonly number[]
+  /** The opponent ids met; two ids is a multiple combat (R35). */
+  readonly foes: readonly string[]
+  readonly count: EncounterCount
+  /** True where the row meets nothing and the event degrades (I-36). */
+  readonly empty: boolean
+}
+
+/** One row of a foe's printed LOOT line. */
+export type AdventureLoot = AdventureRecord & {
+  /** The opponent id whose LOOT line this row is part of. */
+  readonly foe: string
+  /** The 1d6 faces landing on this row; empty for a single named drop. */
+  readonly faces: readonly number[]
+  /** The drop as printed, verbatim. */
+  readonly item: string
+  /** A treasure id where the drop is one of the adventure's named treasures. */
+  readonly treasure: string | null
+  /** A key id where the drop opens a gate; two foes may drop the same one (I-07). */
+  readonly key: string | null
+  /** True where the printed drop is a Hint rather than an object (I-08). */
+  readonly hint: boolean
+  /** True where the drop exists in one copy only (I-33c). */
+  readonly once: boolean
+}
+
+/** Where a treasure comes from. */
+export type TreasureSource = 'area' | 'loot'
+
+/** One of an adventure's named treasures. */
+export type AdventureTreasure = AdventureRecord & {
+  readonly name: string
+  /** How the treasure works, verbatim; spoiler-gated like a Hint (I-60). */
+  readonly effect: string
+  readonly source: TreasureSource
+  /** The area id or foe id named by {@link source}. */
+  readonly sourceRef: string
+  /** Ids that reveal the effect short of holding it; empty = on acquiring. */
+  readonly knownFrom: readonly string[]
+}
+
+/** One per-adventure flag: a named boolean the tables read. */
+export type AdventureFlag = AdventureRecord & {
+  readonly flag: string
+  readonly initial: boolean
+  readonly text: string
+}
+
+/** "While this flag holds, this foe is not met in this area" (I-45). */
+export type AdventureAbsence = AdventureRecord & {
+  /** The printed area number, or 0 for every area of the adventure. */
+  readonly area: number
+  readonly foe: string
+  readonly flag: string
+  /** The flag value that makes the foe absent. */
+  readonly whenTrue: boolean
+  readonly text: string
+}
+
+/** What advances a Master into an act. */
+export type ActCondition = 'start' | 'enter' | 'defeated' | 'treasures'
+
+/** One act marker; the one with `ending` is the ending screen. */
+export type AdventureAct = AdventureRecord & {
+  /** Ascending from 1; the highest satisfied act is current. */
+  readonly act: number
+  readonly name: string
+  readonly condition: ActCondition
+  /** A count for `treasures`, an id for `enter` and `defeated`, null for `start`. */
+  readonly threshold: number | string | null
+  /** The authored line the marker reads. Ours. */
+  readonly line: string
+  /** True on exactly one row per adventure. */
+  readonly ending: boolean
+}
+
+/**
+ * Every table of one adventure, in one object.
+ *
+ * This is the argument the engine's adventure module takes. The engine
+ * imports no data: a caller loads an adventure (from this package, or
+ * from anywhere else that can produce these shapes) and hands it over.
+ */
+export type AdventureTables = {
+  readonly meta: AdventureMeta
+  readonly events: readonly Band[]
+  readonly areas: readonly AdventureArea[]
+  readonly encounters: readonly AdventureEncounter[]
+  readonly loot: readonly AdventureLoot[]
+  readonly treasures: readonly AdventureTreasure[]
+  readonly flags: readonly AdventureFlag[]
+  readonly absences: readonly AdventureAbsence[]
+  readonly acts: readonly AdventureAct[]
+  /** The foes the encounter and loot rows reference, in the opponent shape. */
+  readonly foes: readonly Opponent[]
+}

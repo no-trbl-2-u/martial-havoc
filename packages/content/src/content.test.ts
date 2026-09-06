@@ -46,7 +46,7 @@ const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
   'app.strings': 142,
   // The rules panel's notes: one per engine behaviour (the label leg
   // checks the pairing; this only pins the count).
-  'app.behaviour-notes': 78,
+  'app.behaviour-notes': 91,
 
   // The 5 Treasures: the nine foes as printed, and the prototype slice
   // of three areas with their menus (design/prototype).
@@ -91,6 +91,21 @@ const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
 
   // The campaign layer: what an adventure can be about.
   'campaigns.adventure-hooks': 36,
+
+  // The 5 Treasures written in the adventure format (Phase 5). The
+  // counts are the printed ones: 4 event rows, 8 areas, 17 encounter
+  // bands, 13 LOOT bands, 5 treasures. The flags, the absence and the
+  // acts are readings and inventions of this build, counted here so
+  // one going missing is as red as a dropped table cell.
+  'campaigns.the-5-treasures.adventure': 1,
+  'campaigns.the-5-treasures.events': 4,
+  'campaigns.the-5-treasures.areas': 8,
+  'campaigns.the-5-treasures.encounters': 17,
+  'campaigns.the-5-treasures.loot': 13,
+  'campaigns.the-5-treasures.treasures': 5,
+  'campaigns.the-5-treasures.flags': 4,
+  'campaigns.the-5-treasures.absences': 1,
+  'campaigns.the-5-treasures.acts': 5,
 }
 
 /** Recursively list files under `dir` with the given extension, sorted. */

@@ -43,6 +43,15 @@ import adventureHooks from '../data/campaigns/adventure-hooks.json'
 import treasureFoes from '../data/campaigns/the-5-treasures-foes.json'
 import prototypeBeats from '../data/campaigns/the-5-treasures-prototype-beats.json'
 import prototypeOptions from '../data/campaigns/the-5-treasures-prototype-options.json'
+import caveAdventure from '../data/campaigns/the-5-treasures/adventure.json'
+import caveEvents from '../data/campaigns/the-5-treasures/events.json'
+import caveAreas from '../data/campaigns/the-5-treasures/areas.json'
+import caveEncounters from '../data/campaigns/the-5-treasures/encounters.json'
+import caveLoot from '../data/campaigns/the-5-treasures/loot.json'
+import caveTreasures from '../data/campaigns/the-5-treasures/treasures.json'
+import caveFlags from '../data/campaigns/the-5-treasures/flags.json'
+import caveAbsences from '../data/campaigns/the-5-treasures/absences.json'
+import caveActs from '../data/campaigns/the-5-treasures/acts.json'
 import strings from '../data/app/strings.json'
 import behaviourNotes from '../data/app/behaviour-notes.json'
 
@@ -85,12 +94,27 @@ const registry: readonly CountedFile[] = Object.freeze([
   treasureFoes,
   prototypeBeats,
   prototypeOptions,
+  caveAdventure,
+  caveEvents,
+  caveAreas,
+  caveEncounters,
+  caveLoot,
+  caveTreasures,
+  caveFlags,
+  caveAbsences,
+  caveActs,
   strings,
   behaviourNotes,
 ])
 
 /** The files whose every record carries a line authored for this build. */
-const authored: readonly CountedFile[] = Object.freeze([effects, oracleLines, unexpectedEventLines])
+const authored: readonly CountedFile[] = Object.freeze([
+  effects,
+  oracleLines,
+  unexpectedEventLines,
+  caveAreas,
+  caveActs,
+])
 
 /** What {@link contentCounts} reports. */
 export type ContentCounts = {
@@ -99,10 +123,13 @@ export type ContentCounts = {
   /** Record count per file id, so a report can name what grew. */
   readonly byFile: Readonly<Record<string, number>>
   /**
-   * How many records in this package carry an authored line of our own
-   * (Phase 4): the 72 effect records plus the 66 Oracle lines plus the
-   * 11 Unexpected Event lines. Counted from the same files, so the
-   * number in a report is the number on disk.
+   * How many records in this package carry an authored line of our own.
+   *
+   * Phase 4: 72 effect records, 66 Oracle lines, 11 Unexpected Event
+   * lines. Phase 5: the 8 areas of the cave (whose `description` and
+   * `hint` are transcriptions but whose `line` is ours) and its 5 act
+   * markers. Counted from the same files, so the number in a report is
+   * the number on disk.
    */
   readonly authoredLines: number
 }

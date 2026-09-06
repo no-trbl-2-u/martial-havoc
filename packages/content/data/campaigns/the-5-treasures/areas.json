@@ -1,0 +1,161 @@
+{
+  "$schema": "../../../schema/content.schema.json",
+  "$comment": "The eight areas of the Flat-top mountain and the Lotus Flower cave. `description` and `hint` are verbatim from page a1, printed spelling and punctuation kept; `line` is ours, the authored line the beat screen reads (spec.md, Horizon). `exits` is the map's adjacency, inferred (I-42); `gate` is the locked Private Quarters (I-07); `treasures` are the two picked up by exploration rather than loot (I-38); `rescue` is the Kitchen's Monk (I-39). The three lines for areas 2, 3 and 4 are the same lines the design prototype shipped, kept word for word so the screen does not change under the player when Phase 8 rebuilds it on this file.",
+  "id": "campaigns.the-5-treasures.areas",
+  "kind": "list",
+  "title": "The 5 Treasures: areas",
+  "cite": "5T a1",
+  "label": "rule",
+  "docs": "docs/campaigns/the-5-treasures/areas.md",
+  "records": [
+    {
+      "id": "area.the-5-treasures.flat-top-mountain",
+      "cite": "5T a1",
+      "adventure": "adventure.the-5-treasures",
+      "area": 1,
+      "name": "Flat-top mountain",
+      "description": "A wild and vast territory covered with pines and willow trees, deep valleys and steep rocks, difficult paths for horses. In the distance an axe at work and the animals running on craggy ridges.",
+      "hint": "Old poem 'Towering peaks, Tapered pinnacles. Down in the deep, winding stream, Beside the lonely cliff'",
+      "line": "Pines, willows, and a long way down on either side. Somewhere out of sight an axe keeps time.",
+      "exits": ["area.the-5-treasures.cave-entrance"],
+      "gate": null,
+      "treasures": [],
+      "rescue": null
+    },
+    {
+      "id": "area.the-5-treasures.cave-entrance",
+      "cite": "5T a1",
+      "reading": "I-42",
+      "adventure": "adventure.the-5-treasures",
+      "area": 2,
+      "name": "Cave entrance",
+      "description": "A shut wooden gate hidden by a willow tree; painted in red : 蓮花洞 A stream falls slowly silent, swallowed by the mountain. Shrill voices come from the inside.",
+      "hint": "Ogres go out hunting for travellers once a day",
+      "line": "A gate shut under a willow, and three red characters nobody painted for you. The stream goes in and stops talking.",
+      "exits": [
+        "area.the-5-treasures.flat-top-mountain",
+        "area.the-5-treasures.storage-room",
+        "area.the-5-treasures.dining-hall"
+      ],
+      "gate": null,
+      "treasures": [],
+      "rescue": null
+    },
+    {
+      "id": "area.the-5-treasures.attendants-room",
+      "cite": "5T a1",
+      "reading": "I-42",
+      "adventure": "adventure.the-5-treasures",
+      "area": 3,
+      "name": "Attendants room",
+      "description": "The room serves as entrance to the locked Private Quarters, a kitsch display case contains the finest tea set, right next to it, on a pedestal a jade vase is guarded by at least one of the personal Senior King's attendants.",
+      "hint": "The attendants have already tested Senior King's patience. Next mistake they will get punished",
+      "line": "Tea things behind glass, a vase on a pedestal, and a locked door that somebody here is paid to stand beside.",
+      "exits": [
+        "area.the-5-treasures.dining-hall",
+        "area.the-5-treasures.chieftain-quarter"
+      ],
+      "gate": null,
+      "treasures": ["treasure.the-5-treasures.vase-of-muttonfat-jade"],
+      "rescue": null
+    },
+    {
+      "id": "area.the-5-treasures.dining-hall",
+      "cite": "5T a1",
+      "reading": "I-42",
+      "adventure": "adventure.the-5-treasures",
+      "area": 4,
+      "name": "Dining Hall",
+      "description": "The cave vault is high and the torches barely illuminate the entire area, a long stone table with two stone thrones . The room is busy with devil servants running to and from the kitchen.",
+      "hint": "Junior King would take a nap here if he overdrank wine.",
+      "line": "Two stone thrones and one long table. The torches give up before they reach the ceiling, and the servants never look up.",
+      "exits": [
+        "area.the-5-treasures.cave-entrance",
+        "area.the-5-treasures.kitchen",
+        "area.the-5-treasures.attendants-room"
+      ],
+      "gate": null,
+      "treasures": [],
+      "rescue": null
+    },
+    {
+      "id": "area.the-5-treasures.storage-room",
+      "cite": "5T a1",
+      "reading": "I-42",
+      "adventure": "adventure.the-5-treasures",
+      "area": 5,
+      "name": "Storage room",
+      "description": "A dark room, a faint light from nearby areas illuminates the floor: a mess of boxes, crates, trunks filled with tools, servants' clothes, herbs and dried food. A source of light could show the shelves: utensils, plates, cups and recipients; gourds, jugs and vases of all dimensions.",
+      "hint": "One of the treasures looks like an ordinary gourd bottle.",
+      "line": "Everything the cave owns and nothing it wants, stacked in the dark. Bring a light and the shelves start counting themselves.",
+      "exits": [
+        "area.the-5-treasures.cave-entrance",
+        "area.the-5-treasures.kitchen"
+      ],
+      "gate": null,
+      "treasures": ["treasure.the-5-treasures.gold-and-red-gourd"],
+      "rescue": null
+    },
+    {
+      "id": "area.the-5-treasures.women-quarter",
+      "cite": "5T a1",
+      "reading": "I-07",
+      "adventure": "adventure.the-5-treasures",
+      "area": 6,
+      "name": "Women quarter",
+      "description": "The door is decorated with ivory bas-reliefs: a rich sedan chair followed by a troop of marching she-devils. A protruding hand with a golden decoration. Inside: an old woman is sitting on a chair, a white silk scarf wrapped around her head and jewels studded her golden earrings. A she-devil servant is combing her hair.",
+      "hint": "The old lady is the demons' adoptive mother. She knows the spells to control the Dazzling Golden Cord",
+      "line": "Ivory on the door, a comb going through white hair, and nobody in the room in any hurry about you.",
+      "exits": ["area.the-5-treasures.chieftain-quarter"],
+      "gate": {
+        "key": "key.the-5-treasures.private-quarter",
+        "text": "The door is decorated with ivory bas-reliefs"
+      },
+      "treasures": [],
+      "rescue": null
+    },
+    {
+      "id": "area.the-5-treasures.kitchen",
+      "cite": "5T a1",
+      "reading": "I-42",
+      "adventure": "adventure.the-5-treasures",
+      "area": 7,
+      "name": "Kitchen",
+      "description": "A steady fire fuels a boiling pot, little devils bustle about amidst chopped ingredients and sauces, knives wielded by steady hands. The smoke rises toward an opening in the ceiling that goes up inside the mountain. Soaked in the pool at the back, hidden from the entrance, there's a man tied up, he is trembling and murmuring a prayer.",
+      "hint": "The man is a MONK, captured to be eaten by the Senior King and prolong his life",
+      "line": "Steam, knives and a pot that has been boiling longer than anyone here has been alive. At the back, something in the pool is praying.",
+      "exits": [
+        "area.the-5-treasures.storage-room",
+        "area.the-5-treasures.dining-hall"
+      ],
+      "gate": null,
+      "treasures": [],
+      "rescue": {
+        "foe": "foe.monk",
+        "text": "Soaked in the pool at the back, hidden from the entrance, there's a man tied up",
+        "dishonorOnAttack": true
+      }
+    },
+    {
+      "id": "area.the-5-treasures.chieftain-quarter",
+      "cite": "5T a1",
+      "reading": "I-07",
+      "adventure": "adventure.the-5-treasures",
+      "area": 8,
+      "name": "Chieftain quarter",
+      "description": "The Senior King's private area is entered through a paper sliding door. Inside: a golden screen decorated with a fan wrapped in flames hides the bed; on the other side of the room there's a lectern with several scattered sheets.",
+      "hint": "By interpreting what is written on the sheets, you come to how two of the treasures work.",
+      "line": "A screen with a burning fan painted on it, a bed behind that, and a lectern where somebody has been working something out.",
+      "exits": [
+        "area.the-5-treasures.attendants-room",
+        "area.the-5-treasures.women-quarter"
+      ],
+      "gate": {
+        "key": "key.the-5-treasures.private-quarter",
+        "text": "a paper sliding door"
+      },
+      "treasures": [],
+      "rescue": null
+    }
+  ]
+}

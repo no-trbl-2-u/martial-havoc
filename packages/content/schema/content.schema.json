@@ -1402,6 +1402,529 @@
             "minLength": 1
           }
         }
+      },
+      "adventureMeta": {
+        "description": "The header record of one adventure written in the adventure format (packages/content/schema/adventure-format.md). Exactly one per adventure directory: the format version its files are written in, the printed title, the premise paragraph verbatim, the area the Master starts in, and the printed credit line. Every other file of the adventure names this record's id in its own `adventure` field, which is what makes the directory one document.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "version",
+          "title",
+          "premise",
+          "startArea",
+          "credits"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "version": {
+            "description": "The adventure format version this adventure is written in. Bumped only when a record shape changes incompatibly; the engine refuses a version it does not know.",
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          },
+          "title": {
+            "description": "The adventure's printed title, verbatim.",
+            "type": "string",
+            "minLength": 1
+          },
+          "premise": {
+            "description": "The premise paragraph, verbatim. Never a paraphrase: the printed prose is the adventure's opening screen.",
+            "type": "string",
+            "minLength": 1
+          },
+          "startArea": {
+            "description": "The id of the area the Master begins in (an `adventureArea` record id).",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "credits": {
+            "description": "The licence and credit line, verbatim.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "adventureArea": {
+        "description": "One area of an adventure: its printed number and title, its printed description, its spoiler-gated Hint, an authored line of ours for the beat screen, the areas it leads to, the lock on entering it, and the treasures lying in it. Description and hint are verbatim transcriptions; `line` is the only authored field.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "adventure",
+          "area",
+          "name",
+          "description",
+          "hint",
+          "line",
+          "exits",
+          "gate",
+          "treasures",
+          "rescue"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "adventure": {
+            "description": "The `adventureMeta` id this area belongs to.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "area": {
+            "description": "The area's printed number (1-8 in The 5 Treasures).",
+            "type": "integer",
+            "minimum": 1
+          },
+          "name": {
+            "description": "The area's printed title, verbatim.",
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "description": "The area's printed description, verbatim, printed spelling and all.",
+            "type": "string",
+            "minLength": 1
+          },
+          "hint": {
+            "description": "The grey Hint paragraph, verbatim. Hidden until earned (I-60): revealed by an Event roll of 6, or by information about the area (I-06b).",
+            "type": "string",
+            "minLength": 1
+          },
+          "line": {
+            "description": "The authored line read when the Master stands here. Ours, never a paraphrase of the printed description.",
+            "type": "string",
+            "minLength": 1
+          },
+          "exits": {
+            "description": "The ids of the areas reachable from here. Undirected in the source; listed once per area in both directions.",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/atoms/id"
+            }
+          },
+          "gate": {
+            "description": "The lock on entering this area, or null where the way in is open. `key` is a key id an `adventureLoot` row can drop; `text` is what the door is, as the source describes it.",
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "text"
+            ],
+            "properties": {
+              "key": {
+                "$ref": "#/$defs/atoms/id"
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "treasures": {
+            "description": "Treasure ids found here by exploration rather than as loot (I-38). Empty for most areas.",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/atoms/id"
+            }
+          },
+          "rescue": {
+            "description": "A stat-blocked NPC who is a rescue rather than an enemy (I-39): fightable if the Master attacks, otherwise freed for the reward of their loot roll. Null in every area that holds none.",
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false,
+            "required": [
+              "foe",
+              "text",
+              "dishonorOnAttack"
+            ],
+            "properties": {
+              "foe": {
+                "$ref": "#/$defs/atoms/id"
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "dishonorOnAttack": {
+                "description": "True where attacking the rescue costs the Master honour rather than earning a fight.",
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "adventureEncounter": {
+        "description": "One row of an area's encounter table: which 1d6 faces land on it, which foes are met, and how many. `faces: []` is a fixed encounter - an area whose printed Encounters line carries no dice (I-34), met on any Ambush or Encounter event. `empty: true` is a row that meets nothing (I-36).",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "adventure",
+          "area",
+          "faces",
+          "foes",
+          "count",
+          "empty"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "adventure": {
+            "description": "The `adventureMeta` id this row belongs to.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "area": {
+            "description": "The printed number of the area whose table this row is in.",
+            "type": "integer",
+            "minimum": 1
+          },
+          "faces": {
+            "description": "The 1d6 faces that land on this row, listed explicitly so nothing parses a range at runtime. Empty for a fixed encounter.",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/atoms/die"
+            }
+          },
+          "foes": {
+            "description": "The foe ids met on this row. Two ids is a multiple combat (R35), as the Attendants room's `Both`.",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/atoms/id"
+            }
+          },
+          "count": {
+            "description": "How many of each foe: `one` a single opponent; `band` a group that attacks together (I-05b); `oracle` a number read from the Oracle's No. of enemies row (I-34); `none` where the row meets nothing.",
+            "enum": [
+              "one",
+              "band",
+              "oracle",
+              "none"
+            ]
+          },
+          "empty": {
+            "description": "True where the row meets nothing and the event degrades to Safe exploration (I-36).",
+            "type": "boolean"
+          }
+        }
+      },
+      "adventureLoot": {
+        "description": "One row of a foe's printed LOOT line. A line with dice becomes one record per band; a line naming a single item becomes one record with `faces: []`. `treasure` and `key` lift a drop out of plain text into something the engine can hold.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "adventure",
+          "foe",
+          "faces",
+          "item",
+          "treasure",
+          "key",
+          "hint",
+          "once"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "adventure": {
+            "description": "The `adventureMeta` id this row belongs to.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "foe": {
+            "description": "The opponent id whose LOOT line this row is part of.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "faces": {
+            "description": "The 1d6 faces that land on this row; empty where the line names a single drop with no roll.",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/atoms/die"
+            }
+          },
+          "item": {
+            "description": "The drop as printed, verbatim.",
+            "type": "string",
+            "minLength": 1
+          },
+          "treasure": {
+            "description": "The treasure id where this drop is one of the adventure's named treasures, else null.",
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)+$"
+          },
+          "key": {
+            "description": "The key id where this drop opens a gate, else null. Two foes may drop the same key id (I-07).",
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)+$"
+          },
+          "hint": {
+            "description": "True where the printed drop is the warning-triangle icon with no text, read as a Hint (I-08).",
+            "type": "boolean"
+          },
+          "once": {
+            "description": "True where the drop is unique in the adventure and cannot be had twice (I-33c: the seven-star sword drops once).",
+            "type": "boolean"
+          }
+        }
+      },
+      "adventureTreasure": {
+        "description": "One of the adventure's named treasures: its printed name and its printed effect, where it is found, and what reveals how it works. The effect is spoiler-gated like a Hint (I-60): hidden until the treasure is acquired, or until something in `knownFrom` is read.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "adventure",
+          "name",
+          "effect",
+          "source",
+          "sourceRef",
+          "knownFrom"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "adventure": {
+            "description": "The `adventureMeta` id this treasure belongs to.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "name": {
+            "description": "The treasure's printed name, verbatim.",
+            "type": "string",
+            "minLength": 1
+          },
+          "effect": {
+            "description": "How the treasure works, verbatim from the spoiler-gated section.",
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "description": "`area` where the treasure is picked up by exploration (I-38); `loot` where it is a foe's drop.",
+            "enum": [
+              "area",
+              "loot"
+            ]
+          },
+          "sourceRef": {
+            "description": "The area id or the foe id named by `source`.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "knownFrom": {
+            "description": "Ids that reveal this treasure's effect without acquiring it - an area whose sheets explain it (I-38b), a foe who knows the spells (I-41). Empty means the effect is revealed on acquiring.",
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/atoms/id"
+            }
+          }
+        }
+      },
+      "adventureFlag": {
+        "description": "One per-adventure flag: a named boolean the areas and the encounter tables read. The adventure has a clock and states where the rulebook has none (I-40), and every one of them is data rather than a branch in the engine.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "adventure",
+          "flag",
+          "initial",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "adventure": {
+            "description": "The `adventureMeta` id this flag belongs to.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "flag": {
+            "description": "The flag's name, as the engine reads it.",
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "initial": {
+            "description": "The flag's value when the adventure begins.",
+            "type": "boolean"
+          },
+          "text": {
+            "description": "What the flag means, in one line.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "adventureAbsence": {
+        "description": "One rule of the form `while this flag holds, this foe is not met in this area`. The adventure's only such rule is the Cave entrance's Ogres, who hunt once a day and so are absent by night (I-45); the shape exists so a second adventure states its own without an engine change.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "adventure",
+          "area",
+          "foe",
+          "flag",
+          "whenTrue",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "adventure": {
+            "description": "The `adventureMeta` id this rule belongs to.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "area": {
+            "description": "The printed number of the area the foe is absent from, or 0 for every area of the adventure.",
+            "type": "integer",
+            "minimum": 0
+          },
+          "foe": {
+            "description": "The opponent id that is not met.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "flag": {
+            "description": "The `adventureFlag` name this rule reads.",
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "whenTrue": {
+            "description": "The flag value that makes the foe absent.",
+            "type": "boolean"
+          },
+          "text": {
+            "description": "Why, in one line.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "adventureAct": {
+        "description": "One act marker of an adventure: the condition that advances the Master into it and the authored line the marker reads. The last row carries `ending: true` and is the ending screen - the thing a scripted playthrough has to reach for the adventure to be finishable.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "adventure",
+          "act",
+          "name",
+          "condition",
+          "threshold",
+          "line",
+          "ending"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "adventure": {
+            "description": "The `adventureMeta` id this act belongs to.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "act": {
+            "description": "The act's number, ascending from 1. Acts are tested in order and the highest satisfied one is current.",
+            "type": "integer",
+            "minimum": 1
+          },
+          "name": {
+            "description": "The act's name.",
+            "type": "string",
+            "minLength": 1
+          },
+          "condition": {
+            "description": "What advances into this act: `start` always holds; `enter` an area has been entered; `defeated` a foe has been defeated; `treasures` at least n treasures are held.",
+            "enum": [
+              "start",
+              "enter",
+              "defeated",
+              "treasures"
+            ]
+          },
+          "threshold": {
+            "description": "What the condition tests: a count for `treasures`, an area or foe id for `enter` and `defeated`, null for `start`.",
+            "type": [
+              "integer",
+              "string",
+              "null"
+            ]
+          },
+          "line": {
+            "description": "The authored line the marker reads. Ours.",
+            "type": "string",
+            "minLength": 1
+          },
+          "ending": {
+            "description": "True on exactly one row per adventure: the ending screen.",
+            "type": "boolean"
+          }
+        }
       }
     },
     "files": {
@@ -1826,6 +2349,30 @@
                 },
                 {
                   "$ref": "#/$defs/records/behaviourNote"
+                },
+                {
+                  "$ref": "#/$defs/records/adventureMeta"
+                },
+                {
+                  "$ref": "#/$defs/records/adventureArea"
+                },
+                {
+                  "$ref": "#/$defs/records/adventureEncounter"
+                },
+                {
+                  "$ref": "#/$defs/records/adventureLoot"
+                },
+                {
+                  "$ref": "#/$defs/records/adventureTreasure"
+                },
+                {
+                  "$ref": "#/$defs/records/adventureFlag"
+                },
+                {
+                  "$ref": "#/$defs/records/adventureAbsence"
+                },
+                {
+                  "$ref": "#/$defs/records/adventureAct"
                 }
               ]
             }

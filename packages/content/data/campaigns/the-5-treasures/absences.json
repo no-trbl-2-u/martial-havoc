@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schema/content.schema.json",
+  "$comment": "Rules of the form 'while this flag holds, this foe is not met in this area'. The adventure has exactly one: the Cave entrance's Ogres 'go out hunting for travellers once a day', so they are absent by night (I-45), and night is what the gourd sets. The shape is here rather than in the engine so a second adventure can state its own absences without a code change.",
+  "id": "campaigns.the-5-treasures.absences",
+  "kind": "list",
+  "title": "The 5 Treasures: absences",
+  "cite": "5T a1",
+  "label": "reading",
+  "docs": "docs/campaigns/the-5-treasures/areas.md",
+  "records": [
+    { "id": "absence.the-5-treasures.ogres-by-night", "cite": "I-45; 5T a1", "reading": "I-45", "adventure": "adventure.the-5-treasures", "area": 2, "foe": "foe.ogre", "flag": "night", "whenTrue": true, "text": "The Ogres go out hunting for travellers once a day, so by night the Cave entrance is theirs no longer." }
+  ]
+}
