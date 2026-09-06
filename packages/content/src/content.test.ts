@@ -43,7 +43,7 @@ const repoRoot = join(packageDir, '..', '..')
  * half-transcribed table impossible to ship.
  */
 const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
-  'app.strings': 316,
+  'app.strings': 318,
   // The rules panel's notes: one per engine behaviour (the label leg
   // checks the pairing; this only pins the count).
   'app.behaviour-notes': 109,

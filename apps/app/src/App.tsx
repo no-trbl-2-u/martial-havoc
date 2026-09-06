@@ -2,20 +2,22 @@
  * The frame: a binding down the left, and to its right one leaf: the
  * header, the attribute strip, and one screen under them. Changing
  * screen turns the whole leaf over the spine (`components/Leaf.tsx`);
- * the binding stays. The Phase 1 garden page this replaces was a
+ * the binding stays.
+ *
+ * Every launch opens on the title page (`screens/TitleScreen.tsx`).
+ * Whether it has been passed is this component's own state, never the
+ * record's: the record remembers where play was, and START turns the
+ * leaf back to it. The Phase 1 garden page this replaces was a
  * placeholder; this is the design prototype (design/prototype) built
  * on the real engine and the real content.
  *
  * Dice: the table's random d6, with any `?dice=` faces served first so
  * a browser test can name its rolls. The source is made once.
  */
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { t, theFiveTreasuresAreaById } from '@martial-havoc/content'
 import { parseDiceQuery, queued, randomSource } from './dice/random'
 import { useRecord } from './hooks/useRecord'
-import { fill } from './lib/fill'
-import type { RecordState } from './state/types'
 import { color, frameWidth } from './theme/tokens'
 import { AttributeStrip } from './components/AttributeStrip'
 import { Binding } from './components/Binding'
@@ -29,30 +31,7 @@ import { CombatScreen } from './screens/CombatScreen'
 import { RegionScreen } from './screens/RegionScreen'
 import { RulesScreen } from './screens/RulesScreen'
 import { AboutScreen } from './screens/AboutScreen'
-
-/** The header's second line, per screen. */
-const placeLine = (state: RecordState): string => {
-  switch (state.screen) {
-    case 'combat':
-      return fill(t('ui.combat.place'), { n: state.combat?.round ?? 1 })
-    case 'rules':
-      return t('ui.rules.place')
-    case 'region':
-      return t('ui.region.place')
-    case 'creation':
-      return t('ui.creation.place')
-    case 'village':
-      return t('ui.village.place')
-    case 'record':
-      return t('ui.record.place')
-    case 'about':
-      return t('ui.about.place')
-    case 'beat': {
-      const area = theFiveTreasuresAreaById(state.cave.area)
-      return fill(t('ui.beat.place'), { area: area?.area ?? '', name: (area?.name ?? '').toUpperCase() })
-    }
-  }
-}
+import { TitleScreen } from './screens/TitleScreen'
 
 const search = (): string => {
   try {
@@ -71,14 +50,24 @@ export const App = () => {
   // export field under the player's cursor.
   const exportedAt = useMemo(() => new Date().toISOString(), [])
   const [state, dispatch] = useRecord(dice, table)
+  // Past the title page yet? A Master still being made always opens
+  // on creation, whatever screen a saved session was left on.
+  const [opened, setOpened] = useState(false)
+  const start = () => {
+    if (state.creation !== null && state.screen !== 'creation') dispatch({ type: 'nav', screen: 'creation' })
+    setOpened(true)
+  }
+  const making = state.creation !== null
   return (
     <View style={styles.root}>
       <View style={styles.frame} testID="frame">
         <Binding />
-        <Leaf page={state.screen}>
+        <Leaf page={opened ? state.screen : 'title'}>
+          {opened ? (
           <View style={styles.page}>
-          <Header place={placeLine(state)} screen={state.screen} onNav={(screen) => dispatch({ type: 'nav', screen })} />
-          <View style={styles.strip}>
+          <Header screen={state.screen} nav={!making} onNav={(screen) => dispatch({ type: 'nav', screen })} />
+          {/* No header while making a Master: the strip starts the page. */}
+          <View style={[styles.strip, making && styles.stripFirst]}>
             <AttributeStrip sheet={state.sheet} blank={state.creation !== null} />
           </View>
           {state.screen === 'creation' ? <CreationScreen state={state} dispatch={dispatch} /> : null}
@@ -92,6 +81,9 @@ export const App = () => {
           {state.screen === 'region' ? <RegionScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'about' ? <AboutScreen dispatch={dispatch} /> : null}
           </View>
+          ) : (
+            <TitleScreen onStart={start} />
+          )}
         </Leaf>
       </View>
     </View>
@@ -105,4 +97,5 @@ const styles = StyleSheet.create({
   frame: { flex: 1, width: '100%', maxWidth: frameWidth, flexDirection: 'row', backgroundColor: color.ochre, borderColor: color.ink, borderLeftWidth: 1, borderRightWidth: 1 },
   page: { flex: 1 },
   strip: { marginHorizontal: 14 },
+  stripFirst: { marginTop: 14 },
 })

@@ -109,7 +109,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
   const theirs = foe.proficiencies.reduce((best, p) => (p.value > best.value ? p : best), foe.proficiencies[0] ?? { name: '', value: 0 })
   const canRoll = !c.over.ended && c.last === null && !c.opening
   return (
-    <View style={styles.screen}>
+    <View style={styles.screen} testID="combat">
       <View style={styles.sides}>
         <Side title={t('ui.combat.you')} strength={c.last?.master ?? null} prefix="mine" idle={fill(t('ui.combat.mine.idle'), { skill: state.sheet.skill, name: mine.name.toUpperCase(), value: mine.value })} />
         <Side title={foe.name.toUpperCase()} strength={c.last?.opponent ?? null} prefix="theirs" idle={fill(t('ui.combat.theirs.idle'), { end: c.foeEndurance, name: theirs.name.toUpperCase(), value: theirs.value })} />

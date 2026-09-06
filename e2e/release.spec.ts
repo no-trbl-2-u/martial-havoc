@@ -23,6 +23,7 @@ const button = (page: Page, name: RegExp | string) => page.getByRole('button', {
  * taps and spends no `?dice=` faces.
  */
 const begin = async (page: Page) => {
+  await page.getByTestId('title-start').click()
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
   await expect(page.getByTestId('beat')).toBeVisible()
@@ -51,7 +52,7 @@ test('the manifest and the icon are served, installably', async ({ request }) =>
   expect(manifest.headers()['content-type']).toContain('application/manifest+json')
   const parsed = (await manifest.json()) as Record<string, unknown>
   expect(parsed['name']).toBe('Martial Havoc')
-  expect(parsed['display']).toBe('standalone')
+  expect(parsed['display']).toBe('fullscreen')
 
   const icon = await request.get('/icon.svg')
   expect(icon.ok()).toBe(true)
@@ -65,7 +66,7 @@ test('About credits every author, carries the licence, and counts what shipped',
   await page.goto('/')
   await begin(page)
   await button(page, 'ABOUT').click()
-  await expect(page.getByTestId('place')).toHaveText('CREDITS AND LICENCE')
+  await expect(page.getByTestId('about')).toBeVisible()
   await expect(page.getByText("The rules are Gianluca Monaco's.")).toBeVisible()
   // Every other author is named by the licence sentence itself, which is
   // transcribed rather than paraphrased, so it is the thing to assert.
@@ -84,7 +85,7 @@ test('About credits every author, carries the licence, and counts what shipped',
     /^\d+ engine behaviours, every one labelled and cited$/,
   )
   await button(page, 'BACK TO PLAY').click()
-  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
+  await expect(page.getByTestId('beat')).toBeVisible()
 })
 
 test('About never scrolls sideways at 375px', async ({ page }) => {
@@ -107,14 +108,16 @@ test('the app opens on a reload with no network', async ({ page, context }) => {
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null, undefined, {
     timeout: 15_000,
   })
-  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
+  await expect(page.getByTestId('beat')).toBeVisible()
 
   await context.setOffline(true)
   await page.reload()
-  // The whole app, from cache, and the campaign with it: the frame, the
-  // Master already made, and the menu the rules allow.
-  await expect(page.getByText('THE 5 TREASURES')).toBeVisible()
-  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
+  // The whole app, from cache, and the campaign with it: the title page
+  // first, as at every launch, then the Master already made and the
+  // menu the rules allow.
+  await expect(page.getByTestId('title')).toBeVisible()
+  await page.getByTestId('title-start').click()
+  await expect(page.getByTestId('beat')).toBeVisible()
   await expect(page.getByTestId('attr-skill')).toHaveText('8')
   await expect(button(page, /TO THE CAVE ENTRANCE/)).toBeVisible()
 

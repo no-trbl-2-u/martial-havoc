@@ -43,7 +43,7 @@ export const AboutScreen = ({ dispatch }: Props) => {
   // frozen static registry, and the screen renders on a tap, not a tick.
   const counts = contentCounts()
   return (
-    <View style={styles.screen}>
+    <View style={styles.screen} testID="about">
       <ScrollView style={styles.body} contentContainerStyle={styles.bodyContent}>
         <Block heading={t('ui.about.what')}>
           <Text style={styles.title}>{t('app.title')}</Text>

@@ -13,6 +13,7 @@ import { expect, test } from '@playwright/test'
 test.use({ contextOptions: { reducedMotion: 'no-preference' } })
 
 const begin = async (page: import('@playwright/test').Page) => {
+  await page.getByTestId('title-start').click()
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
   await expect(page.getByTestId('beat')).toBeVisible()

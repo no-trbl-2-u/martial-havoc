@@ -4,7 +4,7 @@
   "description": "A rules engine for a rule-light d6 solo wuxia RPG. The sandbox is the real game; adventures are scenes in it.",
   "start_url": "/",
   "scope": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#8E6428",
   "theme_color": "#16110C",

@@ -45,8 +45,11 @@ describe('the web app manifest', () => {
     expect(manifest['description']).toBe(t('app.tagline'))
   })
 
-  it('installs as a portrait standalone app from the root', () => {
-    expect(manifest['display']).toBe('standalone')
+  it('installs as a portrait fullscreen app from the root', () => {
+    // fullscreen: on Android the installed app hides the status bar and
+    // the system navigation bar, which otherwise sat over the footer
+    // (operator request, 2026-09-06).
+    expect(manifest['display']).toBe('fullscreen')
     expect(manifest['orientation']).toBe('portrait')
     expect(manifest['start_url']).toBe('/')
     expect(manifest['scope']).toBe('/')
