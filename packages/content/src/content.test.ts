@@ -46,7 +46,7 @@ const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
   'app.strings': 142,
   // The rules panel's notes: one per engine behaviour (the label leg
   // checks the pairing; this only pins the count).
-  'app.behaviour-notes': 91,
+  'app.behaviour-notes': 98,
 
   // The 5 Treasures: the nine foes as printed, and the prototype slice
   // of three areas with their menus (design/prototype).

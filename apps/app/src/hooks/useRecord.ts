@@ -23,7 +23,9 @@ export const useRecord = (
   const [state, dispatch] = useReducer(
     (s: RecordState, a: Action) => reduce(s, a, dice),
     fresh,
-    (d) => load() ?? newRecord(d),
+    // A freshly rolled record is what `load` falls back to and lays the
+    // saved campaign over, so the dice are spent exactly once either way.
+    (d) => load(newRecord(d)),
   )
   useEffect(() => {
     save(state)

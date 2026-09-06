@@ -89,6 +89,31 @@ describe('manual dice', () => {
     expect(s.manualOpen).toBe(false)
   })
 
+  it('a roll the app made is not an override', () => {
+    // The count is the record's honesty about how much of it the app
+    // rolled. A roll from the app's own dice source moves nothing.
+    const s = play(fresh(), [[{ type: 'option', id: FORCE }, [1, 1]]])
+    expect(s.result).toMatchObject({ kind: 'check' })
+    expect(s.overrides).toBe(0)
+  })
+
+  it('counts one override per manual roll, never resetting', () => {
+    const tap = (face: 6): readonly (readonly [Action, readonly Die[]])[] => [
+      [{ type: 'manual.toggle' }, []],
+      [{ type: 'manual.face', face }, []],
+      [{ type: 'manual.face', face }, []],
+    ]
+    const s = play(fresh(), [
+      ...tap(6),
+      [{ type: 'option', id: FORCE }, [1, 1]],
+      ...tap(6),
+      [{ type: 'option', id: FORCE }, [1, 1]],
+      // ...and a roll the app made in between moves nothing.
+      [{ type: 'option', id: FORCE }, [1, 1]],
+    ])
+    expect(s.overrides).toBe(2)
+  })
+
   it('a third tap starts over; cancel clears', () => {
     const s = play(fresh(), [
       [{ type: 'manual.face', face: 1 }, []],
