@@ -1,6 +1,6 @@
 # VISION
 
-This game must be faithful to the experience of playing Martial heroes.
+This game must be faithful to the experience of playing Martial Havoc.
 Adventures and prompts must be verbatim to the either the rulebook or the
 adventure book.
 
