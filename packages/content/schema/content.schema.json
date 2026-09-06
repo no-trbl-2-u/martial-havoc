@@ -572,6 +572,43 @@
           }
         }
       },
+      "exceptionalWeapon": {
+        "description": "One weapon that passes R77's gate against an incorporeal opponent (MH p.66). The rule names the category and lists no members; reading I-29 names these three. `ref` is the id of the record that already holds the weapon - a Special Item, an adventure treasure, or the preset sheet that carries it as an equipment line - so the name is transcribed once and this file only says which of them the gate opens for.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "reading",
+          "name",
+          "ref",
+          "note"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ref": {
+            "description": "The id of the record that holds this weapon.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "note": {
+            "description": "Why this one counts, in one line.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
       "encounterCell": {
         "description": "One cell of the Encounters matrix (MH p.67, R74): a 2d6 total in one of the five columns. `printed` is the cell verbatim; `opponentRef` is the canonical opponent id it resolves to, or null when the cell redirects to another column instead of naming an opponent.",
         "type": "object",
@@ -697,7 +734,7 @@
         }
       },
       "opponent": {
-        "description": "One of the 50 opponent stat blocks (MH p.70-79, R80). `attack` is printed as an integer, as the range `2-4` (Brawler), or blank (Huang Feng Guai) - kept as printed rather than normalised. `martialArtsValue` carries the n of a `Martial Arts (n)` Proficiency (R75); the Proficiency itself stays in the list.",
+        "description": "One of the 50 opponent stat blocks (MH p.70-79, R80). `attack` is printed as an integer, as the range `2-4` (Brawler), or blank (Huang Feng Guai) - kept as printed rather than normalised. `martialArtsValue` carries the n of a `Martial Arts (n)` Proficiency (R75); the Proficiency itself stays in the list. `incorporeal` is the R77 gate's data side: true for the spirits and ghosts reading I-29 names, false everywhere else; a tagged record also carries `reading: \"I-29\"`, since no cell of the printed stat block says it.",
         "type": "object",
         "additionalProperties": false,
         "required": [
@@ -710,6 +747,7 @@
           "attack",
           "proficiencies",
           "martialArtsValue",
+          "incorporeal",
           "page",
           "notes"
         ],
@@ -757,6 +795,10 @@
               "integer",
               "null"
             ]
+          },
+          "incorporeal": {
+            "description": "Immune to ordinary blows (R77): only a Technique, a Ritual or an exceptional weapon can hurt it. Read (never recomputed) by the engine's `ordinaryBlowsPass`.",
+            "type": "boolean"
           },
           "page": {
             "type": "string",
@@ -2442,6 +2484,9 @@
                 },
                 {
                   "$ref": "#/$defs/records/villagePlace"
+                },
+                {
+                  "$ref": "#/$defs/records/exceptionalWeapon"
                 }
               ]
             }
