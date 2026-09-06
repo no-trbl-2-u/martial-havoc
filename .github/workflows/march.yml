@@ -1,0 +1,160 @@
+# ---------------------------------------------------------------------------
+# march.yml -- the autonomous `/march` tick, run as a GitHub Action.
+#
+# WHAT THIS IS
+#   `/march` is this repository's outer dispatcher skill (skills/march.md):
+#   triage -> critique -> ship-a-phase -> expand -> iterate. Locally it is
+#   driven by `/loop 30m /march`. This workflow is the unattended, cloud-side
+#   equivalent: the same skill, the same standing rules (agents.md), on a
+#   schedule and on demand.
+#
+# WHAT IT DOES, IN ORDER
+#   1. Checks out `main` with full history (a march ends in commit + push).
+#   2. Installs Node 22 and the workspace dependencies.
+#   3. Installs the Playwright browser, because the verify gate's final leg
+#      (`npm run e2e`) is a hard gate (agents.md rule 3) and cannot be skipped.
+#   4. Hands control to Claude Code with the single prompt `/march`.
+#   5. Claude runs the skill end-to-end: reads docs/, ships, runs the verify
+#      gate in the foreground, commits, pushes to main, polls the deploy.
+#
+# WHAT IT DELIBERATELY DOES NOT DO
+#   - It does not run `npm run verify` itself. The gate belongs to the skill,
+#     which must run it as a blocking foreground call before the commit it
+#     makes (agents.md rule 3). Running it here as well would double the cost
+#     and would gate nothing, since the commit happens inside step 5.
+#   - It does not deploy. Cloudflare Workers Builds is wired to `main` and
+#     fires on the push (agents.md rule 4); the skill polls it afterwards
+#     with `npm run deploy:check`.
+# ---------------------------------------------------------------------------
+name: march
+
+on:
+  # ---- Trigger 1: manual. The Actions tab, or `gh workflow run march.yml`. --
+  workflow_dispatch:
+    inputs:
+      args:
+        description: >-
+          Optional argument appended to the `/march` command. The march skill
+          reads it as $ARGUMENTS (see .claude/commands/march.md). Leave empty
+          for a normal tick.
+        required: false
+        type: string
+        default: ''
+
+  # ---- Trigger 2: schedule. The unattended loop. ---------------------------
+  # Every 6 hours on the hour, UTC. GitHub's scheduler is best-effort and can
+  # lag under load; a missed tick is harmless because `/march` is stateless --
+  # it re-derives what to do from plan/ on every run.
+  schedule:
+    - cron: '0 */6 * * *'
+
+# One march at a time. Two concurrent ticks would race on `origin/main` and on
+# the Cloudflare deploy. `cancel-in-progress: false` because a tick that is
+# mid-push must not be killed -- that is exactly the "committed but not
+# pushed" state agents.md rule 1 forbids.
+concurrency:
+  group: march
+  cancel-in-progress: false
+
+jobs:
+  march:
+    name: march tick
+    runs-on: ubuntu-latest
+
+    # The verify gate (typecheck -> test -> labels:check -> build:web -> e2e)
+    # plus an Expo web export plus a deploy poll. 90 minutes is generous
+    # headroom; a tick that exceeds it is a signal the gate has outgrown the
+    # per-commit path (agents.md rule 3: shrink the gate, do not background it).
+    timeout-minutes: 90
+
+    permissions:
+      contents: write        # the skill pushes to main
+      issues: write          # /triage labels and comments on issues
+      pull-requests: write   # /triage and /iterate may touch PRs
+      id-token: write        # required by the action's OIDC exchange
+
+    steps:
+      # ---------------------------------------------------------------------
+      # Step 1 -- source. `fetch-depth: 0` gives full history: the skills read
+      # `git log` to decide what shipped last, and a shallow clone cannot push
+      # a merge. `persist-credentials` stays at its default (true) so the
+      # in-run push to main authenticates as GITHUB_TOKEN.
+      # ---------------------------------------------------------------------
+      - name: Checkout main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
+
+      # ---------------------------------------------------------------------
+      # Step 2 -- runtime. package.json declares `engines.node >= 22`.
+      # `cache: npm` restores ~/.npm keyed on the lockfile.
+      # ---------------------------------------------------------------------
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # ---------------------------------------------------------------------
+      # Step 3 -- dependencies. `npm ci`, not `install`, so the lockfile is
+      # authoritative and the tree is reproducible across ticks.
+      # ---------------------------------------------------------------------
+      - name: Install dependencies
+        run: npm ci
+
+      # ---------------------------------------------------------------------
+      # Step 4 -- browser for the e2e leg of the verify gate. Chromium only:
+      # the Playwright config drives the exported web build, and installing the
+      # full browser matrix triples this step for no coverage gain.
+      # ---------------------------------------------------------------------
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      # ---------------------------------------------------------------------
+      # Step 5 -- the march itself.
+      #
+      #   prompt         The slash command. Supplying `prompt` puts the action
+      #                  in automation mode: it runs headless immediately
+      #                  instead of waiting for an @claude mention.
+      #   claude_args    Passed straight through to the Claude Code CLI.
+      #                    --permission-mode bypassPermissions
+      #                      There is no human to answer a permission prompt in
+      #                      an unattended run, and a denied call would strand
+      #                      the tick mid-phase. Safe here because the rules
+      #                      that matter are enforced mechanically rather than
+      #                      by the permission layer: .claude/hooks/guard.mjs
+      #                      blocks `--no-verify`, force-push, destructive
+      #                      resets, attribution trailers and emojis in commit
+      #                      messages (agents.md rules 2/3/5), and hooks still
+      #                      run under this mode.
+      #                    --max-turns 400
+      #                      A full phase (docs read -> code -> gate -> commit
+      #                      -> push -> deploy poll) is long. The cap exists so
+      #                      a pathological loop cannot burn the whole budget.
+      #
+      # SECRETS
+      #   ANTHROPIC_API_KEY        the Claude credential (required)
+      #   CLOUDFLARE_API_TOKEN     read by `npm run deploy:check` (agents.md
+      #   CLOUDFLARE_ACCOUNT_ID    rule 4). If unset, deploy:check exits 3 with
+      #                            a clear error and the tick reports blocked
+      #                            rather than silently skipping the gate.
+      #   GITHUB_TOKEN             exported as GH_TOKEN so the `gh` CLI, which
+      #                            /triage drives, authenticates with no extra
+      #                            configuration.
+      # ---------------------------------------------------------------------
+      - name: Run /march
+        uses: anthropics/claude-code-action@v1
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: /march ${{ inputs.args }}
+          claude_args: --permission-mode bypassPermissions --max-turns 400
+          # Surface the run's report in the Actions summary so a failed tick
+          # can be read without downloading raw logs.
+          display_report: true
