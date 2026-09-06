@@ -52,9 +52,36 @@ forbids.
 | 2 | `actions/setup-node@v4` — Node 22, npm cache | `package.json` declares `engines.node >= 22`. The cache is keyed on `package-lock.json`. |
 | 3 | `npm ci` | Lockfile-authoritative install, so a tick is reproducible. |
 | 4 | `npx playwright install --with-deps chromium` | `npm run e2e` is the last leg of the verify gate and is a hard gate (agents.md rule 3). Chromium only — the Playwright config drives the exported web build, so the rest of the matrix buys nothing. |
-| 5 | `anthropics/claude-code-action@v1` | The tick. Everything else is setup. |
+| 5 | Preflight the Anthropic credential | Turns an opaque credential failure into a named one. See below. |
+| 6 | `anthropics/claude-code-action@v1` | The tick. Everything else is setup. |
 
-### Step 5 in detail
+### Step 5 — the credential preflight
+
+The action hides the CLI's output by default (`show_full_output:
+false`), and **this repository is public**, so turning that on
+would publish the whole transcript. A rejected credential
+therefore surfaces only as `is_error: true` with no reason —
+which is how the first scheduled tick died: 411 ms in, one turn,
+`total_cost_usd: 0`, `modelUsage: {}`.
+
+The preflight asks `GET /v1/models` with the key and prints only
+the HTTP status plus the API's own error type and message. That
+output carries no repository content, so it is safe in a public
+log; the key is masked by Actions. It separates three failures
+that are indistinguishable from the outside:
+
+| Status | Meaning | Fix |
+|---|---|---|
+| `200` | Key valid; the listed model ids are what it can see | Nothing — a later failure is not the key |
+| `401` | `authentication_error` — invalid or revoked key | Regenerate at <https://console.anthropic.com/settings/keys> and update the secret |
+| `400` | `invalid_request_error`, usually "credit balance is too low" | Add credit to the Console account |
+| `403` | Key valid, account lacks access to the resource | Check the key's workspace and permissions |
+
+On `200` it also lists the model ids visible to the key. If the
+model Claude Code selects is absent from that list, the failure
+is model access, not the credential.
+
+### Step 6 in detail
 
 | Input | Value | Rationale |
 |---|---|---|
