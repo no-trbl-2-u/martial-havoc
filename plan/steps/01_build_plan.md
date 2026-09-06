@@ -105,7 +105,7 @@ Later UI phases carry their own version marker.
       description, Encounters line and gated Hint; the Event roll on
       every entry, on the roll card; the LOOT lines; the Monk; the
       sheets; the ending act. The hand-authored slice and its invented
-      checks are gone. — see the commit that ticks this row
+      checks are gone. — 89bb9a4
 
 **The milestone (phase 10, by 2026-12-05):**
 - [ ] Phase 10 — The cave played to its ending `[needs-user-call]`
