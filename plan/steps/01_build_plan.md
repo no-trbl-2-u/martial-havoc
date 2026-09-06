@@ -109,8 +109,36 @@ Later UI phases carry their own version marker.
       sheets; the ending act. The hand-authored slice and its invented
       checks are gone. — 89bb9a4
 
+**The feel of play (phases 10a–10j; the operator's verdict of
+2026-09-06, "played, not recited"; before phase 10's sitting):**
+The first bucket of that verdict shipped as 2299932 and 34c5e63 (the
+area named, citations folded behind SOURCE, foe descriptions, the
+rules panel's titles, three lies fixed). What remains is phase-sized:
+- [ ] Phase 10a — The voice `[needs-user-call]` (brief:
+      `phase_10a_the_voice.md`; the root of the block; settles
+      `spec.md` against `VISION.md` through `/re-seed`)
+- [ ] Phase 10b — The opening: the village as the Call (brief:
+      `phase_10b_the_opening.md`)
+- [ ] Phase 10c — The three acts on screen (brief:
+      `phase_10c_three_acts.md`)
+- [ ] Phase 10d — The fight as a scene (brief:
+      `phase_10d_the_fight_as_a_scene.md`)
+- [ ] Phase 10e — Many foes (brief: `phase_10e_many_foes.md`)
+- [ ] Phase 10f — The sheet that grows: the Final Blow's Technique,
+      and age (brief: `phase_10f_the_sheet_that_grows.md`)
+- [ ] Phase 10g — The five treasures work (brief:
+      `phase_10g_the_five_treasures_work.md`)
+- [ ] Phase 10h — The cave map and the journal as a story (brief:
+      `phase_10h_map_and_journal.md`)
+- [ ] Phase 10i — The ending scores the adventure (brief:
+      `phase_10i_the_ending_scores.md`)
+- [ ] Phase 10j — Who the Master is, and the player's own words
+      `[needs-user-call]` (brief: `phase_10j_who_the_master_is.md`)
+
 **The milestone (phase 10, by 2026-12-05):**
 - [ ] Phase 10 — The cave played to its ending `[needs-user-call]`
+      (waits on 10a–10j: the sitting is only evidence once the cave
+      plays as a story)
 
 **The sandbox (phases 11–14, by 2027-03-05):**
 - [ ] Phase 11 — Word-table lines
@@ -288,12 +316,121 @@ watabou; CC BY-SA 4.0); release checklist (verify, deploy-check, the
 scripted cave run, the label leg, content counts printed); deploy; the
 operator installs the web app to a phone.
 
+### Phase 10a — The voice
+
+**Done when:** `spec.md` and `VISION.md` agree on whether the app may
+print a line of its own; `plan/VOICE.md` is the style guide; every
+result on the beat and in combat prints one marked authored line; the
+count is printed by the build.
+**Waits on:** the operator's call, then `/re-seed`
+**Cost:** one week of wiring after the call
+
+The root of the feel-of-play block. Three options are put to the
+operator in the brief; the recommendation is sparse, marked, second
+person. MH p.3, p.27–28, p.81–89; 5T a1–a2.
+
+### Phase 10b — The opening: the village as the Call
+
+**Done when:** BEGIN lands in Fen Pass with the premise as THE CALL;
+the trail is the point of no return; a scripted Master goes village,
+trail, mountain, cave on fixed dice.
+**Waits on:** 10a for the lines; wiring may ship before
+**Cost:** one week
+
+Reverses phase 8c's "start on the mountain". MH p.42 step 1, p.44,
+p.47, p.84–85; 5T a1.
+
+### Phase 10c — The three acts on screen
+
+**Done when:** an act slip shows once per act; a five-mark progress
+row sits in the beat header; the boss's door applies the book's
+pacing rule as a labelled reading; the save carries the acts seen.
+**Waits on:** 10a for the mark's wording
+**Cost:** one week
+
+`acts.json` and `actFor` exist and have no screen. MH p.82–88.
+
+### Phase 10d — The fight as a scene
+
+**Done when:** a kill, a flight and a fall each have a slip; an
+Ambush is the enemy's unopposed first round; the Unexpected Event's
+eleven rows each resolve back into the room, with "The fight resumes"
+returning to the round loop.
+**Waits on:** 10a for the lines
+**Cost:** two weeks
+
+MH p.23, p.27–29, p.30, p.58; readings I-08a, I-30, I-32, I-33.
+
+### Phase 10e — Many foes
+
+**Done when:** the combat screen has a many-foes mode over the
+engine's `multiple` module; the Oracle counts the devils; area
+Techniques reach what their text says; "Both" is fought as both.
+**Waits on:** 10d
+**Cost:** two weeks
+
+Audit rows [4.0] and [4.2]. MH p.28 footnote, p.30, p.58; 5T a1–a2;
+the sealed ATTACK rule.
+
+### Phase 10f — The sheet that grows
+
+**Done when:** a landed Final Blow can be kept as a named Technique
+through the LUCK roll and the naming table, and used in later fights;
+creation asks an age; the record migrates.
+**Waits on:** nothing
+**Cost:** one to two weeks
+
+The engine's `newTechnique` and `namingRoll` reach the screen. MH
+p.5, p.24–26, p.92; sealed I-12.
+
+### Phase 10g — The five treasures work
+
+**Done when:** the vase traps, the cord ties, the fan burns, the sword
+blocks, each a labelled reading; a scripted Master beats Silver Horn
+with the vase.
+**Waits on:** 10d
+**Cost:** two weeks
+
+5T a2, "The 5 Treasures"; MH p.66 (R77); readings I-38b, I-41, I-45
+and four new ones.
+
+### Phase 10h — The cave map and the journal as a story
+
+**Done when:** MAP draws the cave's visited rooms from the adjacency
+graph while the Master is in it; RECORD reads a chronicle in order
+with passages interleaved; the record migrates.
+**Waits on:** nothing
+**Cost:** one to two weeks
+
+5T a1 (the map, redrawn as ours); MH p.43, p.85; spec.md's ledger.
+
+### Phase 10i — The ending scores the adventure
+
+**Done when:** the ending is a screen with the freeze frame, the four
+scores, XP less Dishonor, the advancement table at the SKILL band,
+spending applied and flagged, unspent XP carried.
+**Waits on:** 10c, 10f
+**Cost:** one week
+
+The engine's `progression` module reaches the screen. MH p.34–35,
+p.87–89.
+
+### Phase 10j — Who the Master is, and the player's own words
+
+**Done when:** creation ends with a motive from the Adventures table
+(or the operator's alternative); the passage field is prompted at four
+moments; passages sit in the chronicle where written.
+**Waits on:** 10a, 10h; the operator's call on the motive
+**Cost:** one week after the call
+
+MH p.3, p.36–39, p.51, p.85–86, p.92.
+
 ### Phase 10 — The cave played to its ending, by 2026-12-05
 
 **Done when:** on 2026-12-05 a campaign record exists whose cave reached
 the ending screen with the PDF closed, or the falsifier is recorded as
 fired with its reason.
-**Waits on:** Phase 9
+**Waits on:** Phase 9, and 10a–10j (the feel-of-play block)
 **Cost:** the operator's evenings; the date is fixed
 
 `[needs-user-call]` The operator plays the cave to the ending screen; the
