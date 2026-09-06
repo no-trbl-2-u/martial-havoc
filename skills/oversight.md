@@ -52,6 +52,9 @@ In parallel where independent:
 4. `plan/steps/01_build_plan.md` "Status" block — pending
    phases.
 5. `plan/AUDIT.md` — open `/iterate` findings.
+5b. `plan/NEEDS_HUMAN_ATTENTION.md` — the design questions only the
+   operator answers; every open row is a question for the
+   questionnaire, and closing one is written there with the date.
 6. `data/BACKLOG.md` — pending data work.
 7. `plan/CRITIQUE.md` — critique pending.
 8. Last 3 phase briefs — current vs. recent commits.

@@ -50,6 +50,13 @@ ticks. One HIGH row stands alone at the top; the rest are MED.
 
 ## Durable rows
 
+### [needs-user-call] The open design questions live in `plan/NEEDS_HUMAN_ATTENTION.md`
+
+Five rows from the verdict of 2026-09-06 (the voice, closed; who the
+Master is; where the player's imagination goes; the rules panel's
+audience; the sandbox's place). An open row there is a wall for the
+loop: build up to it and stop. `/oversight` reads that file first.
+
 ### [needs-user-call] Bai Gu Jing and Jiangshi: incorporeal or not? (I-29)
 
 Reading I-29 names eight opponents outright and two more with a
