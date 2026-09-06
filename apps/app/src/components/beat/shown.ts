@@ -2,9 +2,11 @@
  * What the result slip prints, for each kind of result.
  *
  * Lifted out of `BeatScreen` unchanged when Phase 8a split the beat
- * into three candidate layouts: all three print the same result, so
- * the mapping from a `Result` to the eight things a slip shows has to
- * live somewhere none of them owns.
+ * into three candidate layouts: all three printed the same result, so
+ * the mapping from a `Result` to the eight things a slip shows had to
+ * live somewhere none of them owned. It stays split now the Sheet
+ * arrangement has won, because resolving a result and drawing one are
+ * different jobs.
  *
  * Every string comes from the content package (`t`); nothing here is
  * copy (agents.md rule 7). Every citation comes from the engine's own
@@ -100,7 +102,3 @@ export const shown = (r: Result, sheet: RecordState['sheet']): ShownResult => {
       }
   }
 }
-
-/** One line of the ledger: what a result reads as, in a sentence. */
-export const ledgerLine = (s: ShownResult): string =>
-  s.a === null ? `${s.title} — ${s.total}` : `${s.title} — ${s.a}+${s.b} = ${s.total}`

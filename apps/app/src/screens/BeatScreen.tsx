@@ -3,50 +3,29 @@
  * label, the menu of what the rules allow here, the passage field and
  * the roll bar (spec.md, Horizon; design prototype, "BEAT").
  *
- * Since Phase 8a this screen no longer lays the beat out itself. It
- * resolves the beat — line, menu, result, roll-bar state — and hands
- * the same props to one of three candidate layouts, which the operator
- * picks between (`plan/phases/phase_8_the_ui.md`, 8a). Phase 8b keeps
- * the picked one and deletes the rest.
- *
- * Resolving here rather than in each layout is what makes the choice a
- * fair one: all three candidates render identical data, so what an
- * operator compares is the arrangement and nothing else.
+ * This screen resolves the beat — line, menu, result, roll-bar state —
+ * and `./../components/beat/SheetBeat` lays it out. The split survives
+ * from Phase 8a, where three candidate arrangements had to render
+ * identical data for the operator's comparison to be a fair one; it
+ * stays because resolving and arranging are genuinely different jobs,
+ * and the next surface to grow a beat reuses the resolution.
  */
-import type { ReactElement } from 'react'
 import { beatForArea, optionsForArea, t } from '@martial-havoc/content'
 import { fill } from '../lib/fill'
+import { SheetBeat } from '../components/beat/SheetBeat'
 import { shown } from '../components/beat/shown'
-import { LedgerLayout } from '../layouts/LedgerLayout'
-import { ScrollLayout } from '../layouts/ScrollLayout'
-import { SheetLayout } from '../layouts/SheetLayout'
-import type { LayoutId, LayoutProps } from '../layouts/types'
-import { DEFAULT_LAYOUT } from '../layouts/types'
 import type { Action, RecordState } from '../state/types'
 
-type Props = {
-  readonly state: RecordState
-  readonly dispatch: (a: Action) => void
-  /** Which candidate to draw. Absent means {@link DEFAULT_LAYOUT}. */
-  readonly layout?: LayoutId
-}
+type Props = { readonly state: RecordState; readonly dispatch: (a: Action) => void }
 
-/** The three candidates, keyed by the id the query string carries. */
-const LAYOUT_COMPONENTS: Readonly<Record<LayoutId, (p: LayoutProps) => ReactElement>> = {
-  a: ScrollLayout,
-  b: SheetLayout,
-  c: LedgerLayout,
-}
-
-export const BeatScreen = ({ state, dispatch, layout }: Props) => {
+export const BeatScreen = ({ state, dispatch }: Props) => {
   const beat = beatForArea(state.area)
   const options = optionsForArea(state.area)
   const result = state.result === null ? null : shown(state.result, state.sheet)
   // The roll bar is live only where the menu offers something to roll.
   const hasCheck = options.some((o) => o.action === 'skill-check' || o.action === 'luck-check')
-  const Layout = LAYOUT_COMPONENTS[layout ?? DEFAULT_LAYOUT]
   return (
-    <Layout
+    <SheetBeat
       state={state}
       dispatch={dispatch}
       line={beat?.line ?? t('ui.empty.line')}

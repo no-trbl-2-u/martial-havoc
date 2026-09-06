@@ -11,7 +11,6 @@ import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { beatForArea, t } from '@martial-havoc/content'
 import { parseDiceQuery, queued, randomSource } from './dice/random'
-import { layoutFromQuery } from './layouts/types'
 import { useRecord } from './hooks/useRecord'
 import { fill } from './lib/fill'
 import type { RecordState } from './state/types'
@@ -52,9 +51,6 @@ const search = (): string => {
 export const App = () => {
   const table = useMemo(() => randomSource(), [])
   const dice = useMemo(() => queued(parseDiceQuery(search()), table), [table])
-  // Phase 8a: which candidate layout the beat draws in. Temporary —
-  // 8b keeps the operator's pick and deletes the flag.
-  const layout = useMemo(() => layoutFromQuery(search()), [])
   const [state, dispatch] = useRecord(dice, table)
   return (
     <View style={styles.root}>
@@ -65,7 +61,7 @@ export const App = () => {
           <View style={styles.strip}>
             <AttributeStrip sheet={state.sheet} />
           </View>
-          {state.screen === 'beat' ? <BeatScreen state={state} dispatch={dispatch} layout={layout} /> : null}
+          {state.screen === 'beat' ? <BeatScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'combat' ? <CombatScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'rules' ? <RulesScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'region' ? <RegionScreen state={state} dispatch={dispatch} /> : null}

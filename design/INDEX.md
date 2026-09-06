@@ -42,3 +42,37 @@ correct the file.
   lines of ours.
 - The prototype's Ghost is SKILL 5, END 6, INCORPOREAL 2. The Dexterous
   Ghost is SKILL 7, END 8, evanescence (2), immaterial charge (4) (5T a2).
+
+## The beat's layout — decided 2026-09-06
+
+The build plan's Phase 8 row carried `[needs-user-call]`: *"the agent
+renders three layouts at phone width with a working beat and files
+them; the operator picks; the agent builds it."* That happened.
+
+Three candidates were built on the real engine and the real content,
+identical in data and in tokens, differing only in arrangement, and
+photographed at 390x844 in `design/screenshots/layouts/`:
+
+| | Layout | The bet | The cost |
+|---|---|---|---|
+| A | **Scroll** — line, result, scrolling menu, roll bar at the foot (the Phase 5 prototype's arrangement) | The authored line is the point; the player reads before they act | On a long line the menu falls below the fold; the primary action is a thumb-stretch from the top |
+| **B** | **Sheet** — the line scrolls alone in the upper page; the menu is a fixed bottom sheet above the roll bar; a result overlays the sheet's top rather than pushing it | Everything pressable lives in the bottom third, where the thumb is, and never scrolls away | The line gets less room; a landed result covers the menu's first row or two until it is read |
+| C | **Ledger** — line, result slip, then the deeds already done here as a transcript, over a compact two-column menu | The screen *is* the campaign record, growing | Densest of the three; the transcript competes with the result slip; two-column cells truncate longer titles |
+
+**The operator picked B, the Sheet.** It is now the only layout:
+`apps/app/src/components/beat/SheetBeat.tsx`. The two losers and the
+`?layout=` flag that served them were deleted in the same commit — a
+shipped product does not carry an unchosen design behind a query
+string. The screenshots stay as the record of what was compared.
+
+One constraint bound all three and binds anything that replaces this
+one: **the result's two dice, its label pill and its citation stay on
+screen.** `spec.md` requires a labelled, cited behaviour to be visible,
+so an arrangement that hides the result slip is a refusal, not a
+candidate. Candidate C's first draft dropped it and was corrected
+before it shipped.
+
+The bargain B makes is now asserted, not just described: an e2e holds
+the menu row's position steady across a landing result and keeps it in
+the phone's bottom half. If a later change breaks that, it breaks the
+reason this layout was chosen, and the gate says so.
