@@ -136,9 +136,9 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
               <Button primary text={t('ui.creation.roll')} onPress={() => dispatch({ type: 'creation.roll' })} />
             ) : (
               <View style={styles.values}>
-                <Value label="SKL" value={skillAfterTraining(c)} testID="creation-skill" />
-                <Value label="END" value={c.endurance?.current ?? 0} testID="creation-endurance" />
-                <Value label="LCK" value={c.luck?.current ?? 0} testID="creation-luck" />
+                <Value label={t('ui.attr.skill')} value={skillAfterTraining(c)} testID="creation-skill" />
+                <Value label={t('ui.attr.endurance')} value={c.endurance?.current ?? 0} testID="creation-endurance" />
+                <Value label={t('ui.attr.luck')} value={c.luck?.current ?? 0} testID="creation-luck" />
               </View>
             )}
           </Step>
@@ -253,10 +253,10 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
         {c.step === 'ready' ? (
           <Step title={t('ui.creation.ready.title')} note={t('ui.creation.ready.note')} testID="step-ready">
             <View style={styles.values}>
-              <Value label="SKL" value={skillAfterTraining(c)} testID="ready-skill" />
-              <Value label="END" value={c.endurance?.current ?? 0} />
-              <Value label="LCK" value={c.luck?.current ?? 0} />
-              <Value label="GP" value={c.status?.gold ?? 0} />
+              <Value label={t('ui.attr.skill')} value={skillAfterTraining(c)} testID="ready-skill" />
+              <Value label={t('ui.attr.endurance')} value={c.endurance?.current ?? 0} />
+              <Value label={t('ui.attr.luck')} value={c.luck?.current ?? 0} />
+              <Value label={t('ui.attr.gold')} value={c.status?.gold ?? 0} />
             </View>
             <Text style={styles.reading}>
               {c.techniqueIds

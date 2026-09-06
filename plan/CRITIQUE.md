@@ -9,6 +9,37 @@
 
 ## Pending
 
+### [MED] packages/content + docs — five rule-file fields carry the docs' gloss, not the book's text
+- pass: user-jot (PR #21 session, verbatim report 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: Checking every transcribed JSON field (1043) directly against the pdf-parse extractions finds 14 not verbatim; 9 are extraction artefacts the docs already note (split words, the appendix image). The other 5 are docs gloss cells transcribed into label: rule files as if printed: healing.endurance.partial and healing.luck.partial (summaries of the p.31 list; the LUCK cell carries "(p. 47)"), xp-category.minus-dishonor-points.category ("minus Dishonor Points" is the doc's row, not a printed category), unexpected-event.7.text (carries "(footnote: optional ENDURANCE=1 rule, R33)" inside the printed row "Reinforcements: 1-4 Minions of the same type"), loot.the-5-treasures.devil-servant.3.item ("[warning-triangle icon, no text]" stands in for an icon; the schema requires item minLength 1).
+- evidence: scratch probe json-vs-pdf, 2026-09-06; docs/rules/multiple-combat-escape-healing.md rows 74-78, docs/rules/experience-and-advancement.md row 50, docs/rules/combat.md row 127, docs/campaigns/the-5-treasures/foes.md row 31
+- suggested fix: Correct each at its docs source and change the dependent record in the same commit (fidelity.test.ts holds JSON to docs, so they cannot move separately): healing partial cells quoted verbatim from p.31 with the incense note moved to prose; the Dishonor row moved out of the categories table into the R43 arithmetic; the footnote marker taken out of row 7's text and left in the R33 row; the loot item given the printed value the icon stands for once I-08 says what it is, or the schema allowed an empty item when hint is true.
+- source: user
+
+### [MED] docs — table cells do not say which are transcription and which are the bundle's gloss
+- pass: user-jot (PR #21 session, verbatim report 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: fidelity
+- observation: Of 879 table cells of 12+ characters under docs/rules, docs/world and docs/campaigns, 605 are verbatim in the extraction and 274 are not; the 274 are dominated by the bundle's own words (summary tables, "mechanical (schema)", "Position on the plan", encounter bands rewritten with semicolons). Only foes.md marks a column "(verbatim)". Blockquotes are 11 of 11 verbatim. Without a marker a docs-to-PDF gate cannot be built, so VISION.md's "verbatim and cited" is checked only from JSON back to docs (PR #21) and from JSON to the PDF by hand.
+- evidence: scratch probes proofread and proofread-quotes, 2026-09-06; docs/index.md Conventions has no verbatim rule and no pip rule
+- suggested fix: Add two conventions to docs/index.md: a cell or quote that transcribes the book is verbatim and a column that does so carries "(verbatim)" in its header, everything else is gloss; dice pips are written as digits. Retrofit the headers table by table, then add a docs-to-PDF leg beside fidelity.test.ts that checks only marked columns and blockquotes. Log the pass in docs/log.md.
+- source: user
+
+### [LOW] docs — about half the rulebook's prose is not in the bundle
+- pass: user-jot (PR #21 session, verbatim report 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: completeness
+- observation: 49 percent of the rulebook's 8-word windows are found in docs/ (lower bound; pdf-parse splits words). The tables are complete. Absent or partial: the introduction, the Lie Zi epigraph, the WuXia paragraph, most of "Cinematic journey" (p.81-91), the worked examples, the pre-generated sheets as prose. VISION.md says "the rulebook and the adventure are decomposed, verbatim and cited, under docs/"; the adventure is, the rulebook's prose is not.
+- evidence: scratch probe sentences and shingles, 2026-09-06; docs/world/cinematic-journey.md quotes one paragraph of eleven pages
+- suggested fix: A transcription pass from the PDF pages (not the extraction) into the existing concepts' prose sections, one folio per commit, each verified against the render; no engine or app change follows from it until a phase asks for the introduction on screen.
+- source: user
+
+
 The `/critique` pass proper still waits for Phase 8 (The UI) to ship and
 the deploy to be green (set via oversight 2026-09-05). The rows below are
 not from that pass: they are the carry-overs the `/march` loop of

@@ -9,7 +9,32 @@
 
 ## Pending
 
-(empty — populated by `/expand` as signals accumulate)
+### [ ] [score 6.0] Reconcile VISION.md with the authored lines: where inventions may print
+- proposed: 2026-09-06, operator via oversight (not an expand pass)
+- source signals:
+  - `VISION.md` (operator, 2026-09-06): inventions are "confined to the
+    app's own controls (button titles, headings, citations)".
+  - `plan/CRITIQUE.md` [MED] "no full proofread of the docs against the
+    PDF has been done (VISION.md)".
+  - Measurement, 2026-09-06 (PR #21 session): six invented surfaces
+    print as prose in play - Technique effect lines (72, combat),
+    Unexpected Event lines (11, combat), ending act lines (5, beat),
+    village blurbs (4), behaviour notes (109, rules panel), combat menu
+    lines (strings). Oracle lines (66) are in data but never rendered.
+    The areas' authored lines stopped printing in phase 8c.
+- rationale: two operator-level statements disagree. `spec.md` commits
+  to "an authored line beside every result", "About 440 authored
+  lines" and a done-condition that "the shipped authored-line count is
+  printed by the build; 437 is the full count". `VISION.md` forbids
+  those lines anywhere but controls. The build cannot satisfy both,
+  and every phase that touches a result slip inherits the ambiguity.
+- proposed scope: 1 phase after the reading is settled - either strip
+  the six surfaces to the book's text and cite-only rows, or print
+  each invented line under its INVENTION pill and amend VISION.md.
+- estimated phases: 1 (plus the re-seed)
+- conflicts: `spec.md` (sealed, rule 6) - resolution goes through
+  `/re-seed` before any phase ships; `/oversight` decides which
+  statement wins.
 
 ## Promoted
 
