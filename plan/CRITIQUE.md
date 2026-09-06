@@ -206,16 +206,6 @@ not from that pass: they are the carry-overs the `/march` loop of
 - suggested fix: Roll the Oracle's No. of enemies row in doTurn when the encounter's count is 'oracle', push that many servant ids onto pending, and show the roll on the card as a third die.
 - source: user
 
-### [MED] apps/app — the adventure’s flags are saved but nothing on the beat sets them (I-45, I-40, I-41)
-- pass: user-jot (phase 8c residue, 2026-09-06)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: night (the gourd opened), junior-king-asleep (wine), cord-spells-known (the Old Vixen met kindly, or the sheets) are declared in flags.json and carried in the record, but no menu row toggles them, so the absence rule (Ogres absent by night) never fires and the Cord is never usable.
-- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
-- suggested fix: Add menu rows where the book allows the act: OPEN THE GOURD once held (toggles night; label reading I-45), and set cord-spells-known from learnFrom's sources; wine and the nap wait for the sandbox's market.
-- source: user
-
 ### [LOW] apps/app — the Devil servant’s LOOT on a 6 is recorded as nothing (I-08)
 - pass: user-jot (phase 8c residue, 2026-09-06)
 - viewport: unspecified
@@ -277,6 +267,27 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [MED] apps/app — the adventure’s flags are saved but nothing on the beat sets them (I-45, I-40, I-41)
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: night (the gourd opened), junior-king-asleep (wine), cord-spells-known (the Old Vixen met kindly, or the sheets) are declared in flags.json and carried in the record, but no menu row toggles them, so the absence rule (Ogres absent by night) never fires and the Cord is never usable.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Add menu rows where the book allows the act: OPEN THE GOURD once held (toggles night; label reading I-45), and set cord-spells-known from learnFrom's sources; wine and the nap wait for the sandbox's market.
+- source: user
+- resolved: 2edf072 (2026-09-06). Two of the four flags now have a
+  source. A menu row appears once the gourd is held and toggles `night`
+  (I-45), its line the treasure's own printed effect; a test walks into
+  the Cave entrance on the same two dice by day and by night and meets
+  an Ogre, then nothing, so `absences.json` is live. `learnFrom` is now
+  passed a beaten named foe and a freed rescue as well as the area, so
+  the Old Vixen yields the Cord's spells (I-41), and
+  `cord-spells-known` is derived from `cave.effects` rather than set
+  beside it. Still open, deliberately: `junior-king-asleep` waits on
+  wine, which waits on the sandbox's market. Nine new strings under
+  `ui.cave.gourd.*` and `ui.deed.gourd.*`, each cited.
 
 ### [HIGH] packages/content — opponent roster carries no incorporeal tag (I-29)
 - pass: user-jot (commit 884f341)

@@ -4,7 +4,7 @@
 > pass. Durable rows (`[needs-user-call]`, `[user-issue #N]`, a
 > `> Bias:` line) survive the rewrite.
 
-# Site audit — 2026-09-06
+# Site audit — 2026-09-06 (second pass)
 
 The pass ran against `plan/CRITIQUE.md`'s Pending block, which is the
 only populated finding source: `/critique` proper has never run
@@ -21,11 +21,14 @@ ticks. One HIGH row stands alone at the top; the rest are MED.
 - source bump: +0.5 (user-filed via /jot)
 - next: shipped this tick — see `plan/CRITIQUE.md` Done
 
-### [ ] [4.9] apps/app — the adventure's flags are saved but nothing on the beat sets them (I-45, I-40, I-41)
+### [x] [5.4] apps/app — the adventure's flags are saved but nothing on the beat sets them (I-45, I-40, I-41)
 - category: external-critique
 - impact: 7 (the gourd's night, the sleeping Junior King and the Cord's spells are all unreachable)
 - ease: 7 (menu rows over machinery that already exists)
-- next: `/iterate` — add the menu rows the book allows, wire `learnFrom`
+- source bump: +0.5 (user-filed via /jot)
+- issue: #25
+- next: shipped 2edf072 — the gourd's night and the Vixen's spells; the
+  Junior King's nap waits on the sandbox's market
 
 ### [ ] [4.2] apps/app — the Oracle is not asked how many Devil servants there are (I-34)
 - category: external-critique
