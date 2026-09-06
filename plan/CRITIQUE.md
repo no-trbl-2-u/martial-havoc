@@ -15,16 +15,6 @@ not from that pass: they are the carry-overs the `/march` loop of
 2026-09-05/06 left behind after shipping Phases 3 and 4, filed here so
 `/iterate` drains them rather than losing them.
 
-### [HIGH] packages/content — opponent roster carries no incorporeal tag (I-29)
-- pass: user-jot (commit 884f341)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: R77 makes spirits and ghosts immune to ordinary blows, and the engine's progression.ordinaryBlowsPass gates on it, but no opponent record carries the tag - so the gate can never fire from data. Reading I-29 names the roster to tag: Gui, Ghost Pirate, First Abbot, Tutelary Spirit, Huli Jing, Yogi, Bai Gu Jing (doubtful), Jiangshi (doubtful), plus the adventure's Dexterous Ghost and Old Vixen. Exceptional weapons: Lu Dongbin's sword (Special Item 6), the seven-star sword, Yin's Magical sword.
-- evidence: carried over from the /march loop of 2026-09-05/06 (Phases 3 and 4), user-spotted at 2026-09-06T01:20:04Z
-- suggested fix: Add an `incorporeal` boolean and an `exceptionalWeapon` flag to the opponent and market record kinds, tag the named records with cite I-29, and assert in a content test that every tagged name resolves.
-- source: user
-
 ### [MED] packages/content — effects.json operation strings are unverified
 - pass: user-jot (commit 884f341)
 - viewport: unspecified
@@ -256,6 +246,30 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [HIGH] packages/content — opponent roster carries no incorporeal tag (I-29)
+- pass: user-jot (commit 884f341)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: R77 makes spirits and ghosts immune to ordinary blows, and the engine's progression.ordinaryBlowsPass gates on it, but no opponent record carries the tag - so the gate can never fire from data. Reading I-29 names the roster to tag: Gui, Ghost Pirate, First Abbot, Tutelary Spirit, Huli Jing, Yogi, Bai Gu Jing (doubtful), Jiangshi (doubtful), plus the adventure's Dexterous Ghost and Old Vixen. Exceptional weapons: Lu Dongbin's sword (Special Item 6), the seven-star sword, Yin's Magical sword.
+- evidence: carried over from the /march loop of 2026-09-05/06 (Phases 3 and 4), user-spotted at 2026-09-06T01:20:04Z
+- suggested fix: Add an `incorporeal` boolean and an `exceptionalWeapon` flag to the opponent and market record kinds, tag the named records with cite I-29, and assert in a content test that every tagged name resolves.
+- source: user
+- resolved: d15a7f2 (2026-09-06). `opponent` gained a required
+  `incorporeal` boolean, answered for all 59 stat blocks and true for
+  the eight I-29 names outright, each carrying `reading: "I-29"`. The
+  other half of R77 ships as `data/rules/exceptional-weapons.json`, a
+  reading-labelled table pointing at Special Item 6, the seven-star
+  sword and Yin's sheet by id. `isIncorporeal` and
+  `isExceptionalWeapon` are the lookups; five content tests hold the
+  tagged set, the resolution of every I-29 name, the reading citation,
+  the completeness of the tag and the resolution of every weapon ref.
+  Not done here: the market flag the row suggested (no Market weapon is
+  exceptional, so the enum value would have been dead), and the two
+  doubtful names - Bai Gu Jing and Jiangshi - which are left false and
+  filed as a `[needs-user-call]` row in `plan/AUDIT.md`. Wiring the
+  gate into CombatScreen is a separate row's work.
 
 ### [MED] general — Workers Builds fails off main with no log, config verified
 - resolved: 526b63a (2026-09-06). deploy.mjs now runs `npm run build:web` itself when apps/app/dist is missing; build b1ea4755 on 526b63a was the first green non-production Workers Build. The cause was reproduced locally (exit 3 at the empty-export guard on a fresh checkout) but never confirmed against a build log, and it sits awkwardly beside the recorded dashboard config - see the open row "the branch-build fix and the dashboard config disagree".
