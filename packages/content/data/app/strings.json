@@ -863,6 +863,26 @@
       "cite": "spec.md, Horizon (creation)"
     },
     {
+      "id": "ui.creation.flag.proficiencies-overspent",
+      "text": "Proficiencies overspent by {n} (R10).",
+      "cite": "MH p.10 (R10); spec.md, Horizon (creation reports, never refuses)"
+    },
+    {
+      "id": "ui.creation.flag.techniques-overspent",
+      "text": "Techniques overspent by {n} points (R16).",
+      "cite": "MH p.16 (R16); spec.md, Horizon (creation reports, never refuses)"
+    },
+    {
+      "id": "ui.creation.flag.training-below-one",
+      "text": "Training has taken SKILL to {skill} (R15).",
+      "cite": "MH p.15 (R15); spec.md, Horizon (creation reports, never refuses)"
+    },
+    {
+      "id": "ui.creation.flag.stray-proficiencies",
+      "text": "Not proficiencies of this style: {names} (R11).",
+      "cite": "MH p.10 (R11); spec.md, Horizon (creation reports, never refuses)"
+    },
+    {
       "id": "ui.nav.creation",
       "text": "NEW",
       "cite": "spec.md, Horizon (creation)"

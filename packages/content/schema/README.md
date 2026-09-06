@@ -57,6 +57,25 @@ Adding a table means adding its file *and* its expected count to
 ways, so neither a half-transcribed table nor a forgotten file
 can ship.
 
+`../src/fidelity.test.ts` is the round-trip leg. Every text field
+of a `label: rule` file must appear verbatim in the concept its
+`docs` pointer names (blockquote prefixes, footnote markers, curly
+quotes and line wrapping are the only things it normalises), so a
+paraphrase is red exactly as a dropped cell is. It also proves
+every record's `reading` names an `I-nn` that
+`docs/rules/readings` defines. Player-facing text is therefore in
+one of two categories, decided mechanically:
+
+| Category | What | Gate |
+|---|---|---|
+| transcribed | any text field of a `rule` file except `line`, `note`, `title` | must round-trip to the concept |
+| authored | every field of a `reading` or `invention` file; `line`, `note`, `title` anywhere | counted, cited, never compared |
+
+The app side of rule 7 is `scripts/copy-check.test.ts` (the `copy`
+Vitest project): every `.ts`/`.tsx` under `apps/app/src` is read as
+text and is red on a JSX text node, a rendered string prop or a
+literal of three or more words that did not come through `t()`.
+
 Rules this directory serves (spec.md, Routine calls; agents.md
 rule 7): every data record carries `cite`; engine-facing tables
 carry `label: rule`; no copy is hardcoded in components.

@@ -39,9 +39,11 @@ import {
   socialStatuses,
   techniqueById,
   techniqueByName,
+  t,
   techniques,
 } from '@martial-havoc/content'
 import type { MartialArt } from '@martial-havoc/content'
+import { fill } from '../lib/fill'
 import type { CreationState, RolledAttribute, Sheet } from './types'
 
 /** The name a Master gets if the player never types one. */
@@ -143,18 +145,25 @@ export const flagsOf = (c: CreationState): readonly string[] => {
   const art = artOf(c)
   const flags: string[] = []
   const overProficiency = spentProficiency(c) - pool(c)
-  if (overProficiency > 0) flags.push(`Proficiencies overspent by ${overProficiency} (R10).`)
+  // The flag lines are content (agents.md rule 7): read by id, filled here.
+  if (overProficiency > 0) {
+    flags.push(fill(t('ui.creation.flag.proficiencies-overspent'), { n: overProficiency }))
+  }
   const overResources = spentResources(c) - resourcePool(c)
-  if (overResources > 0) flags.push(`Techniques overspent by ${overResources} points (R16).`)
+  if (overResources > 0) {
+    flags.push(fill(t('ui.creation.flag.techniques-overspent'), { n: overResources }))
+  }
   if (c.training > 0 && skillAfterTraining(c) < 1) {
-    flags.push(`Training has taken SKILL to ${skillAfterTraining(c)} (R15).`)
+    flags.push(fill(t('ui.creation.flag.training-below-one'), { skill: skillAfterTraining(c) }))
   }
   if (art !== undefined) {
     const known = new Set(art.proficiencies.map((p) => p.toLowerCase()))
     const strays = Object.keys(c.proficiencies).filter(
       (name) => c.proficiencies[name] !== 0 && !known.has(name.toLowerCase()),
     )
-    if (strays.length > 0) flags.push(`Not proficiencies of this style: ${strays.join(', ')} (R11).`)
+    if (strays.length > 0) {
+      flags.push(fill(t('ui.creation.flag.stray-proficiencies'), { names: strays.join(', ') }))
+    }
   }
   return flags
 }

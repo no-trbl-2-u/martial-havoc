@@ -16,6 +16,9 @@ export default defineConfig({
       // (Phase 9). Also at the root, and for the same reason — it reads
       // the filesystem, which the app's Expo tsconfig has no types for.
       { test: { name: 'release', include: ['scripts/release-check.test.ts'] } },
+      // The copy leg: no hardcoded player-facing copy under apps/app/src
+      // (agents.md rule 7). Reads source as text, so it lives here too.
+      { test: { name: 'copy', include: ['scripts/copy-check.test.ts'] } },
     ],
   },
 })
