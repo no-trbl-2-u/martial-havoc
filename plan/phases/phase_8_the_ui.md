@@ -154,11 +154,13 @@ e2e`, foreground, blocking (agents.md rule 3). Never backgrounded.
 
 ## DoD
 
-- [ ] 8a: three layouts at `?layout=a|b|c`, screenshotted, filed, and the choice put to the operator.
-- [ ] 8b: the picked layout is the only layout; the flag and the losers are gone.
-- [ ] Every surface in the table above renders on the real engine.
-- [ ] A Playwright run creates a Master and wins a fight on the web export.
-- [ ] The layout decision is recorded in `design/INDEX.md`.
+- [x] 8a: three layouts at `?layout=a|b|c`, screenshotted, filed, and the choice put to the operator.
+- [x] 8b: the picked layout is the only layout; the flag and the losers are gone.
+- [-] Every surface in the table above renders on the real engine. Creation,
+      Beat, Combat, Rules and the region ship; the cave's areas, the
+      village and the record screen are the remaining carry-overs.
+- [x] A Playwright run creates a Master and wins a fight on the web export. (19a589f)
+- [x] The layout decision is recorded in `design/INDEX.md`.
 - [ ] `npm run verify` green; committed and pushed to `main`; deploy confirmed.
 
 ## Follow-ups (out of scope)

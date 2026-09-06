@@ -79,11 +79,12 @@ Later UI phases carry their own version marker.
       call is **settled for v1**: 8a shipped three candidates
       (d4ab97f), the operator picked B, the Sheet, and 8b made it the
       only layout (c6430ae); `design/INDEX.md` records the decision.
-      Still pending for the row to close: creation, the cave's areas,
-      the village, and the campaign record screen with export and
-      import, plus the Playwright run that creates a Master and wins a
-      fight. **This UI is v1 and is expected to be replaced** — see
-      "The UI is v1" below.
+      Creation shipped next — the eight printed Masters read in R01's
+      order, the advisory pools flagged, and the Playwright run that
+      creates a Master and wins a fight (19a589f). Still pending for
+      the row to close: the cave's areas, the village, and the campaign
+      record screen with export and import. **This UI is v1 and is
+      expected to be replaced** — see "The UI is v1" below.
 - [ ] Phase 9 — The web release
 
 **The milestone (phase 10, by 2026-12-05):**
