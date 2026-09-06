@@ -156,16 +156,6 @@ not from that pass: they are the carry-overs the `/march` loop of
 - suggested fix: Read one non-production build log in the dashboard and settle it. If the build command is not running off main, say so next to agents.md rule 4 and keep deploy.mjs self-sufficient; if it is running, the guard was a symptom and the real cause is still unfound.
 - source: agent
 
-### [MED] general — CronCreate loop schedules do not survive the cloud container
-- pass: loop (commit 2338c05)
-- viewport: unspecified
-- auth_state: anonymous
-- category: reliability
-- observation: `/loop 30m /march` schedules through CronCreate, which is in-memory and session-only. In a Claude Code cloud session the container is reclaimed between turns, and the job goes with it: this session lost its 30-minute /march schedule twice without any notice, the first time going roughly 45 minutes with the loop silently dead while it looked alive. Nothing in the loop reports the schedule's own health, so the failure is invisible until somebody runs CronList. The durable alternative on this surface is a Routine, whose minimum interval is one hour - so a sub-hour autonomous loop cannot be made to survive here at all.
-- evidence: CronList returned "No scheduled jobs" at 2026-09-06T05:13Z after job 9a2a35ec was created at 03:41Z; the same happened again to job 85df0690 within twenty minutes, observed at 2026-09-06T05:30:00Z
-- suggested fix: Have the loop check its own schedule each tick (CronList, or list_triggers for the Routine) and say so loudly when it is gone, per standing rule 8. Note in skills/march.md that on the cloud surface an hourly Routine is the only durable cadence.
-- source: agent
-
 ### [LOW] docs/campaigns/the-5-treasures — I-41 and I-38b disagree on the Cord's spells
 - pass: loop (commit 2338c05)
 - viewport: unspecified
@@ -257,6 +247,35 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [MED] general — CronCreate loop schedules do not survive the cloud container
+- pass: loop (commit 2338c05)
+- viewport: unspecified
+- auth_state: anonymous
+- category: reliability
+- observation: `/loop 30m /march` schedules through CronCreate, which is in-memory and session-only. In a Claude Code cloud session the container is reclaimed between turns, and the job goes with it: this session lost its 30-minute /march schedule twice without any notice, the first time going roughly 45 minutes with the loop silently dead while it looked alive. Nothing in the loop reports the schedule's own health, so the failure is invisible until somebody runs CronList. The durable alternative on this surface is a Routine, whose minimum interval is one hour - so a sub-hour autonomous loop cannot be made to survive here at all.
+- evidence: CronList returned "No scheduled jobs" at 2026-09-06T05:13Z after job 9a2a35ec was created at 03:41Z; the same happened again to job 85df0690 within twenty minutes, observed at 2026-09-06T05:30:00Z
+- suggested fix: Have the loop check its own schedule each tick (CronList, or list_triggers for the Routine) and say so loudly when it is gone, per standing rule 8. Note in skills/march.md that on the cloud surface an hourly Routine is the only durable cadence.
+- source: agent
+- resolved: skills/march.md Step 0.5 (2026-09-06). The loop now checks
+  its own heartbeat before any work: `CronList` each tick, and on an
+  empty list from a hand-started tick it reports the death loudly and
+  first, fires `scripts/notify.mjs` per standing rule 8, re-arms, and
+  names the unaccounted-for interval in the tick's report. Re-arming
+  silently is called out as forbidden, since a silent re-arm is
+  indistinguishable from a loop that never died - which is exactly what
+  hid this. The step also records the durability finding the row asked
+  for: on the cloud surface an hourly Routine is the only durable
+  cadence, its minimum interval is one hour and its runs draw against a
+  daily per-account cap, so a sub-hourly autonomous loop cannot be made
+  durable here at all; a `/loop` cadence is best-effort and a long
+  unattended window needs a Routine.
+  Confirmed a third time while writing this: job e6460733 (created
+  16:35Z) was gone by 17:59Z, and `notify.mjs` reported
+  `no channel configured`, so the pager leg is inert until
+  NOTIFY_NTFY_TOPIC or NOTIFY_WEBHOOK_URL is set - noted in the step
+  itself, and the reason the loud line in the tick's own report comes
+  first rather than instead.
 
 ### [MED] plan/steps/01_build_plan.md — the plan does not know the prototype landed
 - pass: user-jot (commit 40b3dd5)
