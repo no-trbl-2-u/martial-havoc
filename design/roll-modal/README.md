@@ -24,4 +24,21 @@ The plate is a dashed SVG placeholder. `spec.md` refuses credited art
 (text and SVG only), so the image slot is drawn geometry of ours, keyed
 by reason. Raster or credited plates would need `/re-seed`.
 
-Not chosen yet. The operator picks; nothing here ships.
+## Decided 2026-09-06
+
+The operator picked **A, the Card**, with SVG plates of ours, and
+added two notes that the shipped card follows:
+
+1. One button. The card has a single CONTINUE. ROLL 2d6 (or a check on
+   the menu) rolls at once and the card opens on the result; CONTINUE
+   closes it and the result slip takes over on the sheet. MY DICE opens
+   the same card unrolled, with the picker for the faces on the table;
+   CONTINUE resolves the check on them and counts an override. The
+   mockups' three-button ready state and KEEP IT are superseded.
+2. The attribute strip shows a dash in every cell while a Master is
+   being made.
+
+Shipped in `apps/app/src/components/beat/RollCard.tsx`,
+`apps/app/src/components/Plate.tsx` and `apps/app/src/hooks/useTumble.ts`;
+the reducer's `roll.open`, `roll.manual`, `roll` and `roll.close`.
+The beat's manual-dice slip is gone; the fight keeps its own.

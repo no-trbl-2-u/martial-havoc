@@ -166,6 +166,18 @@ export type VillageNote = {
 /** What the result slip shows, when it shows anything. */
 export type Result = CheckResult | RestResult | TakeResult | TreasureResult
 
+/**
+ * The roll card over the beat (design/roll-modal, reading A; the
+ * operator's pick and notes of 2026-09-06).
+ *
+ * Two ways in. ROLL 2d6 or a check on the menu rolls at once and the
+ * card opens landed: the result, the dice, the plate, one CONTINUE. MY
+ * DICE opens the card not yet landed: the picker for the faces on the
+ * table, and CONTINUE resolves the check on them. `optionId` names the
+ * check either way. Null is the resting state: no card.
+ */
+export type RollCard = { readonly optionId: string; readonly landed: boolean }
+
 /** The last round rolled, both sides kept whole so both dice can be shown. */
 export type RoundShown = {
   readonly master: AttackStrength
@@ -217,6 +229,8 @@ export type RecordState = {
   readonly area: number
   readonly sheet: Sheet
   readonly result: Result | null
+  /** The roll card over the beat, or null. */
+  readonly roll: RollCard | null
   /** Faces the player tapped for the next roll; used when two are present. */
   readonly manual: readonly Die[]
   readonly manualOpen: boolean
@@ -259,7 +273,14 @@ export type RecordState = {
 export type Action =
   | { readonly type: 'nav'; readonly screen: Screen }
   | { readonly type: 'option'; readonly id: string }
+  /** ROLL 2d6: roll the area's first check now and open the card landed. */
+  | { readonly type: 'roll.open' }
+  /** MY DICE: open the card with the picker for the area's first check. */
+  | { readonly type: 'roll.manual' }
+  /** CONTINUE on a picker card: resolve the check on the two tapped faces. */
   | { readonly type: 'roll' }
+  /** CONTINUE on a landed card, or a tap outside a picker: close it. The result stays. */
+  | { readonly type: 'roll.close' }
   | { readonly type: 'manual.toggle' }
   | { readonly type: 'manual.cancel' }
   | { readonly type: 'manual.face'; readonly face: Die }

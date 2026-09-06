@@ -64,9 +64,24 @@ describe('checks on the beat', () => {
     expect(s.sheet.luck).toBe(8)
   })
 
-  it('the primary roll is the area’s first check', () => {
-    const s = play(fresh(), [[{ type: 'roll' }, [2, 2]]])
+  it('the primary roll is the area’s first check, rolled at once with the card landed', () => {
+    const s = play(fresh(), [[{ type: 'roll.open' }, [2, 2]]])
     expect(s.result).toMatchObject({ kind: 'check', check: 'skill', threshold: 10 })
+    expect(s.roll).toEqual({ optionId: FORCE, landed: true })
+  })
+
+  it('a check on the menu rolls at once and opens the card landed; CONTINUE closes it and keeps the result', () => {
+    const rolled = play(fresh(), [[{ type: 'option', id: FORCE }, [4, 6]]])
+    expect(rolled.roll).toEqual({ optionId: FORCE, landed: true })
+    expect(rolled.result).toMatchObject({ kind: 'check', success: true })
+    const kept = reduce(rolled, { type: 'roll.close' }, fromSequence([]))
+    expect(kept.roll).toBeNull()
+    expect(kept.result).toBe(rolled.result)
+  })
+
+  it('CONTINUE on a landed card does not roll again', () => {
+    const rolled = play(fresh(), [[{ type: 'option', id: FORCE }, [4, 6]]])
+    expect(reduce(rolled, { type: 'roll' }, fromSequence([1, 1]))).toBe(rolled)
   })
 
   it('an option from another area does nothing', () => {
@@ -76,17 +91,40 @@ describe('checks on the beat', () => {
 })
 
 describe('manual dice', () => {
-  it('two tapped faces are the Master’s next roll and count one override', () => {
-    const s = play(fresh(), [
-      [{ type: 'manual.toggle' }, []],
+  it('MY DICE opens the picker card for the first check; two tapped faces and CONTINUE roll it and count one override', () => {
+    const open = play(fresh(), [[{ type: 'roll.manual' }, []]])
+    expect(open.roll).toEqual({ optionId: FORCE, landed: false })
+    expect(open.result).toBeNull()
+    const s = play(open, [
       [{ type: 'manual.face', face: 6 }, []],
       [{ type: 'manual.face', face: 6 }, []],
-      [{ type: 'option', id: FORCE }, [1, 1]], // the table's dice are ignored
+      [{ type: 'roll' }, [1, 1]], // the table's dice are ignored
     ])
     expect(s.result).toMatchObject({ kind: 'check', doubleSix: true })
+    expect(s.roll).toEqual({ optionId: FORCE, landed: true })
     expect(s.overrides).toBe(1)
     expect(s.manual).toEqual([])
     expect(s.manualOpen).toBe(false)
+  })
+
+  it('CONTINUE with fewer than two faces rolls nothing', () => {
+    const one = play(fresh(), [
+      [{ type: 'roll.manual' }, []],
+      [{ type: 'manual.face', face: 6 }, []],
+    ])
+    expect(reduce(one, { type: 'roll' }, fromSequence([1, 1]))).toBe(one)
+  })
+
+  it('a tap outside a picker card closes it with nothing rolled', () => {
+    const s = play(fresh(), [
+      [{ type: 'roll.manual' }, []],
+      [{ type: 'manual.face', face: 6 }, []],
+      [{ type: 'roll.close' }, []],
+    ])
+    expect(s.roll).toBeNull()
+    expect(s.result).toBeNull()
+    expect(s.manual).toEqual([])
+    expect(s.overrides).toBe(0)
   })
 
   it('a roll the app made is not an override', () => {
@@ -99,15 +137,15 @@ describe('manual dice', () => {
 
   it('counts one override per manual roll, never resetting', () => {
     const tap = (face: 6): readonly (readonly [Action, readonly Die[]])[] => [
-      [{ type: 'manual.toggle' }, []],
+      [{ type: 'roll.manual' }, []],
       [{ type: 'manual.face', face }, []],
       [{ type: 'manual.face', face }, []],
+      [{ type: 'roll' }, [1, 1]],
+      [{ type: 'roll.close' }, []],
     ]
     const s = play(fresh(), [
       ...tap(6),
-      [{ type: 'option', id: FORCE }, [1, 1]],
       ...tap(6),
-      [{ type: 'option', id: FORCE }, [1, 1]],
       // ...and a roll the app made in between moves nothing.
       [{ type: 'option', id: FORCE }, [1, 1]],
     ])

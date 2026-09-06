@@ -1,4 +1,11 @@
-/** The Master's numbers in reach: SKILL, ENDURANCE, LUCK, gold (R01). */
+/**
+ * The Master's numbers in reach: SKILL, ENDURANCE, LUCK, gold (R01).
+ *
+ * `blank` draws a dash in every cell: while a Master is being made the
+ * record carries a placeholder sheet so the frame has numbers, and
+ * showing those would claim a Master that does not exist yet (the
+ * operator's note, 2026-09-06).
+ */
 import { StyleSheet, Text, View } from 'react-native'
 import { t } from '@martial-havoc/content'
 import { color, font } from '../theme/tokens'
@@ -6,7 +13,7 @@ import type { Sheet } from '../state/types'
 
 type Cell = { readonly id: string; readonly value: number; readonly inverted?: boolean; readonly wide?: boolean }
 
-export const AttributeStrip = ({ sheet }: { readonly sheet: Sheet }) => {
+export const AttributeStrip = ({ sheet, blank = false }: { readonly sheet: Sheet; readonly blank?: boolean }) => {
   const cells: readonly Cell[] = [
     { id: 'skill', value: sheet.skill },
     { id: 'endurance', value: sheet.endurance, inverted: true, wide: true },
@@ -27,7 +34,7 @@ export const AttributeStrip = ({ sheet }: { readonly sheet: Sheet }) => {
         >
           <Text style={[styles.name, c.inverted && styles.onInk]}>{t(`ui.attr.${c.id}`)}</Text>
           <Text testID={`attr-${c.id}`} style={[styles.value, c.inverted && styles.onInk]}>
-            {c.value}
+            {blank ? t('ui.attr.blank') : c.value}
           </Text>
         </View>
       ))}

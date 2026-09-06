@@ -17,7 +17,6 @@ import type { MenuOption } from '@martial-havoc/content'
 import { color, font } from '../../theme/tokens'
 import { Die } from '../Die'
 import { FreeText } from '../FreeText'
-import { ManualDice } from '../ManualDice'
 import { MenuButton } from '../MenuButton'
 import { Pill } from '../Pill'
 import { RollBar } from '../RollBar'
@@ -110,7 +109,9 @@ export const MenuList = ({
 
 /**
  * The foot every layout carries: the passage field (always present,
- * `spec.md`), the manual dice when open, and the roll bar.
+ * `spec.md`) and the roll bar. The manual dice left the foot for the
+ * roll card (design/roll-modal, reading A), which is what freed the
+ * sheet: MY DICE here opens the picker there.
  */
 export const BeatFoot = ({
   state,
@@ -134,20 +135,12 @@ export const BeatFoot = ({
       onDraft={(text) => dispatch({ type: 'draft', text })}
       onKeep={() => dispatch({ type: 'passage.keep' })}
     />
-    {state.manualOpen ? (
-      <View style={styles.manual}>
-        <ManualDice
-          manual={state.manual}
-          onFace={(face) => dispatch({ type: 'manual.face', face })}
-          onCancel={() => dispatch({ type: 'manual.cancel' })}
-        />
-      </View>
-    ) : null}
     <RollBar
       primaryText={primaryText}
-      onPrimary={() => dispatch({ type: 'roll' })}
+      onPrimary={() => dispatch({ type: 'roll.open' })}
       primaryDisabled={primaryDisabled}
-      onManual={() => dispatch({ type: 'manual.toggle' })}
+      onManual={() => dispatch({ type: 'roll.manual' })}
+      manualDisabled={primaryDisabled}
       overrides={state.overrides}
       right={deeds}
     />
@@ -207,5 +200,4 @@ const styles = StyleSheet.create({
   },
   emptyLine: { fontFamily: font.serif, fontSize: 15, fontStyle: 'italic', marginTop: 4, color: color.ink },
   foot: { paddingTop: 10, paddingHorizontal: 14, paddingBottom: 14 },
-  manual: { marginTop: 8 },
 })

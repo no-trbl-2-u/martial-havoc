@@ -75,7 +75,7 @@ export const App = () => {
         <View style={styles.page}>
           <Header place={placeLine(state)} screen={state.screen} onNav={(screen) => dispatch({ type: 'nav', screen })} />
           <View style={styles.strip}>
-            <AttributeStrip sheet={state.sheet} />
+            <AttributeStrip sheet={state.sheet} blank={state.creation !== null} />
           </View>
           {state.screen === 'creation' ? <CreationScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'village' ? <VillageScreen state={state} dispatch={dispatch} /> : null}

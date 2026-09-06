@@ -61,11 +61,14 @@ test('01 the beat, opening', async ({ page }) => {
   await shot(page, '01-beat-opening')
 })
 
-test('02 the beat, a check passed', async ({ page }) => {
+test('02 the beat, a check rolled onto the card and kept', async ({ page }) => {
   await page.goto('/?dice=4,6')
   await begin(page)
   await button(page, /FORCE THE SHUT GATE/).click()
   await expect(page.getByText('SKILL CHECK · PASSED')).toBeVisible()
+  await shot(page, '02a-beat-roll-card-landed')
+  await page.getByTestId('roll-card-continue').click()
+  await expect(page.getByTestId('roll-card')).toHaveCount(0)
   await shot(page, '02-beat-check-passed')
 })
 
@@ -73,11 +76,12 @@ test('03 the beat, the dice on the table', async ({ page }) => {
   await page.goto('/')
   await begin(page)
   await button(page, 'MY DICE').click()
+  await expect(page.getByTestId('roll-card')).toBeVisible()
   await page.getByRole('button', { name: '6', exact: true }).click()
   await page.getByRole('button', { name: '6', exact: true }).click()
-  await expect(button(page, 'USE MY DICE')).toBeVisible()
+  await expect(page.getByText(/YOUR DICE: 6 AND 6/)).toBeVisible()
   await shot(page, '03-beat-manual-dice')
-  await button(page, /FORCE THE SHUT GATE/).click()
+  await page.getByTestId('roll-card-continue').click()
   await expect(page.getByText('SKILL CHECK · FAILED')).toBeVisible()
   await shot(page, '04-beat-double-six')
 })

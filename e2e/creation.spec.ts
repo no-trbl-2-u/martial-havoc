@@ -23,6 +23,11 @@ test('a Master is made by walking the book’s order', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByTestId('creation')).toBeVisible()
   await expect(page.getByTestId('place')).toHaveText('MAKE YOUR MASTER')
+  // No Master yet, so the strip claims none: every cell is a dash.
+  await expect(page.getByTestId('attr-skill')).toHaveText('-')
+  await expect(page.getByTestId('attr-endurance')).toHaveText('-')
+  await expect(page.getByTestId('attr-luck')).toHaveText('-')
+  await expect(page.getByTestId('attr-gold')).toHaveText('-')
 
   // R02, R03 — standing and its gold. One tap rolls both.
   await page.getByTestId('creation-roll-master').click()
@@ -119,7 +124,11 @@ test('a made Master wins a fight', async ({ page }) => {
  */
 test('the village buys, recovers LUCK and rests, on the printed terms', async ({ page }) => {
   await page.goto('/')
-  await page.getByTestId('preset-preset.san-te').click()
+  // A printed sheet's gold is rolled on the table's dice (R03), and San
+  // Te is Poor: 1d6-1, which is 0 GP one time in six and then nothing
+  // here can be bought. Golden Swallow is Rich (5d6+6, never under 11
+  // GP), so every purchase below is affordable on any roll.
+  await page.getByTestId('preset-preset.golden-swallow').click()
   await page.getByTestId('creation-begin').click()
   await button(page, 'VILLAGE').click()
   await expect(page.getByTestId('village')).toBeVisible()

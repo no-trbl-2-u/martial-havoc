@@ -10,7 +10,7 @@
  * stays because resolving and arranging are genuinely different jobs,
  * and the next surface to grow a beat reuses the resolution.
  */
-import { beatForArea, optionsForArea, t } from '@martial-havoc/content'
+import { beatForArea, optionById, optionsForArea, t } from '@martial-havoc/content'
 import { fill } from '../lib/fill'
 import { SheetBeat } from '../components/beat/SheetBeat'
 import { shown } from '../components/beat/shown'
@@ -24,6 +24,8 @@ export const BeatScreen = ({ state, dispatch }: Props) => {
   const result = state.result === null ? null : shown(state.result, state.sheet)
   // The roll bar is live only where the menu offers something to roll.
   const hasCheck = options.some((o) => o.action === 'skill-check' || o.action === 'luck-check')
+  // The roll card's check, if a card is up and its option is this area's.
+  const cardOption = state.roll === null ? undefined : optionById(state.roll.optionId)
   return (
     <SheetBeat
       state={state}
@@ -31,9 +33,10 @@ export const BeatScreen = ({ state, dispatch }: Props) => {
       line={beat?.line ?? t('ui.empty.line')}
       options={options}
       result={result}
-      primaryText={state.manual.length === 2 ? t('ui.roll.manual') : t('ui.roll.primary')}
+      primaryText={t('ui.roll.primary')}
       primaryDisabled={!hasCheck}
       deeds={fill(t('ui.deeds'), { n: state.deeds.length })}
+      cardOption={cardOption !== undefined && cardOption.area === state.area ? cardOption : null}
     />
   )
 }

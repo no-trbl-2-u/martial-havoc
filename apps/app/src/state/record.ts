@@ -66,6 +66,7 @@ export const newRecord = (dice: DiceSource): RecordState => ({
   area: 2,
   sheet: sheetFor(PRESET_ID)(dice),
   result: null,
+  roll: null,
   manual: [],
   manualOpen: false,
   draft: '',

@@ -226,9 +226,50 @@ const doOption = (state: RecordState, option: MenuOption, dice: DiceSource): Rec
   }
 }
 
+/** Whether an option is one of the two checks the roll card handles (R20, R21). */
+const isCheck = (option: MenuOption): boolean =>
+  option.action === 'skill-check' || option.action === 'luck-check'
+
 /** The primary roll button on the beat: the area's first check. */
 const firstCheck = (state: RecordState): MenuOption | undefined =>
-  optionsForArea(state.area).find((o) => o.action === 'skill-check' || o.action === 'luck-check')
+  optionsForArea(state.area).find(isCheck)
+
+/**
+ * Roll a check now and open the card landed (design/roll-modal, reading
+ * A, the operator's note: ROLL uses the rolled result, one CONTINUE).
+ */
+const rollNow = (state: RecordState, option: MenuOption, dice: DiceSource): RecordState => ({
+  ...doOption(state, option, dice),
+  roll: { optionId: option.id, landed: true },
+})
+
+/** Open the card with the picker: the check is named, the faces are the player's to tap. */
+const openPicker = (state: RecordState, option: MenuOption): RecordState => ({
+  ...state,
+  roll: { optionId: option.id, landed: false },
+  manual: [],
+  manualOpen: true,
+})
+
+/**
+ * CONTINUE on a picker card: resolve the check on the two tapped faces.
+ * Fewer than two is nothing to roll; the button is disabled and the
+ * reducer agrees. The override count moves inside `doOption`.
+ */
+const rollCard = (state: RecordState, dice: DiceSource): RecordState => {
+  if (state.roll === null || state.roll.landed || state.manual.length !== 2) return state
+  const option = optionById(state.roll.optionId)
+  if (option === undefined || option.area !== state.area || !isCheck(option)) return state
+  return { ...doOption(state, option, dice), roll: { optionId: option.id, landed: true } }
+}
+
+/** Close the card. What it rolled is already in `result`; nothing is undone. */
+const closeCard = (state: RecordState): RecordState => ({
+  ...state,
+  roll: null,
+  manual: [],
+  manualOpen: false,
+})
 
 // --------------------------------------------------------------- the fight
 
@@ -587,12 +628,22 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return { ...state, screen: action.screen }
     case 'option': {
       const option = optionById(action.id)
-      return option === undefined || option.area !== state.area ? state : doOption(state, option, dice)
+      if (option === undefined || option.area !== state.area) return state
+      // A check rolls now and opens the card on the result; the rest resolves plainly.
+      return isCheck(option) ? rollNow(state, option, dice) : doOption(state, option, dice)
     }
-    case 'roll': {
+    case 'roll.open': {
       const option = firstCheck(state)
-      return option === undefined ? state : doOption(state, option, dice)
+      return option === undefined ? state : rollNow(state, option, dice)
     }
+    case 'roll.manual': {
+      const option = firstCheck(state)
+      return option === undefined ? state : openPicker(state, option)
+    }
+    case 'roll':
+      return rollCard(state, dice)
+    case 'roll.close':
+      return closeCard(state)
     case 'manual.toggle':
       return { ...state, manualOpen: !state.manualOpen, manual: [] }
     case 'manual.cancel':

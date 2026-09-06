@@ -1201,6 +1201,46 @@
       "id": "ui.about.footer",
       "text": "Built by an autonomous loop, one phase at a time",
       "cite": "agents.md"
+    },
+    {
+      "id": "ui.card.ready",
+      "text": "YOUR ROLL",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.card.rolling",
+      "text": "ROLLING",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.card.luck.cost",
+      "text": "LUCK {luck} · THEN LUCK -1, WHATEVER THE RESULT",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.plate.skill",
+      "text": "PLATE · SKILL CHECK",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.plate.luck",
+      "text": "PLATE · LUCK CHECK",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.plate.ours",
+      "text": "SVG, OURS · PLACEHOLDER",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.card.continue",
+      "text": "CONTINUE",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.attr.blank",
+      "text": "-",
+      "cite": "design/roll-modal/README.md"
     }
   ]
 }
