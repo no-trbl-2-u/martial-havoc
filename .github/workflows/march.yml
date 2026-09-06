@@ -112,7 +112,65 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       # ---------------------------------------------------------------------
-      # Step 5 -- the march itself.
+      # Step 5 -- credential preflight.
+      #
+      # The action hides the CLI's output (`show_full_output` defaults to
+      # false, and this repository is public, so turning it on would publish
+      # the whole transcript). A rejected credential therefore surfaces only
+      # as `is_error: true` with no reason -- which is exactly how the first
+      # scheduled tick died: 411ms in, one turn, zero model usage.
+      #
+      # This step asks the Anthropic API one question the key can answer on
+      # its own, and prints only the HTTP status and the API's own error type
+      # and message. Those carry no repository content, so they are safe in a
+      # public log; the key itself is masked by Actions. The result separates
+      # the three failures that look identical from the outside:
+      #
+      #   200  the key is valid and the model is visible to it
+      #   401  invalid or revoked key (authentication_error)
+      #   400  a request the key's account cannot make -- most often
+      #        "credit balance is too low" (invalid_request_error)
+      #   403  the key is valid but the account lacks access
+      #
+      # `--fail-with-body` keeps the body on a non-2xx so the message is
+      # printed before curl's own exit code stops the job.
+      # ---------------------------------------------------------------------
+      - name: Preflight the Anthropic credential
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          set -uo pipefail
+
+          if [ -z "${ANTHROPIC_API_KEY}" ]; then
+            echo "::error::ANTHROPIC_API_KEY is unset or empty."
+            exit 1
+          fi
+
+          # -s quiet, -S still print errors, -w appends the status on its own
+          # line so the body and the code can be split without jq.
+          response=$(curl -sS -w '\n%{http_code}' \
+            https://api.anthropic.com/v1/models \
+            -H "x-api-key: ${ANTHROPIC_API_KEY}" \
+            -H 'anthropic-version: 2023-06-01')
+
+          status=$(printf '%s' "${response}" | tail -n 1)
+          body=$(printf '%s' "${response}" | sed '$d')
+
+          echo "HTTP ${status}"
+
+          if [ "${status}" != "200" ]; then
+            echo "::error::The Anthropic API rejected the key (HTTP ${status})."
+            echo "${body}"
+            exit 1
+          fi
+
+          # Print the model ids the key can see. If the model Claude Code
+          # picks is absent here, that is the failure, not the key.
+          echo "Models visible to this key:"
+          printf '%s' "${body}" | grep -o '"id":"[^"]*"' | cut -d'"' -f4
+
+      # ---------------------------------------------------------------------
+      # Step 6 -- the march itself.
       #
       #   prompt         The slash command. Supplying `prompt` puts the action
       #                  in automation mode: it runs headless immediately
