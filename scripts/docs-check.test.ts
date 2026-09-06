@@ -21,11 +21,12 @@
  *      across docs/rules (a table row starting with the id defines it).
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
-import { dirname, join, relative, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { dirname, join, relative, resolve, sep } from 'node:path'
 import { parse as parseYaml } from 'yaml'
 import { describe, expect, it } from 'vitest'
 
-const root = resolve(new URL('..', import.meta.url).pathname)
+const root = resolve(fileURLToPath(new URL('..', import.meta.url)))
 const docsDir = join(root, 'docs')
 
 /** Recursively list files under `dir` ending in `ext`. */
@@ -54,8 +55,9 @@ const relativeLinks = (body: string): string[] =>
 // docs/sources/ holds provenance copied verbatim from elsewhere (the
 // estate's inventory keeps the estate's own frontmatter); only its
 // index.md is a concept of this bundle.
+const sources = join(docsDir, 'sources')
 const concepts = walk(docsDir, '.md').filter(
-  (f) => !f.includes('/docs/sources/') || f.endsWith('/docs/sources/index.md'),
+  (f) => !f.startsWith(sources + sep) || f === join(sources, 'index.md'),
 )
 const rel = (f: string) => relative(root, f)
 

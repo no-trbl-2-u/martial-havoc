@@ -33,6 +33,7 @@ import {
   rescue,
   resolveEncounter,
   resolveRound,
+  revealHint,
   spendTechnique,
   stayTheNight,
   step,
@@ -238,21 +239,32 @@ const doTake = (state: RecordState, treasure: string): RecordState => {
 /**
  * Read a foe's LOOT line (5T a2) and put the drop where it belongs:
  * a treasure, a key, an item. The result slip shows the printed item.
+ *
+ * A Hint row (the Devil servant's 6, I-08) is not a thing carried: the
+ * servant knew something of the place it was met in, so the area's
+ * grey paragraph is revealed and the slip says so, rather than printing
+ * the transcription's note about an icon with no text.
+ *
+ * `gift` marks a line read from a rescue rather than a body: the same
+ * table, but the slip calls it what it is.
  */
-const doLootOf = (state: RecordState, foeId: string, dice: DiceSource): RecordState => {
+const doLootOf = (state: RecordState, foeId: string, dice: DiceSource, gift = false): RecordState => {
   const drop = lootFrom(TABLES, foeId)(dice)
-  const cave = takeDrop(state.cave, drop.row)
   const row = drop.row
+  const hint = row?.hint === true
+  const cave = hint ? revealHint(state.cave, state.cave.area) : takeDrop(state.cave, drop.row)
   const result: RecordState['result'] = {
     kind: 'loot',
     foe: foeName(foeId),
     face: drop.face ?? null,
-    item: row?.item ?? t('ui.cave.loot.nothing'),
+    item: hint ? t('ui.cave.loot.hint.item') : (row?.item ?? t('ui.cave.loot.nothing')),
     treasure: row?.treasure === undefined || row.treasure === null ? null : treasureName(row.treasure),
     key: row?.key !== undefined && row.key !== null,
+    gift,
+    hint,
   }
   const next = { ...state, cave, result }
-  if (row === undefined || row.hint) return next
+  if (row === undefined || hint) return next
   const took = row.treasure !== null ? treasureName(row.treasure) : row.item
   return addDeed(next, fill(t('ui.deed.took'), { name: took }))
 }
@@ -270,6 +282,7 @@ const doRescue = (state: RecordState, dice: DiceSource): RecordState => {
     addDeed(freed, fill(t('ui.deed.freed'), { name: foeName(foe) })),
     foe,
     dice,
+    true,
   )
 }
 

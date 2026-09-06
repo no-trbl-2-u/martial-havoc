@@ -175,6 +175,10 @@ export type LootResult = {
   /** The treasure's printed name where the drop was one of the five. */
   readonly treasure: string | null
   readonly key: boolean
+  /** Read from a rescue's line rather than a body's: given, not taken. */
+  readonly gift: boolean
+  /** The row was a Hint (I-08): the area's grey paragraph, revealed. */
+  readonly hint: boolean
 }
 
 /** A line of feedback that is not a roll: a rescue, what the sheets taught. */

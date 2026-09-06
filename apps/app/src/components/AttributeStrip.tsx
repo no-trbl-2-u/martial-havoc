@@ -1,24 +1,32 @@
 /**
  * The Master's numbers in reach: SKILL, ENDURANCE, LUCK, gold (R01).
  *
- * `blank` draws a dash in every cell: while a Master is being made the
- * record carries a placeholder sheet so the frame has numbers, and
- * showing those would claim a Master that does not exist yet (the
- * operator's note, 2026-09-06).
+ * While a Master is being made the record carries a placeholder sheet,
+ * and showing that would claim a Master that does not exist yet (the
+ * operator's note, 2026-09-06); so creation passes `values` instead,
+ * each null until its dice have been rolled, and a null cell draws a
+ * dash. The strip fills in as the Master does.
  */
 import { StyleSheet, Text, View } from 'react-native'
 import { t } from '@martial-havoc/content'
 import { color, font } from '../theme/tokens'
-import type { Sheet } from '../state/types'
 
-type Cell = { readonly id: string; readonly value: number; readonly inverted?: boolean; readonly wide?: boolean }
+/** The four numbers, each null while it is still unrolled. */
+export type StripValues = {
+  readonly skill: number | null
+  readonly endurance: number | null
+  readonly luck: number | null
+  readonly gold: number | null
+}
 
-export const AttributeStrip = ({ sheet, blank = false }: { readonly sheet: Sheet; readonly blank?: boolean }) => {
+type Cell = { readonly id: string; readonly value: number | null; readonly inverted?: boolean; readonly wide?: boolean }
+
+export const AttributeStrip = ({ values }: { readonly values: StripValues }) => {
   const cells: readonly Cell[] = [
-    { id: 'skill', value: sheet.skill },
-    { id: 'endurance', value: sheet.endurance, inverted: true, wide: true },
-    { id: 'luck', value: sheet.luck },
-    { id: 'gold', value: sheet.gold },
+    { id: 'skill', value: values.skill },
+    { id: 'endurance', value: values.endurance, inverted: true, wide: true },
+    { id: 'luck', value: values.luck },
+    { id: 'gold', value: values.gold },
   ]
   return (
     <View style={styles.strip}>
@@ -34,7 +42,7 @@ export const AttributeStrip = ({ sheet, blank = false }: { readonly sheet: Sheet
         >
           <Text style={[styles.name, c.inverted && styles.onInk]}>{t(`ui.attr.${c.id}`)}</Text>
           <Text testID={`attr-${c.id}`} style={[styles.value, c.inverted && styles.onInk]}>
-            {blank ? t('ui.attr.blank') : c.value}
+            {c.value === null ? t('ui.attr.blank') : c.value}
           </Text>
         </View>
       ))}

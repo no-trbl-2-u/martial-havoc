@@ -21,8 +21,9 @@ standing rules are non-negotiable. Beyond it:
 - Skills live in `skills/`; state lives in `plan/`.
 - The next pending work is the first `[ ]` row in
   `plan/steps/01_build_plan.md`.
-- `docs/` is the decomposed rulebook and adventure, and standing
-  rule 9 says to read the relevant concept there first.
+- The two PDFs at the repo root are the game and outrank everything
+  else (standing rule 9); `docs/` is their decomposition, the index
+  that finds the folio and cites it.
 
 Prose in `agents.md` is context, not enforcement. The rules that
 must hold whatever an agent decides are enforced mechanically by

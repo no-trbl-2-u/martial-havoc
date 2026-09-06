@@ -28,10 +28,11 @@
  * carries no node types.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs'
-import { join, relative, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { join, relative, resolve, sep } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-const root = resolve(new URL('..', import.meta.url).pathname)
+const root = resolve(fileURLToPath(new URL('..', import.meta.url)))
 const srcDir = join(root, 'apps', 'app', 'src')
 
 /**
@@ -65,7 +66,7 @@ const walk = (dir: string, exts: readonly string[]): readonly string[] =>
 
 /** Source files the leg reads: shipped `.ts`/`.tsx`, not tests, not theme. */
 const sources = walk(srcDir, ['.ts', '.tsx']).filter(
-  (f) => !/\.test\.tsx?$/.test(f) && !f.includes(`${join('src', 'theme')}/`),
+  (f) => !/\.test\.tsx?$/.test(f) && !f.includes(join('src', 'theme') + sep),
 )
 
 /**

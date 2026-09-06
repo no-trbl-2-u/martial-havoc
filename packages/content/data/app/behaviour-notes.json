@@ -1,6 +1,6 @@
 {
   "$schema": "../../schema/content.schema.json",
-  "$comment": "One note per engine behaviour, keyed by ref to the id in packages/engine's registry. The rules panel shows the engine's own id, label and cite; this file adds the sentence a player reads. scripts/labels-check.test.ts fails when a behaviour has no note or a note has no behaviour.",
+  "$comment": "One note per engine behaviour, keyed by ref to the id in packages/engine's registry. The rules panel shows the engine's own id, label and cite; this file adds the sentence a player reads. scripts/labels-check.test.ts fails when a behaviour has no note or a note has no behaviour. `title` is the plain sentence the panel lists a behaviour under; the engine id shows only once the row is opened.",
   "id": "app.behaviour-notes",
   "kind": "list",
   "title": "Rules panel notes",
@@ -12,49 +12,57 @@
       "id": "note.dice.d6",
       "cite": "MH p.6",
       "ref": "dice.d6",
-      "text": "One six-sided die. The book has no other."
+      "text": "One six-sided die. The book has no other.",
+      "title": "The die is a d6, and only a d6"
     },
     {
       "id": "note.dice.d66",
       "cite": "MH p.12",
       "ref": "dice.d66",
-      "text": "Two dice read as a two-digit address, first die tens, second die ones: the Technique, Ritual and word tables."
+      "text": "Two dice read as a two-digit address, first die tens, second die ones: the Technique, Ritual and word tables.",
+      "title": "Two dice make a two-digit address on the big tables"
     },
     {
       "id": "note.dice.two-d6-doubles",
       "cite": "MH p.26",
       "ref": "dice.two-d6-doubles",
-      "text": "Two dice summed, with both faces kept so a doubles result can be shown and a save replayed."
+      "text": "Two dice summed, with both faces kept so a doubles result can be shown and a save replayed.",
+      "title": "Two dice are summed, and doubles are noticed"
     },
     {
       "id": "note.creation.attributes",
       "cite": "MH p.6 (R04)",
       "ref": "creation.attributes",
-      "text": "SKILL is 1d6+6, ENDURANCE 2d6+12, LUCK 1d6+6."
+      "text": "SKILL is 1d6+6, ENDURANCE 2d6+12, LUCK 1d6+6.",
+      "title": "SKILL, ENDURANCE and LUCK are rolled, not chosen"
     },
     {
       "id": "note.creation.initial-values",
       "cite": "MH p.6 (R05)",
       "ref": "creation.initial-values",
-      "text": "The rolled values are kept as the Master's initial values beside the current ones; later rules refer back to them."
+      "text": "The rolled values are kept as the Master's initial values beside the current ones; later rules refer back to them.",
+      "title": "Your starting numbers are remembered beside your current ones"
     },
     {
       "id": "note.creation.social-status",
       "cite": "MH p.5 (R03)",
       "ref": "creation.social-status",
-      "text": "One d6 for social status, and the gold that comes with it."
+      "text": "One d6 for social status, and the gold that comes with it.",
+      "title": "One die decides your station in life and your gold"
     },
     {
       "id": "note.creation.starting-kit",
       "cite": "MH p.5 (R02)",
       "ref": "creation.starting-kit",
-      "text": "Common clothing, one weapon, and a Health Elixir or a Market item under 20 GP."
+      "text": "Common clothing, one weapon, and a Health Elixir or a Market item under 20 GP.",
+      "title": "You begin with clothes, a weapon and one small thing"
     },
     {
       "id": "note.creation.starting-weapon-is-weapon",
       "cite": "I-02",
       "ref": "creation.starting-weapon-is-weapon",
       "text": "The free-text starting weapon counts as a weapon for any armed Proficiency.",
+      "title": "Whatever you wrote down as your weapon counts as one",
       "says": "a weapon, even if not listed in the weapon table",
       "silent": "which weapons count for which style",
       "source": "estate-inventory.md, I-02",
@@ -64,25 +72,29 @@
       "id": "note.creation.martial-art-roll",
       "cite": "MH p.7 (R09)",
       "ref": "creation.martial-art-roll",
-      "text": "A Martial Art is chosen, or rolled on the banded d6 x d6 table of eighteen."
+      "text": "A Martial Art is chosen, or rolled on the banded d6 x d6 table of eighteen.",
+      "title": "Your Martial Art is chosen, or rolled on the table of eighteen"
     },
     {
       "id": "note.creation.proficiency-pool-is-rolled-skill",
       "cite": "MH p.7, 11 (R10, R15; D06)",
       "ref": "creation.proficiency-pool-is-rolled-skill",
-      "text": "The points to spend on Proficiencies equal the rolled SKILL, before any Training is deducted from it."
+      "text": "The points to spend on Proficiencies equal the rolled SKILL, before any Training is deducted from it.",
+      "title": "You have as many Proficiency points as your rolled SKILL"
     },
     {
       "id": "note.creation.proficiency-cap-4",
       "cite": "MH p.7 (R11)",
       "ref": "creation.proficiency-cap-4",
-      "text": "No Proficiency may exceed 4 at creation."
+      "text": "No Proficiency may exceed 4 at creation.",
+      "title": "No Proficiency starts above 4"
     },
     {
       "id": "note.creation.unspent-allowed",
       "cite": "I-04",
       "ref": "creation.unspent-allowed",
       "text": "Proficiency points may be left unspent, and a Proficiency may be left at zero.",
+      "title": "Points may be left unspent",
       "says": "spend as many points as your SKILL value",
       "silent": "whether every point must be spent",
       "source": "estate-inventory.md, I-04 (Beggar So spends 8 of 12)",
@@ -92,79 +104,92 @@
       "id": "note.creation.training-deduction",
       "cite": "MH p.11 (R15)",
       "ref": "creation.training-deduction",
-      "text": "Each Training point bought at creation permanently lowers SKILL by one."
+      "text": "Each Training point bought at creation permanently lowers SKILL by one.",
+      "title": "Each Training point costs one SKILL for good"
     },
     {
       "id": "note.creation.resource-points",
       "cite": "MH p.11 (R16)",
       "ref": "creation.resource-points",
-      "text": "Each Training point gives four Resource points; a Technique or Ritual costs its printed value in them."
+      "text": "Each Training point gives four Resource points; a Technique or Ritual costs its printed value in them.",
+      "title": "Each Training point buys four points of Techniques and Rituals"
     },
     {
       "id": "note.creation.training-is-a-proficiency",
       "cite": "MH p.11 (R17)",
       "ref": "creation.training-is-a-proficiency",
-      "text": "Training is carried as a Proficiency with a value, usable in checks."
+      "text": "Training is carried as a Proficiency with a value, usable in checks.",
+      "title": "Training is a Proficiency you can roll on"
     },
     {
       "id": "note.creation.pools-advisory-never-refuse",
       "cite": "spec.md, Refusals (Creation's pools are advisory)",
       "ref": "creation.pools-advisory-never-refuse",
-      "text": "Overspending a pool raises a flag with the numbers; the engine never refuses a creation."
+      "text": "Overspending a pool raises a flag with the numbers; the engine never refuses a creation.",
+      "title": "Overspending is flagged, never refused"
     },
     {
       "id": "note.creation.presets-as-printed",
       "cite": "MH p.92 (R83); spec.md, Refusals",
       "ref": "creation.presets-as-printed",
-      "text": "The author's eight sheets load exactly as printed, flags and all; nothing is corrected."
+      "text": "The author's eight sheets load exactly as printed, flags and all; nothing is corrected.",
+      "title": "The eight printed Masters load exactly as printed"
     },
     {
       "id": "note.checks.skill-check",
       "cite": "MH p.22 (R20)",
       "ref": "checks.skill-check",
-      "text": "2d6 against SKILL plus one relevant Proficiency; equal or under passes."
+      "text": "2d6 against SKILL plus one relevant Proficiency; equal or under passes.",
+      "title": "A SKILL check: 2d6 at or under SKILL plus one Proficiency"
     },
     {
       "id": "note.checks.luck-check",
       "cite": "MH p.22 (R21)",
       "ref": "checks.luck-check",
-      "text": "2d6 against LUCK; equal or under passes."
+      "text": "2d6 against LUCK; equal or under passes.",
+      "title": "A LUCK check: 2d6 at or under LUCK"
     },
     {
       "id": "note.checks.luck-decrement-regardless",
       "cite": "MH p.22 (R21)",
       "ref": "checks.luck-decrement-regardless",
-      "text": "Every LUCK check costs one LUCK, pass or fail."
+      "text": "Every LUCK check costs one LUCK, pass or fail.",
+      "title": "Every LUCK check spends one LUCK, win or lose"
     },
     {
       "id": "note.checks.double-six-fails-every-check",
       "cite": "spec.md, sealed rules",
       "ref": "checks.double-six-fails-every-check",
-      "text": "Two sixes fail a check whatever the threshold. Sealed in spec.md; reopening it is a re-seed."
+      "text": "Two sixes fail a check whatever the threshold. Sealed in spec.md; reopening it is a re-seed.",
+      "title": "A double six always fails a check"
     },
     {
       "id": "note.checks.classification-is-the-players",
       "cite": "MH p.22 (R22)",
       "ref": "checks.classification-is-the-players",
-      "text": "Whether an action is a SKILL check or a LUCK check is the player's call; the engine offers both and picks neither."
+      "text": "Whether an action is a SKILL check or a LUCK check is the player's call; the engine offers both and picks neither.",
+      "title": "You decide whether an action is SKILL or LUCK"
     },
     {
       "id": "note.combat.attack-strength",
       "cite": "MH p.23 (R23)",
       "ref": "combat.attack-strength",
-      "text": "Each side's Attack Strength is 2d6 plus SKILL plus one relevant Proficiency."
+      "text": "Each side's Attack Strength is 2d6 plus SKILL plus one relevant Proficiency.",
+      "title": "Attack Strength is 2d6 plus SKILL plus one Proficiency"
     },
     {
       "id": "note.combat.exactly-one-proficiency",
       "cite": "MH p.23 (R23; D10)",
       "ref": "combat.exactly-one-proficiency",
-      "text": "Exactly one Proficiency enters a roll, never two."
+      "text": "Exactly one Proficiency enters a roll, never two.",
+      "title": "Only one Proficiency counts in a roll"
     },
     {
       "id": "note.combat.training-does-not-add",
       "cite": "I-22",
       "ref": "combat.training-does-not-add",
       "text": "Training's value adds to checks made to perform or resist Techniques, not to Attack Strength.",
+      "title": "Training does not add to Attack Strength",
       "says": "use Training skill as one of your Martial Proficiency",
       "silent": "which rolls it applies to",
       "source": "estate-inventory.md, I-22",
@@ -175,6 +200,7 @@
       "cite": "I-21",
       "ref": "combat.opponent-proficiency-is-the-higher",
       "text": "Where a stat block lists two Proficiencies, the engine adds the higher unless the narrative or a Special result names the other.",
+      "title": "An opponent with two Proficiencies uses the higher",
       "says": "one relevant Martial Proficiency (if any)",
       "silent": "which of two, for a foe carrying both",
       "source": "estate-inventory.md, I-21",
@@ -184,19 +210,22 @@
       "id": "note.combat.master-loses-the-difference",
       "cite": "MH p.23 (R24)",
       "ref": "combat.master-loses-the-difference",
-      "text": "When the opponent's total is higher, the Master loses the difference from ENDURANCE."
+      "text": "When the opponent's total is higher, the Master loses the difference from ENDURANCE.",
+      "title": "When they roll higher, you lose the difference"
     },
     {
       "id": "note.combat.winners-four-options",
       "cite": "MH p.23 (R25)",
       "ref": "combat.winners-four-options",
-      "text": "When the Master's total is higher, choose one: strike for the difference, use a Technique, change or recover a weapon, or create an Opening."
+      "text": "When the Master's total is higher, choose one: strike for the difference, use a Technique, change or recover a weapon, or create an Opening.",
+      "title": "When you roll higher, you choose one of four things"
     },
     {
       "id": "note.combat.technique-only-as-the-winners-option",
       "cite": "I-23",
       "ref": "combat.technique-only-as-the-winners-option",
       "text": "In combat a Technique is available only as the winner's option in a round; outside combat, at any time.",
+      "title": "In a fight, a Technique is the winner's choice for the round",
       "says": "use one of the Techniques you know",
       "silent": "whether a Technique may be used when behind",
       "source": "estate-inventory.md, I-23",
@@ -206,43 +235,50 @@
       "id": "note.combat.technique-costs-endurance-no-roll",
       "cite": "MH p.24 (R27)",
       "ref": "combat.technique-costs-endurance-no-roll",
-      "text": "A Technique used in combat needs no roll and costs its value in ENDURANCE."
+      "text": "A Technique used in combat needs no roll and costs its value in ENDURANCE.",
+      "title": "A Technique needs no roll and costs its value in ENDURANCE"
     },
     {
       "id": "note.combat.opening",
       "cite": "MH p.24 (R29)",
       "ref": "combat.opening",
-      "text": "Creating an Opening does no damage; it makes a Final Blow possible."
+      "text": "Creating an Opening does no damage; it makes a Final Blow possible.",
+      "title": "An Opening does no damage but sets up the Final Blow"
     },
     {
       "id": "note.combat.ends-fight",
       "cite": "MH p.23 (R26)",
       "ref": "combat.ends-fight",
-      "text": "A fight ends when a Final Blow lands, either side's ENDURANCE reaches zero, or an Unexpected Event occurs."
+      "text": "A fight ends when a Final Blow lands, either side's ENDURANCE reaches zero, or an Unexpected Event occurs.",
+      "title": "A fight ends on a Final Blow, an ENDURANCE of zero, or an Unexpected Event"
     },
     {
       "id": "note.combat.final-blow-doubles",
       "cite": "MH p.25 (R30)",
       "ref": "combat.final-blow-doubles",
-      "text": "After an Opening, roll 2d6; doubles land the blow, six chances in thirty-six."
+      "text": "After an Opening, roll 2d6; doubles land the blow, six chances in thirty-six.",
+      "title": "The Final Blow lands on doubles"
     },
     {
       "id": "note.combat.double-six-lands-a-doubles-roll",
       "cite": "spec.md, sealed rules",
       "ref": "combat.double-six-lands-a-doubles-roll",
-      "text": "A double six lands a doubles roll; the fumble rule is for checks only. Sealed in spec.md."
+      "text": "A double six lands a doubles roll; the fumble rule is for checks only. Sealed in spec.md.",
+      "title": "A double six lands a Final Blow"
     },
     {
       "id": "note.combat.final-blow-new-technique",
       "cite": "MH p.25 (R31)",
       "ref": "combat.final-blow-new-technique",
-      "text": "A landed Final Blow may become a new Technique: roll against LUCK, then give it a value of 1-4 and a description."
+      "text": "A landed Final Blow may become a new Technique: roll against LUCK, then give it a value of 1-4 and a description.",
+      "title": "A landed Final Blow can become a Technique of your own"
     },
     {
       "id": "note.combat.final-blow-luck-on-failure-only",
       "cite": "I-12",
       "ref": "combat.final-blow-luck-on-failure-only",
       "text": "The Final Blow's LUCK roll costs one LUCK on a failure only; a success costs nothing.",
+      "title": "Failing to keep a new Technique costs one LUCK; succeeding costs nothing",
       "says": "on a failure, lose 1 LUCK",
       "silent": "whether the ordinary LUCK-check decrement also applies",
       "source": "estate-inventory.md, I-12; sealed in spec.md",
@@ -253,6 +289,7 @@
       "cite": "I-25",
       "ref": "combat.mantis-final-blow-is-lethal",
       "text": "A Praying Mantis Master's landed Final Blow kills; the doubles roll itself is unchanged.",
+      "title": "A Praying Mantis Master's Final Blow kills",
       "says": "finishing blow is always lethal",
       "silent": "whether the style changes the roll or only the outcome",
       "source": "estate-inventory.md, I-25",
@@ -262,25 +299,29 @@
       "id": "note.combat.naming-table-is-inspiration-only",
       "cite": "MH p.26 (R31)",
       "ref": "combat.naming-table-is-inspiration-only",
-      "text": "The Final Blow table gives three words for inspiration; composing the name is the player's."
+      "text": "The Final Blow table gives three words for inspiration; composing the name is the player's.",
+      "title": "The naming table is inspiration; the name is yours"
     },
     {
       "id": "note.combat.tie-is-an-unexpected-event",
       "cite": "MH p.27 (R32)",
       "ref": "combat.tie-is-an-unexpected-event",
-      "text": "Equal Attack Strengths are an Unexpected Event."
+      "text": "Equal Attack Strengths are an Unexpected Event.",
+      "title": "A tie is an Unexpected Event"
     },
     {
       "id": "note.combat.unexpected-event-ends-the-phase",
       "cite": "MH p.27 (R32)",
       "ref": "combat.unexpected-event-ends-the-phase",
-      "text": "After an Unexpected Event you are no longer in the combat phase; the 2d6 table is rolled only if the narrative leaves the event unclear."
+      "text": "After an Unexpected Event you are no longer in the combat phase; the 2d6 table is rolled only if the narrative leaves the event unclear.",
+      "title": "After an Unexpected Event, the fight is over"
     },
     {
       "id": "note.combat.unexpected-event-minimum-readings",
       "cite": "I-30",
       "ref": "combat.unexpected-event-minimum-readings",
       "text": "Nine of the eleven rows state no mechanical effect; the engine carries a minimum reading for each and labels it so.",
+      "title": "Each Unexpected Event row has a smallest reading, and it is labelled",
       "says": "the row's text, and nothing else, for rows 2-5 and 9-12",
       "silent": "what an injury, a lost weapon or a divine intervention does to the numbers",
       "source": "estate-inventory.md, I-30",
@@ -291,6 +332,7 @@
       "cite": "I-33",
       "ref": "combat.minions-on-a-d6",
       "text": "Row 7's 1-4 Minions are read off a d6: 1-2 one, 3 two, 4 three, 5-6 four.",
+      "title": "How many Minions arrive is read off a d6",
       "says": "1-4 Minions of the same type",
       "silent": "how to roll 1-4 in a d6-only game",
       "source": "estate-inventory.md, I-33",
@@ -300,31 +342,36 @@
       "id": "note.combat.retreat-rows-roll-morale",
       "cite": "spec.md, sealed rules",
       "ref": "combat.retreat-rows-roll-morale",
-      "text": "The two Enemy-retreat rows roll Morale on a d6: 1-3 it flees, 4-5 a cautious retreat, 6 it rallies with 1d6 more. Ours, sealed in spec.md."
+      "text": "The two Enemy-retreat rows roll Morale on a d6: 1-3 it flees, 4-5 a cautious retreat, 6 it rallies with 1d6 more. Ours, sealed in spec.md.",
+      "title": "When the enemy would retreat, Morale decides whether they can"
     },
     {
       "id": "note.multiple.skill-minus-opponents",
       "cite": "MH p.30 (R35)",
       "ref": "multiple.skill-minus-opponents",
-      "text": "Against several opponents the Master's SKILL is reduced by their number."
+      "text": "Against several opponents the Master's SKILL is reduced by their number.",
+      "title": "Against several foes, your SKILL drops by their number"
     },
     {
       "id": "note.multiple.attack-caps-attackers",
       "cite": "MH p.30 (R37)",
       "ref": "multiple.attack-caps-attackers",
-      "text": "An opponent's ATTACK is how many of its kind may attack at once."
+      "text": "An opponent's ATTACK is how many of its kind may attack at once.",
+      "title": "ATTACK is how many of a kind can strike at once"
     },
     {
       "id": "note.multiple.attack-inert-against-a-lone-master",
       "cite": "spec.md, sealed rules",
       "ref": "multiple.attack-inert-against-a-lone-master",
-      "text": "ATTACK counts opponents a creature can wound at once and does nothing against a lone Master. Sealed in spec.md."
+      "text": "ATTACK counts opponents a creature can wound at once and does nothing against a lone Master. Sealed in spec.md.",
+      "title": "ATTACK does nothing against a Master fighting alone"
     },
     {
       "id": "note.multiple.blank-attack-reads-as-one",
       "cite": "I-09",
       "ref": "multiple.blank-attack-reads-as-one",
       "text": "The one stat block printed with a blank ATTACK is read as 1.",
+      "title": "A blank ATTACK is read as 1",
       "says": "nothing; the cell is blank",
       "silent": "the number",
       "source": "estate-inventory.md, I-09 (the roster's mode)",
@@ -335,6 +382,7 @@
       "cite": "I-06",
       "ref": "multiple.one-master-roll-per-round",
       "text": "In multiple combat the Master rolls once a round and that roll is compared against each attacker's own roll.",
+      "title": "You roll once a round and it faces every attacker",
       "says": "reduce your SKILL by the number of opponents",
       "silent": "how many rolls are made",
       "source": "estate-inventory.md, I-06",
@@ -344,13 +392,15 @@
       "id": "note.multiple.area-damage-is-repeated-not-divided",
       "cite": "MH p.30 (R36)",
       "ref": "multiple.area-damage-is-repeated-not-divided",
-      "text": "An area Technique deals the same damage to each opponent it reaches, not a share of it."
+      "text": "An area Technique deals the same damage to each opponent it reaches, not a share of it.",
+      "title": "An area Technique hurts each foe it reaches the same"
     },
     {
       "id": "note.multiple.area-reach-is-read-from-the-prose",
       "cite": "I-11",
       "ref": "multiple.area-reach-is-read-from-the-prose",
       "text": "How many opponents an area Technique reaches is read from its printed text: two, or all around.",
+      "title": "How far an area Technique reaches is what its text says",
       "says": "Butterfly Palms, Light Body, Exploding Qi, Double Strike",
       "silent": "a number for each",
       "source": "estate-inventory.md, I-11",
@@ -360,19 +410,22 @@
       "id": "note.escape.last-blow-of-two",
       "cite": "MH p.30 (R38)",
       "ref": "escape.last-blow-of-two",
-      "text": "Fleeing without a stratagem costs a last blow of 2 ENDURANCE."
+      "text": "Fleeing without a stratagem costs a last blow of 2 ENDURANCE.",
+      "title": "Fleeing without a trick costs a last blow of 2"
     },
     {
       "id": "note.escape.dishonor-on-damage",
       "cite": "MH p.30 (R39)",
       "ref": "escape.dishonor-on-damage",
-      "text": "Each escape that costs damage scores one Dishonor Point."
+      "text": "Each escape that costs damage scores one Dishonor Point.",
+      "title": "An escape that cost blood scores a Dishonor Point"
     },
     {
       "id": "note.escape.stratagem-and-the-two-is-damage",
       "cite": "I-32",
       "ref": "escape.stratagem-and-the-two-is-damage",
       "text": "A stratagem is any escape Technique or a player-declared one the Oracle approves; the last blow is damage, so a bare escape always scores Dishonor.",
+      "title": "A trick spares the last blow, and the last blow is damage",
       "says": "a Technique or some other stratagem",
       "silent": "what counts, and whether the last blow is damage",
       "source": "estate-inventory.md, I-32",
@@ -382,49 +435,57 @@
       "id": "note.healing.skill-plus-one-full-on-a-night",
       "cite": "MH p.31 (R40)",
       "ref": "healing.skill-plus-one-full-on-a-night",
-      "text": "SKILL recovers one point from a regeneration Technique and fully after a night's rest."
+      "text": "SKILL recovers one point from a regeneration Technique and fully after a night's rest.",
+      "title": "SKILL comes back fully after a night's rest"
     },
     {
       "id": "note.healing.endurance-plus-four-full-in-a-week",
       "cite": "MH p.31 (R41)",
       "ref": "healing.endurance-plus-four-full-in-a-week",
-      "text": "ENDURANCE recovers four from a healing Technique, a meal or an Elixir, and fully after a week's rest."
+      "text": "ENDURANCE recovers four from a healing Technique, a meal or an Elixir, and fully after a week's rest.",
+      "title": "ENDURANCE comes back 4 at a time, fully after a week"
     },
     {
       "id": "note.healing.luck-plus-one-at-a-temple",
       "cite": "MH p.31, 47 (R42, R58)",
       "ref": "healing.luck-plus-one-at-a-temple",
-      "text": "LUCK recovers one point from a Spirituality check at a Temple, with incense."
+      "text": "LUCK recovers one point from a Spirituality check at a Temple, with incense.",
+      "title": "LUCK comes back one point at a time, at a temple"
     },
     {
       "id": "note.healing.luck-has-no-full-restore",
       "cite": "MH p.31 (R42)",
       "ref": "healing.luck-has-no-full-restore",
-      "text": "The book gives LUCK no full restore, so the engine invents none."
+      "text": "The book gives LUCK no full restore, so the engine invents none.",
+      "title": "LUCK never comes back all at once"
     },
     {
       "id": "note.healing.nights-rest-heals-four-endurance",
       "cite": "spec.md, sealed rules",
       "ref": "healing.nights-rest-heals-four-endurance",
-      "text": "A night's rest heals 4 ENDURANCE. Ours, sealed in spec.md."
+      "text": "A night's rest heals 4 ENDURANCE. Ours, sealed in spec.md.",
+      "title": "A night's rest heals 4 ENDURANCE"
     },
     {
       "id": "note.progression.xp-four-scores-minus-dishonor",
       "cite": "MH p.34 (R43)",
       "ref": "progression.xp-four-scores-minus-dishonor",
-      "text": "At an adventure's end, four scores of 1-3 are summed and Dishonor subtracted: that is the XP."
+      "text": "At an adventure's end, four scores of 1-3 are summed and Dishonor subtracted: that is the XP.",
+      "title": "XP is four scores of 1 to 3, less Dishonor"
     },
     {
       "id": "note.progression.xp-cost-by-skill-band",
       "cite": "MH p.34 (R44)",
       "ref": "progression.xp-cost-by-skill-band",
-      "text": "What an advance costs depends on the Master's SKILL band."
+      "text": "What an advance costs depends on the Master's SKILL band.",
+      "title": "What an advance costs depends on your SKILL"
     },
     {
       "id": "note.progression.band-reads-current-skill",
       "cite": "I-53",
       "ref": "progression.band-reads-current-skill",
       "text": "The band is read from current SKILL at the moment of spending.",
+      "title": "The cost is read from your SKILL at the moment you spend",
       "says": "the worked example uses the current value",
       "silent": "current or initial SKILL",
       "source": "estate-inventory.md, I-53",
@@ -434,37 +495,43 @@
       "id": "note.progression.skill-and-luck-cap-at-twelve",
       "cite": "MH p.35 (R45)",
       "ref": "progression.skill-and-luck-cap-at-twelve",
-      "text": "SKILL and LUCK cannot exceed 12."
+      "text": "SKILL and LUCK cannot exceed 12.",
+      "title": "SKILL and LUCK stop at 12"
     },
     {
       "id": "note.progression.proficiency-uncapped-after-creation",
       "cite": "MH p.35 (R45)",
       "ref": "progression.proficiency-uncapped-after-creation",
-      "text": "After creation a Proficiency may rise past 4."
+      "text": "After creation a Proficiency may rise past 4.",
+      "title": "After creation a Proficiency can pass 4"
     },
     {
       "id": "note.progression.unspent-xp-carries-over",
       "cite": "MH p.35 (R47)",
       "ref": "progression.unspent-xp-carries-over",
-      "text": "Unspent XP waits for the next advancement."
+      "text": "Unspent XP waits for the next advancement.",
+      "title": "Unspent XP waits for next time"
     },
     {
       "id": "note.progression.scores-are-advisory-never-refused",
       "cite": "spec.md, Refusals",
       "ref": "progression.scores-are-advisory-never-refused",
-      "text": "The four scores are the player's own; the engine flags an odd total and refuses nothing."
+      "text": "The four scores are the player's own; the engine flags an odd total and refuses nothing.",
+      "title": "The four scores are yours to give; nothing is refused"
     },
     {
       "id": "note.progression.treasure-band-by-endurance",
       "cite": "MH p.68 (R78)",
       "ref": "progression.treasure-band-by-endurance",
-      "text": "A defeated opponent's treasure is 1d6 on the band its ENDURANCE falls in."
+      "text": "A defeated opponent's treasure is 1d6 on the band its ENDURANCE falls in.",
+      "title": "A beaten foe's treasure depends on how tough it was"
     },
     {
       "id": "note.progression.treasure-roll-is-offered-and-declinable",
       "cite": "I-30b",
       "ref": "progression.treasure-roll-is-offered-and-declinable",
       "text": "The treasure roll is always offered after a victory and may be declined.",
+      "title": "The treasure roll is offered after every victory, and you may decline it",
       "says": "if you believe that your defeated opponents may be in possession of something",
       "silent": "when the belief applies",
       "source": "estate-inventory.md, I-30b",
@@ -474,19 +541,22 @@
       "id": "note.progression.spirits-immune-to-ordinary-blows",
       "cite": "MH p.66 (R77)",
       "ref": "progression.spirits-immune-to-ordinary-blows",
-      "text": "A spirit or ghost is immune to ordinary blows; a Technique, Ritual or exceptional weapon is needed."
+      "text": "A spirit or ghost is immune to ordinary blows; a Technique, Ritual or exceptional weapon is needed.",
+      "title": "Spirits and ghosts shrug off ordinary blows"
     },
     {
       "id": "note.progression.opponent-martial-arts-value",
       "cite": "MH p.66 (R75, R76)",
       "ref": "progression.opponent-martial-arts-value",
-      "text": "An opponent's Martial Arts (n) gives every Proficiency n points; its Techniques add their value with no ENDURANCE cost."
+      "text": "An opponent's Martial Arts (n) gives every Proficiency n points; its Techniques add their value with no ENDURANCE cost.",
+      "title": "An opponent's Martial Arts value counts for every Proficiency"
     },
     {
       "id": "note.progression.oracle-special-enemy-attack",
       "cite": "I-07a",
       "ref": "progression.oracle-special-enemy-attack",
       "text": "The Oracle's Special enemy attack uses one of the opponent's listed Proficiencies this round.",
+      "title": "A Special enemy attack uses one of its listed Proficiencies",
       "says": "Special, and nothing more",
       "silent": "what a Special attack does",
       "source": "estate-inventory.md, I-07a",
@@ -497,6 +567,7 @@
       "cite": "I-08a",
       "ref": "progression.oracle-ambush-is-one-unopposed-round",
       "text": "An Oracle Ambush is one unopposed opening round for the opponent.",
+      "title": "An Ambush gives the enemy one free round",
       "says": "Ambush and Attack as two outcomes",
       "silent": "what separates them mechanically",
       "source": "estate-inventory.md, I-08a",
@@ -507,6 +578,7 @@
       "cite": "I-15; MH p.43 (R52)",
       "ref": "region.points-are-dice-on-a-plane",
       "text": "The book throws dice on a sheet of paper; the app places each point from dice so a saved region lands the same way twice.",
+      "title": "The region is dice thrown on a sheet of paper",
       "says": "roll a handful of d6 on a sheet of paper; mark where the dice land",
       "silent": "how an app without paper does that",
       "source": "estate-inventory.md, I-15; spec.md, Horizon",
@@ -516,55 +588,64 @@
       "id": "note.region.location-is-the-visible-face",
       "cite": "MH p.43 (R52)",
       "ref": "region.location-is-the-visible-face",
-      "text": "Each point's Location is the face its die shows, read on the Region table."
+      "text": "Each point's Location is the face its die shows, read on the Region table.",
+      "title": "Each place is the face its die shows"
     },
     {
       "id": "note.region.nearest-neighbour-links",
       "cite": "spec.md, Horizon",
       "ref": "region.nearest-neighbour-links",
-      "text": "Points are linked to their nearest neighbours. Ours."
+      "text": "Points are linked to their nearest neighbours. Ours.",
+      "title": "Places are linked to their nearest neighbours"
     },
     {
       "id": "note.region.disconnected-parts-are-joined",
       "cite": "spec.md, Horizon",
       "ref": "region.disconnected-parts-are-joined",
-      "text": "Where nearest-neighbour links leave islands, the closest pair across the gap is joined so the region can be walked. Ours; joined links are marked."
+      "text": "Where nearest-neighbour links leave islands, the closest pair across the gap is joined so the region can be walked. Ours; joined links are marked.",
+      "title": "No part of the region is cut off"
     },
     {
       "id": "note.region.miles-are-the-dice-sum",
       "cite": "spec.md, Horizon; MH p.44 (R53)",
       "ref": "region.miles-are-the-dice-sum",
-      "text": "A link's miles are the sum of the two dice that measured it; the book calls the scale arbitrary. Ours."
+      "text": "A link's miles are the sum of the two dice that measured it; the book calls the scale arbitrary. Ours.",
+      "title": "A road's miles are the two dice that measured it"
     },
     {
       "id": "note.region.route-band-from-the-same-sum",
       "cite": "MH p.44 (R54); spec.md, Horizon",
       "ref": "region.route-band-from-the-same-sum",
-      "text": "The same 2d6 reads the route type on the book's table: nothing, mule track, trail, beaten path, paved road."
+      "text": "The same 2d6 reads the route type on the book's table: nothing, mule track, trail, beaten path, paved road.",
+      "title": "The same dice say what kind of road it is"
     },
     {
       "id": "note.region.positions-are-decorative",
       "cite": "spec.md, Horizon",
       "ref": "region.positions-are-decorative",
-      "text": "Where a point sits on the screen means nothing; the diagram says it is not to scale. Ours."
+      "text": "Where a point sits on the screen means nothing; the diagram says it is not to scale. Ours.",
+      "title": "The map is not to scale"
     },
     {
       "id": "note.adventure.format-version-is-refused-not-guessed",
       "cite": "packages/content/schema/adventure-format.md",
       "ref": "adventure.format-version-is-refused-not-guessed",
-      "text": "An adventure declares the format version its files are written in. The engine reads version 1 and refuses anything else rather than guessing at an unfamiliar shape."
+      "text": "An adventure declares the format version its files are written in. The engine reads version 1 and refuses anything else rather than guessing at an unfamiliar shape.",
+      "title": "An adventure written for a newer build is refused, not guessed at"
     },
     {
       "id": "note.adventure.event-on-entering-an-area",
       "cite": "5T a1",
       "ref": "adventure.event-on-entering-an-area",
-      "text": "Every time you enter an area, roll 1d6 on the adventure's event table: Ambush, Encounter, Safe exploration or Hint."
+      "text": "Every time you enter an area, roll 1d6 on the adventure's event table: Ambush, Encounter, Safe exploration or Hint.",
+      "title": "Entering an area rolls the Event table"
     },
     {
       "id": "note.adventure.event-1-to-3-brings-the-area-encounter",
       "cite": "5T a1",
       "ref": "adventure.event-1-to-3-brings-the-area-encounter",
-      "text": "On an Ambush or an Encounter, roll for the creature encountered in this area on the area's own table."
+      "text": "On an Ambush or an Encounter, roll for the creature encountered in this area on the area's own table.",
+      "title": "An Ambush or an Encounter rolls for who is here"
     },
     {
       "id": "note.adventure.exits-are-the-drawn-passages",
@@ -572,6 +653,7 @@
       "ref": "adventure.exits-are-the-drawn-passages",
       "reading": "I-42",
       "text": "You may walk from an area only into the areas its file lists as exits.",
+      "title": "You can only walk where the map draws a way",
       "says": "the adventure prints a cave map with passages drawn between chambers, and no list of exits",
       "silent": "which chamber connects to which, and which chamber the entrance arrow points into",
       "source": "estate-inventory.md, I-42, section 4.4 - read off a 4x render of the printed plan",
@@ -583,6 +665,7 @@
       "ref": "adventure.one-key-opens-both-private-quarters",
       "reading": "I-07",
       "text": "The Chieftain quarter and the Women quarter are both locked, and the private quarter's key opens both. Either attendant carries a copy.",
+      "title": "One key opens both private quarters",
       "says": "the Attendants room is entrance to the locked Private Quarters, and both attendants carry private quarter's key",
       "silent": "which rooms the Private Quarters are, and whether one key opens both",
       "source": "estate-inventory.md, I-07, with the map's layout",
@@ -594,6 +677,7 @@
       "ref": "adventure.dice-less-encounters-are-fixed",
       "reading": "I-34",
       "text": "An area whose encounter line prints no dice always meets the same foes, on any Ambush or Encounter.",
+      "title": "An area with no dice on its line always meets the same foes",
       "says": "the Storage room and the Kitchen print Devil servants, and the Women quarter prints Old Vixen and she-Devil servant, with no dice beside them",
       "silent": "what to roll in an area whose encounter line has no dice",
       "source": "estate-inventory.md, I-34; the number of devils comes from the Oracle's No. of enemies row",
@@ -605,6 +689,7 @@
       "ref": "adventure.named-foes-are-removed-once-defeated",
       "reading": "I-33b",
       "text": "A named foe defeated once is gone from every table they appear in. The Junior King met on the mountain is the same Junior King as in the Dining Hall.",
+      "title": "A named foe beaten once is gone for good",
       "says": "the event roll is made every time you enter an area, re-entry included, and the Kings appear in several areas' encounter lines",
       "silent": "whether a defeated opponent comes back when the area is entered again",
       "source": "estate-inventory.md, I-33b and I-33c; rank and file - servants, Ogres, Woodgatherers - stay unlimited",
@@ -616,6 +701,7 @@
       "ref": "adventure.empty-degrades-to-safe-exploration",
       "reading": "I-36",
       "text": "An encounter row that meets nothing turns the event into a safe exploration instead.",
+      "title": "Meeting nothing is a safe exploration",
       "says": "the Chieftain quarter's encounter line reads 5-6 Empty",
       "silent": "what an Ambush that meets Empty does",
       "source": "estate-inventory.md, I-36",
@@ -627,6 +713,7 @@
       "ref": "adventure.a-flag-can-make-a-foe-absent",
       "reading": "I-45",
       "text": "While a flag holds, a foe is not met in an area. Opening the gourd makes it night, and the Cave entrance's Ogres are out hunting.",
+      "title": "Some foes are away while something holds, like night",
       "says": "the gourd swallows the sky, changing day to night, and the Ogres go out hunting for travellers once a day",
       "silent": "what night does mechanically",
       "source": "estate-inventory.md, I-45, with the day-and-night flag of I-40",
@@ -638,6 +725,7 @@
       "ref": "adventure.hints-and-effects-are-hidden-until-earned",
       "reading": "I-60",
       "text": "An area's hint and a treasure's workings stay hidden until earned: a Hint event, information about the area, holding the treasure, or reading the Chieftain's sheets.",
+      "title": "Hints and the treasures' workings stay hidden until earned",
       "says": "read this part only if your PG gets information about the area or with Event roll=Hint, and read this if you want to know the treasure's way of working",
       "silent": "how a reader who is also the player is meant to un-read a paragraph",
       "source": "estate-inventory.md, I-60, with I-06b on what counts as information",
@@ -649,6 +737,7 @@
       "ref": "adventure.some-treasures-are-explored-not-looted",
       "reading": "I-38",
       "text": "The gourd on the Storage room's shelves and the vase on the Attendants room's pedestal are picked up by exploring, not taken off a body.",
+      "title": "Some treasures are found lying there, not carried by a foe",
       "says": "a jade vase is guarded on a pedestal, and one of the treasures looks like an ordinary gourd bottle",
       "silent": "which encounter drops those two treasures - no stat block lists either",
       "source": "estate-inventory.md, I-38",
@@ -660,6 +749,7 @@
       "ref": "adventure.a-rescue-costs-dishonor-to-attack",
       "reading": "I-39",
       "text": "The Monk tied up in the Kitchen pool is a rescue, not an enemy. Free him for his loot; attack him and score a Dishonor Point.",
+      "title": "Attacking a captive costs a Dishonor Point",
       "says": "the man is a MONK, captured to be eaten, and he is printed with SKILL, ENDURANCE, ATTACK, special skills and loot like any opponent",
       "silent": "whether the Monk is an enemy, and what killing him costs",
       "source": "estate-inventory.md, I-39",
@@ -669,97 +759,113 @@
       "id": "note.adventure.acts-are-a-ladder-and-the-last-is-the-ending",
       "cite": "plan/phases/phase_5_adventure_format_and_the_5_treasures.md",
       "ref": "adventure.acts-are-a-ladder-and-the-last-is-the-ending",
-      "text": "An adventure marks its progress with acts, tested in order; the highest one you satisfy is where you are, and the last one is the ending screen."
+      "text": "An adventure marks its progress with acts, tested in order; the highest one you satisfy is where you are, and the last one is the ending screen.",
+      "title": "The adventure climbs through acts, and the last is the ending"
     },
     {
       "id": "note.campaign.one-record-per-campaign",
       "cite": "spec.md, Horizon",
       "ref": "campaign.one-record-per-campaign",
-      "text": "One record holds a whole campaign: the Master, the deeds ledger, what you wrote, how many rolls you typed, and each adventure's own memory of what you did there."
+      "text": "One record holds a whole campaign: the Master, the deeds ledger, what you wrote, how many rolls you typed, and each adventure's own memory of what you did there.",
+      "title": "One record holds the whole campaign"
     },
     {
       "id": "note.campaign.the-world-dies-with-the-master",
       "cite": "plan/bearings.md",
       "ref": "campaign.the-world-dies-with-the-master",
-      "text": "When the Master dies the record can be read but not continued. Starting again starts a new world; the old one is not inherited."
+      "text": "When the Master dies the record can be read but not continued. Starting again starts a new world; the old one is not inherited.",
+      "title": "When the Master dies, the world dies too"
     },
     {
       "id": "note.campaign.overspend-is-marked-never-refused",
       "cite": "spec.md, Refusals",
       "ref": "campaign.overspend-is-marked-never-refused",
-      "text": "A Master created over a creation pool is created anyway and carries an overspend mark for the rest of the campaign."
+      "text": "A Master created over a creation pool is created anyway and carries an overspend mark for the rest of the campaign.",
+      "title": "An overspent Master is created anyway and marked"
     },
     {
       "id": "note.campaign.manual-entry-counts-as-an-override",
       "cite": "spec.md, Horizon",
       "ref": "campaign.manual-entry-counts-as-an-override",
-      "text": "Typing the faces of a roll instead of rolling them adds one to the record's override count. The count is never reset."
+      "text": "Typing the faces of a roll instead of rolling them adds one to the record's override count. The count is never reset.",
+      "title": "Typing a roll instead of rolling it is counted"
     },
     {
       "id": "note.campaign.export-is-the-backup",
       "cite": "spec.md, Refusals",
       "ref": "campaign.export-is-the-backup",
-      "text": "There is no account and no cloud. The exported JSON file is the backup, and it opens on any build that can still read its version."
+      "text": "There is no account and no cloud. The exported JSON file is the backup, and it opens on any build that can still read its version.",
+      "title": "The exported file is the only backup"
     },
     {
       "id": "note.campaign.migrations-are-keyed-on-reading-ids",
       "cite": "plan/bearings.md",
       "ref": "campaign.migrations-are-keyed-on-reading-ids",
-      "text": "An old save is brought forward by a chain of migrations, each named for the estate reading whose position changed and forced it."
+      "text": "An old save is brought forward by a chain of migrations, each named for the estate reading whose position changed and forced it.",
+      "title": "An old save is carried forward, one reading at a time"
     },
     {
       "id": "note.campaign.an-unreadable-file-is-data-not-an-exception",
       "cite": "spec.md, Refusals",
       "ref": "campaign.an-unreadable-file-is-data-not-an-exception",
-      "text": "A file that cannot be opened comes back with a reason - not JSON, not a campaign, or from a newer build - rather than an error."
+      "text": "A file that cannot be opened comes back with a reason - not JSON, not a campaign, or from a newer build - rather than an error.",
+      "title": "A file that cannot be read says why"
     },
     {
       "id": "note.village.is-fixed-data",
       "cite": "spec.md, Horizon",
       "ref": "village.is-fixed-data",
-      "text": "The trail-head village is the same three locations on every run. The book describes a City; this settlement is ours."
+      "text": "The trail-head village is the same three locations on every run. The book describes a City; this settlement is ours.",
+      "title": "The village is the same every time"
     },
     {
       "id": "note.village.trail-leads-to-the-cave",
       "cite": "spec.md, Horizon",
       "ref": "village.trail-leads-to-the-cave",
-      "text": "One path leaves the village, and it climbs to the Flat-top mountain and the Lotus Flower cave."
+      "text": "One path leaves the village, and it climbs to the Flat-top mountain and the Lotus Flower cave.",
+      "title": "One trail leaves the village, and it climbs to the cave"
     },
     {
       "id": "note.village.gold-is-ten-silver",
       "cite": "MH p.52",
       "ref": "village.gold-is-ten-silver",
-      "text": "One gold piece is ten silver. Prices are compared in silver so a purse never holds half a coin."
+      "text": "One gold piece is ten silver. Prices are compared in silver so a purse never holds half a coin.",
+      "title": "A gold piece is ten silver"
     },
     {
       "id": "note.village.buy-at-printed-price",
       "cite": "MH p.52-55",
       "ref": "village.buy-at-printed-price",
-      "text": "Goods at the stall row cost what the Market table prints. Nobody haggles with someone walking toward the mountain."
+      "text": "Goods at the stall row cost what the Market table prints. Nobody haggles with someone walking toward the mountain.",
+      "title": "Goods cost what the book prints"
     },
     {
       "id": "note.village.a-refused-purchase-costs-nothing",
       "cite": "spec.md, Horizon",
       "ref": "village.a-refused-purchase-costs-nothing",
-      "text": "A purchase you cannot afford leaves your purse exactly as it was."
+      "text": "A purchase you cannot afford leaves your purse exactly as it was.",
+      "title": "What you cannot afford costs nothing"
     },
     {
       "id": "note.village.temple-needs-incense",
       "cite": "MH p.47",
       "ref": "village.temple-needs-incense",
-      "text": "Without incense there is no attempt at the shrine, and no dice are rolled."
+      "text": "Without incense there is no attempt at the shrine, and no dice are rolled.",
+      "title": "No incense, no prayer"
     },
     {
       "id": "note.village.temple-recovers-one-luck",
       "cite": "MH p.47",
       "ref": "village.temple-recovers-one-luck",
-      "text": "A successful Spirituality check at the three stars recovers 1 LUCK - the only way LUCK comes back."
+      "text": "A successful Spirituality check at the three stars recovers 1 LUCK - the only way LUCK comes back.",
+      "title": "A prayer that is heard recovers 1 LUCK"
     },
     {
       "id": "note.village.one-temple-check-per-day",
       "cite": "I-58",
       "ref": "village.one-temple-check-per-day",
       "text": "One Spirituality check at the shrine per day. A second is not rolled.",
+      "title": "The gods listen once a day",
       "says": "a Spirituality check recovers 1 LUCK, with no count on how often",
       "silent": "how many times a day the gods will listen",
       "source": "estate-inventory.md, I-58",
@@ -769,19 +875,22 @@
       "id": "note.village.inn-charges-before-it-heals",
       "cite": "spec.md, Horizon",
       "ref": "village.inn-charges-before-it-heals",
-      "text": "The inn takes the room price first. If you cannot pay it, nothing else happens either."
+      "text": "The inn takes the room price first. If you cannot pay it, nothing else happens either.",
+      "title": "The inn is paid before it feeds you"
     },
     {
       "id": "note.village.a-meal-and-a-night-are-one-recovery",
       "cite": "spec.md, Horizon",
       "ref": "village.a-meal-and-a-night-are-one-recovery",
-      "text": "The meal and the night are the same +4 ENDURANCE, applied once, not two bonuses that stack."
+      "text": "The meal and the night are the same +4 ENDURANCE, applied once, not two bonuses that stack.",
+      "title": "The meal and the bed are one recovery, not two"
     },
     {
       "id": "note.village.nights-rest-is-the-sealed-four",
       "cite": "MH p.31",
       "ref": "village.nights-rest-is-the-sealed-four",
-      "text": "A full night's rest restores SKILL completely and ENDURANCE by 4."
+      "text": "A full night's rest restores SKILL completely and ENDURANCE by 4.",
+      "title": "A night at the inn restores SKILL and 4 ENDURANCE"
     }
   ]
 }

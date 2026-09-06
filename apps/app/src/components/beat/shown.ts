@@ -3,26 +3,34 @@
  *
  * Lifted out of `BeatScreen` unchanged when Phase 8a split the beat
  * into three candidate layouts: all three printed the same result, so
- * the mapping from a `Result` to the eight things a slip shows had to
- * live somewhere none of them owned. It stays split now the Sheet
+ * the mapping from a `Result` to the things a slip shows had to live
+ * somewhere none of them owned. It stays split now the Sheet
  * arrangement has won, because resolving a result and drawing one are
  * different jobs.
  *
  * Every string comes from the content package (`t`); nothing here is
  * copy (agents.md rule 7). Every citation comes from the engine's own
  * behaviour registry via `citeOf` or from the adventure's folio, so a
- * slip can never print a cite the engine does not claim.
+ * slip can never print a cite the engine does not claim. The citation
+ * is folded behind a tap on every surface (`components/Source`): the
+ * pill carries the label alone.
+ *
+ * `passage` is the book's own words for what the roll brought, where
+ * it has any: the Hint an Event revealed, or the printed description
+ * of whoever was met. It stands where the plate would, so the moment
+ * a foe appears the player reads who it is, not a drawing of a door.
  */
-import { t } from '@martial-havoc/content'
+import { t, theFiveTreasuresAreas, treasureFoes } from '@martial-havoc/content'
 import type { Die as DieFace, Label } from '@martial-havoc/engine'
 import { fill } from '../../lib/fill'
 import { citeOf } from '../../state/reduce'
 import type { RecordState, Result } from '../../state/types'
 
-/** The eight fields a result slip renders, whatever laid it out. */
+/** The fields a result slip renders, whatever laid it out. */
 export type ShownResult = {
   readonly title: string
   readonly label: Label
+  /** The citation the label stands on; folded on screen. */
   readonly pill: string
   /** The two dice, where the result had dice. Null renders nothing. */
   readonly a: DieFace | null
@@ -32,6 +40,8 @@ export type ShownResult = {
   /** The line under it: what the roll was against, or what it brought. */
   readonly against: string
   readonly cite: string
+  /** The book's words for what was brought, or null where it printed none. */
+  readonly passage: string | null
 }
 
 /** What a turn's Event brought, worded. */
@@ -40,6 +50,22 @@ const brought = (r: Extract<Result, { kind: 'turn' }>): string => {
   if (r.hint) return t('ui.cave.event.hint')
   if (r.event === 'safe') return t('ui.cave.event.safe')
   return t('ui.cave.event.nothing')
+}
+
+/**
+ * The printed words behind a turn: the area's Hint when the Event
+ * revealed it, or the stat block's description of each foe met (5T a1,
+ * a2). The result carries printed names, so the lookup is by name.
+ */
+const turnPassage = (r: Extract<Result, { kind: 'turn' }>): string | null => {
+  if (r.foes.length > 0) {
+    const lines = r.foes
+      .map((name) => treasureFoes.find((f) => f.name === name)?.description)
+      .filter((d): d is string => d !== undefined && d.length > 0)
+    return lines.length === 0 ? null : lines.join('\n')
+  }
+  if (r.hint) return theFiveTreasuresAreas.find((a) => a.name === r.area)?.hint ?? null
+  return null
 }
 
 /** Map one result and the sheet it happened to onto what a slip shows. */
@@ -73,6 +99,7 @@ export const shown = (r: Result, sheet: RecordState['sheet']): ShownResult => {
               op: r.success ? '<=' : '>',
               threshold: r.threshold,
             }),
+        passage: null,
       }
     }
     case 'rest':
@@ -85,17 +112,19 @@ export const shown = (r: Result, sheet: RecordState['sheet']): ShownResult => {
         total: `+${r.after - r.before}`,
         against: fill(t('ui.result.rest.against'), { before: r.before, after: r.after }),
         cite: t('ui.result.rest.cite'),
+        passage: null,
       }
     case 'take':
       return {
         title: t('ui.result.take.title'),
         label: 'reading',
-        pill: 'I-38',
+        pill: t('ui.result.take.cite'),
         a: null,
         b: null,
         total: r.treasure,
         against: fill(t('ui.result.take.against'), { n: r.held }),
         cite: t('ui.result.take.cite'),
+        passage: null,
       }
     case 'turn':
       return {
@@ -107,17 +136,27 @@ export const shown = (r: Result, sheet: RecordState['sheet']): ShownResult => {
         total: r.eventText,
         against: brought(r),
         cite: fill(t('ui.cave.event.cite'), { area: r.area }),
+        passage: turnPassage(r),
       }
     case 'loot':
       return {
-        title: fill(t('ui.cave.loot.title'), { name: r.foe.toUpperCase() }),
+        title: fill(t(r.gift ? 'ui.cave.gift.title' : 'ui.cave.loot.title'), { name: r.foe.toUpperCase() }),
         label: 'rule',
         pill: t('ui.cave.cite.a2'),
         a: r.face,
         b: null,
         total: r.treasure ?? r.item,
-        against: r.treasure === null ? (r.key ? t('ui.cave.loot.key') : t('ui.cave.loot.item')) : t('ui.cave.loot.treasure'),
+        against: r.hint
+          ? t('ui.cave.loot.hint')
+          : r.gift
+            ? t('ui.cave.loot.gift')
+            : r.treasure === null
+              ? r.key
+                ? t('ui.cave.loot.key')
+                : t('ui.cave.loot.item')
+              : t('ui.cave.loot.treasure'),
         cite: t('ui.cave.loot.cite'),
+        passage: null,
       }
     case 'note':
       return {
@@ -129,6 +168,7 @@ export const shown = (r: Result, sheet: RecordState['sheet']): ShownResult => {
         total: r.text,
         against: '',
         cite: r.cite,
+        passage: null,
       }
   }
 }

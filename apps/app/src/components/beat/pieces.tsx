@@ -8,8 +8,12 @@
  * reuses them rather than re-deriving them.
  *
  * Phase 8c made the beat the book's: the area slip prints the area's
- * description, its Encounters line and, once earned, its Hint, all
- * verbatim (5T a1); the menu is derived from the adventure graph.
+ * description and, once earned, its Hint, verbatim (5T a1); the menu is
+ * derived from the adventure graph. The 2026-09-06 pass put the area's
+ * name over its text, folded the Encounters line and every citation
+ * behind a tap (`../Source`), and gave the book's opening paragraph a
+ * slip of its own on the first beat, so a player knows where they are
+ * and why before the first roll.
  *
  * Each piece takes what it draws and a callback, never the reducer's
  * `dispatch` in full: a piece that cannot dispatch an arbitrary action
@@ -27,14 +31,29 @@ import { MenuButton } from '../MenuButton'
 import { Pill } from '../Pill'
 import { RollBar } from '../RollBar'
 import { Slip } from '../Slip'
+import { Source } from '../Source'
 import type { ShownResult } from './shown'
 import type { BeatOption } from '../../state/menu'
 import type { Action, RecordState } from '../../state/types'
 
 /**
- * The area the Master is standing in, as the book prints it: the
- * description, the Encounters line, and the Hint once it is earned
- * (I-60). Nothing on this slip is ours but the two headings.
+ * The book's opening, on the first beat: the title block and the
+ * premise paragraph as page a1 prints them (5T a1). Shown until the
+ * Master has done or seen anything; after that it lives under ABOUT.
+ */
+export const PremiseSlip = ({ premise, style }: { readonly premise: string; readonly style?: object }) => (
+  <Slip style={[styles.lineSlip, style]} testID="premise">
+    <Text style={styles.premiseTitle}>{t('ui.intro.title')}</Text>
+    <Text style={styles.premiseSub}>{t('ui.intro.subtitle')}</Text>
+    <Text style={styles.line}>{premise}</Text>
+  </Slip>
+)
+
+/**
+ * The area the Master is standing in: its printed name over its printed
+ * description, and the Hint once it is earned (I-60). The Encounters
+ * line is the book's table for the Event roll, not a thing the player
+ * needs in front of them; it is folded with the folio behind SOURCE.
  */
 export const AreaSlip = ({
   area,
@@ -47,12 +66,20 @@ export const AreaSlip = ({
   readonly style?: object
 }) => (
   <Slip style={[styles.lineSlip, style]}>
+    <Text style={styles.areaNumber}>{fill(t('ui.cave.area.number'), { n: area.area })}</Text>
+    <Text testID="area-name" style={styles.areaName}>
+      {area.name.toUpperCase()}
+    </Text>
     <Text testID="authored-line" style={styles.line}>
       {area.description}
     </Text>
-    <Text testID="encounters-line" style={styles.encounters}>
-      {t('ui.cave.encounters.heading')} {t(`ui.cave.encounters.${area.area}`)}
-    </Text>
+    <View style={styles.areaFoot}>
+      <Source
+        key={area.id}
+        testID="area-source"
+        cite={`${t('ui.cave.encounters.heading')} ${t(`ui.cave.encounters.${area.area}`)} · ${t('ui.cave.cite.a1')}`}
+      />
+    </View>
     {hint === null ? null : (
       <View style={styles.hint} testID="hint">
         <Text style={styles.hintHeading}>{t('ui.cave.hint.heading')}</Text>
@@ -67,7 +94,7 @@ export const EndingSlip = ({ ending, style }: { readonly ending: Ending; readonl
   <Slip dashed style={[styles.lineSlip, style]} testID="ending">
     <View style={styles.resultHead}>
       <Text style={styles.resultTitle}>{t('ui.cave.ending.title')}</Text>
-      <Pill label="invention" text={ending.act.cite} />
+      <Pill label="invention" />
     </View>
     <Text style={[styles.line, styles.endingLine]}>{ending.line}</Text>
     <Text style={styles.encounters}>
@@ -77,10 +104,13 @@ export const EndingSlip = ({ ending, style }: { readonly ending: Ending; readonl
         dishonor: ending.dishonor,
       })}
     </Text>
+    <View style={styles.areaFoot}>
+      <Source cite={ending.act.cite} />
+    </View>
   </Slip>
 )
 
-/** The last result: its label pill, its dice, its number and its citation. */
+/** The last result: its label pill, its dice, its number, the book's words for it, and its folded citation. */
 export const ResultSlip = ({
   result,
   style,
@@ -91,7 +121,7 @@ export const ResultSlip = ({
   <Slip style={[styles.resultSlip, style]} testID="result">
     <View style={styles.resultHead}>
       <Text style={styles.resultTitle}>{result.title}</Text>
-      <Pill label={result.label} text={result.pill} />
+      <Pill label={result.label} />
     </View>
     <View style={styles.resultBody}>
       {result.a === null ? null : <Die face={result.a} testID="die-result-a" />}
@@ -106,7 +136,14 @@ export const ResultSlip = ({
         {result.against.length === 0 ? null : <Text style={styles.against}>{result.against}</Text>}
       </View>
     </View>
-    <Text style={styles.cite}>{result.cite}</Text>
+    {result.passage === null ? null : (
+      <Text testID="result-passage" style={styles.passage}>
+        {result.passage}
+      </Text>
+    )}
+    <View style={styles.cite}>
+      <Source testID="result-source" cite={result.cite} />
+    </View>
   </Slip>
 )
 
@@ -177,11 +214,16 @@ export const BeatFoot = ({
 
 const styles = StyleSheet.create({
   lineSlip: { marginTop: 10, marginHorizontal: 14, padding: 11 },
+  premiseTitle: { fontFamily: font.sans, fontSize: 15, fontWeight: '800', letterSpacing: 1.2, color: color.ink },
+  premiseSub: { fontFamily: font.serif, fontSize: 13, fontStyle: 'italic', marginBottom: 8, color: color.dim },
+  areaNumber: { fontFamily: font.mono, fontSize: 9, letterSpacing: 0.8, color: color.dim },
+  areaName: { fontFamily: font.sans, fontSize: 15, fontWeight: '800', letterSpacing: 1, marginTop: 1, marginBottom: 6, color: color.ink },
   line: { fontFamily: font.serif, fontSize: 17, lineHeight: 25, color: color.ink },
+  areaFoot: { marginTop: 8, flexDirection: 'row', justifyContent: 'flex-end' },
   encounters: { marginTop: 8, fontFamily: font.mono, fontSize: 10, lineHeight: 15, color: color.ink },
   hint: { marginTop: 8, borderTopWidth: 2, borderTopColor: color.ink, paddingTop: 6 },
-  hintHeading: { fontFamily: font.mono, fontSize: 9, letterSpacing: 0.6, color: color.dim },
-  hintText: { marginTop: 3, fontFamily: font.serif, fontSize: 15, lineHeight: 21, fontStyle: 'italic', color: color.dim },
+  hintHeading: { fontFamily: font.sans, fontSize: 9, fontWeight: '800', letterSpacing: 0.8, color: color.vermilion },
+  hintText: { marginTop: 3, fontFamily: font.serif, fontSize: 15, lineHeight: 21, fontStyle: 'italic', color: color.ink },
   endingLine: { marginTop: 8 },
   resultSlip: { marginTop: 10, marginHorizontal: 14 },
   resultHead: {
@@ -212,15 +254,20 @@ const styles = StyleSheet.create({
   total: { fontFamily: font.sans, fontSize: 34, fontWeight: '800', lineHeight: 36, color: color.ink },
   totalText: { fontSize: 16, lineHeight: 20, textAlign: 'right' },
   against: { fontFamily: font.mono, fontSize: 10, color: color.ink, textAlign: 'right' },
+  passage: {
+    paddingHorizontal: 9,
+    paddingBottom: 8,
+    fontFamily: font.serif,
+    fontSize: 14,
+    lineHeight: 20,
+    fontStyle: 'italic',
+    color: color.ink,
+  },
   cite: {
     borderTopWidth: 2,
     borderTopColor: color.ink,
-    paddingVertical: 6,
+    paddingVertical: 5,
     paddingHorizontal: 9,
-    fontFamily: font.mono,
-    fontSize: 10,
-    lineHeight: 15,
-    color: color.ink,
   },
   menuColumn: { paddingHorizontal: 14, gap: 7 },
   empty: { padding: 16, alignItems: 'center' },

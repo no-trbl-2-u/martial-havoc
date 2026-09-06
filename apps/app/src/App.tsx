@@ -20,6 +20,9 @@ import { parseDiceQuery, queued, randomSource } from './dice/random'
 import { useRecord } from './hooks/useRecord'
 import { color, frameWidth } from './theme/tokens'
 import { AttributeStrip } from './components/AttributeStrip'
+import type { StripValues } from './components/AttributeStrip'
+import { skillAfterTraining } from './state/creation'
+import type { RecordState } from './state/types'
 import { Binding } from './components/Binding'
 import { Header } from './components/Header'
 import { Leaf } from './components/Leaf'
@@ -38,6 +41,18 @@ const search = (): string => {
     return (globalThis as { location?: { search?: string } }).location?.search ?? ''
   } catch {
     return ''
+  }
+}
+
+/** What the strip shows: the sheet in play, or the Master being made as far as it has been rolled. */
+const stripValues = (state: RecordState): StripValues => {
+  const c = state.creation
+  if (c === null) return state.sheet
+  return {
+    skill: c.skill === null ? null : skillAfterTraining(c),
+    endurance: c.endurance?.current ?? null,
+    luck: c.luck?.current ?? null,
+    gold: c.status?.gold ?? null,
   }
 }
 
@@ -68,7 +83,7 @@ export const App = () => {
           <Header screen={state.screen} nav={!making} onNav={(screen) => dispatch({ type: 'nav', screen })} />
           {/* No header while making a Master: the strip starts the page. */}
           <View style={[styles.strip, making && styles.stripFirst]}>
-            <AttributeStrip sheet={state.sheet} blank={state.creation !== null} />
+            <AttributeStrip values={stripValues(state)} />
           </View>
           {state.screen === 'creation' ? <CreationScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'village' ? <VillageScreen state={state} dispatch={dispatch} /> : null}
