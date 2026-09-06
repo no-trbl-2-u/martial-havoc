@@ -2,7 +2,7 @@
 
 This game must be faithful to the experience of playing Martial Havoc.
 Adventures and prompts must be verbatim to the either the rulebook or the
-adventure book.
+adventure book. The goal of this application is not to expose the rulebook to the player, but rather BE the mobile game port.
 
 ## What that means in this repository
 
