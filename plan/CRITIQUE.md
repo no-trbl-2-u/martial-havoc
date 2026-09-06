@@ -172,3 +172,63 @@ not from that pass: they are the carry-overs the `/march` loop of
 
 ### [LOW] general — non-production Workers Builds fail in zero seconds
 - resolved: not reproduced (2026-09-06). The stated signature - started_at equal to completed_at, before any command runs - did not hold for any build observed this session: 4d4b7cc8, ac74f2db and b1ea4755 all ran between roughly forty and sixty seconds, and the Cloudflare bot showed one In progress before it failed. The row's own successor (the MED row above) already recorded that the two zero-second failures predate the dashboard config being saved. Superseded rather than fixed.
+
+### [HIGH] packages/engine — the campaign record drops LUCK's initial value (R05)
+- pass: phase-8-residue (commit 4da85ac)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: RecordedMaster carries skillInitial and enduranceInitial but no luckInitial, so an imported campaign loses the ceiling the shrine restores toward. Phase 8 added Sheet.luckInitial because R58's Temple check needs a maximum; fromCampaign cannot restore it, so an imported Master falls back to whatever the session record held (San Te's 9) and LUCK can be healed past where that Master actually started. R05 asks that every attribute's initial be kept, and two of the three are.
+- evidence: apps/app/src/state/campaign.ts masterFrom(); packages/engine/src/campaign/record.ts RecordedMaster; found while shipping the village screen at 2026-09-06T12:59Z
+- suggested fix: Add luckInitial to RecordedMaster, bump the record version and write the migration that fills it from luck for older files (packages/engine/src/campaign/migrate.ts already has the chain). Then carry it through masterFrom and fromCampaign.
+- source: agent
+
+### [HIGH] apps/app — the village's purse and its state survive only a reload, not an export
+- pass: phase-8-residue (commit 4da85ac)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: silver, incense and templeVisitedToday live on RecordState but not in toCampaign, so they persist through the session snapshot and are lost on export/import or whenever the snapshot is dropped for a shape change. Worse, the purse round-trips through sheet.gold, which is whole gold pieces: a Master carrying 47 SP reloads holding 40. The player silently loses up to 9 SP every time the session half is discarded, which is exactly what a UI change does.
+- evidence: apps/app/src/state/campaign.ts toCampaign(); apps/app/src/state/reduce.ts doBuy/doInn keep sheet.gold in sync by hand; found at 2026-09-06T12:59Z
+- suggested fix: Put the purse in the campaign record in silver and derive the strip's gold from it, so there is one representation of money rather than two kept in step by hand. Incense and the shrine's day belong in the adventure half of the record alongside the treasures held.
+- source: agent
+
+### [MED] apps/app — the overspend mark is hardcoded false, so spec.md's flag never ships
+- pass: phase-8-residue (commit 4da85ac)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: masterFrom sets overspent: false unconditionally. spec.md refuses to block an overspent creation pool and asks the record to carry the mark instead ("flag, never refuse"), and the engine's creationClean exists to produce it — but nothing computes it. Phase 8's creation screen now knows the answer (flagsOf reports every pool it is outside) and throws it away at the moment the sheet is made. Yin's own printed sheet is the case this was written for, and it exports as clean.
+- evidence: apps/app/src/state/campaign.ts masterFrom(); apps/app/src/state/creation.ts flagsOf(); packages/engine/src/creation/master.ts creationClean; found at 2026-09-06T12:59Z
+- suggested fix: Carry the creation flags onto the Sheet when finishCreation runs and read them in masterFrom, so an overspent Master exports marked. The rules panel can then say which pool it was.
+- source: agent
+
+### [MED] apps/app — creation asks for a starting item (R02) and drops it
+- pass: phase-8-residue (commit 4da85ac)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: The creation screen's kit step collects one item under 20 GP, as R02 asks, into CreationState.kitItemId — and finishCreation never reads it, because Sheet has no equipment field. The player makes a choice the book requires and the record forgets it before play starts. The engine's startingKit already validates the choice; only the sheet is missing.
+- evidence: apps/app/src/state/creation.ts finishCreation(); apps/app/src/state/types.ts Sheet; found at 2026-09-06T12:59Z
+- suggested fix: Add equipment to Sheet and RecordedMaster (the presets already carry an equipment list that is likewise dropped), fill it from startingKit at finishCreation, and show it on the record screen.
+- source: agent
+
+### [MED] apps/app — the Techniques offered at creation ignore the Master's style
+- pass: phase-8-residue (commit 4da85ac)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: CreationScreen's learnable() takes the martial art, checks it is defined, then sorts the whole 36-Technique table by cost and returns the first 12 regardless of style. A Shaolin Quan Master is offered the same list as any other, and the twelve cheapest are not necessarily the ones the style teaches. The cut to 12 is also arbitrary and undocumented.
+- evidence: apps/app/src/screens/CreationScreen.tsx learnable(); found at 2026-09-06T12:59Z
+- suggested fix: Filter by what the style can teach and show all of them; if the list needs a cap on a phone, scroll it rather than truncate it, and say what the cut is.
+- source: agent
+
+### [LOW] apps/app — finishCreation runs twice on the same creation
+- pass: phase-8-residue (commit 4da85ac)
+- viewport: unspecified
+- auth_state: anonymous
+- category: simplification
+- observation: The creation.begin branch calls finishCreation(state.creation) once for the sheet and again for the purse's starting gold. It is pure, so the second call is only wasted work rather than a bug — but it reads as though two different sheets might be made, which is the sort of thing that becomes a bug later.
+- evidence: apps/app/src/state/reduce.ts, case 'creation.begin'; found at 2026-09-06T12:59Z
+- suggested fix: Bind the sheet once and read gold off it.
+- source: agent
