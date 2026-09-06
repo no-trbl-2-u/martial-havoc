@@ -114,7 +114,7 @@
     },
     {
       "id": "ui.manual.ready",
-      "text": "YOUR DICE: {a} AND {b} · NOW CHOOSE AN ACTION",
+      "text": "YOUR DICE: {a} AND {b}",
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
