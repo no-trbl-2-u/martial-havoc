@@ -1145,6 +1145,108 @@
             "minLength": 1
           }
         }
+      },
+      "effect": {
+        "description": "One authored effect record for a Technique or a Ritual (MH p.12-19; reading A23). The printed effect text stays verbatim in `techniques.json` / `rituals.json`; this record points at it by `ref` and says what it does at the table. A23 is the inventory's one row with no defensible inference, so every record here is an invention of this build, cited to it.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "ref",
+          "class",
+          "cost",
+          "timing",
+          "operation",
+          "line"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "ref": {
+            "description": "The id of the transcribed Technique or Ritual this record is the effect of. Must resolve; the content test checks it.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "class": {
+            "description": "A23's five classes.",
+            "enum": [
+              "mechanical",
+              "combat-narrative",
+              "exploration",
+              "oracle-like",
+              "summoning"
+            ]
+          },
+          "cost": {
+            "description": "Resource points to learn, ENDURANCE to perform (R16, R18). Copied from the referenced record; the test pins the two together.",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          },
+          "timing": {
+            "description": "When it may be used. A Technique is `immediate` outside combat and `combat-winner-option` inside it (R14, R25, I-23); a Ritual is `preparation` - not usable during combat rounds, costing a scene (I-24). `scene` is for effects that occupy a scene without the Ritual's preparation.",
+            "enum": [
+              "immediate",
+              "combat-winner-option",
+              "scene",
+              "preparation"
+            ]
+          },
+          "operation": {
+            "description": "The engine operation the class implies, as a dotted name (e.g. `combat.opening`, `healing.endurance`). Null for narrative-only effects, which is most of them.",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "wudangException": {
+            "description": "True for the Ritual timing exception R13 grants Wudang. A flag on the record so the engine holds no style name.",
+            "type": "boolean"
+          },
+          "line": {
+            "description": "The authored line - what the table reads when the effect fires. Ours, never a paraphrase of the printed effect.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "authoredLine": {
+        "description": "One authored line for a transcribed record that prints none: an Oracle cell (MH p.58) or an Unexpected Event row (MH p.28). The cell's own words stay verbatim where they are; this is the sentence the table reads aloud when it comes up.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "ref",
+          "line"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "ref": {
+            "description": "The id of the transcribed record this line belongs to. Must resolve; the content test checks it.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "line": {
+            "description": "The authored line. Ours, never a paraphrase of the transcribed text.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     },
     "files": {
@@ -1554,6 +1656,12 @@
                 },
                 {
                   "$ref": "#/$defs/records/band"
+                },
+                {
+                  "$ref": "#/$defs/records/effect"
+                },
+                {
+                  "$ref": "#/$defs/records/authoredLine"
                 }
               ]
             }

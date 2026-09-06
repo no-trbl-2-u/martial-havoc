@@ -18,10 +18,14 @@ import oracleFile from '../../data/world/oracle.json'
 import inspirationsFile from '../../data/world/inspirations.json'
 import sparksFile from '../../data/world/sparks.json'
 import presetsFile from '../../data/world/presets.json'
+import effectsFile from '../../data/world/effects.json'
+import oracleLinesFile from '../../data/world/oracle-lines.json'
 
 import { byBanded, byD66, byId, byName, inColumn } from '../lookup'
 import type {
+  AuthoredLine,
   Deity,
+  Effect,
   Learnable,
   MarketItem,
   MartialArt,
@@ -131,6 +135,24 @@ export const presetNameResolution: readonly NameResolution[] = Object.freeze(
 )
 
 /** Resolve a name as printed on a sheet to its canonical id, if it differs. */
+/**
+ * The 72 authored effect records (MH p.12-19; A23), one per Technique
+ * and Ritual. `byRef` is the lookup every caller wants: the transcribed
+ * record is what a player picks, and this is what it does.
+ */
+export const effects: readonly Effect[] = Object.freeze(effectsFile.records as readonly Effect[])
+export const effectById = byId(effects)
+export const effectFor = (ref: string): Effect | undefined => effects.find((e) => e.ref === ref)
+/** Every effect of one of A23's five classes, in printed order. */
+export const effectsOfClass = inColumn(effects, 'class')
+
+/** The 66 authored Oracle lines (MH p.58), one per cell. */
+export const oracleLines: readonly AuthoredLine[] = Object.freeze(
+  oracleLinesFile.records as readonly AuthoredLine[],
+)
+export const oracleLineFor = (ref: string): AuthoredLine | undefined =>
+  oracleLines.find((l) => l.ref === ref)
+
 export const canonicalIdForSheetName = (onSheet: string): string | undefined =>
   presetNameResolution.find((r) => r.onSheet.toLowerCase() === onSheet.trim().toLowerCase())
     ?.canonicalId

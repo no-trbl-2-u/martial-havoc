@@ -58,10 +58,16 @@ const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
   'world.sparks': 216,
   'world.presets': 8,
 
+  // Phase 4's authored lines: records of ours that point at the
+  // transcribed ones. 72 + 66 here, 11 in the rules below, 149 in all.
+  'world.effects': 72,
+  'world.oracle-lines': 66,
+
   // The rules: the tables the procedures roll on.
   'rules.social-status': 5,
   'rules.final-blow': 18,
   'rules.unexpected-events': 11,
+  'rules.unexpected-event-lines': 11,
   'rules.healing': 3,
   'rules.xp-categories': 5,
   'rules.xp-costs': 15,

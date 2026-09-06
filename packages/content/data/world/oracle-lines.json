@@ -1,0 +1,408 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.oracle-lines",
+  "kind": "list",
+  "title": "Authored lines for the Oracle cells",
+  "cite": "MH p.58",
+  "label": "invention",
+  "docs": "docs/rules/oracle-procedure.md",
+  "$comment": "The book defines none of the Oracle's cell words - 'No, and', 'Disaster', 'Territorial', 'Special', 'Ambush' - and the estate found no defensible inference for them (row A37). Interpretation stays the player's; these are the lines this build reads aloud when a cell comes up, so a solo table has a sentence rather than a word. The word itself stays verbatim in oracle.json. Cells that print the same word (Outcome 2 and 3, for instance) still get their own line: the die distinguishes them even where the table does not.",
+  "records": [
+    {
+      "id": "line.oracle.closed-question.1",
+      "cite": "MH p.58",
+      "ref": "oracle.closed-question.1",
+      "line": "No, and the asking has cost you something you had not counted."
+    },
+    {
+      "id": "line.oracle.closed-question.2",
+      "cite": "MH p.58",
+      "ref": "oracle.closed-question.2",
+      "line": "No. Plainly, and with nothing offered in its place."
+    },
+    {
+      "id": "line.oracle.closed-question.3",
+      "cite": "MH p.58",
+      "ref": "oracle.closed-question.3",
+      "line": "No, but the door it closes was not the only door."
+    },
+    {
+      "id": "line.oracle.closed-question.4",
+      "cite": "MH p.58",
+      "ref": "oracle.closed-question.4",
+      "line": "Yes, but the yes arrives with a condition you did not set."
+    },
+    {
+      "id": "line.oracle.closed-question.5",
+      "cite": "MH p.58",
+      "ref": "oracle.closed-question.5",
+      "line": "Yes. Take it and move."
+    },
+    {
+      "id": "line.oracle.closed-question.6",
+      "cite": "MH p.58",
+      "ref": "oracle.closed-question.6",
+      "line": "Yes, and more than you asked for comes with it."
+    },
+    {
+      "id": "line.oracle.outcome.1",
+      "cite": "MH p.58",
+      "ref": "oracle.outcome.1",
+      "line": "It goes wrong in the way you were not watching for, and the wrongness spreads."
+    },
+    {
+      "id": "line.oracle.outcome.2",
+      "cite": "MH p.58",
+      "ref": "oracle.outcome.2",
+      "line": "It falls short. Not ruin, but you are further from where you meant to be."
+    },
+    {
+      "id": "line.oracle.outcome.3",
+      "cite": "MH p.58",
+      "ref": "oracle.outcome.3",
+      "line": "It sours late, after you had already begun to count on it."
+    },
+    {
+      "id": "line.oracle.outcome.4",
+      "cite": "MH p.58",
+      "ref": "oracle.outcome.4",
+      "line": "It works, roughly, and the roughness will not matter."
+    },
+    {
+      "id": "line.oracle.outcome.5",
+      "cite": "MH p.58",
+      "ref": "oracle.outcome.5",
+      "line": "It works cleanly, and someone notices that it did."
+    },
+    {
+      "id": "line.oracle.outcome.6",
+      "cite": "MH p.58",
+      "ref": "oracle.outcome.6",
+      "line": "It works better than the attempt deserved, and the room changes shape around it."
+    },
+    {
+      "id": "line.oracle.npc-reaction.1",
+      "cite": "MH p.58",
+      "ref": "oracle.npc-reaction.1",
+      "line": "They have already decided about you, and the decision was not kind."
+    },
+    {
+      "id": "line.oracle.npc-reaction.2",
+      "cite": "MH p.58",
+      "ref": "oracle.npc-reaction.2",
+      "line": "They keep the table between you and answer only what is asked."
+    },
+    {
+      "id": "line.oracle.npc-reaction.3",
+      "cite": "MH p.58",
+      "ref": "oracle.npc-reaction.3",
+      "line": "They have not seen you yet. Whatever happens next is entirely your choice."
+    },
+    {
+      "id": "line.oracle.npc-reaction.4",
+      "cite": "MH p.58",
+      "ref": "oracle.npc-reaction.4",
+      "line": "They make room, and the making of room is genuine."
+    },
+    {
+      "id": "line.oracle.npc-reaction.5",
+      "cite": "MH p.58",
+      "ref": "oracle.npc-reaction.5",
+      "line": "They put down what they were doing and ask what you need."
+    },
+    {
+      "id": "line.oracle.npc-reaction.6",
+      "cite": "MH p.58",
+      "ref": "oracle.npc-reaction.6",
+      "line": "They go, quickly, and they do not look back to see whether you follow."
+    },
+    {
+      "id": "line.oracle.creature-reaction.1",
+      "cite": "MH p.58",
+      "ref": "oracle.creature-reaction.1",
+      "line": "It comes for you without preamble; there was never a moment to defuse."
+    },
+    {
+      "id": "line.oracle.creature-reaction.2",
+      "cite": "MH p.58",
+      "ref": "oracle.creature-reaction.2",
+      "line": "It holds its ground and makes the boundary obvious. Cross it and this changes."
+    },
+    {
+      "id": "line.oracle.creature-reaction.3",
+      "cite": "MH p.58",
+      "ref": "oracle.creature-reaction.3",
+      "line": "It has not registered you. The wind is in your favour, for now."
+    },
+    {
+      "id": "line.oracle.creature-reaction.4",
+      "cite": "MH p.58",
+      "ref": "oracle.creature-reaction.4",
+      "line": "It comes closer than it should, interested rather than hungry."
+    },
+    {
+      "id": "line.oracle.creature-reaction.5",
+      "cite": "MH p.58",
+      "ref": "oracle.creature-reaction.5",
+      "line": "It suffers your presence, and would suffer your hand on it."
+    },
+    {
+      "id": "line.oracle.creature-reaction.6",
+      "cite": "MH p.58",
+      "ref": "oracle.creature-reaction.6",
+      "line": "It breaks and runs, and the noise of its going tells everything nearby that you are here."
+    },
+    {
+      "id": "line.oracle.encounter-outcome.1",
+      "cite": "MH p.58",
+      "ref": "oracle.encounter-outcome.1",
+      "line": "They were waiting. The first exchange happens before you know there is one."
+    },
+    {
+      "id": "line.oracle.encounter-outcome.2",
+      "cite": "MH p.58",
+      "ref": "oracle.encounter-outcome.2",
+      "line": "They come at you openly, and there is no version of this that is not a fight."
+    },
+    {
+      "id": "line.oracle.encounter-outcome.3",
+      "cite": "MH p.58",
+      "ref": "oracle.encounter-outcome.3",
+      "line": "No greeting, no demand. They close the distance and that is the whole of it."
+    },
+    {
+      "id": "line.oracle.encounter-outcome.4",
+      "cite": "MH p.58",
+      "ref": "oracle.encounter-outcome.4",
+      "line": "Weapons come out on their side first, and yours follow because they must."
+    },
+    {
+      "id": "line.oracle.encounter-outcome.5",
+      "cite": "MH p.58",
+      "ref": "oracle.encounter-outcome.5",
+      "line": "Nobody swings. What happens next depends on how they read you."
+    },
+    {
+      "id": "line.oracle.encounter-outcome.6",
+      "cite": "MH p.58",
+      "ref": "oracle.encounter-outcome.6",
+      "line": "The meeting stays a meeting. Find out what they are."
+    },
+    {
+      "id": "line.oracle.enemy-type.1",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-type.1",
+      "line": "Numbers, not skill. Individually they are nothing; that is not the problem."
+    },
+    {
+      "id": "line.oracle.enemy-type.2",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-type.2",
+      "line": "Someone who takes orders and is competent at taking them."
+    },
+    {
+      "id": "line.oracle.enemy-type.3",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-type.3",
+      "line": "A trusted hand, sent because the matter was worth sending a trusted hand."
+    },
+    {
+      "id": "line.oracle.enemy-type.4",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-type.4",
+      "line": "A fighter by trade, who has done this often enough to be calm about it."
+    },
+    {
+      "id": "line.oracle.enemy-type.5",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-type.5",
+      "line": "Real training behind the stance. This one will cost you."
+    },
+    {
+      "id": "line.oracle.enemy-type.6",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-type.6",
+      "line": "The one the others answer to, and the one who chose that you would meet."
+    },
+    {
+      "id": "line.oracle.no-of-enemies.1",
+      "cite": "MH p.58",
+      "ref": "oracle.no-of-enemies.1",
+      "line": "Roll, and accept the number. It could be one; it could be a room full."
+    },
+    {
+      "id": "line.oracle.no-of-enemies.2",
+      "cite": "MH p.58",
+      "ref": "oracle.no-of-enemies.2",
+      "line": "Three of them, spread wide enough that you cannot watch all three."
+    },
+    {
+      "id": "line.oracle.no-of-enemies.3",
+      "cite": "MH p.58",
+      "ref": "oracle.no-of-enemies.3",
+      "line": "Three, and they have done this together before."
+    },
+    {
+      "id": "line.oracle.no-of-enemies.4",
+      "cite": "MH p.58",
+      "ref": "oracle.no-of-enemies.4",
+      "line": "Two, which is one more than you can face cleanly."
+    },
+    {
+      "id": "line.oracle.no-of-enemies.5",
+      "cite": "MH p.58",
+      "ref": "oracle.no-of-enemies.5",
+      "line": "Two, and the second one is holding back to see how you move."
+    },
+    {
+      "id": "line.oracle.no-of-enemies.6",
+      "cite": "MH p.58",
+      "ref": "oracle.no-of-enemies.6",
+      "line": "One. Whatever else is true, this is between the two of you."
+    },
+    {
+      "id": "line.oracle.enemy-attack.1",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-attack.1",
+      "line": "Straightforward, and no less dangerous for it."
+    },
+    {
+      "id": "line.oracle.enemy-attack.2",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-attack.2",
+      "line": "They fight the way they were taught, without flourish."
+    },
+    {
+      "id": "line.oracle.enemy-attack.3",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-attack.3",
+      "line": "Nothing you have not seen. Everything you have seen still works."
+    },
+    {
+      "id": "line.oracle.enemy-attack.4",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-attack.4",
+      "line": "They open with something you did not know they had."
+    },
+    {
+      "id": "line.oracle.enemy-attack.5",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-attack.5",
+      "line": "The style shows itself, and the style is the point."
+    },
+    {
+      "id": "line.oracle.enemy-attack.6",
+      "cite": "MH p.58",
+      "ref": "oracle.enemy-attack.6",
+      "line": "They stop holding back the thing they were holding back."
+    },
+    {
+      "id": "line.oracle.door.1",
+      "cite": "MH p.58",
+      "ref": "oracle.door.1",
+      "line": "It stands open, which is either luck or an invitation."
+    },
+    {
+      "id": "line.oracle.door.2",
+      "cite": "MH p.58",
+      "ref": "oracle.door.2",
+      "line": "Ajar, and nobody thought it worth closing behind them."
+    },
+    {
+      "id": "line.oracle.door.3",
+      "cite": "MH p.58",
+      "ref": "oracle.door.3",
+      "line": "Open, and the dust on the sill says it has been for a while."
+    },
+    {
+      "id": "line.oracle.door.4",
+      "cite": "MH p.58",
+      "ref": "oracle.door.4",
+      "line": "It opens. Something else opens with it."
+    },
+    {
+      "id": "line.oracle.door.5",
+      "cite": "MH p.58",
+      "ref": "oracle.door.5",
+      "line": "Locked, and the lock was chosen by someone who expected you."
+    },
+    {
+      "id": "line.oracle.door.6",
+      "cite": "MH p.58",
+      "ref": "oracle.door.6",
+      "line": "Shut, unlocked, and heavier than it looks."
+    },
+    {
+      "id": "line.oracle.object-amount.1",
+      "cite": "MH p.58",
+      "ref": "oracle.object-amount.1",
+      "line": "That was the last of it. Whatever you were relying on, stop."
+    },
+    {
+      "id": "line.oracle.object-amount.2",
+      "cite": "MH p.58",
+      "ref": "oracle.object-amount.2",
+      "line": "One left, and after it you are asking someone for more."
+    },
+    {
+      "id": "line.oracle.object-amount.3",
+      "cite": "MH p.58",
+      "ref": "oracle.object-amount.3",
+      "line": "Enough for once more, and not for the once after that."
+    },
+    {
+      "id": "line.oracle.object-amount.4",
+      "cite": "MH p.58",
+      "ref": "oracle.object-amount.4",
+      "line": "More than you need, which means you can be careless with it. Once."
+    },
+    {
+      "id": "line.oracle.object-amount.5",
+      "cite": "MH p.58",
+      "ref": "oracle.object-amount.5",
+      "line": "Plenty. This is not the thing that will run out on you."
+    },
+    {
+      "id": "line.oracle.object-amount.6",
+      "cite": "MH p.58",
+      "ref": "oracle.object-amount.6",
+      "line": "A supply, and the question becomes how much of it you can carry."
+    },
+    {
+      "id": "line.oracle.value.1",
+      "cite": "MH p.58",
+      "ref": "oracle.value.1",
+      "line": "Worth having, not worth arguing over."
+    },
+    {
+      "id": "line.oracle.value.2",
+      "cite": "MH p.58",
+      "ref": "oracle.value.2",
+      "line": "The price of a night indoors and a meal you did not cook."
+    },
+    {
+      "id": "line.oracle.value.3",
+      "cite": "MH p.58",
+      "ref": "oracle.value.3",
+      "line": "Enough to matter to someone poor, and to be noticed if you spend it fast."
+    },
+    {
+      "id": "line.oracle.value.4",
+      "cite": "MH p.58",
+      "ref": "oracle.value.4",
+      "line": "Real money. Somebody has already missed it."
+    },
+    {
+      "id": "line.oracle.value.5",
+      "cite": "MH p.58",
+      "ref": "oracle.value.5",
+      "line": "The kind of sum that buys silence, or ends it."
+    },
+    {
+      "id": "line.oracle.value.6",
+      "cite": "MH p.58",
+      "ref": "oracle.value.6",
+      "line": "A fortune, and a fortune is a reason for the next three people you meet."
+    }
+  ]
+}

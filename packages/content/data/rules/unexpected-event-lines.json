@@ -1,0 +1,78 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "rules.unexpected-event-lines",
+  "kind": "list",
+  "title": "Authored lines for the Unexpected Event table",
+  "cite": "MH p.28",
+  "label": "invention",
+  "docs": "docs/rules/combat.md",
+  "$comment": "R32's table names each event in a few words and gives nine of the eleven rows no mechanical effect; reading I-30 supplies the mechanical floor and the engine carries it (packages/engine/src/combat/unexpected-event.ts). These are the lines the table reads when the row comes up. The row's printed text stays verbatim in unexpected-events.json. Rows 4 and 10 are the retreat rows, whose sealed Morale roll follows the line.",
+  "records": [
+    {
+      "id": "line.unexpected-event.2",
+      "cite": "MH p.28",
+      "ref": "unexpected-event.2",
+      "line": "Something above takes an interest in you, and the interest is not friendly."
+    },
+    {
+      "id": "line.unexpected-event.3",
+      "cite": "MH p.28",
+      "ref": "unexpected-event.3",
+      "line": "You are opened up, or the weapon leaves your hand, and either way the fight you were having is over."
+    },
+    {
+      "id": "line.unexpected-event.4",
+      "cite": "MH p.28",
+      "ref": "unexpected-event.4",
+      "line": "They break off and go, and whether it was orders or nerve is not yours to know yet."
+    },
+    {
+      "id": "line.unexpected-event.5",
+      "cite": "MH p.28",
+      "ref": "unexpected-event.5",
+      "line": "The room stops being the room: the floor, the light, or the sky decides otherwise."
+    },
+    {
+      "id": "line.unexpected-event.6",
+      "cite": "MH p.28",
+      "ref": "unexpected-event.6",
+      "line": "The pause closes. You are back in it before you have finished the breath."
+    },
+    {
+      "id": "line.unexpected-event.7",
+      "cite": "MH p.28",
+      "ref": "unexpected-event.7",
+      "line": "Footsteps behind them, more than one set, and they are not here for you."
+    },
+    {
+      "id": "line.unexpected-event.8",
+      "cite": "MH p.28",
+      "ref": "unexpected-event.8",
+      "line": "Nothing has changed except your count of the exits. Fight on."
+    },
+    {
+      "id": "line.unexpected-event.9",
+      "cite": "MH p.28",
+      "ref": "unexpected-event.9",
+      "line": "The ground gives, or the dark arrives, and both of you have to solve it before solving each other."
+    },
+    {
+      "id": "line.unexpected-event.10",
+      "cite": "MH p.28",
+      "ref": "unexpected-event.10",
+      "line": "They withdraw, still facing you, and the withdrawal is a decision rather than a rout."
+    },
+    {
+      "id": "line.unexpected-event.11",
+      "cite": "MH p.28",
+      "ref": "unexpected-event.11",
+      "line": "Their guard opens or their blade goes, and for a moment they are only a person standing there."
+    },
+    {
+      "id": "line.unexpected-event.12",
+      "cite": "MH p.28",
+      "ref": "unexpected-event.12",
+      "line": "Something above takes an interest in you, and this time it is on your side."
+    }
+  ]
+}

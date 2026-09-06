@@ -1,0 +1,732 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "world.effects",
+  "kind": "list",
+  "title": "Technique and Ritual effect records",
+  "cite": "MH p.12-19; A23",
+  "label": "invention",
+  "docs": "docs/rules/readings/techniques-rituals-items.md",
+  "$comment": "Reading A23 is the estate's one row with no defensible inference: all 72 Technique and Ritual effects are prose without numbers, and 'each Technique needs a hand-authored effect record'. This file is those records. The printed effect text is NOT here - it stays verbatim in techniques.json and rituals.json, and each record points at it by ref. class is A23's own five-way classification; timing follows R14, R25 and I-23 for Techniques and I-24 for Rituals; operation names an engine call where the class implies one and is null where the effect is narrative. Every line is authored for this build, which is why the file's label is invention.",
+  "records": [
+    {
+      "id": "effect.technique.blue-dragon",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.blue-dragon",
+      "class": "exploration",
+      "cost": 1,
+      "timing": "immediate",
+      "operation": null,
+      "line": "The river stops being a wall and becomes a road; you cross it without a boat and without getting wet."
+    },
+    {
+      "id": "effect.technique.butterfly-palms",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.butterfly-palms",
+      "class": "mechanical",
+      "cost": 1,
+      "timing": "combat-winner-option",
+      "operation": "multiple.areaDamage",
+      "line": "Both palms land at once: the round's damage falls on two opponents instead of one."
+    },
+    {
+      "id": "effect.technique.chain-fists",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.chain-fists",
+      "class": "mechanical",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": "combat.resolveRound",
+      "line": "You spend the round buying three strikes with three, and the exchange ends with both of you worse off than you started."
+    },
+    {
+      "id": "effect.technique.cranes-flight",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.cranes-flight",
+      "class": "exploration",
+      "cost": 1,
+      "timing": "immediate",
+      "operation": null,
+      "line": "The ground drops away beneath you and the far roof arrives; no climb, no descent, no rope."
+    },
+    {
+      "id": "effect.technique.crushing-blow",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.crushing-blow",
+      "class": "combat-narrative",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": "combat.opening",
+      "line": "You come down over their guard and they go to the floor, which is where a Final Blow starts."
+    },
+    {
+      "id": "effect.technique.downwind-ears",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.downwind-ears",
+      "class": "exploration",
+      "cost": 2,
+      "timing": "immediate",
+      "operation": null,
+      "line": "You hold still and the far conversation arrives whole: names, numbers, the road they mean to take."
+    },
+    {
+      "id": "effect.technique.eagle-claw",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.eagle-claw",
+      "class": "exploration",
+      "cost": 1,
+      "timing": "immediate",
+      "operation": null,
+      "line": "The gate bar, the fallen beam, the cart across the path - you simply lift it and walk on."
+    },
+    {
+      "id": "effect.technique.exploding-qi",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.exploding-qi",
+      "class": "mechanical",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": "multiple.areaDamage",
+      "line": "The ring of them is thrown outward at once, and everyone still standing has to close again."
+    },
+    {
+      "id": "effect.technique.hand-of-1000-characters",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.hand-of-1000-characters",
+      "class": "combat-narrative",
+      "cost": 1,
+      "timing": "combat-winner-option",
+      "operation": null,
+      "line": "You leave a word on them. They will carry it, and everyone who meets them afterwards will read it."
+    },
+    {
+      "id": "effect.technique.iron-bridge",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.iron-bridge",
+      "class": "combat-narrative",
+      "cost": 1,
+      "timing": "combat-winner-option",
+      "operation": null,
+      "line": "You stop being something that can be moved. The push, the charge, the current: none of it shifts you."
+    },
+    {
+      "id": "effect.technique.iron-broom",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.iron-broom",
+      "class": "combat-narrative",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": "combat.opening",
+      "line": "You take their legs out from under them, and what is left is not a stance."
+    },
+    {
+      "id": "effect.technique.iron-head",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.iron-head",
+      "class": "combat-narrative",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": null,
+      "line": "You meet the blow with your skull and it is the blow that breaks."
+    },
+    {
+      "id": "effect.technique.iron-palm",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.iron-palm",
+      "class": "combat-narrative",
+      "cost": 1,
+      "timing": "combat-winner-option",
+      "operation": null,
+      "line": "Your open hand goes through what a blade would notch, and your hand is unmarked."
+    },
+    {
+      "id": "effect.technique.iron-shirt",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.iron-shirt",
+      "class": "mechanical",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": "combat.resolveRound",
+      "line": "They strike you bare-handed and it is their own hand that pays for it."
+    },
+    {
+      "id": "effect.technique.light-body",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.light-body",
+      "class": "mechanical",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": "multiple.areaDamage",
+      "line": "You go up, and you come down on every one of the circle that closed around you."
+    },
+    {
+      "id": "effect.technique.lizard-climbs-the-wall",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.lizard-climbs-the-wall",
+      "class": "exploration",
+      "cost": 1,
+      "timing": "immediate",
+      "operation": null,
+      "line": "The wall becomes a staircase. You go up it the way anyone else goes up stairs."
+    },
+    {
+      "id": "effect.technique.monkey-jump",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.monkey-jump",
+      "class": "combat-narrative",
+      "cost": 1,
+      "timing": "combat-winner-option",
+      "operation": "escape.escape",
+      "line": "You are behind them before they have finished the swing, and nobody sees how you got there."
+    },
+    {
+      "id": "effect.technique.piercing-through-stones",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.piercing-through-stones",
+      "class": "exploration",
+      "cost": 2,
+      "timing": "immediate",
+      "operation": null,
+      "line": "Your fingers enter the stone like water entering sand, and whatever the stone was hiding is now reachable."
+    },
+    {
+      "id": "effect.technique.poisonous-bird",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.poisonous-bird",
+      "class": "combat-narrative",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": null,
+      "line": "The blow lands quietly, and the sickness arrives later, when they can no longer connect it to you."
+    },
+    {
+      "id": "effect.technique.pushing-the-horse",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.pushing-the-horse",
+      "class": "exploration",
+      "cost": 1,
+      "timing": "immediate",
+      "operation": null,
+      "line": "You speak once to the animal and it does the thing, as if it had thought of it first."
+    },
+    {
+      "id": "effect.technique.rising-wave-strike",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.rising-wave-strike",
+      "class": "combat-narrative",
+      "cost": 1,
+      "timing": "combat-winner-option",
+      "operation": null,
+      "line": "The air in front of you goes hard and moves, and everything loose in the room goes with it."
+    },
+    {
+      "id": "effect.technique.rock-splitting-tiger",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.rock-splitting-tiger",
+      "class": "exploration",
+      "cost": 2,
+      "timing": "immediate",
+      "operation": null,
+      "line": "The hand comes down edge-first and the thing you needed opened is open."
+    },
+    {
+      "id": "effect.technique.shooting-star-kick",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.shooting-star-kick",
+      "class": "combat-narrative",
+      "cost": 1,
+      "timing": "combat-winner-option",
+      "operation": null,
+      "line": "The arrow comes, your foot meets it, and it goes back the way it came."
+    },
+    {
+      "id": "effect.technique.sky-punching-fist",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.sky-punching-fist",
+      "class": "combat-narrative",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": "combat.opening",
+      "line": "You go up under the taller one, and the height they were counting on puts them on the ground."
+    },
+    {
+      "id": "effect.technique.snake-form",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.snake-form",
+      "class": "combat-narrative",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": null,
+      "line": "You fold through the gap in the hold and come out on the other side of it."
+    },
+    {
+      "id": "effect.technique.spinning-kick",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.spinning-kick",
+      "class": "combat-narrative",
+      "cost": 1,
+      "timing": "combat-winner-option",
+      "operation": "escape.escape",
+      "line": "You turn on the one chasing you and they stop chasing, because they are down."
+    },
+    {
+      "id": "effect.technique.spirit-to-flesh",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.spirit-to-flesh",
+      "class": "mechanical",
+      "cost": 4,
+      "timing": "combat-winner-option",
+      "operation": "progression.ordinaryBlowsPass",
+      "line": "You give the thing edges. Now it can be hit, and now it knows it."
+    },
+    {
+      "id": "effect.technique.spirit-summoning-fist",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.spirit-summoning-fist",
+      "class": "summoning",
+      "cost": 4,
+      "timing": "combat-winner-option",
+      "operation": null,
+      "line": "If the next strike ends them, what is left does not depart. It stays with you, and it has opinions."
+    },
+    {
+      "id": "effect.technique.sticky-hands",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.sticky-hands",
+      "class": "exploration",
+      "cost": 1,
+      "timing": "immediate",
+      "operation": null,
+      "line": "The thing leaves their belt and arrives in your sleeve, and the conversation never pauses."
+    },
+    {
+      "id": "effect.technique.taming-the-tiger",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.taming-the-tiger",
+      "class": "exploration",
+      "cost": 1,
+      "timing": "immediate",
+      "operation": null,
+      "line": "Whatever was circling the camp decides, without knowing why, that tonight is not the night."
+    },
+    {
+      "id": "effect.technique.tear-out-a-phoenixs-eye",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.tear-out-a-phoenixs-eye",
+      "class": "exploration",
+      "cost": 2,
+      "timing": "immediate",
+      "operation": null,
+      "line": "You press once at the temple and the far treeline resolves into figures, and the figures into faces."
+    },
+    {
+      "id": "effect.technique.three-stars-fist",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.three-stars-fist",
+      "class": "combat-narrative",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": null,
+      "line": "One point, chosen: they lose the sight, or the scent, or the shout they were about to give."
+    },
+    {
+      "id": "effect.technique.tiger-roar",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.tiger-roar",
+      "class": "combat-narrative",
+      "cost": 1,
+      "timing": "combat-winner-option",
+      "operation": null,
+      "line": "The sound arrives before you do, and the room decides it would rather be elsewhere."
+    },
+    {
+      "id": "effect.technique.unicorn-step",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.unicorn-step",
+      "class": "exploration",
+      "cost": 1,
+      "timing": "immediate",
+      "operation": "escape.escape",
+      "line": "The road shortens under you. Whoever was following is now behind by more than they can close."
+    },
+    {
+      "id": "effect.technique.void-boxing",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.void-boxing",
+      "class": "combat-narrative",
+      "cost": 2,
+      "timing": "combat-winner-option",
+      "operation": "escape.escape",
+      "line": "For as long as a held breath you are simply not there, and the blow closes on nothing."
+    },
+    {
+      "id": "effect.technique.water-splitting-move",
+      "cite": "MH p.12-15; A23",
+      "ref": "technique.water-splitting-move",
+      "class": "exploration",
+      "cost": 2,
+      "timing": "immediate",
+      "operation": null,
+      "line": "You go under and keep going, past the depth and the time a body is supposed to have."
+    },
+    {
+      "id": "effect.ritual.acting-without-acting",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.acting-without-acting",
+      "class": "oracle-like",
+      "cost": 3,
+      "timing": "preparation",
+      "operation": "oracle.consult",
+      "line": "You sit until the room offers two futures: one you would welcome, one you would not. Both are true."
+    },
+    {
+      "id": "effect.ritual.acupuncture",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.acupuncture",
+      "class": "mechanical",
+      "cost": 1,
+      "timing": "preparation",
+      "operation": "healing.heal",
+      "line": "You set the needles and the wrongness in them - in the flesh or in the spirit - lets go."
+    },
+    {
+      "id": "effect.ritual.body-and-mind-balance",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.body-and-mind-balance",
+      "class": "mechanical",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": "healing.heal",
+      "line": "You trade what your body has left for what your mind has left, and neither goes past where it began."
+    },
+    {
+      "id": "effect.ritual.book-of-changes",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.book-of-changes",
+      "class": "oracle-like",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": "oracle.consult",
+      "line": "The lines fall, you read them, and the thing that has not happened yet acquires a shape."
+    },
+    {
+      "id": "effect.ritual.door-gods",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.door-gods",
+      "class": "exploration",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": null,
+      "line": "You paint the pair at the threshold, and nothing that means the house harm crosses it while they hold."
+    },
+    {
+      "id": "effect.ritual.geomancy",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.geomancy",
+      "class": "exploration",
+      "cost": 1,
+      "timing": "preparation",
+      "operation": null,
+      "line": "You read the land and it tells you which of the four ways actually reaches where you are going."
+    },
+    {
+      "id": "effect.ritual.god-of-money",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.god-of-money",
+      "class": "exploration",
+      "cost": 3,
+      "timing": "preparation",
+      "operation": null,
+      "line": "You make the offering, and the bargain that follows goes better than the bargain deserved to."
+    },
+    {
+      "id": "effect.ritual.god-of-plagues",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.god-of-plagues",
+      "class": "summoning",
+      "cost": 4,
+      "timing": "preparation",
+      "operation": null,
+      "line": "You name the place aloud and leave. What settles on it afterwards is not yours to call back."
+    },
+    {
+      "id": "effect.ritual.god-of-rain",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.god-of-rain",
+      "class": "exploration",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": null,
+      "line": "The sky changes its mind. The drought breaks, or the clear road turns to mud behind you."
+    },
+    {
+      "id": "effect.ritual.king-of-the-underworld",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.king-of-the-underworld",
+      "class": "summoning",
+      "cost": 4,
+      "timing": "preparation",
+      "operation": "oracle.consult",
+      "line": "You call one of the dead back far enough to answer one question, and they answer the question you asked."
+    },
+    {
+      "id": "effect.ritual.light-and-shadow",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.light-and-shadow",
+      "class": "combat-narrative",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": null,
+      "line": "One hand burns and one hand freezes, and what is between them has to choose."
+    },
+    {
+      "id": "effect.ritual.lord-of-the-bow",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.lord-of-the-bow",
+      "class": "mechanical",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": "combat.resolveRound",
+      "line": "You loose without aiming, because the aiming has already been done. It hits."
+    },
+    {
+      "id": "effect.ritual.lord-of-the-sea",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.lord-of-the-sea",
+      "class": "exploration",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": null,
+      "line": "The current takes your side of the argument, and the wind stops being a problem."
+    },
+    {
+      "id": "effect.ritual.mother-of-lightning",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.mother-of-lightning",
+      "class": "summoning",
+      "cost": 4,
+      "timing": "preparation",
+      "operation": null,
+      "line": "You point into the storm at something you can see, and the storm agrees with you."
+    },
+    {
+      "id": "effect.ritual.mystical-fire",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.mystical-fire",
+      "class": "summoning",
+      "cost": 4,
+      "timing": "preparation",
+      "operation": null,
+      "line": "It catches, and water will not touch it. Only another working will put it out."
+    },
+    {
+      "id": "effect.ritual.older-brother",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.older-brother",
+      "class": "summoning",
+      "cost": 4,
+      "timing": "preparation",
+      "operation": null,
+      "line": "Someone attaches themselves to you to learn what you know, and now they are everywhere you are."
+    },
+    {
+      "id": "effect.ritual.open-the-mouth-close-the-mouth",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.open-the-mouth-close-the-mouth",
+      "class": "oracle-like",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": "oracle.consult",
+      "line": "Mid-conversation you know which sentence opens the door and which one closes it."
+    },
+    {
+      "id": "effect.ritual.outer-gate",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.outer-gate",
+      "class": "exploration",
+      "cost": 1,
+      "timing": "preparation",
+      "operation": null,
+      "line": "However deep in you are, you know which turn leads out, and you take it."
+    },
+    {
+      "id": "effect.ritual.protective-demon",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.protective-demon",
+      "class": "summoning",
+      "cost": 4,
+      "timing": "preparation",
+      "operation": null,
+      "line": "Something small and divine agrees to stand at your shoulder for a while. It fights."
+    },
+    {
+      "id": "effect.ritual.pulling-silk-threads",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.pulling-silk-threads",
+      "class": "combat-narrative",
+      "cost": 3,
+      "timing": "preparation",
+      "operation": null,
+      "line": "Their arm moves because you decided it should, and they watch it happen."
+    },
+    {
+      "id": "effect.ritual.punishing-the-sky",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.punishing-the-sky",
+      "class": "mechanical",
+      "cost": 4,
+      "timing": "preparation",
+      "operation": "healing.heal",
+      "line": "You come back. Not whole - half of what you started with - but back, and the sky is owed for it."
+    },
+    {
+      "id": "effect.ritual.real-person",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.real-person",
+      "class": "oracle-like",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": "oracle.consult",
+      "line": "A few words in, you know whether the words are true."
+    },
+    {
+      "id": "effect.ritual.silence-gate",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.silence-gate",
+      "class": "exploration",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": null,
+      "line": "You sit down and stop needing food or water, for as long as the sitting lasts."
+    },
+    {
+      "id": "effect.ritual.somersault-clouds",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.somersault-clouds",
+      "class": "exploration",
+      "cost": 3,
+      "timing": "preparation",
+      "operation": null,
+      "line": "The fall becomes a walk. You arrive at the bottom at your own pace."
+    },
+    {
+      "id": "effect.ritual.tea-ceremony",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.tea-ceremony",
+      "class": "exploration",
+      "cost": 3,
+      "timing": "preparation",
+      "operation": null,
+      "line": "By the third cup the proposal is no longer yours alone, and they say yes to their own idea."
+    },
+    {
+      "id": "effect.ritual.tempering-steel",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.tempering-steel",
+      "class": "exploration",
+      "cost": 4,
+      "timing": "preparation",
+      "operation": null,
+      "line": "The blade goes into your hands ordinary and comes out of them better than the smith made it."
+    },
+    {
+      "id": "effect.ritual.the-5-phases",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.the-5-phases",
+      "class": "exploration",
+      "cost": 3,
+      "timing": "preparation",
+      "operation": null,
+      "line": "A little of one thing becomes a little of the next, and only in the order the wheel allows."
+    },
+    {
+      "id": "effect.ritual.the-72-transformations",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.the-72-transformations",
+      "class": "exploration",
+      "cost": 4,
+      "timing": "preparation",
+      "operation": null,
+      "line": "You become the creature the moment needs, for as long as the moment lasts."
+    },
+    {
+      "id": "effect.ritual.the-eight-celestial-drunkards",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.the-eight-celestial-drunkards",
+      "class": "summoning",
+      "cost": 4,
+      "timing": "preparation",
+      "operation": null,
+      "line": "Eight arrive uninvited, nobody knows their names, and the scene does not survive them."
+    },
+    {
+      "id": "effect.ritual.the-golden-bell",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.the-golden-bell",
+      "class": "combat-narrative",
+      "cost": 4,
+      "timing": "preparation",
+      "operation": null,
+      "line": "For a short while nothing gets in. Not the blade, not the fall, not the fire."
+    },
+    {
+      "id": "effect.ritual.the-way-of-tao",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.the-way-of-tao",
+      "class": "oracle-like",
+      "cost": 3,
+      "timing": "preparation",
+      "operation": "oracle.consult",
+      "line": "You stop looking at the event and start looking at its opposite, which is where the detail was."
+    },
+    {
+      "id": "effect.ritual.tightening-spell",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.tightening-spell",
+      "class": "combat-narrative",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": null,
+      "line": "The band closes around their skull and nothing they do loosens it."
+    },
+    {
+      "id": "effect.ritual.violin",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.violin",
+      "class": "combat-narrative",
+      "cost": 3,
+      "timing": "preparation",
+      "operation": null,
+      "line": "You play the one melody, and they go where the melody goes."
+    },
+    {
+      "id": "effect.ritual.vital-breath",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.vital-breath",
+      "class": "mechanical",
+      "cost": 1,
+      "timing": "preparation",
+      "operation": "healing.heal",
+      "line": "You breathe the way the old book says to breathe, and what was torn begins to knit."
+    },
+    {
+      "id": "effect.ritual.wheel-of-existence",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.wheel-of-existence",
+      "class": "oracle-like",
+      "cost": 3,
+      "timing": "preparation",
+      "operation": "oracle.consult",
+      "line": "You look at them long enough and their last life surfaces, and with it the thing this one is hiding."
+    },
+    {
+      "id": "effect.ritual.white-guanyin",
+      "cite": "MH p.16-19; A23",
+      "ref": "ritual.white-guanyin",
+      "class": "exploration",
+      "cost": 2,
+      "timing": "preparation",
+      "operation": null,
+      "line": "You recite it, and the kind thing you were going to attempt becomes the thing that works."
+    }
+  ]
+}

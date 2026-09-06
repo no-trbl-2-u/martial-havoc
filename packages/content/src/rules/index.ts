@@ -9,6 +9,7 @@
 import socialStatusFile from '../../data/rules/social-status.json'
 import finalBlowFile from '../../data/rules/final-blow.json'
 import unexpectedEventsFile from '../../data/rules/unexpected-events.json'
+import unexpectedEventLinesFile from '../../data/rules/unexpected-event-lines.json'
 import healingFile from '../../data/rules/healing.json'
 import xpCategoriesFile from '../../data/rules/xp-categories.json'
 import xpCostsFile from '../../data/rules/xp-costs.json'
@@ -23,6 +24,7 @@ import specialItemsFile from '../../data/rules/special-items.json'
 
 import { byBanded, byFaces, byId, byTotal, byTotals, inColumn } from '../lookup'
 import type {
+  AuthoredLine,
   Band,
   CityEncounter,
   CityService,
@@ -63,6 +65,13 @@ export const rollUnexpectedEvent = byTotal(unexpectedEvents)
 export const retreatRows: readonly UnexpectedEvent[] = Object.freeze(
   unexpectedEvents.filter((e) => e.retreatRow),
 )
+
+/** The 11 authored Unexpected Event lines (MH p.28), one per row. */
+export const unexpectedEventLines: readonly AuthoredLine[] = Object.freeze(
+  unexpectedEventLinesFile.records as readonly AuthoredLine[],
+)
+export const unexpectedEventLineFor = (ref: string): AuthoredLine | undefined =>
+  unexpectedEventLines.find((l) => l.ref === ref)
 
 /** The healing summary (MH p.31, R40-R42). */
 export const healing: readonly Healing[] = Object.freeze(healingFile.records as readonly Healing[])
