@@ -906,6 +906,111 @@
       "id": "ui.nav.creation",
       "text": "NEW",
       "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.village.place",
+      "text": "FEN PASS · THE TRAIL-HEAD",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.nav.village",
+      "text": "VILLAGE",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.purse",
+      "text": "{gp} GP {sp} SP",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.market.title",
+      "text": "BUY",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.market.note",
+      "text": "MH p.52-55 · printed prices",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.temple.title",
+      "text": "THE SHRINE",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.temple.note",
+      "text": "MH p.47 (R58) · a Spirituality check, with incense, once a day (I-58)",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.temple.roll",
+      "text": "BURN INCENSE",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.temple.none",
+      "text": "No incense. Buy a stick at the stall row.",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.temple.spent",
+      "text": "The gods have heard you today.",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.temple.passed",
+      "text": "The check passed. +1 LUCK.",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.temple.failed",
+      "text": "The check failed. Nothing recovered.",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.inn.title",
+      "text": "THE LAST INN",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.inn.note",
+      "text": "MH p.31 (R40) · a meal and a bed; SKILL restored, ENDURANCE +4",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.inn.stay",
+      "text": "STAY THE NIGHT · {sp} SP",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.inn.poor",
+      "text": "Not enough silver for a bed.",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.inn.rested",
+      "text": "SKILL {skill} · ENDURANCE {endurance}",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.trail.title",
+      "text": "THE TRAIL",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.trail.go",
+      "text": "TAKE THE TRAIL",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.bought",
+      "text": "Bought {item} for {cost}.",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
+      "id": "ui.village.poor",
+      "text": "Not enough money for {item}.",
+      "cite": "spec.md, Horizon (the village)"
     }
   ]
 }

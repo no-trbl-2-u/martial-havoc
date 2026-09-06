@@ -236,6 +236,7 @@ export const finishCreation = (c: CreationState): Sheet => {
     endurance,
     enduranceInitial: c.endurance?.initial ?? endurance,
     luck: c.luck?.current ?? 7,
+    luckInitial: c.luck?.initial ?? c.luck?.current ?? 7,
     gold: c.status?.gold ?? 0,
     dishonor: 0,
     proficiencies:

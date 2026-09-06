@@ -20,6 +20,7 @@ import { Binding } from './components/Binding'
 import { Header } from './components/Header'
 import { BeatScreen } from './screens/BeatScreen'
 import { CreationScreen } from './screens/CreationScreen'
+import { VillageScreen } from './screens/VillageScreen'
 import { CombatScreen } from './screens/CombatScreen'
 import { RegionScreen } from './screens/RegionScreen'
 import { RulesScreen } from './screens/RulesScreen'
@@ -35,6 +36,8 @@ const placeLine = (state: RecordState): string => {
       return t('ui.region.place')
     case 'creation':
       return t('ui.creation.place')
+    case 'village':
+      return t('ui.village.place')
     case 'beat': {
       const beat = beatForArea(state.area)
       return fill(t('ui.beat.place'), { area: state.area, name: (beat?.name ?? '').toUpperCase() })
@@ -65,6 +68,7 @@ export const App = () => {
             <AttributeStrip sheet={state.sheet} />
           </View>
           {state.screen === 'creation' ? <CreationScreen state={state} dispatch={dispatch} /> : null}
+          {state.screen === 'village' ? <VillageScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'beat' ? <BeatScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'combat' ? <CombatScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'rules' ? <RulesScreen state={state} dispatch={dispatch} /> : null}

@@ -29,17 +29,26 @@ import {
   spendTechnique,
   treasureBand,
   unexpectedEvent,
+  buy,
+  fromSilver,
+  placeRunning,
+  stayTheNight,
+  toSilver,
+  templeVisit,
 } from '@martial-havoc/engine'
 import type { DiceSource } from '@martial-havoc/engine'
 import {
+  INCENSE_ID,
   effectFor,
   optionById,
   optionsForArea,
   rollTreasure,
   rollUnexpectedEvent,
   t,
+  market,
   treasureFoeById,
   unexpectedEventLineFor,
+  villagePlaces,
 } from '@martial-havoc/content'
 import type { MenuOption, Opponent } from '@martial-havoc/content'
 import { queued } from '../dice/random'
@@ -413,6 +422,124 @@ const withProficiency = (c: CreationState, name: string, delta: number): Creatio
   return { ...c, proficiencies: { ...c.proficiencies, [name]: next } }
 }
 
+// --------------------------------------------------------------- village
+
+/**
+ * The village's three procedures (MH p.47, p.52-55; spec.md, Horizon).
+ *
+ * Each is one call into `packages/engine/src/village`, and each returns
+ * a note rather than a `Result`: the shrine rolls, the inn and the
+ * stall row do not, and the result slip is built for a roll. Every
+ * refusal — no silver, no incense, a second visit today — is reported
+ * and never thrown, which is the engine's own contract carried up.
+ */
+const doBuy = (state: RecordState, id: string): RecordState => {
+  const bought = buy({ market, itemId: id, purse: state.silver })
+  const name = bought.item?.item ?? id
+  if (!bought.bought) {
+    return {
+      ...state,
+      villageNote: { text: fill(t('ui.village.poor'), { item: name }), roll: null, cite: 'MH p.52-55' },
+    }
+  }
+  const paid = fromSilver(bought.cost)
+  return {
+    ...state,
+    silver: bought.after,
+    // Incense is the shrine's condition (R58); the engine holds no
+    // inventory, so the record remembers this one item.
+    incense: state.incense || bought.item?.id === INCENSE_ID,
+    sheet: { ...state.sheet, gold: fromSilver(bought.after).gp },
+    villageNote: {
+      text: fill(t('ui.village.bought'), {
+        item: name,
+        cost: paid.gp === 0 ? `${paid.sp} SP` : `${paid.gp} GP ${paid.sp} SP`,
+      }),
+      roll: null,
+      cite: 'MH p.52-55',
+    },
+  }
+}
+
+const doTemple = (state: RecordState, dice: DiceSource): RecordState => {
+  const { source, manual } = masterDice(state, dice)
+  const visit = templeVisit({
+    skill: state.sheet.skill,
+    luck: state.sheet.luck,
+    // R05's initial LUCK is the ceiling: the shrine restores toward
+    // where the Master started, never past it.
+    maxLuck: state.sheet.luckInitial,
+    hasIncense: state.incense,
+    visitedToday: state.templeVisitedToday,
+  })(source)
+  const cite = citeOf('village.temple-recovers-one-luck')
+  if (!visit.attempted) {
+    return {
+      ...state,
+      villageNote: {
+        text: t(visit.reason === 'no-incense' ? 'ui.village.temple.none' : 'ui.village.temple.spent'),
+        roll: null,
+        cite: visit.reason === 'no-incense' ? cite : citeOf('village.one-temple-check-per-day'),
+      },
+    }
+  }
+  const passed = visit.outcome?.success === true
+  return afterMasterRoll(
+    withSheet(
+      {
+        ...state,
+        templeVisitedToday: true,
+        // The stick is burned whether the gods listen or not.
+        incense: false,
+        villageNote: {
+          text: t(passed ? 'ui.village.temple.passed' : 'ui.village.temple.failed'),
+          roll: visit.outcome?.roll ?? null,
+          cite,
+        },
+      },
+      { luck: visit.luck },
+    ),
+    manual,
+  )
+}
+
+const doInn = (state: RecordState): RecordState => {
+  const place = placeRunning(villagePlaces, 'inn')
+  const stay = stayTheNight({
+    skill: { current: state.sheet.skill, initial: state.sheet.skillInitial },
+    endurance: { current: state.sheet.endurance, initial: state.sheet.enduranceInitial },
+    purse: state.silver,
+    roomPriceSp: place?.roomPriceSp ?? 0,
+  })
+  if (!stay.stayed) {
+    return {
+      ...state,
+      villageNote: { text: t('ui.village.inn.poor'), roll: null, cite: citeOf('village.inn-charges-before-it-heals') },
+    }
+  }
+  return withSheet(
+    {
+      ...state,
+      silver: stay.purseAfter,
+      // A night has passed, so the shrine will listen again (I-58).
+      templeVisitedToday: false,
+      villageNote: {
+        text: fill(t('ui.village.inn.rested'), {
+          skill: stay.skill?.after ?? state.sheet.skill,
+          endurance: stay.endurance?.after ?? state.sheet.endurance,
+        }),
+        roll: null,
+        cite: citeOf('village.nights-rest-is-the-sealed-four'),
+      },
+    },
+    {
+      skill: stay.skill?.after ?? state.sheet.skill,
+      endurance: stay.endurance?.after ?? state.sheet.endurance,
+      gold: fromSilver(stay.purseAfter).gp,
+    },
+  )
+}
+
 // ------------------------------------------------------------------ reduce
 
 /** The one way a record changes. Pure: same state, action and dice, same result. */
@@ -502,6 +629,15 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       }))
     case 'creation.step':
       return onCreation(state, (c) => ({ ...c, step: action.step }))
+    case 'village.buy':
+      return doBuy(state, action.id)
+    case 'village.temple':
+      return doTemple(state, dice)
+    case 'village.inn':
+      return doInn(state)
+    case 'village.trail':
+      return { ...state, screen: 'beat', villageNote: null }
+
     case 'creation.begin':
       return state.creation === null
         ? state
@@ -510,6 +646,8 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
             creation: null,
             screen: 'beat',
             sheet: finishCreation(state.creation),
+            // R03's gold, in the silver prices are compared at.
+            silver: toSilver({ gp: finishCreation(state.creation).gold }),
           }
   }
 }

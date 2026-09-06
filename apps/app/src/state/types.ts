@@ -22,7 +22,7 @@ import type {
 } from '@martial-havoc/engine'
 
 /** The screens of the frame. */
-export type Screen = 'creation' | 'beat' | 'combat' | 'rules' | 'region'
+export type Screen = 'creation' | 'beat' | 'combat' | 'rules' | 'region' | 'village'
 
 /**
  * Where creation has got to, in the book's own order (R02-R19).
@@ -95,6 +95,8 @@ export type Sheet = {
   readonly endurance: number
   readonly enduranceInitial: number
   readonly luck: number
+  /** R05: what LUCK started at — the ceiling the shrine restores toward. */
+  readonly luckInitial: number
   readonly gold: number
   readonly dishonor: number
   readonly proficiencies: readonly NamedValue[]
@@ -136,6 +138,21 @@ export type TreasureResult = {
   readonly face: Die
   readonly band: string
   readonly text: string
+}
+
+/**
+ * Something the village did (MH p.47, p.52-55; spec.md, Horizon).
+ *
+ * Not a `Result`: the village's outcomes are not all rolls, and the
+ * result slip is built to show a roll. This is the village's own line
+ * of feedback, held separately so neither has to pretend to be the
+ * other.
+ */
+export type VillageNote = {
+  readonly text: string
+  /** The check, when the shrine rolled one. */
+  readonly roll: TwoD6Roll | null
+  readonly cite: string
 }
 
 /** What the result slip shows, when it shows anything. */
@@ -216,6 +233,14 @@ export type RecordState = {
    * creation and a placeholder sheet.
    */
   readonly creation: CreationState | null
+  /** The Master's purse in silver (1 GP = 10 SP, MH p.52). */
+  readonly silver: number
+  /** Whether a stick of incense is carried (R58's condition). */
+  readonly incense: boolean
+  /** Whether the shrine has already been visited today (I-58). */
+  readonly templeVisitedToday: boolean
+  /** The last thing the village said, or null. */
+  readonly villageNote: VillageNote | null
 }
 
 /** Everything a screen may ask the record to do. */
@@ -251,3 +276,7 @@ export type Action =
   | { readonly type: 'creation.kit'; readonly id: string }
   | { readonly type: 'creation.step'; readonly step: CreationStep }
   | { readonly type: 'creation.begin' }
+  | { readonly type: 'village.buy'; readonly id: string }
+  | { readonly type: 'village.temple' }
+  | { readonly type: 'village.inn' }
+  | { readonly type: 'village.trail' }

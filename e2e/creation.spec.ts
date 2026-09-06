@@ -110,3 +110,44 @@ test('a made Master wins a fight', async ({ page }) => {
   await page.getByTestId('act-go-on').click()
   await expect(page.getByText('DEEDS 1')).toBeVisible()
 })
+
+/**
+ * The village (Phase 7's engine module, given a surface in Phase 8).
+ *
+ * The three procedures the build-plan row names — buy, LUCK recovery
+ * and a night's rest — each doing what the folio on screen says.
+ */
+test('the village buys, recovers LUCK and rests, on the printed terms', async ({ page }) => {
+  await page.goto('/')
+  await page.getByTestId('preset-preset.san-te').click()
+  await page.getByTestId('creation-begin').click()
+  await button(page, 'VILLAGE').click()
+  await expect(page.getByTestId('village')).toBeVisible()
+  await expect(page.getByTestId('place')).toHaveText('FEN PASS · THE TRAIL-HEAD')
+
+  // Three locations and the trail, from the fixed data file.
+  await expect(page.getByTestId('village.place.market')).toBeVisible()
+  await expect(page.getByTestId('village.place.temple')).toBeVisible()
+  await expect(page.getByTestId('village.place.inn')).toBeVisible()
+  await expect(page.getByTestId('village-trail')).toBeVisible()
+
+  // R58: no incense, no check, and no dice are spent finding that out.
+  await page.getByTestId('village-temple').click()
+  await expect(page.getByTestId('village-note')).toContainText('No incense')
+
+  // MH p.52-55: a stick of incense at its printed 5 SP.
+  await page.getByTestId('buy-market.common.incense').click()
+  await expect(page.getByTestId('village-note')).toContainText('Bought Incense')
+
+  // Now the shrine will roll.
+  await page.getByTestId('village-temple').click()
+  await expect(page.getByTestId('village-note')).toContainText('check')
+
+  // The inn takes its silver and gives the night back.
+  await page.getByTestId('village-inn').click()
+  await expect(page.getByTestId('village-note')).toContainText('ENDURANCE')
+
+  // And the trail leads out.
+  await page.getByTestId('village-go').click()
+  await expect(page.getByTestId('beat')).toBeVisible()
+})

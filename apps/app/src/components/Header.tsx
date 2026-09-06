@@ -20,6 +20,11 @@ export const Header = ({ place, screen, onNav }: Props) => (
     </Slip>
     <View style={styles.nav}>
       <Button small text={t('ui.nav.rules')} onPress={() => onNav(screen === 'rules' ? 'beat' : 'rules')} />
+      <Button
+        small
+        text={t('ui.nav.village')}
+        onPress={() => onNav(screen === 'village' ? 'beat' : 'village')}
+      />
       <Button small text={t('ui.nav.map')} onPress={() => onNav(screen === 'region' ? 'beat' : 'region')} />
     </View>
   </View>

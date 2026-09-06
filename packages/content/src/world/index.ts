@@ -88,6 +88,15 @@ export const startingKitItems: readonly MarketItem[] = Object.freeze(
 )
 
 /**
+ * Incense (MH p.52, Common Items, 5 SP).
+ *
+ * Named because it is the one Market row a *rule* depends on: R58
+ * gates the Temple's Spirituality check on carrying it. Everything
+ * else in the table is priced and bought; this one is a condition.
+ */
+export const INCENSE_ID = 'market.common.incense'
+
+/**
  * The trail-head village, as fixed data (spec.md, Horizon).
  *
  * Four records: three locations and the one trail out. Fixed, not

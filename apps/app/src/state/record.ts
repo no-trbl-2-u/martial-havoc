@@ -42,6 +42,7 @@ export const sheetFor =
       endurance: preset.endurance,
       enduranceInitial: preset.endurance,
       luck: preset.luck,
+      luckInitial: preset.luck,
       gold,
       dishonor: 0,
       proficiencies: preset.proficiencies,
@@ -78,4 +79,10 @@ export const newRecord = (dice: DiceSource): RecordState => ({
   region: throwRegion(REGION_POINTS)(dice),
   here: 0,
   creation: emptyCreation(),
+  // The purse in silver (MH p.52). The sheet keeps gold for the strip;
+  // this is the same money at the resolution prices are printed in.
+  silver: 0,
+  incense: false,
+  templeVisitedToday: false,
+  villageNote: null,
 })
