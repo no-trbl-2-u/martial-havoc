@@ -13,47 +13,104 @@ const shot = (page: Page, name: string) =>
   page.screenshot({ path: `design/screenshots/${name}.png`, fullPage: false })
 
 const button = (page: Page, name: RegExp | string) => page.getByRole('button', { name })
+
+/**
+ * Past creation and into the cave, on San Te's printed sheet (R83).
+ * A fresh record opens on creation (Phase 8), so every stop after the
+ * creation frames has to make a Master first. Creation spends no
+ * `?dice=` faces (it rolls on the table's source), so a stop's named
+ * rolls still reach the rolls they were named for.
+ */
+const begin = async (page: Page) => {
+  await page.getByTestId('preset-preset.san-te').click()
+  await page.getByTestId('creation-begin').click()
+  await expect(page.getByTestId('beat')).toBeVisible()
+}
+
+/** One move: tap the exit, let the card land, CONTINUE. */
+const go = async (page: Page, name: RegExp) => {
+  await button(page, name).click()
+  await page.getByTestId('roll-card-continue').click()
+  await expect(page.getByTestId('roll-card')).toHaveCount(0)
+}
+
+/** The book's walk to the Dexterous Ghost: spends `4,4,2,3` of the queue. */
 const goIn = async (page: Page) => {
-  await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
+  await go(page, /TO THE CAVE ENTRANCE/)
+  await go(page, /TO THE DINING HALL/)
+  await go(page, /TO THE ATTENDANTS ROOM/)
   await button(page, /FACE THE DEXTEROUS GHOST/).click()
 }
 
+test('00 creation, the eight sheets and a rolled Master', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.getByTestId('creation')).toBeVisible()
+  await shot(page, '00a-creation-who')
+  await page.getByTestId('creation-roll-master').click()
+  await expect(page.getByTestId('creation-standing')).toBeVisible()
+  await shot(page, '00b-creation-standing')
+  await button(page, 'ROLL').first().click()
+  await expect(page.getByTestId('creation-skill')).toBeVisible()
+  await shot(page, '00c-creation-numbers')
+  await button(page, 'ROLL').first().click()
+  await expect(page.getByTestId('creation-art')).toBeVisible()
+  await shot(page, '00d-creation-art-and-training')
+  await page.getByTestId('creation-next').click()
+  await shot(page, '00e-creation-spend')
+  await page.getByTestId('creation-next').click()
+  await shot(page, '00f-creation-kit')
+  await page.getByTestId('creation-next').click()
+  await expect(page.getByTestId('step-ready')).toBeVisible()
+  await shot(page, '00g-creation-ready')
+})
+
 test('01 the beat, opening', async ({ page }) => {
   await page.goto('/')
-  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
+  await begin(page)
+  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
   await shot(page, '01-beat-opening')
 })
 
-test('02 the beat, a check passed', async ({ page }) => {
-  await page.goto('/?dice=4,6')
-  await button(page, /FORCE THE SHUT GATE/).click()
-  await expect(page.getByText('SKILL CHECK · PASSED')).toBeVisible()
-  await shot(page, '02-beat-check-passed')
+test('02 the beat, a move rolled onto the card and kept', async ({ page }) => {
+  await page.goto('/?dice=2,5')
+  await begin(page)
+  await button(page, /TO THE CAVE ENTRANCE/).click()
+  await expect(page.getByText('EVENT · ENCOUNTER')).toBeVisible()
+  await shot(page, '02a-beat-roll-card-landed')
+  await page.getByTestId('roll-card-continue').click()
+  await expect(page.getByTestId('roll-card')).toHaveCount(0)
+  await shot(page, '02-beat-event-encounter')
 })
 
 test('03 the beat, the dice on the table', async ({ page }) => {
   await page.goto('/')
+  await begin(page)
   await button(page, 'MY DICE').click()
+  await button(page, /TO THE CAVE ENTRANCE/).click()
+  await expect(page.getByTestId('roll-card')).toBeVisible()
   await page.getByRole('button', { name: '6', exact: true }).click()
-  await page.getByRole('button', { name: '6', exact: true }).click()
-  await expect(button(page, 'USE MY DICE')).toBeVisible()
+  await expect(page.getByText('YOUR DIE: 6')).toBeVisible()
   await shot(page, '03-beat-manual-dice')
-  await button(page, /FORCE THE SHUT GATE/).click()
-  await expect(page.getByText('SKILL CHECK · FAILED')).toBeVisible()
-  await shot(page, '04-beat-double-six')
+  await page.getByTestId('roll-card-continue').click()
+  await expect(page.getByText('EVENT · HINT')).toBeVisible()
+  await page.getByTestId('roll-card-continue').click()
+  await expect(page.getByTestId('hint')).toBeVisible()
+  await shot(page, '04-beat-hint-revealed')
 })
 
 test('05 the beat, a passage kept and a night’s rest', async ({ page }) => {
-  await page.goto('/?dice=1,1,6,6')
+  await page.goto('/')
+  await begin(page)
   await page.getByPlaceholder("Write it down, or don't.").fill('The willow had grown around the gate before anyone thought to shut it.')
   await button(page, 'KEEP IT').click()
-  await button(page, /REST BY THE STREAM/).click()
+  await button(page, /REST HERE/).click()
   await expect(page.getByText("A NIGHT'S REST")).toBeVisible()
   await shot(page, '05-beat-rest-and-passage')
 })
 
 test('06 combat, before the round', async ({ page }) => {
-  await page.goto('/?dice=6,5,1,1')
+  await page.goto('/?dice=4,4,2,3,6,5,1,1')
+  await begin(page)
   await goIn(page)
   await expect(page.getByTestId('place')).toHaveText('COMBAT · ROUND 1')
   await shot(page, '06-combat-ready')
@@ -65,21 +122,23 @@ test('06 combat, before the round', async ({ page }) => {
 })
 
 test('09 combat, the Final Blow lands', async ({ page }) => {
-  await page.goto('/?dice=6,5,1,1,3,3')
+  await page.goto('/?dice=4,4,2,3,6,5,1,1,3,3')
+  await begin(page)
   await goIn(page)
   await button(page, 'ROLL THE ROUND').click()
   await page.getByTestId('act-opening').click()
   await page.getByTestId('act-blow').click()
   await expect(page.getByText('THE BLOW LANDS')).toBeVisible()
   await shot(page, '09-combat-final-blow')
-  await page.getByTestId('act-treasure').click()
+  await page.getByTestId('act-loot').click()
   await page.getByTestId('act-go-on').click()
-  await expect(page.getByText(/TREASURE ROLL/)).toBeVisible()
+  await expect(page.getByText(/LOOT · DEXTEROUS GHOST/)).toBeVisible()
   await shot(page, '10-beat-after-the-fight')
 })
 
 test('11 combat, a lost round', async ({ page }) => {
-  await page.goto('/?dice=1,1,6,6')
+  await page.goto('/?dice=4,4,2,3,1,1,6,6')
+  await begin(page)
   await goIn(page)
   await button(page, 'ROLL THE ROUND').click()
   await expect(page.getByText('IT IS AHEAD BY · END LOST')).toBeVisible()
@@ -87,7 +146,8 @@ test('11 combat, a lost round', async ({ page }) => {
 })
 
 test('12 combat, a tie and Morale', async ({ page }) => {
-  await page.goto('/?dice=3,4,4,4,2,2,2')
+  await page.goto('/?dice=4,4,2,3,3,4,4,4,2,2,2')
+  await begin(page)
   await goIn(page)
   await button(page, 'ROLL THE ROUND').click()
   await expect(page.getByText('UNEXPECTED EVENT · 2d6 = 4')).toBeVisible()
@@ -99,6 +159,7 @@ test('12 combat, a tie and Morale', async ({ page }) => {
 
 test('14 the rules panel', async ({ page }) => {
   await page.goto('/')
+  await begin(page)
   await button(page, 'RULES').click()
   await expect(page.getByText('RULES, READINGS AND INVENTIONS')).toBeVisible()
   await shot(page, '14-rules-panel')
@@ -110,7 +171,36 @@ test('14 the rules panel', async ({ page }) => {
 
 test('16 the region', async ({ page }) => {
   await page.goto('/')
+  await begin(page)
   await button(page, 'MAP').click()
   await expect(page.getByText('NOT TO SCALE')).toBeVisible()
   await shot(page, '16-region')
+})
+
+test('17 the village', async ({ page }) => {
+  await page.goto('/')
+  await begin(page)
+  await button(page, 'VILLAGE').click()
+  await expect(page.getByTestId('village')).toBeVisible()
+  await shot(page, '17-village')
+  await page.getByTestId('village-temple').click()
+  await expect(page.getByTestId('village-note')).toBeVisible()
+  await shot(page, '18-village-shrine-rolled')
+})
+
+test('19 the record', async ({ page }) => {
+  await page.goto('/')
+  await begin(page)
+  await button(page, 'RECORD').click()
+  await expect(page.getByTestId('record')).toBeVisible()
+  await shot(page, '19-record')
+})
+
+test('20 about, with the adventure as printed', async ({ page }) => {
+  await page.goto('/')
+  await begin(page)
+  await button(page, 'ABOUT').click()
+  await expect(page.getByTestId('intro-premise')).toBeVisible()
+  await page.getByTestId('intro-title').scrollIntoViewIfNeeded()
+  await shot(page, '20-about-the-adventure')
 })

@@ -84,3 +84,22 @@ The bargain B makes is now asserted, not just described: an e2e holds
 the menu row's position steady across a landing result and keeps it in
 the phone's bottom half. If a later change breaks that, it breaks the
 reason this layout was chosen, and the gate says so.
+
+## The roll card — decided 2026-09-06
+
+The operator asked for a modal on the roll: what the roll is for, the
+dice tumbling and landing, and a plate under them keyed to the reason,
+so the beat could lose its dice section. Three readings were built on
+the app's tokens and photographed (`design/roll-modal/`, canvas
+`Roll Modal`): A the Card, B the Sheet, C the Leaf. **The operator
+picked A** and gave two notes (one CONTINUE; a blank strip during
+creation); `design/roll-modal/README.md` records both.
+
+The layout constraint still binds: the two dice, the label pill and
+the citation are on the card until CONTINUE and on the result slip
+after, never off screen. The e2e that holds the menu row steady
+across a landing result now rolls through the card and still holds.
+
+Plates are drawn SVG of ours, dashed as every invention is, because
+`spec.md` refuses credited art. A plate per Proficiency or per area is
+a later pass along the same seam (`Plate.tsx`, `PlateKey`).

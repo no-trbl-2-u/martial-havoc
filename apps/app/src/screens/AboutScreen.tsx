@@ -15,7 +15,7 @@
  */
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { behaviours } from '@martial-havoc/engine'
-import { contentCounts, t } from '@martial-havoc/content'
+import { contentCounts, t, theFiveTreasuresEvents, theFiveTreasuresMeta } from '@martial-havoc/content'
 import { fill } from '../lib/fill'
 import type { Action } from '../state/types'
 import { color, font } from '../theme/tokens'
@@ -62,6 +62,29 @@ export const AboutScreen = ({ dispatch }: Props) => {
           </Text>
         </Block>
 
+        {/* The adventure's page a1 opening and page a2 credits, as
+            printed (5T a1, 5T a2): the introduction the book has. The
+            operator asked for it here rather than as an interruption
+            after creation. */}
+        <Block heading={t('ui.intro.heading')}>
+          <Text testID="intro-title" style={styles.title}>{t('ui.intro.title')}</Text>
+          <Text style={styles.licence}>{t('ui.intro.subtitle')}</Text>
+          <Text testID="intro-premise" style={styles.line}>{theFiveTreasuresMeta.premise}</Text>
+          <Text style={[styles.licence, styles.gap]}>{t('ui.intro.events')}</Text>
+          {theFiveTreasuresEvents.map((row) => (
+            <Text key={row.id} style={styles.eventRow}>
+              {row.totals.length === 1 ? row.totals[0] : `${row.totals[0]}-${row.totals[row.totals.length - 1]}`} {row.text}
+            </Text>
+          ))}
+          <Text style={[styles.licence, styles.gap]}>{t('ui.intro.encounters')}</Text>
+          <Text style={styles.licence}>{t('ui.intro.note.1')}</Text>
+          <Text style={styles.licence}>{t('ui.intro.note.2')}</Text>
+          <Text style={[styles.licence, styles.gap]}>{t('ui.intro.credits.licence')}</Text>
+          <Text style={styles.licence}>{t('ui.intro.credits.writing')}</Text>
+          <Text style={styles.licence}>{t('ui.intro.credits.icons')}</Text>
+          <Text style={styles.licence}>{t('ui.intro.credits.map')}</Text>
+        </Block>
+
         <Block heading={t('ui.about.shipped')}>
           <Text testID="about-records" style={styles.count}>
             {fill(t('ui.about.records'), { records: counts.records, files: counts.files })}
@@ -102,6 +125,8 @@ const styles = StyleSheet.create({
   line: { fontFamily: font.serif, fontSize: 13, lineHeight: 18, color: color.ink },
   licence: { fontFamily: font.mono, fontSize: 10, lineHeight: 15, marginTop: 2, color: color.dim },
   count: { fontFamily: font.sans, fontSize: 14, fontWeight: '800', color: color.ink },
+  eventRow: { fontFamily: font.mono, fontSize: 11, lineHeight: 16, color: color.ink },
+  gap: { marginTop: 6 },
   foot: { paddingTop: 9, paddingHorizontal: 14, paddingBottom: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
   footer: { flexShrink: 1, fontFamily: font.mono, fontSize: 10, color: color.dim },
   back: { paddingVertical: 9, paddingHorizontal: 13 },

@@ -192,6 +192,9 @@ ending" cannot happen while five areas are unreachable. It should be
 its own row (an 8c, or a phase between 8 and 9), planned through
 `/plan-a-phase` or `/oversight`.
 
+**Done as Phase 8c on 2026-09-06** (`phase_8c_the_cave_verbatim.md`),
+by the operator's call recorded in `VISION.md`.
+
 ## Follow-ups (out of scope)
 
 - Phase 9 owns the web release proper (metadata, offline, the landing).

@@ -33,7 +33,7 @@ import type { RecordState } from './types'
 export const CAMPAIGN_KEY = 'mh.campaign'
 
 /** The disposable half: the session snapshot, this shape only. */
-export const SESSION_KEY = 'mh.session.v1'
+export const SESSION_KEY = 'mh.session.v2'
 
 type Shelf = {
   readonly getItem: (key: string) => string | null
@@ -65,7 +65,10 @@ const looksLikeSession = (value: unknown): value is RecordState => {
   const v = value as Record<string, unknown>
   return (
     typeof v['screen'] === 'string' &&
-    typeof v['area'] === 'number' &&
+    typeof v['cave'] === 'object' &&
+    v['cave'] !== null &&
+    typeof (v['cave'] as Record<string, unknown>)['area'] === 'string' &&
+    Array.isArray(v['pending']) &&
     typeof v['sheet'] === 'object' &&
     Array.isArray(v['manual']) &&
     typeof v['region'] === 'object'

@@ -17,6 +17,7 @@ import { exportCampaign, toJson } from '@martial-havoc/engine'
 import { t } from '@martial-havoc/content'
 import { fill } from '../lib/fill'
 import { toCampaign } from '../state/campaign'
+import { treasureName } from '../state/menu'
 import type { Action, RecordState } from '../state/types'
 import { color, font } from '../theme/tokens'
 import { Button } from '../components/Button'
@@ -97,7 +98,7 @@ export const RecordScreen = ({ state, dispatch, at }: Props) => {
           testID="record-treasures"
           title={t('ui.record.treasures.title')}
           empty={t('ui.record.treasures.empty')}
-          lines={state.held.map((key) => t(`ui.treasure.${key}`))}
+          lines={state.cave.treasures.map(treasureName)}
         />
 
         <Slip style={styles.slip} testID="record-export">

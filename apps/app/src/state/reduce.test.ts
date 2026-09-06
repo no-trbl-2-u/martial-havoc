@@ -2,11 +2,17 @@
  * The reducer on fixed dice. Every rule it exercises is the engine's;
  * these tests check the wiring: the right engine call, the right place
  * in the record, the override count, and that nothing is mutated.
+ *
+ * The cave is walked the way the book walks it (5T a1): every die named
+ * below is exactly the die the printed procedure asks for - one for the
+ * Event, one for the area's creature where the area's table rolls, none
+ * where it does not.
  */
 import { describe, expect, it } from 'vitest'
 import { fromSequence } from '@martial-havoc/engine'
 import type { Die } from '@martial-havoc/engine'
 import { randomSource } from '../dice/random'
+import { menuFor } from './menu'
 import { newRecord } from './record'
 import { reduce } from './reduce'
 import type { Action, RecordState } from './types'
@@ -18,100 +24,186 @@ const fresh = (): RecordState => newRecord(randomSource(() => 0.5))
 const play = (state: RecordState, steps: readonly (readonly [Action, readonly Die[]])[]): RecordState =>
   steps.reduce((s, [action, faces]) => reduce(s, action, fromSequence(faces)), state)
 
-const FORCE = 'option.the-5-treasures.2.force-the-gate'
-const GO_IN = 'option.the-5-treasures.2.go-in'
-const FIGHT = 'option.the-5-treasures.3.face-the-ghost'
-const VASE = 'option.the-5-treasures.3.take-the-vase'
-const ON = 'option.the-5-treasures.3.on'
-const UNSEEN = 'option.the-5-treasures.4.cross-unseen'
+const AREA = {
+  mountain: 'area.the-5-treasures.flat-top-mountain',
+  entrance: 'area.the-5-treasures.cave-entrance',
+  attendants: 'area.the-5-treasures.attendants-room',
+  hall: 'area.the-5-treasures.dining-hall',
+  storage: 'area.the-5-treasures.storage-room',
+  women: 'area.the-5-treasures.women-quarter',
+  kitchen: 'area.the-5-treasures.kitchen',
+  chieftain: 'area.the-5-treasures.chieftain-quarter',
+} as const
+
+const GHOST = 'foe.dexterous-ghost'
+const KEY = 'key.the-5-treasures.private-quarter'
+const VASE = 'treasure.the-5-treasures.vase-of-muttonfat-jade'
+
+/** Walk into `to` on a safe Event (4) and close the card. */
+const walk = (to: string): readonly (readonly [Action, readonly Die[]])[] => [
+  [{ type: 'cave.go', to }, [4]],
+  [{ type: 'roll.close' }, []],
+]
+
+/** From the mountain to the Attendants room, meeting the Dexterous Ghost there (Event 2, creature 3). */
+const toGhost = (): RecordState =>
+  play(fresh(), [
+    ...walk(AREA.entrance),
+    ...walk(AREA.hall),
+    [{ type: 'cave.go', to: AREA.attendants }, [2, 3]],
+    [{ type: 'roll.close' }, []],
+  ])
+
+/** Beat a foe that stands at full ENDURANCE: a won round, an Opening, then doubles. */
+const finish = (): readonly (readonly [Action, readonly Die[]])[] => [
+  [{ type: 'combat.round' }, [6, 5, 1, 1]],
+  [{ type: 'combat.opening' }, []],
+  [{ type: 'combat.blow' }, [3, 3]],
+]
 
 describe('a new record', () => {
-  it('is San Te at the cave entrance with a seven-point region', () => {
+  it('is San Te on the Flat-top mountain with a seven-point region', () => {
     const s = fresh()
     expect(s.sheet).toMatchObject({ name: 'San Te', skill: 8, endurance: 20, luck: 9 })
     expect(s.sheet.techniques).toContain('technique.iron-head')
-    expect(s.area).toBe(2)
+    expect(s.cave.area).toBe(AREA.mountain)
+    expect(s.cave.treasures).toEqual([])
     expect(s.region.points).toHaveLength(7)
     expect(s.overrides).toBe(0)
   })
 })
 
-describe('checks on the beat', () => {
-  it('a SKILL check adds the option’s Proficiency and passes on equal-or-under (R20)', () => {
-    // Stamina 2 + SKILL 8 = 10; 4+6 = 10 passes.
-    const s = play(fresh(), [[{ type: 'option', id: FORCE }, [4, 6]]])
+describe('walking the cave (5T a1)', () => {
+  it('an exit rolls the Event table at once and opens the card landed', () => {
+    const s = play(fresh(), [[{ type: 'cave.go', to: AREA.entrance }, [4]]])
+    expect(s.cave.area).toBe(AREA.entrance)
+    expect(s.roll).toEqual({ to: AREA.entrance, landed: true })
     expect(s.result).toMatchObject({
-      kind: 'check',
-      check: 'skill',
-      threshold: 10,
-      success: true,
-      proficiency: { name: 'Stamina', value: 2 },
+      kind: 'turn',
+      area: 'Cave entrance',
+      eventFace: 4,
+      event: 'safe',
+      eventText: 'Safe exploration',
+      encounterFace: null,
+      foes: [],
+      hint: false,
     })
+    expect(s.pending).toEqual([])
   })
 
-  it('a double six fails even under the threshold (spec.md, sealed)', () => {
-    const s = play(fresh(), [[{ type: 'option', id: FORCE }, [6, 6]]])
-    expect(s.result).toMatchObject({ kind: 'check', success: false, doubleSix: true })
+  it('CONTINUE closes the card and keeps the result', () => {
+    const s = play(fresh(), [...walk(AREA.entrance)])
+    expect(s.roll).toBeNull()
+    expect(s.result?.kind).toBe('turn')
   })
 
-  it('a LUCK check costs one LUCK regardless (R21)', () => {
-    const s = play(fresh(), [
-      [{ type: 'option', id: GO_IN }, []],
-      [{ type: 'option', id: ON }, []],
-      [{ type: 'option', id: UNSEEN }, [1, 1]],
+  it('an Encounter rolls the area’s creature table and the foe waits on the beat', () => {
+    const s = play(fresh(), [[{ type: 'cave.go', to: AREA.entrance }, [2, 5]]])
+    expect(s.result).toMatchObject({ event: 'encounter', encounterFace: 5, foes: ['Junior King Silver Horn'] })
+    expect(s.pending).toEqual(['foe.junior-king-silver-horn'])
+    // With a foe standing, the exits and the rest are refused; facing it is offered.
+    const menu = menuFor({ ...s, roll: null })
+    expect(menu.find((o) => o.id.startsWith('fight-'))?.title).toBe('FACE THE JUNIOR KING SILVER HORN')
+    expect(menu.filter((o) => o.action.kind === 'go').every((o) => !o.enabled)).toBe(true)
+    expect(reduce({ ...s, roll: null }, { type: 'cave.go', to: AREA.mountain }, fromSequence([4]))).toMatchObject({ cave: { area: AREA.entrance } })
+  })
+
+  it('an Ambush rolls the creature too (Event 1 is an Ambush!)', () => {
+    const s = play(fresh(), [[{ type: 'cave.go', to: AREA.entrance }, [1, 2]]])
+    expect(s.result).toMatchObject({ event: 'ambush', eventText: 'Ambush!', foes: ['Ogre'] })
+  })
+
+  it('a Hint reveals the area’s grey paragraph (I-06b, I-60)', () => {
+    const s = play(fresh(), [[{ type: 'cave.go', to: AREA.entrance }, [6]]])
+    expect(s.result).toMatchObject({ event: 'hint', hint: true, foes: [] })
+    expect(s.cave.hints).toContain(AREA.entrance)
+  })
+
+  it('a locked door is refused without its key and draws no die (I-07)', () => {
+    const s = play(fresh(), [...walk(AREA.entrance), ...walk(AREA.hall), ...walk(AREA.attendants)])
+    const refused = reduce(s, { type: 'cave.go', to: AREA.chieftain }, fromSequence([4]))
+    expect(refused).toBe(s)
+    const menu = menuFor(s)
+    const door = menu.find((o) => o.id === `go-${AREA.chieftain}`)
+    expect(door?.enabled).toBe(false)
+    expect(door?.note).toBe('LOCKED')
+    expect(door?.line).toBe('a paper sliding door')
+  })
+
+  it('a night’s rest heals 4 ENDURANCE, never past the initial value', () => {
+    const hurt = { ...fresh(), sheet: { ...fresh().sheet, endurance: 18 } }
+    const s = reduce(hurt, { type: 'cave.rest' }, fromSequence([]))
+    expect(s.sheet.endurance).toBe(20)
+    expect(s.result).toEqual({ kind: 'rest', before: 18, after: 20 })
+  })
+
+  it('taking the vase holds it once and writes a deed (I-38)', () => {
+    const s = play(toGhost(), [
+      [{ type: 'cave.fight', foe: GHOST }, []],
+      ...finish(),
+      [{ type: 'combat.leave' }, []],
+      [{ type: 'cave.take', treasure: VASE }, []],
+      [{ type: 'cave.take', treasure: VASE }, []],
     ])
-    expect(s.result).toMatchObject({ kind: 'check', check: 'luck', success: true, luckAfter: 8 })
-    expect(s.sheet.luck).toBe(8)
+    expect(s.cave.treasures).toEqual([VASE])
+    expect(s.deeds).toContain('took the Vase of muttonfat jade')
+    expect(s.result).toMatchObject({ kind: 'take', treasure: 'Vase of muttonfat jade', held: 1 })
   })
 
-  it('the primary roll is the area’s first check', () => {
-    const s = play(fresh(), [[{ type: 'roll' }, [2, 2]]])
-    expect(s.result).toMatchObject({ kind: 'check', check: 'skill', threshold: 10 })
-  })
-
-  it('an option from another area does nothing', () => {
-    const s = fresh()
-    expect(reduce(s, { type: 'option', id: FIGHT }, fromSequence([]))).toBe(s)
+  it('leaves for the region from the mountain', () => {
+    const s = reduce(fresh(), { type: 'cave.leave' }, fromSequence([]))
+    expect(s.screen).toBe('region')
+    expect(menuFor(fresh()).some((o) => o.action.kind === 'leave')).toBe(true)
+    expect(menuFor(play(fresh(), walk(AREA.entrance))).some((o) => o.action.kind === 'leave')).toBe(false)
   })
 })
 
-describe('manual dice', () => {
-  it('two tapped faces are the Master’s next roll and count one override', () => {
-    const s = play(fresh(), [
-      [{ type: 'manual.toggle' }, []],
-      [{ type: 'manual.face', face: 6 }, []],
-      [{ type: 'manual.face', face: 6 }, []],
-      [{ type: 'option', id: FORCE }, [1, 1]], // the table's dice are ignored
+describe('my dice on the beat', () => {
+  it('MY DICE on: an exit opens the picker; the tapped face is the Event die and counts one override', () => {
+    const open = play(fresh(), [
+      [{ type: 'roll.manual' }, []],
+      [{ type: 'cave.go', to: AREA.entrance }, [4]],
     ])
-    expect(s.result).toMatchObject({ kind: 'check', doubleSix: true })
+    expect(open.byHand).toBe(true)
+    expect(open.roll).toEqual({ to: AREA.entrance, landed: false })
+    expect(open.cave.area).toBe(AREA.mountain)
+    const s = play(open, [
+      [{ type: 'manual.face', face: 6 }, []],
+      [{ type: 'roll' }, [1, 1]], // the table's dice are ignored
+    ])
+    expect(s.result).toMatchObject({ kind: 'turn', eventFace: 6, event: 'hint' })
+    expect(s.roll).toEqual({ to: AREA.entrance, landed: true })
     expect(s.overrides).toBe(1)
     expect(s.manual).toEqual([])
-    expect(s.manualOpen).toBe(false)
+  })
+
+  it('a second tapped face is the creature roll', () => {
+    const s = play(fresh(), [
+      [{ type: 'roll.manual' }, []],
+      [{ type: 'cave.go', to: AREA.entrance }, []],
+      [{ type: 'manual.face', face: 2 }, []],
+      [{ type: 'manual.face', face: 5 }, []],
+      [{ type: 'roll' }, [1, 1]],
+    ])
+    expect(s.result).toMatchObject({ eventFace: 2, encounterFace: 5, foes: ['Junior King Silver Horn'] })
+    expect(s.overrides).toBe(1)
+  })
+
+  it('CONTINUE with no face rolls nothing; a tap outside closes with nothing rolled', () => {
+    const open = play(fresh(), [
+      [{ type: 'roll.manual' }, []],
+      [{ type: 'cave.go', to: AREA.entrance }, []],
+    ])
+    expect(reduce(open, { type: 'roll' }, fromSequence([4]))).toBe(open)
+    const closed = reduce(open, { type: 'roll.close' }, fromSequence([]))
+    expect(closed.roll).toBeNull()
+    expect(closed.cave.area).toBe(AREA.mountain)
+    expect(closed.overrides).toBe(0)
   })
 
   it('a roll the app made is not an override', () => {
-    // The count is the record's honesty about how much of it the app
-    // rolled. A roll from the app's own dice source moves nothing.
-    const s = play(fresh(), [[{ type: 'option', id: FORCE }, [1, 1]]])
-    expect(s.result).toMatchObject({ kind: 'check' })
+    const s = play(fresh(), [[{ type: 'cave.go', to: AREA.entrance }, [4]]])
     expect(s.overrides).toBe(0)
-  })
-
-  it('counts one override per manual roll, never resetting', () => {
-    const tap = (face: 6): readonly (readonly [Action, readonly Die[]])[] => [
-      [{ type: 'manual.toggle' }, []],
-      [{ type: 'manual.face', face }, []],
-      [{ type: 'manual.face', face }, []],
-    ]
-    const s = play(fresh(), [
-      ...tap(6),
-      [{ type: 'option', id: FORCE }, [1, 1]],
-      ...tap(6),
-      [{ type: 'option', id: FORCE }, [1, 1]],
-      // ...and a roll the app made in between moves nothing.
-      [{ type: 'option', id: FORCE }, [1, 1]],
-    ])
-    expect(s.overrides).toBe(2)
   })
 
   it('a third tap starts over; cancel clears', () => {
@@ -125,36 +217,16 @@ describe('manual dice', () => {
   })
 })
 
-describe('rest and treasure', () => {
-  it('a night’s rest heals 4 ENDURANCE, never past the initial value', () => {
-    const hurt = { ...fresh(), sheet: { ...fresh().sheet, endurance: 18 } }
-    const s = reduce(hurt, { type: 'option', id: 'option.the-5-treasures.2.rest' }, fromSequence([]))
-    expect(s.sheet.endurance).toBe(20)
-    expect(s.result).toEqual({ kind: 'rest', before: 18, after: 20 })
-  })
-
-  it('taking the vase holds it once and writes a deed', () => {
-    const s = play(fresh(), [
-      [{ type: 'option', id: GO_IN }, []],
-      [{ type: 'option', id: VASE }, []],
-      [{ type: 'option', id: VASE }, []],
-    ])
-    expect(s.held).toEqual(['vase-of-muttonfat-jade'])
-    expect(s.deeds).toEqual(['took the Vase of muttonfat jade'])
-  })
-})
-
 describe('the fight with the Dexterous Ghost', () => {
-  const atGhost = (): RecordState =>
-    play(fresh(), [
-      [{ type: 'option', id: GO_IN }, []],
-      [{ type: 'option', id: FIGHT }, []],
-    ])
+  const atGhost = (): RecordState => reduce(toGhost(), { type: 'cave.fight', foe: GHOST }, fromSequence([]))
 
   it('starts on the combat screen with the foe’s printed ENDURANCE', () => {
     const s = atGhost()
     expect(s.screen).toBe('combat')
-    expect(s.combat).toMatchObject({ foeId: 'foe.dexterous-ghost', foeEndurance: 8, round: 1 })
+    expect(s.combat).toMatchObject({ foeId: GHOST, foeEndurance: 8, round: 1 })
+    // A foe the Event did not bring cannot be fought.
+    const before = toGhost()
+    expect(reduce(before, { type: 'cave.fight', foe: 'foe.ogre' }, fromSequence([]))).toBe(before)
   })
 
   it('a won round shows both strengths and offers the difference (R23, R25)', () => {
@@ -191,14 +263,13 @@ describe('the fight with the Dexterous Ghost', () => {
     const left = reduce(m, { type: 'combat.leave' }, fromSequence([]))
     expect(left.screen).toBe('beat')
     expect(left.sheet.dishonor).toBe(0)
+    // The Ghost is not beaten, so it is not gone; but the encounter is over.
+    expect(left.cave.defeated).toEqual([])
+    expect(left.pending).toEqual([])
   })
 
   it('an Opening then doubles lands the Final Blow (R29, R30)', () => {
-    const s = play(atGhost(), [
-      [{ type: 'combat.round' }, [6, 5, 1, 1]],
-      [{ type: 'combat.opening' }, []],
-      [{ type: 'combat.blow' }, [3, 3]],
-    ])
+    const s = play(atGhost(), finish())
     expect(s.combat?.blow).toMatchObject({ landed: true })
     expect(s.combat?.foeEndurance).toBe(0)
     expect(s.combat?.over).toEqual({ ended: true, reason: 'final-blow' })
@@ -233,22 +304,28 @@ describe('the fight with the Dexterous Ghost', () => {
     expect(reduce(won, { type: 'combat.technique', id: 'technique.blue-dragon' }, fromSequence([]))).toBe(won)
   })
 
-  it('fleeing costs the last blow and a Dishonor Point (R38, R39)', () => {
+  it('fleeing costs the last blow and a Dishonor Point, and leaves the encounter behind (R38, R39)', () => {
     const s = reduce(atGhost(), { type: 'combat.leave' }, fromSequence([]))
     expect(s.screen).toBe('beat')
     expect(s.sheet.endurance).toBe(18)
     expect(s.sheet.dishonor).toBe(1)
     expect(s.deeds).toContain('fled dexterous ghost · dishonor +1')
+    expect(s.pending).toEqual([])
   })
 
-  it('the treasure roll is offered once after a victory (R78, I-30b)', () => {
-    const s = play(atGhost(), [
-      [{ type: 'combat.round' }, [6, 5, 1, 1]],
-      [{ type: 'combat.strike' }, []],
-      [{ type: 'combat.treasure' }, [3]],
-    ])
-    expect(s.result).toMatchObject({ kind: 'treasure', face: 3, band: 'Up to 16' })
-    expect(reduce(s, { type: 'combat.treasure' }, fromSequence([4]))).toBe(s)
+  it('a beaten named foe is gone from every table, and its LOOT line is read once (5T a2, I-33c)', () => {
+    const won = play(atGhost(), [...finish()])
+    const looted = reduce(won, { type: 'combat.loot' }, fromSequence([]))
+    expect(looted.result).toMatchObject({ kind: 'loot', foe: 'Dexterous Ghost', face: null, item: "private quarter's key", key: true, treasure: null })
+    expect(looted.cave.keys).toContain(KEY)
+    expect(looted.deeds).toContain("took the private quarter's key")
+    expect(reduce(looted, { type: 'combat.loot' }, fromSequence([]))).toBe(looted)
+    const back = reduce(looted, { type: 'combat.leave' }, fromSequence([]))
+    expect(back.screen).toBe('beat')
+    expect(back.cave.defeated).toEqual([GHOST])
+    expect(back.pending).toEqual([])
+    // The key opens the paper door.
+    expect(menuFor(back).find((o) => o.id === `go-${AREA.chieftain}`)?.enabled).toBe(true)
   })
 
   it('the Master down ends the world: leaving starts a new record', () => {
@@ -259,6 +336,95 @@ describe('the fight with the Dexterous Ghost', () => {
     const again = reduce(s, { type: 'combat.leave' }, randomSource(() => 0.5))
     expect(again.sheet.endurance).toBe(20)
     expect(again.deeds).toEqual([])
+    expect(again.cave.area).toBe(AREA.mountain)
+  })
+})
+
+describe('the Kitchen Monk (I-39) and the Chieftain’s sheets (I-38b)', () => {
+  const atKitchen = (): RecordState =>
+    play(fresh(), [...walk(AREA.entrance), ...walk(AREA.storage), ...walk(AREA.kitchen)])
+
+  it('freeing him is recorded and rewarded with his LOOT line', () => {
+    const s = reduce(atKitchen(), { type: 'cave.rescue' }, fromSequence([1]))
+    expect(s.cave.rescued).toEqual(['foe.monk'])
+    expect(s.result).toMatchObject({ kind: 'loot', foe: 'Monk', face: 1, item: 'rosary' })
+    expect(s.cave.items).toEqual(['rosary'])
+    expect(s.deeds).toEqual(['freed the Monk', 'took the rosary'])
+    expect(menuFor(s).some((o) => o.id === 'rescue')).toBe(false)
+    expect(reduce(s, { type: 'cave.rescue' }, fromSequence([1]))).toBe(s)
+  })
+
+  it('attacking him costs a Dishonor Point and starts the fight', () => {
+    const s = reduce(atKitchen(), { type: 'cave.attack' }, fromSequence([]))
+    expect(s.screen).toBe('combat')
+    expect(s.combat?.foeId).toBe('foe.monk')
+    expect(s.cave.dishonor).toBe(1)
+    expect(s.sheet.dishonor).toBe(1)
+  })
+
+  it('the sheets teach the gourd and the fan; once read, the row is gone', () => {
+    const inside = { ...fresh(), cave: { ...fresh().cave, area: AREA.chieftain } }
+    expect(menuFor(inside).some((o) => o.id === 'learn')).toBe(true)
+    const s = reduce(inside, { type: 'cave.learn' }, fromSequence([]))
+    expect([...s.cave.effects].sort()).toEqual([
+      'treasure.the-5-treasures.gold-and-red-gourd',
+      'treasure.the-5-treasures.plantain-fan',
+    ])
+    expect(s.result).toMatchObject({ kind: 'note', label: 'reading' })
+    expect(menuFor(s).some((o) => o.id === 'learn')).toBe(false)
+    expect(reduce(s, { type: 'cave.learn' }, fromSequence([]))).toBe(s)
+  })
+})
+
+describe('the cave, played to its ending on the reducer', () => {
+  it('walks the eight areas, takes all five treasures and reaches the ending', () => {
+    const KING = 'foe.junior-king-silver-horn'
+    const SENIOR = 'foe.senior-king-golden-horn'
+    const BEAST = 'foe.skillful-beast'
+    const VIXEN = 'foe.old-vixen'
+    const beat = (foe: string): readonly (readonly [Action, readonly Die[]])[] => [
+      [{ type: 'cave.fight', foe }, []],
+      ...finish(),
+      [{ type: 'combat.loot' }, []],
+      [{ type: 'combat.leave' }, []],
+    ]
+    const s = play(fresh(), [
+      // 1. Into the cave: Encounter, the Junior King; his sword drops once.
+      [{ type: 'cave.go', to: AREA.entrance }, [2, 5]],
+      [{ type: 'roll.close' }, []],
+      ...beat(KING),
+      // 2. The Storage room: safe; the gourd off the shelves.
+      ...walk(AREA.storage),
+      [{ type: 'cave.take', treasure: 'treasure.the-5-treasures.gold-and-red-gourd' }, []],
+      // 3. The Kitchen: safe; the Monk freed.
+      ...walk(AREA.kitchen),
+      [{ type: 'cave.rescue' }, [5]],
+      // 4. The Dining Hall: Encounter, 6, the Senior King; the fan.
+      [{ type: 'cave.go', to: AREA.hall }, [2, 6]],
+      [{ type: 'roll.close' }, []],
+      ...beat(SENIOR),
+      // 5. The Attendants room: Encounter, 1, the Skillful Beast; the key. The vase.
+      [{ type: 'cave.go', to: AREA.attendants }, [2, 1]],
+      [{ type: 'roll.close' }, []],
+      ...beat(BEAST),
+      [{ type: 'cave.take', treasure: VASE }, []],
+      // 6. The Chieftain quarter: Hint; the sheets.
+      [{ type: 'cave.go', to: AREA.chieftain }, [6]],
+      [{ type: 'roll.close' }, []],
+      [{ type: 'cave.learn' }, []],
+      // 7. The Women quarter: Encounter, fixed: the Old Vixen; the Cord.
+      [{ type: 'cave.go', to: AREA.women }, [2]],
+      [{ type: 'roll.close' }, []],
+      ...beat(VIXEN),
+    ])
+    expect(s.cave.treasures).toHaveLength(5)
+    expect(s.cave.defeated).toEqual([KING, SENIOR, BEAST, VIXEN])
+    expect(s.cave.rescued).toEqual(['foe.monk'])
+    expect(s.cave.items).toContain('elixir')
+    expect(s.screen).toBe('beat')
+    expect(menuFor(s).some((o) => o.action.kind === 'leave')).toBe(true)
+    // Sword, gourd, the Monk's elixir, fan, key, vase, cord.
+    expect(s.deeds.filter((d) => d.startsWith('took the'))).toHaveLength(7)
   })
 })
 
@@ -293,9 +459,9 @@ describe('the rest of the record', () => {
     const s = fresh()
     const frozen = JSON.stringify(s)
     play(s, [
-      [{ type: 'option', id: FORCE }, [1, 1]],
-      [{ type: 'option', id: GO_IN }, []],
-      [{ type: 'option', id: FIGHT }, []],
+      [{ type: 'cave.go', to: AREA.entrance }, [2, 5]],
+      [{ type: 'roll.close' }, []],
+      [{ type: 'cave.fight', foe: 'foe.junior-king-silver-horn' }, []],
       [{ type: 'combat.round' }, [6, 5, 1, 1]],
     ])
     expect(JSON.stringify(s)).toBe(frozen)

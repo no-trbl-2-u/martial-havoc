@@ -16,9 +16,11 @@ type Props = {
   readonly manual: readonly Die[]
   readonly onFace: (face: Die) => void
   readonly onCancel?: () => void
+  /** How many faces the roll reads: two for 2d6, one for the Event's d6. */
+  readonly need?: 1 | 2
 }
 
-export const ManualDice = ({ manual, onFace, onCancel }: Props) => (
+export const ManualDice = ({ manual, onFace, onCancel, need = 2 }: Props) => (
   <Slip borderColor={color.vermilion} style={styles.slip} testID="manual-dice">
     <Text style={styles.heading}>{t('ui.manual.heading')}</Text>
     <View style={styles.faces}>
@@ -41,7 +43,9 @@ export const ManualDice = ({ manual, onFace, onCancel }: Props) => (
       <Text style={styles.status}>
         {manual.length === 2
           ? fill(t('ui.manual.ready'), { a: manual[0] ?? '', b: manual[1] ?? '' })
-          : t('ui.manual.prompt')}
+          : manual.length === 1 && need === 1
+            ? fill(t('ui.manual.ready.one'), { a: manual[0] ?? '' })
+            : t(need === 1 ? 'ui.manual.prompt.one' : 'ui.manual.prompt')}
       </Text>
       {onCancel === undefined ? null : <Button text={t('ui.manual.cancel')} small onPress={onCancel} />}
     </View>

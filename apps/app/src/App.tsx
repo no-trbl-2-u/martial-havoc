@@ -9,7 +9,7 @@
  */
 import { useMemo } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { beatForArea, t } from '@martial-havoc/content'
+import { t, theFiveTreasuresAreaById } from '@martial-havoc/content'
 import { parseDiceQuery, queued, randomSource } from './dice/random'
 import { useRecord } from './hooks/useRecord'
 import { fill } from './lib/fill'
@@ -45,8 +45,8 @@ const placeLine = (state: RecordState): string => {
     case 'about':
       return t('ui.about.place')
     case 'beat': {
-      const beat = beatForArea(state.area)
-      return fill(t('ui.beat.place'), { area: state.area, name: (beat?.name ?? '').toUpperCase() })
+      const area = theFiveTreasuresAreaById(state.cave.area)
+      return fill(t('ui.beat.place'), { area: area?.area ?? '', name: (area?.name ?? '').toUpperCase() })
     }
   }
 }
@@ -75,7 +75,7 @@ export const App = () => {
         <View style={styles.page}>
           <Header place={placeLine(state)} screen={state.screen} onNav={(screen) => dispatch({ type: 'nav', screen })} />
           <View style={styles.strip}>
-            <AttributeStrip sheet={state.sheet} />
+            <AttributeStrip sheet={state.sheet} blank={state.creation !== null} />
           </View>
           {state.screen === 'creation' ? <CreationScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'village' ? <VillageScreen state={state} dispatch={dispatch} /> : null}

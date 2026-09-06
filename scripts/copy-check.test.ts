@@ -12,7 +12,8 @@
  * Three shapes of hardcoded copy are caught:
  *
  *   1. JSX text nodes - `<Text>Roll again</Text>`;
- *   2. string props that render - `label="SKL"`, `placeholder="Name"`;
+ *   2. string props that render - `label="SKL"`, `placeholder="Name"`
+ *      (a single lowercase token is a key, not copy, and is skipped);
  *   3. string or template literals of three or more words - the
  *      sentence hidden in a helper, `Overspent by ${n} (R10).`
  *
@@ -95,9 +96,18 @@ const jsxTextNodes = (text: string): readonly Omit<Finding, 'file'>[] =>
     .filter((m) => looksLikeCopy(m[1] ?? ''))
     .map((m) => ({ line: lineOf(text, m.index ?? 0), shape: 'jsx-text', text: (m[1] ?? '').trim() }))
 
+/**
+ * A prop value that is a key, not copy: one lowercase identifier-like
+ * token (`label="invention"` picks the Pill's look and its content
+ * string by id). Copy is never a single lowercase token; `SKL` and
+ * `Roll again` both fail this test and are caught.
+ */
+const isKeyToken = (s: string): boolean => /^[a-z][a-z0-9-]*$/.test(s)
+
 /** Rendered props given a string literal: `label="SKL"`. */
 const renderedProps = (text: string): readonly Omit<Finding, 'file'>[] =>
   [...text.matchAll(new RegExp(`\\b(${RENDERED_PROPS.join('|')})=(["'])([^"'\\n]*[A-Za-z][^"'\\n]*)\\2`, 'g'))]
+    .filter((m) => !isKeyToken(m[3] ?? ''))
     .map((m) => ({ line: lineOf(text, m.index ?? 0), shape: `prop:${m[1] ?? ''}`, text: m[3] ?? '' }))
 
 /** String and template literals that read as a sentence. */

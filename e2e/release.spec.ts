@@ -84,7 +84,7 @@ test('About credits every author, carries the licence, and counts what shipped',
     /^\d+ engine behaviours, every one labelled and cited$/,
   )
   await button(page, 'BACK TO PLAY').click()
-  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
+  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
 })
 
 test('About never scrolls sideways at 375px', async ({ page }) => {
@@ -107,16 +107,16 @@ test('the app opens on a reload with no network', async ({ page, context }) => {
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null, undefined, {
     timeout: 15_000,
   })
-  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
+  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
 
   await context.setOffline(true)
   await page.reload()
   // The whole app, from cache, and the campaign with it: the frame, the
   // Master already made, and the menu the rules allow.
   await expect(page.getByText('THE 5 TREASURES')).toBeVisible()
-  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
+  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
   await expect(page.getByTestId('attr-skill')).toHaveText('8')
-  await expect(button(page, /FORCE THE SHUT GATE/)).toBeVisible()
+  await expect(button(page, /TO THE CAVE ENTRANCE/)).toBeVisible()
 
   await context.setOffline(false)
 })
