@@ -1,7 +1,7 @@
 /**
  * The header slip: the adventure, where the Master is, and the panels.
  *
- * Four destinations at 390px is more than one row of buttons holds, so
+ * Five destinations at 390px is more than one row of buttons holds, so
  * the nav wraps. Each is a toggle back to the beat, which keeps the
  * whole app one tap from play — there is no back stack to get lost in
  * because there is no router (phase 8 brief, decision 3).
@@ -38,6 +38,11 @@ export const Header = ({ place, screen, onNav }: Props) => (
         onPress={() => onNav(screen === 'village' ? 'beat' : 'village')}
       />
       <Button small text={t('ui.nav.map')} onPress={() => onNav(screen === 'region' ? 'beat' : 'region')} />
+      <Button
+        small
+        text={t('ui.nav.about')}
+        onPress={() => onNav(screen === 'about' ? 'beat' : 'about')}
+      />
     </View>
   </View>
 )

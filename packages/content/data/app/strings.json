@@ -1141,6 +1141,66 @@
       "id": "ui.record.import.no-path",
       "text": "No way to migrate a version {version} file.",
       "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.nav.about",
+      "text": "ABOUT",
+      "cite": "spec.md, Routine calls (Licence)"
+    },
+    {
+      "id": "ui.about.place",
+      "text": "CREDITS AND LICENCE",
+      "cite": "spec.md, Routine calls (Licence)"
+    },
+    {
+      "id": "ui.about.what",
+      "text": "WHAT THIS IS",
+      "cite": "spec.md, Horizon"
+    },
+    {
+      "id": "ui.about.whose",
+      "text": "WHOSE IT IS",
+      "cite": "spec.md, Routine calls (Licence)"
+    },
+    {
+      "id": "ui.about.rules-by",
+      "text": "The rules are Gianluca Monaco's.",
+      "cite": "MH_Full_Itchio.pdf, cover"
+    },
+    {
+      "id": "ui.about.shipped",
+      "text": "WHAT SHIPPED",
+      "cite": "spec.md, Routine calls"
+    },
+    {
+      "id": "ui.about.records",
+      "text": "{records} records in {files} files",
+      "cite": "spec.md, Routine calls"
+    },
+    {
+      "id": "ui.about.authored",
+      "text": "{n} carry a line authored for this build",
+      "cite": "plan/phases/phase_4_effects_and_oracle_lines.md"
+    },
+    {
+      "id": "ui.about.behaviours",
+      "text": "{n} engine behaviours, every one labelled and cited",
+      "cite": "agents.md, standing rule 6"
+    },
+    {
+      "id": "ui.about.offline",
+      "text": "OFFLINE, AND YOURS",
+      "cite": "spec.md, Refusals"
+    },
+    {
+      "id": "ui.about.offline.line",
+      "text": "No account, no server, no network needed once this page has loaded. The campaign is on this device, and the export is the backup.",
+      "cite": "spec.md, Refusals"
+    },
+    {
+      "id": "ui.about.footer",
+      "text": "Built by an autonomous loop, one phase at a time",
+      "cite": "agents.md"
     }
   ]
 }

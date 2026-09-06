@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--
+      viewport-fit=cover: the frame is drawn edge to edge, so a notched
+      phone must not letterbox it (phase 9 brief, Metadata).
+    -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+    />
+
+    <title>Martial Havoc</title>
+    <!-- app.tagline, verbatim (packages/content/data/app/strings.json). -->
+    <meta
+      name="description"
+      content="A rules engine for a rule-light d6 solo wuxia RPG. The sandbox is the real game; adventures are scenes in it."
+    />
+
+    <!-- The install: theme.color.ink and theme.color.paper from apps/app/src/theme/tokens.ts. -->
+    <meta name="theme-color" content="#16110C" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Martial Havoc" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!--
+      The `react-native-web` recommended reset, copied from the template
+      Expo supplies when a project has no public/index.html of its own:
+      https://necolas.github.io/react-native-web/docs/setup/#root-element
+
+      This file replaces that template, so the reset has to travel with
+      it. Without these three rules the frame loses its full height and
+      the page scrolls behind the fixed sheet — on the export only, which
+      is exactly the kind of break a unit test cannot see.
+    -->
+    <style id="expo-reset">
+      /* These styles make the body full-height */
+      html,
+      body {
+        height: 100%;
+      }
+      /* These styles disable body scrolling if you are using <ScrollView> */
+      body {
+        overflow: hidden;
+      }
+      /* These styles make the root element full-height */
+      #root {
+        display: flex;
+        height: 100%;
+        flex: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <noscript>
+      Martial Havoc is a dice engine that runs in your browser. It needs
+      JavaScript, and it needs nothing else: no account, no network, no
+      server.
+    </noscript>
+    <div id="root"></div>
+  </body>
+</html>

@@ -20,6 +20,7 @@
     "deploy": "node scripts/deploy.mjs",
     "deploy:version": "node scripts/deploy.mjs --upload-only",
     "deploy:check": "node scripts/deploy-check.mjs",
+    "counts": "node scripts/counts.mjs",
     "serve:web": "node scripts/serve-static.mjs apps/app/dist 4173",
     "pulse": "node scripts/pulse.mjs",
     "screenshots": "playwright test --config playwright.screenshots.config.ts"

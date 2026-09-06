@@ -30,6 +30,7 @@ export type Screen =
   | 'region'
   | 'village'
   | 'record'
+  | 'about'
 
 /**
  * Where creation has got to, in the book's own order (R02-R19).

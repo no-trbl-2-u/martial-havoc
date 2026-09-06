@@ -196,15 +196,15 @@ Closes #<phase-issue>
 
 ## DoD
 
-- [ ] The About screen names every credited author and the licence, and
+- [x] The About screen names every credited author and the licence, and
       shows the content and behaviour counts read at runtime.
-- [ ] The export's HTML carries the title, the description, the theme
+- [x] The export's HTML carries the title, the description, the theme
       colour and the manifest link; the manifest and the icon ship.
-- [ ] A Playwright run goes offline, reloads, and the app still opens.
-- [ ] `npm run counts` prints the content counts.
-- [ ] `plan/RELEASE.md` exists and every agent-checkable line is ticked,
+- [x] A Playwright run goes offline, reloads, and the app still opens.
+- [x] `npm run counts` prints the content counts.
+- [x] `plan/RELEASE.md` exists and every agent-checkable line is ticked,
       with the operator's install named as the one line that is not.
-- [ ] `npm run verify` green; committed and pushed to `main`; deploy
+- [x] `npm run verify` green; committed and pushed to `main`; deploy
       confirmed by `npm run deploy:check`.
 
 ## Follow-ups (out of scope)
