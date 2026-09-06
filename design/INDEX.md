@@ -6,6 +6,7 @@ Step 3 reads this file first.
 | File | What it is | Provenance |
 |---|---|---|
 | `V1-DESIGN-PROMPT.md` | The prompt handed to claude.ai/design: five design-system options, three screens each | Written 2026-09-05 from `spec.md` and `plan/bearings.md` |
+| `screenshots/*.png` | The playthrough: sixteen 390 x 844 frames at 2x, one per screen and state, on named dice. The visual baseline Phase 8 starts from. Regenerate with `npm run build:web && npm run screenshots` (`e2e/screenshots/playthrough.spec.ts`; not a verify leg, since fonts differ per machine) | Generated 2026-09-06 from commit d17d46e and after |
 | `prototype/martial-havoc-prototype.dc.html` | The operator's chosen prototype: the woodblock direction (option 4 of the prompt) as one working phone frame with four screens - the beat, combat, the rules panel, the region | Exported 2026-09-06 from Claude Design project `20b14fd3-4e84-4d7b-a540-40f5ff6b2b43`, file `Martial Havoc Prototype.dc.html`. The `support.js` it loads is Claude Design's generated runtime and is not kept here. |
 
 ## What the prototype decided

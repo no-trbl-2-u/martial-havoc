@@ -11,6 +11,7 @@ import { linksFrom, otherEnd } from '@martial-havoc/engine'
 import type { RegionPoint } from '@martial-havoc/engine'
 import { regionColumn, rollRouteType, t } from '@martial-havoc/content'
 import { fill } from '../lib/fill'
+import { spread } from '../lib/spread'
 import type { Action, RecordState } from '../state/types'
 import { color, font } from '../theme/tokens'
 import { Button } from '../components/Button'
@@ -24,14 +25,15 @@ const H = 382
 /** A d66 coordinate (11-66) onto the drawing, with a margin for the glyph and its label. */
 const sx = (x: number): number => 30 + ((x - 11) / 55) * (W - 60)
 const sy = (y: number): number => 40 + ((y - 11) / 55) * (H - 70)
+/** Glyph plus label need this much room; positions are decorative, so crowded points are spread. */
+const MIN_APART = 58
+const BOX = { minX: 30, maxX: W - 30, minY: 40, maxY: H - 30 }
 
 const locations = regionColumn('Location')
 const locationName = (face: number): string => locations.find((c) => c.face === face)?.text.toUpperCase() ?? ''
 
 /** A glyph per point: the Location face picks the shape, so no two kinds look alike without colour. */
-const Glyph = ({ p, here }: { p: RegionPoint; here: boolean }) => {
-  const x = sx(p.x)
-  const y = sy(p.y)
+const Glyph = ({ p, here, x, y }: { p: RegionPoint; here: boolean; x: number; y: number }) => {
   const fillColor = here ? color.vermilion : color.ochre
   if (p.locationFace <= 2) return <Rect x={x - 12} y={y - 12} width={24} height={24} fill={fillColor} stroke={color.ink} strokeWidth={3} />
   if (p.locationFace <= 4) return <Circle cx={x} cy={y} r={13} fill={fillColor} stroke={color.ink} strokeWidth={3} />
@@ -42,6 +44,9 @@ export const RegionScreen = ({ state, dispatch }: Props) => {
   const { region, here } = state
   const at = region.points.find((p) => p.id === here) ?? region.points[0]
   const reach = at === undefined ? [] : linksFrom(region, at.id)
+  /** Where each point is drawn: the dice's position, spread for legibility. */
+  const drawn = spread(region.points.map((p) => ({ x: sx(p.x), y: sy(p.y) })), MIN_APART, BOX)
+  const at2 = (id: number) => drawn[id] ?? { x: 0, y: 0 }
   return (
     <View style={styles.screen}>
       <Slip style={styles.head}>
@@ -62,7 +67,7 @@ export const RegionScreen = ({ state, dispatch }: Props) => {
               const a = region.points[l.a]
               const b = region.points[l.b]
               if (a === undefined || b === undefined) return null
-              return <Path key={`${l.a}-${l.b}`} d={`M${sx(a.x)} ${sy(a.y)} L${sx(b.x)} ${sy(b.y)}`} strokeDasharray={l.joined ? '6 5' : undefined} />
+              return <Path key={`${l.a}-${l.b}`} d={`M${at2(a.id).x} ${at2(a.id).y} L${at2(b.id).x} ${at2(b.id).y}`} strokeDasharray={l.joined ? '6 5' : undefined} />
             })}
           </G>
           <G fontFamily="-apple-system, Arial, sans-serif" fontSize={11} fontWeight="800" fill={color.ink}>
@@ -70,8 +75,8 @@ export const RegionScreen = ({ state, dispatch }: Props) => {
               const a = region.points[l.a]
               const b = region.points[l.b]
               if (a === undefined || b === undefined) return null
-              const mx = (sx(a.x) + sx(b.x)) / 2
-              const my = (sy(a.y) + sy(b.y)) / 2
+              const mx = (at2(a.id).x + at2(b.id).x) / 2
+              const my = (at2(a.id).y + at2(b.id).y) / 2
               const label = fill(t('ui.region.miles'), { n: l.miles })
               return (
                 <G key={`m-${l.a}-${l.b}`}>
@@ -81,10 +86,10 @@ export const RegionScreen = ({ state, dispatch }: Props) => {
               )
             })}
           </G>
-          <G>{region.points.map((p) => <Glyph key={p.id} p={p} here={p.id === at?.id} />)}</G>
+          <G>{region.points.map((p) => <Glyph key={p.id} p={p} here={p.id === at?.id} x={at2(p.id).x} y={at2(p.id).y} />)}</G>
           <G fontFamily="-apple-system, Arial, sans-serif" fontSize={12} fontWeight="800" fill={color.ink}>
             {region.points.map((p) => (
-              <SvgText key={`t-${p.id}`} x={sx(p.x)} y={sy(p.y) - 20} textAnchor="middle">
+              <SvgText key={`t-${p.id}`} x={at2(p.id).x} y={at2(p.id).y - 20} textAnchor="middle">
                 {p.id === at?.id ? t('ui.region.you') : locationName(p.locationFace)}
               </SvgText>
             ))}
