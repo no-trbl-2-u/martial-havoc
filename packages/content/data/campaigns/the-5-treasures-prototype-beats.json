@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "$comment": "The prototype slice of the cave: the three areas the design prototype walks (design/prototype/martial-havoc-prototype.dc.html). Area names are the adventure's titles, verbatim; the lines are ours. Phase 5 replaces this file with the adventure format and all eight areas.",
+  "id": "campaigns.the-5-treasures-prototype-beats",
+  "kind": "list",
+  "title": "The 5 Treasures: prototype beats",
+  "cite": "5T a1",
+  "label": "invention",
+  "docs": "docs/campaigns/the-5-treasures/areas.md",
+  "records": [
+    { "id": "beat.the-5-treasures.2", "cite": "5T a1; design/prototype/martial-havoc-prototype.dc.html", "area": 2, "name": "Cave entrance", "line": "A gate shut under a willow, and three red characters nobody painted for you. The stream goes in and stops talking." },
+    { "id": "beat.the-5-treasures.3", "cite": "5T a1; design/prototype/martial-havoc-prototype.dc.html", "area": 3, "name": "Attendants room", "line": "Tea things behind glass, a vase on a pedestal, and a locked door that somebody here is paid to stand beside." },
+    { "id": "beat.the-5-treasures.4", "cite": "5T a1; design/prototype/martial-havoc-prototype.dc.html", "area": 4, "name": "Dining Hall", "line": "Two stone thrones and one long table. The torches give up before they reach the ceiling, and the servants never look up." }
+  ]
+}

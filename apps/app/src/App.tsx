@@ -1,42 +1,79 @@
 /**
- * The garden's placeholder screen.
+ * The frame: a binding down the left, the header and the attribute
+ * strip, and one of four screens under them. The Phase 1 garden page
+ * this replaces was a placeholder; this is the design prototype
+ * (design/prototype) built on the real engine and the real content.
  *
- * Phase 1 ships exactly one screen: the project name and the licence
- * line, both read from `@martial-havoc/content` (no copy lives in a
- * component — agents.md rule 7). Phase 8 (The UI) replaces this screen;
- * it is not the app's shell and must not grow one.
- *
- * Phase 2 shipped the tables and the creation engine behind it and
- * deliberately left the screen alone: the build plan gives the UI to
- * Phase 8, which is also where a random dice source is injected.
+ * Dice: the table's random d6, with any `?dice=` faces served first so
+ * a browser test can name its rolls. The source is made once.
  */
-import { t } from '@martial-havoc/content'
-import { StyleSheet, Text, View } from 'react-native'
+import { useMemo } from 'react'
+import { StyleSheet, View } from 'react-native'
+import { beatForArea, t } from '@martial-havoc/content'
+import { parseDiceQuery, queued, randomSource } from './dice/random'
+import { useRecord } from './hooks/useRecord'
+import { fill } from './lib/fill'
+import type { RecordState } from './state/types'
+import { color, frameWidth } from './theme/tokens'
+import { AttributeStrip } from './components/AttributeStrip'
+import { Binding } from './components/Binding'
+import { Header } from './components/Header'
+import { BeatScreen } from './screens/BeatScreen'
+import { CombatScreen } from './screens/CombatScreen'
+import { RegionScreen } from './screens/RegionScreen'
+import { RulesScreen } from './screens/RulesScreen'
 
-/** Root component; a pure function of the content package. */
-export const App = () => (
-  <View style={styles.root} testID="garden">
-    <Text style={styles.title} accessibilityRole="header">
-      {t('app.title')}
-    </Text>
-    <Text style={styles.tagline}>{t('app.tagline')}</Text>
-    <Text style={styles.note}>{t('app.garden')}</Text>
-    <Text style={styles.licence}>{t('app.licence')}</Text>
-  </View>
-)
+/** The header's second line, per screen. */
+const placeLine = (state: RecordState): string => {
+  switch (state.screen) {
+    case 'combat':
+      return fill(t('ui.combat.place'), { n: state.combat?.round ?? 1 })
+    case 'rules':
+      return t('ui.rules.place')
+    case 'region':
+      return t('ui.region.place')
+    case 'beat': {
+      const beat = beatForArea(state.area)
+      return fill(t('ui.beat.place'), { area: state.area, name: (beat?.name ?? '').toUpperCase() })
+    }
+  }
+}
+
+const search = (): string => {
+  try {
+    return (globalThis as { location?: { search?: string } }).location?.search ?? ''
+  } catch {
+    return ''
+  }
+}
+
+/** Root component. */
+export const App = () => {
+  const table = useMemo(() => randomSource(), [])
+  const dice = useMemo(() => queued(parseDiceQuery(search()), table), [table])
+  const [state, dispatch] = useRecord(dice, table)
+  return (
+    <View style={styles.root}>
+      <View style={styles.frame} testID="frame">
+        <Binding />
+        <View style={styles.page}>
+          <Header place={placeLine(state)} screen={state.screen} onNav={(screen) => dispatch({ type: 'nav', screen })} />
+          <View style={styles.strip}>
+            <AttributeStrip sheet={state.sheet} />
+          </View>
+          {state.screen === 'beat' ? <BeatScreen state={state} dispatch={dispatch} /> : null}
+          {state.screen === 'combat' ? <CombatScreen state={state} dispatch={dispatch} /> : null}
+          {state.screen === 'rules' ? <RulesScreen state={state} dispatch={dispatch} /> : null}
+          {state.screen === 'region' ? <RegionScreen state={state} dispatch={dispatch} /> : null}
+        </View>
+      </View>
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    padding: 24,
-    justifyContent: 'center',
-    gap: 16,
-    maxWidth: 480,
-    width: '100%',
-    alignSelf: 'center',
-  },
-  title: { fontSize: 32, fontWeight: '700' },
-  tagline: { fontSize: 16, lineHeight: 24 },
-  note: { fontSize: 14, fontStyle: 'italic' },
-  licence: { fontSize: 12, lineHeight: 18, opacity: 0.7 },
+  root: { flex: 1, backgroundColor: color.frame, alignItems: 'center' },
+  frame: { flex: 1, width: '100%', maxWidth: frameWidth, flexDirection: 'row', backgroundColor: color.ochre, borderColor: color.ink, borderLeftWidth: 1, borderRightWidth: 1 },
+  page: { flex: 1 },
+  strip: { marginHorizontal: 14 },
 })

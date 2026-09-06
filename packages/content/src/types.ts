@@ -308,3 +308,49 @@ export type D66Text = BaseRecord & {
   readonly d66: number
   readonly text: string
 }
+
+// ------------------------------------------------------------- prototype
+
+/** One area as the beat screen shows it (5T a1; the line is ours). */
+export type Beat = BaseRecord & {
+  readonly area: number
+  /** The area's printed title, verbatim. */
+  readonly name: string
+  /** The authored line read when the Master stands here. */
+  readonly line: string
+}
+
+/** The engine action a beat menu entry performs. */
+export type MenuAction =
+  | 'skill-check'
+  | 'luck-check'
+  | 'rest'
+  | 'go'
+  | 'fight'
+  | 'take'
+  | 'leave-cave'
+
+/** One entry of the beat menu: what the rules allow here, and its line. */
+export type MenuOption = BaseRecord & {
+  readonly area: number
+  readonly title: string
+  /** The short mechanical note beside the title (SKILL CHECK, +4 END, AREA 3). */
+  readonly note: string
+  readonly line: string
+  readonly action: MenuAction
+  /** An area number for `go`, a foe id for `fight`, a treasure key for `take`. */
+  readonly target?: string
+  /** For `skill-check`: the one Proficiency that adds to the threshold (R20). */
+  readonly proficiency?: string
+}
+
+/** The rules panel's note on one engine behaviour, keyed by `ref`. */
+export type BehaviourNote = BaseRecord & {
+  /** The behaviour id in the engine registry. */
+  readonly ref: string
+  readonly text: string
+  readonly says?: string
+  readonly silent?: string
+  readonly source?: string
+  readonly reversed?: string
+}

@@ -109,6 +109,10 @@ export type { BlowInput, TreasureBand } from './progression/spoils'
 export { ambush, enemyAttack } from './progression/oracle'
 export type { Ambush, EnemyAttack } from './progression/oracle'
 
+// The region: dice thrown on a plane, linked and measured (MH p.42-44).
+export { linksFrom, otherEnd, throwRegion } from './region/region'
+export type { Region, RegionLink, RegionPoint } from './region/region'
+
 import type { Behaviour } from './labels'
 import { diceBehaviours } from './dice/behaviours'
 import { creationBehaviours } from './creation/behaviours'
@@ -118,6 +122,7 @@ import { multipleBehaviours } from './multiple/behaviours'
 import { escapeBehaviours } from './escape/behaviours'
 import { healingBehaviours } from './healing/behaviours'
 import { progressionBehaviours } from './progression/behaviours'
+import { regionBehaviours } from './region/behaviours'
 
 /**
  * The registry of every behaviour the engine exports.
@@ -137,4 +142,5 @@ export const behaviours: readonly Behaviour[] = Object.freeze([
   ...escapeBehaviours,
   ...healingBehaviours,
   ...progressionBehaviours,
+  ...regionBehaviours,
 ])

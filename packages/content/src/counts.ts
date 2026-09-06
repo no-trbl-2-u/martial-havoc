@@ -40,7 +40,11 @@ import encounters from '../data/rules/encounters.json'
 import treasures from '../data/rules/treasures.json'
 import specialItems from '../data/rules/special-items.json'
 import adventureHooks from '../data/campaigns/adventure-hooks.json'
+import treasureFoes from '../data/campaigns/the-5-treasures-foes.json'
+import prototypeBeats from '../data/campaigns/the-5-treasures-prototype-beats.json'
+import prototypeOptions from '../data/campaigns/the-5-treasures-prototype-options.json'
 import strings from '../data/app/strings.json'
+import behaviourNotes from '../data/app/behaviour-notes.json'
 
 /** The minimum every content file exposes for counting. */
 type CountedFile = {
@@ -78,7 +82,11 @@ const registry: readonly CountedFile[] = Object.freeze([
   treasures,
   specialItems,
   adventureHooks,
+  treasureFoes,
+  prototypeBeats,
+  prototypeOptions,
   strings,
+  behaviourNotes,
 ])
 
 /** The files whose every record carries a line authored for this build. */

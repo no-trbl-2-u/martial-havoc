@@ -37,6 +37,8 @@ export { contentCounts } from './counts'
 export type { ContentCounts } from './counts'
 
 import strings from '../data/app/strings.json'
+import notesFile from '../data/app/behaviour-notes.json'
+import type { BehaviourNote } from './types'
 
 /** One UI string record: what it says and where it comes from. */
 export type StringRecord = {
@@ -62,3 +64,16 @@ export const stringById =
 
 /** {@link stringById} bound to the shipped app strings. */
 export const t = stringById(appStrings)
+
+/**
+ * The rules panel's notes, one per engine behaviour (`ref` is the id in
+ * the engine's registry). `scripts/labels-check.test.ts` holds the two
+ * lists in step; this package cannot import the engine to check it here.
+ */
+export const behaviourNotes: readonly BehaviourNote[] = Object.freeze(
+  notesFile.records as readonly BehaviourNote[],
+)
+
+/** The note for one behaviour id, or undefined for one that has none. */
+export const behaviourNoteFor = (ref: string): BehaviourNote | undefined =>
+  behaviourNotes.find((n) => n.ref === ref)
