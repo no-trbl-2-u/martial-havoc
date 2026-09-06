@@ -28,73 +28,100 @@ const begin = async (page: Page) => {
   await expect(page.getByTestId('beat')).toBeVisible()
 }
 
-test('the beat opens at the cave entrance with the Master in reach', async ({ page }) => {
+/** One move: tap the exit, let the card land, CONTINUE. */
+const go = async (page: Page, name: RegExp) => {
+  await button(page, name).click()
+  await page.getByTestId('roll-card-continue').click()
+  await expect(page.getByTestId('roll-card')).toHaveCount(0)
+}
+
+/**
+ * From the mountain to the Attendants room and the Dexterous Ghost, on
+ * named dice: Event 4 (safe) into the entrance, 4 into the Dining Hall,
+ * then Event 2 (Encounter) and creature 3 (the Ghost) into the
+ * Attendants room. Spends `4,4,2,3` of the queue.
+ */
+const toGhost = async (page: Page) => {
+  await go(page, /TO THE CAVE ENTRANCE/)
+  await go(page, /TO THE DINING HALL/)
+  await go(page, /TO THE ATTENDANTS ROOM/)
+  await expect(page.getByTestId('place')).toHaveText('AREA 3 OF 8 · ATTENDANTS ROOM')
+  await button(page, /FACE THE DEXTEROUS GHOST/).click()
+}
+
+test('the beat opens on the Flat-top mountain, the book’s text word for word', async ({ page }) => {
   await page.goto('/')
   await begin(page)
   await expect(page.getByText('THE 5 TREASURES')).toBeVisible()
-  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
+  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
   await expect(page.getByTestId('attr-skill')).toHaveText('8')
   await expect(page.getByTestId('attr-endurance')).toHaveText('20')
   await expect(page.getByTestId('attr-luck')).toHaveText('9')
-  await expect(page.getByTestId('authored-line')).not.toBeEmpty()
-  await expect(button(page, /FORCE THE SHUT GATE/)).toBeVisible()
-  await expect(button(page, /REST BY THE STREAM/)).toBeVisible()
+  // The printed description, the printed Encounters line; the Hint hidden (I-60).
+  await expect(page.getByTestId('authored-line')).toHaveText(
+    'A wild and vast territory covered with pines and willow trees, deep valleys and steep rocks, difficult paths for horses. In the distance an axe at work and the animals running on craggy ridges.',
+  )
+  await expect(page.getByTestId('encounters-line')).toHaveText('Encounters: 1-3 Woodgatherer; 4-5 Ogre; 6 Junior King')
+  await expect(page.getByTestId('hint')).toHaveCount(0)
+  await expect(button(page, /TO THE CAVE ENTRANCE/)).toBeVisible()
+  await expect(button(page, /REST HERE/)).toBeVisible()
+  await expect(button(page, /LEAVE FOR THE REGION/)).toBeVisible()
   await expect(page.getByPlaceholder("Write it down, or don't.")).toBeVisible()
   await expect(page.getByText('OPTIONAL')).toBeVisible()
   await expect(page.getByText('OVERRIDES 0')).toBeVisible()
-  await expect(button(page, 'ROLL 2d6')).toBeVisible()
   await expect(button(page, 'MY DICE')).toBeVisible()
+  await expect(button(page, 'ROLL 2d6')).toHaveCount(0)
 })
 
-test('a check rolls at once onto the card: the reason, both dice, the total, the pill, the citation, the plate', async ({ page }) => {
-  await page.goto('/?dice=4,6')
+test('an exit rolls the Event table onto the card: the reason, the die, the printed row, the pill, the citation, the plate', async ({ page }) => {
+  await page.goto('/?dice=4')
   await begin(page)
-  await button(page, /FORCE THE SHUT GATE/).click()
+  await button(page, /TO THE CAVE ENTRANCE/).click()
   const card = page.getByTestId('roll-card')
   await expect(card).toBeVisible()
-  await expect(page.getByTestId('roll-card-title')).toHaveText('FORCE THE SHUT GATE')
-  await expect(card.getByText(/SKILL CHECK · STAMINA · against SKILL 8 \+2 \(STAMINA\)/)).toBeVisible()
-  // The dice tumble, then land on the faces the engine rolled.
-  await expect(page.getByText('SKILL CHECK · PASSED')).toBeVisible()
+  await expect(page.getByTestId('roll-card-title')).toHaveText('TO THE CAVE ENTRANCE')
+  await expect(card.getByText(/EVENT TABLE · 1d6/)).toBeVisible()
+  // The die tumbles, then lands on the face the engine rolled: 4, Safe exploration.
+  await expect(page.getByText('EVENT · SAFE EXPLORATION')).toBeVisible()
   await expect(page.getByTestId('die-card-a')).toHaveAttribute('aria-label', '4')
-  await expect(page.getByTestId('die-card-b')).toHaveAttribute('aria-label', '6')
-  await expect(page.getByTestId('roll-card-total')).toHaveText('10')
+  await expect(page.getByTestId('die-card-b')).toHaveCount(0)
+  await expect(page.getByTestId('roll-card-total')).toHaveText('Safe exploration')
   await expect(page.getByTestId('pill-rule')).toBeVisible()
-  await expect(card.getByText(/MH p\.22 \(R20\) · equal or under passes · 10 <= 10/)).toBeVisible()
-  await expect(page.getByTestId('plate-skill')).toBeVisible()
-  // CONTINUE closes the card; the result slip carries the same on the sheet.
+  await expect(card.getByText(/5T a1 · Event table, roll every time you enter an area/)).toBeVisible()
+  await expect(page.getByTestId('plate-event')).toBeVisible()
+  // CONTINUE closes the card; the result slip carries the same on the sheet, in the new area.
   await page.getByTestId('roll-card-continue').click()
   await expect(card).toHaveCount(0)
-  await expect(page.getByText('SKILL CHECK · PASSED')).toBeVisible()
+  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
+  await expect(page.getByText('EVENT · SAFE EXPLORATION')).toBeVisible()
   await expect(page.getByTestId('die-result-a')).toHaveAttribute('aria-label', '4')
-  await expect(page.getByTestId('die-result-b')).toHaveAttribute('aria-label', '6')
-  await expect(page.getByTestId('result-total')).toHaveText('10')
-  await expect(page.getByText(/against SKILL 8 \+2 \(STAMINA\)/)).toBeVisible()
-  await expect(page.getByText(/MH p\.22 \(R20\) · equal or under passes · 10 <= 10/)).toBeVisible()
+  await expect(page.getByTestId('result-total')).toHaveText('Safe exploration')
+  await expect(page.getByTestId('authored-line')).toContainText('A shut wooden gate hidden by a willow tree')
 })
 
-test('the dice on the table are used, counted as an override, and the record survives a reload', async ({ page }) => {
+test('MY DICE: the same card, the face entered by hand, counted as an override; a Hint reveals the grey paragraph', async ({ page }) => {
   await page.goto('/?dice=1,1')
   await begin(page)
-  // MY DICE opens the same card, unrolled: the picker for the faces on the table.
   await button(page, 'MY DICE').click()
+  await expect(button(page, 'MY DICE · ON')).toBeVisible()
+  await button(page, /TO THE CAVE ENTRANCE/).click()
   await expect(page.getByTestId('roll-card')).toBeVisible()
-  await expect(page.getByTestId('roll-card-title')).toHaveText('FORCE THE SHUT GATE')
-  await expect(page.getByText('TAP THE TWO FACES YOU ROLLED')).toBeVisible()
+  await expect(page.getByTestId('roll-card-title')).toHaveText('TO THE CAVE ENTRANCE')
+  await expect(page.getByText(/TAP THE FACE YOU ROLLED/)).toBeVisible()
   await expect(page.getByTestId('roll-card-continue')).toBeDisabled()
   await page.getByRole('button', { name: '6', exact: true }).click()
-  await page.getByRole('button', { name: '6', exact: true }).click()
-  await expect(page.getByText(/YOUR DICE: 6 AND 6/)).toBeVisible()
+  await expect(page.getByText('YOUR DIE: 6')).toBeVisible()
   await page.getByTestId('roll-card-continue').click()
-  await expect(page.getByText('SKILL CHECK · FAILED')).toBeVisible()
-  await expect(page.getByText(/a double six always fails/)).toBeVisible()
-  await expect(page.getByTestId('pill-invention')).toBeVisible()
+  await expect(page.getByText('EVENT · HINT')).toBeVisible()
+  await expect(page.getByTestId('pill-rule')).toBeVisible()
   await page.getByTestId('roll-card-continue').click()
   await expect(page.getByTestId('roll-card')).toHaveCount(0)
+  await expect(page.getByTestId('hint')).toContainText('Ogres go out hunting for travellers once a day')
   await expect(page.getByText('OVERRIDES 1')).toBeVisible()
   await page.reload()
   await expect(page.getByText('OVERRIDES 1')).toBeVisible()
-  await expect(page.getByText('SKILL CHECK · FAILED')).toBeVisible()
+  await expect(page.getByText('EVENT · HINT')).toBeVisible()
+  await expect(page.getByTestId('hint')).toContainText('Ogres go out hunting')
 })
 
 test('a passage is optional and kept when written', async ({ page }) => {
@@ -108,11 +135,9 @@ test('a passage is optional and kept when written', async ({ page }) => {
 })
 
 test('combat shows both rolls, both Proficiencies, both totals and the difference', async ({ page }) => {
-  await page.goto('/?dice=6,5,1,1')
+  await page.goto('/?dice=4,4,2,3,6,5,1,1')
   await begin(page)
-  await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
-  await expect(page.getByTestId('place')).toHaveText('AREA 3 OF 8 · ATTENDANTS ROOM')
-  await button(page, /FACE THE DEXTEROUS GHOST/).click()
+  await toGhost(page)
   await expect(page.getByTestId('place')).toHaveText('COMBAT · ROUND 1')
   await expect(page.getByText('DEXTEROUS GHOST', { exact: true })).toBeVisible()
   await button(page, 'ROLL THE ROUND').click()
@@ -132,19 +157,22 @@ test('combat shows both rolls, both Proficiencies, both totals and the differenc
   await expect(page.getByTestId('act-opening')).toBeEnabled()
   await page.getByTestId('act-strike').click()
   await expect(button(page, 'FIGHT IS OVER')).toBeVisible()
-  await page.getByTestId('act-treasure').click()
+  // Its LOOT line, as printed: the private quarter's key, no die.
+  await page.getByTestId('act-loot').click()
   await page.getByTestId('act-go-on').click()
   await expect(page.getByTestId('place')).toHaveText('AREA 3 OF 8 · ATTENDANTS ROOM')
-  await expect(page.getByText(/TREASURE ROLL · 1d6 = [1-6]/)).toBeVisible()
-  await expect(page.getByText('DEEDS 1')).toBeVisible()
+  await expect(page.getByText('LOOT · DEXTEROUS GHOST')).toBeVisible()
+  await expect(page.getByTestId('result-total')).toHaveText("private quarter's key")
+  await expect(page.getByText('DEEDS 2')).toBeVisible()
+  // The key opens the paper door.
+  await expect(button(page, /TO THE CHIEFTAIN QUARTER/)).toBeEnabled()
 })
 
 test('a tie is an Unexpected Event and the retreat row rolls Morale', async ({ page }) => {
   // Master 3+4+8+4 = 19; Ghost 4+4+7+4 = 19. Event 2d6 = 2+2 = 4 (retreat). Morale d6 = 2 (flee).
-  await page.goto('/?dice=3,4,4,4,2,2,2')
+  await page.goto('/?dice=4,4,2,3,3,4,4,4,2,2,2')
   await begin(page)
-  await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
-  await button(page, /FACE THE DEXTEROUS GHOST/).click()
+  await toGhost(page)
   await button(page, 'ROLL THE ROUND').click()
   await expect(page.getByText('EQUAL · UNEXPECTED EVENT')).toBeVisible()
   await expect(page.getByText('UNEXPECTED EVENT · 2d6 = 4')).toBeVisible()
@@ -158,10 +186,9 @@ test('a tie is an Unexpected Event and the retreat row rolls Morale', async ({ p
 
 test('a lost round costs the difference; fleeing costs the last blow and Dishonor', async ({ page }) => {
   // Master 1+1+12 = 14; Ghost 6+6+11 = 23: nine off ENDURANCE, then two more for the escape.
-  await page.goto('/?dice=1,1,6,6')
+  await page.goto('/?dice=4,4,2,3,1,1,6,6')
   await begin(page)
-  await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
-  await button(page, /FACE THE DEXTEROUS GHOST/).click()
+  await toGhost(page)
   await button(page, 'ROLL THE ROUND').click()
   await expect(page.getByText('IT IS AHEAD BY · END LOST')).toBeVisible()
   await expect(page.getByTestId('banner-value')).toHaveText('9')
@@ -187,7 +214,7 @@ test('the rules panel lists every behaviour with its label and opens one', async
   await expect(page.getByText('SILENT ON')).toBeVisible()
   await expect(page.getByText(/estate-inventory\.md, I-21/)).toBeVisible()
   await button(page, 'BACK TO PLAY').click()
-  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
+  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
 })
 
 test('the region is seven linked points and says it is not to scale', async ({ page }) => {
@@ -203,7 +230,7 @@ test('the region is seven linked points and says it is not to scale', async ({ p
   await travel.click()
   await expect(page.getByTestId('here')).not.toBeEmpty()
   await button(page, 'BACK TO PLAY').click()
-  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
+  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
 })
 
 test('an unknown route still serves the app (single-page fallback)', async ({ page }) => {
@@ -229,14 +256,12 @@ test('the frame never scrolls sideways at phone width', async ({ page }) => {
  */
 test('the beat keeps the menu and the roll bar in reach when a result lands', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto('/?dice=4,6')
+  await page.goto('/')
   await begin(page)
-  const menuButton = page.getByRole('button', { name: /FORCE THE SHUT GATE/ })
+  const menuButton = page.getByRole('button', { name: /REST HERE/ })
   const before = await menuButton.boundingBox()
   await menuButton.click()
-  await expect(page.getByText('SKILL CHECK · PASSED')).toBeVisible()
-  await page.getByTestId('roll-card-continue').click()
-  await expect(page.getByTestId('roll-card')).toHaveCount(0)
+  await expect(page.getByText("A NIGHT'S REST")).toBeVisible()
   const after = await menuButton.boundingBox()
   expect(before).not.toBeNull()
   expect(after).not.toBeNull()

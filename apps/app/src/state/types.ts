@@ -8,8 +8,10 @@
  * makes a new one. Nothing here is a class and nothing is mutated.
  */
 import type {
+  AdventureState,
   AttackStrength,
   Die,
+  EventKind,
   FightEnd,
   FinalBlowRoll,
   Label,
@@ -136,16 +138,52 @@ export type RestResult = {
 /** A treasure picked up by exploration (5T a2, I-38). */
 export type TakeResult = {
   readonly kind: 'take'
+  /** The treasure's printed name. */
   readonly treasure: string
   readonly held: number
 }
 
-/** The R78 treasure roll after a victory. */
-export type TreasureResult = {
-  readonly kind: 'treasure'
-  readonly face: Die
-  readonly band: string
+/**
+ * One turn of the adventure's own procedure (5T a1): the area walked
+ * into, the Event rolled on entering, and what it brought.
+ */
+export type TurnResult = {
+  readonly kind: 'turn'
+  /** The printed name of the area entered. */
+  readonly area: string
+  readonly eventFace: Die
+  readonly event: EventKind
+  /** The Event row's printed text ("Ambush!", "Encounter", ...). */
+  readonly eventText: string
+  /** The face rolled on the area's creature table, or null where none was drawn. */
+  readonly encounterFace: Die | null
+  /** The printed names of the foes met; empty where nothing was. */
+  readonly foes: readonly string[]
+  /** True where the Event revealed this area's Hint. */
+  readonly hint: boolean
+}
+
+/** A foe's LOOT line read after a victory or a rescue (5T a2). */
+export type LootResult = {
+  readonly kind: 'loot'
+  /** The printed name of who carried it. */
+  readonly foe: string
+  /** The face rolled, or null where the line names one drop. */
+  readonly face: Die | null
+  /** The printed item text. */
+  readonly item: string
+  /** The treasure's printed name where the drop was one of the five. */
+  readonly treasure: string | null
+  readonly key: boolean
+}
+
+/** A line of feedback that is not a roll: a rescue, what the sheets taught. */
+export type NoteResult = {
+  readonly kind: 'note'
+  readonly title: string
   readonly text: string
+  readonly label: Label
+  readonly cite: string
 }
 
 /**
@@ -164,19 +202,20 @@ export type VillageNote = {
 }
 
 /** What the result slip shows, when it shows anything. */
-export type Result = CheckResult | RestResult | TakeResult | TreasureResult
+export type Result = CheckResult | RestResult | TakeResult | TurnResult | LootResult | NoteResult
 
 /**
  * The roll card over the beat (design/roll-modal, reading A; the
  * operator's pick and notes of 2026-09-06).
  *
- * Two ways in. ROLL 2d6 or a check on the menu rolls at once and the
- * card opens landed: the result, the dice, the plate, one CONTINUE. MY
- * DICE opens the card not yet landed: the picker for the faces on the
- * table, and CONTINUE resolves the check on them. `optionId` names the
- * check either way. Null is the resting state: no card.
+ * The beat's one roll is the adventure's: the Event table on entering
+ * an area (5T a1). Tapping an exit rolls at once and the card opens
+ * landed: the result, the dice, the plate, one CONTINUE. With MY DICE
+ * on, the same tap opens the card not yet landed: the picker for the
+ * face on the table, and CONTINUE resolves the move on it. `to` names
+ * the area either way. Null is the resting state: no card.
  */
-export type RollCard = { readonly optionId: string; readonly landed: boolean }
+export type RollCard = { readonly to: string; readonly landed: boolean }
 
 /** The last round rolled, both sides kept whole so both dice can be shown. */
 export type RoundShown = {
@@ -207,7 +246,8 @@ export type Combat = {
   readonly blow: FinalBlowRoll | null
   /** The authored line of the Technique last used, if one was. */
   readonly techniqueLine: string | null
-  readonly treasureRolled: boolean
+  /** The LOOT line has been read (once per victory). */
+  readonly looted: boolean
   readonly over: FightEnd
 }
 
@@ -226,21 +266,29 @@ export type Filter = 'all' | Label
 export type RecordState = {
   readonly version: 1
   readonly screen: Screen
-  readonly area: number
+  /**
+   * The cave as the engine keeps it: where the Master stands, what they
+   * hold, who is gone (`packages/engine/src/adventure`). The beat is
+   * derived from this and the adventure's tables, never from a number.
+   */
+  readonly cave: AdventureState
+  /** Foe ids the last Event brought and the Master has not yet fought or fled. */
+  readonly pending: readonly string[]
   readonly sheet: Sheet
   readonly result: Result | null
   /** The roll card over the beat, or null. */
   readonly roll: RollCard | null
-  /** Faces the player tapped for the next roll; used when two are present. */
+  /** Faces the player tapped for the next roll; read in order. */
   readonly manual: readonly Die[]
+  /** The fight's inline picker is open. */
   readonly manualOpen: boolean
+  /** MY DICE on the beat: the next move's Event die is entered by hand. */
+  readonly byHand: boolean
   readonly draft: string
   readonly passages: readonly string[]
   /** How many rolls were typed instead of rolled (spec.md, Horizon). */
   readonly overrides: number
   readonly deeds: readonly string[]
-  /** Treasure keys held (of the five). */
-  readonly held: readonly string[]
   readonly combat: Combat | null
   readonly filter: Filter
   readonly openId: string | null
@@ -272,12 +320,25 @@ export type RecordState = {
 /** Everything a screen may ask the record to do. */
 export type Action =
   | { readonly type: 'nav'; readonly screen: Screen }
-  | { readonly type: 'option'; readonly id: string }
-  /** ROLL 2d6: roll the area's first check now and open the card landed. */
-  | { readonly type: 'roll.open' }
-  /** MY DICE: open the card with the picker for the area's first check. */
+  /** Walk into an adjacent area: the Event roll, and the card (5T a1). */
+  | { readonly type: 'cave.go'; readonly to: string }
+  /** Pick up a treasure lying here (I-38). */
+  | { readonly type: 'cave.take'; readonly treasure: string }
+  /** Free the rescue here; the reward is their LOOT line (I-39). */
+  | { readonly type: 'cave.rescue' }
+  /** Attack the rescue instead: Dishonor, then the fight (I-39). */
+  | { readonly type: 'cave.attack' }
+  /** Learn what this area teaches about the treasures (I-38b, I-41). */
+  | { readonly type: 'cave.learn' }
+  /** Face one of the foes the Event brought. */
+  | { readonly type: 'cave.fight'; readonly foe: string }
+  /** A night's rest here (R40; spec.md sealed). */
+  | { readonly type: 'cave.rest' }
+  /** Out of the adventure and into the region (spec.md, Horizon). */
+  | { readonly type: 'cave.leave' }
+  /** MY DICE on the beat: toggle entering the next move's die by hand. */
   | { readonly type: 'roll.manual' }
-  /** CONTINUE on a picker card: resolve the check on the two tapped faces. */
+  /** CONTINUE on a picker card: resolve the move on the tapped face. */
   | { readonly type: 'roll' }
   /** CONTINUE on a landed card, or a tap outside a picker: close it. The result stays. */
   | { readonly type: 'roll.close' }
@@ -293,7 +354,8 @@ export type Action =
   | { readonly type: 'combat.opening' }
   | { readonly type: 'combat.blow' }
   | { readonly type: 'combat.morale' }
-  | { readonly type: 'combat.treasure' }
+  /** After a victory: the foe's LOOT line (5T a2). */
+  | { readonly type: 'combat.loot' }
   | { readonly type: 'combat.leave' }
   | { readonly type: 'rules.filter'; readonly filter: Filter }
   | { readonly type: 'rules.open'; readonly id: string | null }

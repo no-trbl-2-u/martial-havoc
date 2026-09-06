@@ -15,28 +15,11 @@
  */
 import { newCampaign } from '@martial-havoc/engine'
 import type { AdventureState, CampaignRecord, RecordedMaster } from '@martial-havoc/engine'
-import {
-  areaByNumber,
-  theFiveTreasuresAreas,
-  theFiveTreasuresMeta,
-  theFiveTreasuresTreasureById,
-} from '@martial-havoc/content'
+import { theFiveTreasuresAreaById, theFiveTreasuresMeta } from '@martial-havoc/content'
 import type { RecordState, Sheet } from './types'
 
-/** The adventure the prototype plays. */
+/** The adventure the app plays. */
 export const ADVENTURE_ID = theFiveTreasuresMeta.id
-
-/** Area id to the printed number the prototype screen indexes areas by. */
-const AREA_NUMBER: ReadonlyMap<string, number> = new Map(
-  theFiveTreasuresAreas.map((area) => [area.id, area.area]),
-)
-
-/** The treasure id prefix the prototype's short keys are missing. */
-const TREASURE_PREFIX = 'treasure.the-5-treasures.'
-
-/** A prototype treasure key ("vase-of-muttonfat-jade") to its full id. */
-const treasureId = (key: string): string | undefined =>
-  theFiveTreasuresTreasureById(`${TREASURE_PREFIX}${key}`)?.id
 
 /**
  * The sheet as the record keeps it.
@@ -61,29 +44,11 @@ const masterFrom = (sheet: Sheet): RecordedMaster => ({
 })
 
 /**
- * The cave's state as the session knows it.
- *
- * The prototype tracks two of the eleven fields an `AdventureState` has:
- * where the Master stands, and which treasures they picked up. The rest
- * is left at its empty value rather than guessed - a record that claimed
- * a foe was defeated when the session never said so would be worse than
- * one that starts the cave fresh. Phase 8 drives the adventure through
- * the engine's own `step`, and then all eleven are real.
+ * The cave's state as the session knows it: the engine's own
+ * `AdventureState`, carried whole. Every field is real because the beat
+ * drives the adventure through the engine's `step` (Phase 8c).
  */
-const adventureFrom = (state: RecordState): AdventureState => ({
-  adventure: ADVENTURE_ID,
-  area: areaByNumber(state.area)?.id ?? theFiveTreasuresMeta.startArea,
-  visited: [areaByNumber(state.area)?.id ?? theFiveTreasuresMeta.startArea],
-  flags: {},
-  defeated: [],
-  keys: [],
-  items: [],
-  treasures: state.held.map(treasureId).filter((id): id is string => id !== undefined),
-  hints: [],
-  effects: [],
-  rescued: [],
-  dishonor: 0,
-})
+const adventureFrom = (state: RecordState): AdventureState => state.cave
 
 /** The durable half of a session, as the engine's record. */
 export const toCampaign = (state: RecordState): CampaignRecord => ({
@@ -111,13 +76,18 @@ export const toCampaign = (state: RecordState): CampaignRecord => ({
  * screen keeps it; carrying the screen is the session half's job.
  */
 export const fromCampaign = (record: CampaignRecord, session: RecordState): RecordState => {
-  const cave = record.adventures[ADVENTURE_ID]
-  const area = cave === undefined ? session.area : (AREA_NUMBER.get(cave.area) ?? session.area)
+  const saved = record.adventures[ADVENTURE_ID]
+  // A save that stands in an area this build does not have opens on the
+  // session's cave instead, whole: a half-applied state would be worse.
+  const cave =
+    saved !== undefined && theFiveTreasuresAreaById(saved.area) !== undefined ? saved : session.cave
   return {
     ...session,
     creation: null,
     screen: session.screen === 'creation' ? 'beat' : session.screen,
-    area,
+    cave,
+    pending: [],
+    roll: null,
     sheet: {
       ...session.sheet,
       name: record.master.name,
@@ -134,8 +104,5 @@ export const fromCampaign = (record: CampaignRecord, session: RecordState): Reco
     deeds: record.deeds.map((deed) => deed.text),
     passages: record.passages,
     overrides: record.overrides,
-    held: (cave?.treasures ?? [])
-      .map((id) => id.slice(TREASURE_PREFIX.length))
-      .filter((key) => treasureId(key) !== undefined),
   }
 }

@@ -128,11 +128,6 @@
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
-      "id": "ui.roll.primary",
-      "text": "ROLL 2d6",
-      "cite": "design/prototype/martial-havoc-prototype.dc.html"
-    },
-    {
       "id": "ui.roll.manual",
       "text": "USE MY DICE",
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
@@ -220,21 +215,6 @@
     {
       "id": "ui.result.take.cite",
       "text": "5T a2 · picked up by exploration, not loot (inferred, I-38)",
-      "cite": "design/prototype/martial-havoc-prototype.dc.html"
-    },
-    {
-      "id": "ui.result.treasure.title",
-      "text": "TREASURE ROLL · 1d6 = {face}",
-      "cite": "design/prototype/martial-havoc-prototype.dc.html"
-    },
-    {
-      "id": "ui.result.treasure.against",
-      "text": "band {band}",
-      "cite": "design/prototype/martial-havoc-prototype.dc.html"
-    },
-    {
-      "id": "ui.result.treasure.cite",
-      "text": "MH p.68 R78 · offered after a victory, declinable (I-30b)",
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
@@ -473,21 +453,6 @@
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
-      "id": "ui.combat.act.treasure",
-      "text": "Roll for treasure",
-      "cite": "design/prototype/martial-havoc-prototype.dc.html"
-    },
-    {
-      "id": "ui.combat.act.treasure.cite",
-      "text": "MH p.68 R78",
-      "cite": "design/prototype/martial-havoc-prototype.dc.html"
-    },
-    {
-      "id": "ui.combat.act.treasure.line",
-      "text": "A 1d6 treasure roll, banded by its ENDURANCE. You may decline.",
-      "cite": "design/prototype/martial-havoc-prototype.dc.html"
-    },
-    {
       "id": "ui.combat.act.go-on",
       "text": "Go on",
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
@@ -711,11 +676,6 @@
       "id": "ui.deed.fell",
       "text": "fell to {name}",
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
-    },
-    {
-      "id": "ui.treasure.vase-of-muttonfat-jade",
-      "text": "Vase of muttonfat jade",
-      "cite": "5T a2"
     },
     {
       "id": "ui.creation.place",
@@ -1213,11 +1173,6 @@
       "cite": "design/roll-modal/README.md"
     },
     {
-      "id": "ui.card.luck.cost",
-      "text": "LUCK {luck} · THEN LUCK -1, WHATEVER THE RESULT",
-      "cite": "design/roll-modal/README.md"
-    },
-    {
       "id": "ui.plate.skill",
       "text": "PLATE · SKILL CHECK",
       "cite": "design/roll-modal/README.md"
@@ -1241,6 +1196,331 @@
       "id": "ui.attr.blank",
       "text": "-",
       "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.go",
+      "text": "TO THE {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.go.note",
+      "text": "AREA {n}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.go.locked",
+      "text": "LOCKED",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.face",
+      "text": "FACE THE {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.foe.line",
+      "text": "SKILL {skill} · END {endurance} · ATT {attack}",
+      "cite": "5T a2"
+    },
+    {
+      "id": "ui.cave.take",
+      "text": "TAKE THE {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.take.note",
+      "text": "TREASURE {n} OF 5",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.rescue",
+      "text": "FREE THE {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.rescue.note",
+      "text": "RESCUE · I-39",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.attack",
+      "text": "ATTACK THE {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.attack.note",
+      "text": "DISHONOR +1 · I-39",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.learn",
+      "text": "READ WHAT IS WRITTEN HERE",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.learn.note",
+      "text": "I-38b",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.learn.title",
+      "text": "WHAT THE SHEETS SAY",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.learn.cite",
+      "text": "5T a2 · The 5 Treasures, as printed · which two is a reading (I-38b)",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.rest",
+      "text": "REST HERE",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.rest.note",
+      "text": "+4 END",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.leave",
+      "text": "LEAVE FOR THE REGION",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.leave.note",
+      "text": "INVENTION · THE SANDBOX",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.event.title",
+      "text": "EVENT · {event}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.event.met",
+      "text": "MET: {names}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.event.hint",
+      "text": "THE HINT IS REVEALED",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.event.safe",
+      "text": "NOTHING MET",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.event.nothing",
+      "text": "NOTHING MET",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.event.cite",
+      "text": "5T a1 · Event table, roll every time you enter an area · entering the {area}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.cite.a1",
+      "text": "5T a1",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.cave.cite.a2",
+      "text": "5T a2",
+      "cite": "5T a2"
+    },
+    {
+      "id": "ui.cave.loot.title",
+      "text": "LOOT · {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.loot.nothing",
+      "text": "nothing",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.loot.key",
+      "text": "a key",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.loot.item",
+      "text": "an item",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.loot.treasure",
+      "text": "one of the five",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.loot.cite",
+      "text": "5T a2 · LOOT, as printed",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.encounters.heading",
+      "text": "Encounters:",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.cave.encounters.1",
+      "text": "1-3 Woodgatherer; 4-5 Ogre; 6 Junior King",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.cave.encounters.2",
+      "text": "1 Devil servant; 2-4 Ogre; 5-6 Junior King",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.cave.encounters.3",
+      "text": "1-2 Skillful Beast; 3-4 Dexterous Ghost; 5-6 Both",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.cave.encounters.4",
+      "text": "1-4 Devil servant; 5 Junior King; 6 Senior King",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.cave.encounters.5",
+      "text": "Devil servants",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.cave.encounters.6",
+      "text": "Old Vixen and she-Devil servant",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.cave.encounters.7",
+      "text": "Devil servants",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.cave.encounters.8",
+      "text": "1-4 Senior King; 5-6 Empty",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.cave.hint.heading",
+      "text": "read this part only if your PG gets information about the area or with Event roll=Hint",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.cave.ending.title",
+      "text": "THE 5 TREASURES · THE ENDING",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.ending.line",
+      "text": "{n} OF 5 TREASURES · {d} NAMED FOES DOWN · DISHONOR {dishonor}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.card.move.note",
+      "text": "EVENT TABLE · 1d6 · then the area's creature on 1-3",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.plate.event",
+      "text": "PLATE · EVENT",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.manual.prompt.one",
+      "text": "TAP THE FACE YOU ROLLED · A SECOND FOR THE CREATURE, IF YOU LIKE",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.manual.ready.one",
+      "text": "YOUR DIE: {a}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.manual.on",
+      "text": "MY DICE · ON",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.deed.freed",
+      "text": "freed the {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.loot",
+      "text": "Take its loot",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.loot.cite",
+      "text": "5T a2 · LOOT",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.loot.line",
+      "text": "What it carried, as printed. Some lines roll 1d6.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.intro.heading",
+      "text": "THE ADVENTURE, AS PRINTED",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.intro.title",
+      "text": "THE 5 TREASURES",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.intro.subtitle",
+      "text": "An adventure for Martial Havoc",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.intro.events",
+      "text": "Event table, roll every time you enter an area:",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.intro.encounters",
+      "text": "Encounters",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.intro.note.1",
+      "text": "for Event=1,2,3 roll for the creature encountered in the area",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.intro.note.2",
+      "text": "read this part only if your PG gets information about the area or with Event roll=Hint",
+      "cite": "5T a1"
+    },
+    {
+      "id": "ui.intro.credits.licence",
+      "text": "License https://creativecommons.org/licenses/by-sa/4.0/",
+      "cite": "5T a2"
+    },
+    {
+      "id": "ui.intro.credits.writing",
+      "text": "Writing by Gianluca Monaco",
+      "cite": "5T a2"
+    },
+    {
+      "id": "ui.intro.credits.icons",
+      "text": "Icons: https://limofeus.itch.io/handdrawniconpack",
+      "cite": "5T a2"
+    },
+    {
+      "id": "ui.intro.credits.map",
+      "text": "Cave map: https://watabou.itch.io/cave-generator",
+      "cite": "5T a2"
     }
   ]
 }

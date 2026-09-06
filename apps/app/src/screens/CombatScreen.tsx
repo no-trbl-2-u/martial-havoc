@@ -50,7 +50,7 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
     return [{ id: 'fall', title: t('ui.combat.act.fall'), cite: t('ui.combat.act.fall.cite'), line: t('ui.combat.act.fall.line'), enabled: true, action: { type: 'combat.leave' } }]
   if (c.foeEndurance === 0)
     return [
-      { id: 'treasure', title: t('ui.combat.act.treasure'), cite: t('ui.combat.act.treasure.cite'), line: t('ui.combat.act.treasure.line'), enabled: !c.treasureRolled, action: { type: 'combat.treasure' } },
+      { id: 'loot', title: t('ui.combat.act.loot'), cite: t('ui.combat.act.loot.cite'), line: t('ui.combat.act.loot.line'), enabled: !c.looted, action: { type: 'combat.loot' } },
       { id: 'go-on', title: t('ui.combat.act.go-on'), cite: t('ui.combat.act.go-on.cite'), line: t('ui.combat.act.go-on.line'), enabled: true, action: { type: 'combat.leave' } },
     ]
   if (c.event !== null) {

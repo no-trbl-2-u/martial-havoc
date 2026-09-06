@@ -27,8 +27,18 @@ const begin = async (page: Page) => {
   await expect(page.getByTestId('beat')).toBeVisible()
 }
 
+/** One move: tap the exit, let the card land, CONTINUE. */
+const go = async (page: Page, name: RegExp) => {
+  await button(page, name).click()
+  await page.getByTestId('roll-card-continue').click()
+  await expect(page.getByTestId('roll-card')).toHaveCount(0)
+}
+
+/** The book's walk to the Dexterous Ghost: spends `4,4,2,3` of the queue. */
 const goIn = async (page: Page) => {
-  await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
+  await go(page, /TO THE CAVE ENTRANCE/)
+  await go(page, /TO THE DINING HALL/)
+  await go(page, /TO THE ATTENDANTS ROOM/)
   await button(page, /FACE THE DEXTEROUS GHOST/).click()
 }
 
@@ -57,47 +67,49 @@ test('00 creation, the eight sheets and a rolled Master', async ({ page }) => {
 test('01 the beat, opening', async ({ page }) => {
   await page.goto('/')
   await begin(page)
-  await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
+  await expect(page.getByTestId('place')).toHaveText('AREA 1 OF 8 · FLAT-TOP MOUNTAIN')
   await shot(page, '01-beat-opening')
 })
 
-test('02 the beat, a check rolled onto the card and kept', async ({ page }) => {
-  await page.goto('/?dice=4,6')
+test('02 the beat, a move rolled onto the card and kept', async ({ page }) => {
+  await page.goto('/?dice=2,5')
   await begin(page)
-  await button(page, /FORCE THE SHUT GATE/).click()
-  await expect(page.getByText('SKILL CHECK · PASSED')).toBeVisible()
+  await button(page, /TO THE CAVE ENTRANCE/).click()
+  await expect(page.getByText('EVENT · ENCOUNTER')).toBeVisible()
   await shot(page, '02a-beat-roll-card-landed')
   await page.getByTestId('roll-card-continue').click()
   await expect(page.getByTestId('roll-card')).toHaveCount(0)
-  await shot(page, '02-beat-check-passed')
+  await shot(page, '02-beat-event-encounter')
 })
 
 test('03 the beat, the dice on the table', async ({ page }) => {
   await page.goto('/')
   await begin(page)
   await button(page, 'MY DICE').click()
+  await button(page, /TO THE CAVE ENTRANCE/).click()
   await expect(page.getByTestId('roll-card')).toBeVisible()
   await page.getByRole('button', { name: '6', exact: true }).click()
-  await page.getByRole('button', { name: '6', exact: true }).click()
-  await expect(page.getByText(/YOUR DICE: 6 AND 6/)).toBeVisible()
+  await expect(page.getByText('YOUR DIE: 6')).toBeVisible()
   await shot(page, '03-beat-manual-dice')
   await page.getByTestId('roll-card-continue').click()
-  await expect(page.getByText('SKILL CHECK · FAILED')).toBeVisible()
-  await shot(page, '04-beat-double-six')
+  await expect(page.getByText('EVENT · HINT')).toBeVisible()
+  await page.getByTestId('roll-card-continue').click()
+  await expect(page.getByTestId('hint')).toBeVisible()
+  await shot(page, '04-beat-hint-revealed')
 })
 
 test('05 the beat, a passage kept and a night’s rest', async ({ page }) => {
-  await page.goto('/?dice=1,1,6,6')
+  await page.goto('/')
   await begin(page)
   await page.getByPlaceholder("Write it down, or don't.").fill('The willow had grown around the gate before anyone thought to shut it.')
   await button(page, 'KEEP IT').click()
-  await button(page, /REST BY THE STREAM/).click()
+  await button(page, /REST HERE/).click()
   await expect(page.getByText("A NIGHT'S REST")).toBeVisible()
   await shot(page, '05-beat-rest-and-passage')
 })
 
 test('06 combat, before the round', async ({ page }) => {
-  await page.goto('/?dice=6,5,1,1')
+  await page.goto('/?dice=4,4,2,3,6,5,1,1')
   await begin(page)
   await goIn(page)
   await expect(page.getByTestId('place')).toHaveText('COMBAT · ROUND 1')
@@ -110,7 +122,7 @@ test('06 combat, before the round', async ({ page }) => {
 })
 
 test('09 combat, the Final Blow lands', async ({ page }) => {
-  await page.goto('/?dice=6,5,1,1,3,3')
+  await page.goto('/?dice=4,4,2,3,6,5,1,1,3,3')
   await begin(page)
   await goIn(page)
   await button(page, 'ROLL THE ROUND').click()
@@ -118,14 +130,14 @@ test('09 combat, the Final Blow lands', async ({ page }) => {
   await page.getByTestId('act-blow').click()
   await expect(page.getByText('THE BLOW LANDS')).toBeVisible()
   await shot(page, '09-combat-final-blow')
-  await page.getByTestId('act-treasure').click()
+  await page.getByTestId('act-loot').click()
   await page.getByTestId('act-go-on').click()
-  await expect(page.getByText(/TREASURE ROLL/)).toBeVisible()
+  await expect(page.getByText(/LOOT · DEXTEROUS GHOST/)).toBeVisible()
   await shot(page, '10-beat-after-the-fight')
 })
 
 test('11 combat, a lost round', async ({ page }) => {
-  await page.goto('/?dice=1,1,6,6')
+  await page.goto('/?dice=4,4,2,3,1,1,6,6')
   await begin(page)
   await goIn(page)
   await button(page, 'ROLL THE ROUND').click()
@@ -134,7 +146,7 @@ test('11 combat, a lost round', async ({ page }) => {
 })
 
 test('12 combat, a tie and Morale', async ({ page }) => {
-  await page.goto('/?dice=3,4,4,4,2,2,2')
+  await page.goto('/?dice=4,4,2,3,3,4,4,4,2,2,2')
   await begin(page)
   await goIn(page)
   await button(page, 'ROLL THE ROUND').click()
@@ -182,4 +194,13 @@ test('19 the record', async ({ page }) => {
   await button(page, 'RECORD').click()
   await expect(page.getByTestId('record')).toBeVisible()
   await shot(page, '19-record')
+})
+
+test('20 about, with the adventure as printed', async ({ page }) => {
+  await page.goto('/')
+  await begin(page)
+  await button(page, 'ABOUT').click()
+  await expect(page.getByTestId('intro-premise')).toBeVisible()
+  await page.getByTestId('intro-title').scrollIntoViewIfNeeded()
+  await shot(page, '20-about-the-adventure')
 })

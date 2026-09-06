@@ -6,13 +6,14 @@
  * (R03). The region is seven points on a plane (spec.md, Horizon). All
  * of it is a pure function of the dice passed in.
  */
-import { chooseSocialStatus, rollSpec, throwRegion } from '@martial-havoc/engine'
+import { beginAdventure, chooseSocialStatus, rollSpec, throwRegion } from '@martial-havoc/engine'
 import type { DiceSource } from '@martial-havoc/engine'
 import {
   canonicalIdForSheetName,
   presetById,
   socialStatuses,
   techniqueByName,
+  theFiveTreasures,
 } from '@martial-havoc/content'
 import { emptyCreation } from './creation'
 import type { RecordState, Sheet } from './types'
@@ -63,17 +64,19 @@ export const sheetFor =
 export const newRecord = (dice: DiceSource): RecordState => ({
   version: 1,
   screen: 'creation',
-  area: 2,
+  // The book's first area: the Flat-top mountain (5T a1, `startArea`).
+  cave: beginAdventure(theFiveTreasures),
+  pending: [],
   sheet: sheetFor(PRESET_ID)(dice),
   result: null,
   roll: null,
   manual: [],
   manualOpen: false,
+  byHand: false,
   draft: '',
   passages: [],
   overrides: 0,
   deeds: [],
-  held: [],
   combat: null,
   filter: 'all',
   openId: null,

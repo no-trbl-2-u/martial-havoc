@@ -42,3 +42,12 @@ Shipped in `apps/app/src/components/beat/RollCard.tsx`,
 `apps/app/src/components/Plate.tsx` and `apps/app/src/hooks/useTumble.ts`;
 the reducer's `roll.open`, `roll.manual`, `roll` and `roll.close`.
 The beat's manual-dice slip is gone; the fight keeps its own.
+
+## The card after Phase 8c
+
+The beat lost its invented checks the same day (`VISION.md`), so the
+card's one roll is the adventure's Event table: tapping an exit rolls
+it, the card shows the die (and the creature die where one was drawn),
+the printed Event row, what it brought and `5T a1`. MY DICE is a toggle
+on the roll bar; on, the exit opens the card unrolled with a one-face
+picker. The skill and luck plates stay for the Oracle and the sandbox.

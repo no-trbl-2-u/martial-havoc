@@ -93,14 +93,19 @@ test('creation reports an overspend and still lets the Master begin', async ({ p
 
 test('a made Master wins a fight', async ({ page }) => {
   // The printed sheet, so the fight's numbers are known: San Te at
-  // SKILL 8 against the Dexterous Ghost, on named dice.
-  await page.goto('/?dice=6,5,1,1')
+  // SKILL 8 against the Dexterous Ghost, on named dice. The walk in is
+  // the book's: Event 4 (safe) twice, then Event 2 and creature 3.
+  await page.goto('/?dice=4,4,2,3,6,5,1,1')
   await page.getByTestId('preset-preset.san-te').click()
   await expect(page.getByTestId('step-ready')).toBeVisible()
   await page.getByTestId('creation-begin').click()
   await expect(page.getByTestId('beat')).toBeVisible()
 
-  await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
+  for (const exit of [/TO THE CAVE ENTRANCE/, /TO THE DINING HALL/, /TO THE ATTENDANTS ROOM/]) {
+    await button(page, exit).click()
+    await page.getByTestId('roll-card-continue').click()
+    await expect(page.getByTestId('roll-card')).toHaveCount(0)
+  }
   await button(page, /FACE THE DEXTEROUS GHOST/).click()
   await expect(page.getByTestId('place')).toHaveText('COMBAT · ROUND 1')
 
@@ -111,9 +116,9 @@ test('a made Master wins a fight', async ({ page }) => {
   // 10 off its ENDURANCE of 8 ends it.
   await page.getByTestId('act-strike').click()
   await expect(button(page, 'FIGHT IS OVER')).toBeVisible()
-  await page.getByTestId('act-treasure').click()
+  await page.getByTestId('act-loot').click()
   await page.getByTestId('act-go-on').click()
-  await expect(page.getByText('DEEDS 1')).toBeVisible()
+  await expect(page.getByText('DEEDS 2')).toBeVisible()
 })
 
 /**
@@ -169,23 +174,28 @@ test('the village buys, recovers LUCK and rests, on the printed terms', async ({
  * functions Phase 6 shipped.
  */
 test('the record shows what was played, and reads its own export back', async ({ page }) => {
-  await page.goto('/?dice=6,5,1,1')
+  await page.goto('/?dice=4,4,2,3,6,5,1,1')
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
 
-  // Do something worth recording: win a fight.
-  await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
+  // Do something worth recording: walk to the Ghost and win the fight.
+  for (const exit of [/TO THE CAVE ENTRANCE/, /TO THE DINING HALL/, /TO THE ATTENDANTS ROOM/]) {
+    await button(page, exit).click()
+    await page.getByTestId('roll-card-continue').click()
+    await expect(page.getByTestId('roll-card')).toHaveCount(0)
+  }
   await button(page, /FACE THE DEXTEROUS GHOST/).click()
   await button(page, 'ROLL THE ROUND').click()
   await page.getByTestId('act-strike').click()
-  await page.getByTestId('act-treasure').click()
+  await page.getByTestId('act-loot').click()
   await page.getByTestId('act-go-on').click()
 
   await button(page, 'RECORD').click()
   await expect(page.getByTestId('record')).toBeVisible()
   await expect(page.getByTestId('place')).toHaveText('THE CAMPAIGN RECORD')
-  await expect(page.getByTestId('record-counts')).toContainText('1 DEEDS')
+  await expect(page.getByTestId('record-counts')).toContainText('2 DEEDS')
   await expect(page.getByTestId('record-deeds')).toContainText('dexterous ghost')
+  await expect(page.getByTestId('record-deeds')).toContainText("private quarter's key")
 
   // The export is the whole campaign, and it reads back.
   const json = await page.getByTestId('record-json').inputValue()
@@ -193,7 +203,7 @@ test('the record shows what was played, and reads its own export back', async ({
   await page.getByTestId('record-paste').fill(json)
   await page.getByTestId('record-read').click()
   await expect(page.getByTestId('record-import-note')).toHaveText('Campaign read.')
-  await expect(page.getByTestId('record-counts')).toContainText('1 DEEDS')
+  await expect(page.getByTestId('record-counts')).toContainText('2 DEEDS')
 })
 
 test('an unreadable import says which kind of unreadable it was', async ({ page }) => {

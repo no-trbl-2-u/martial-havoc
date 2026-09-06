@@ -42,8 +42,6 @@ import treasures from '../data/rules/treasures.json'
 import specialItems from '../data/rules/special-items.json'
 import adventureHooks from '../data/campaigns/adventure-hooks.json'
 import treasureFoes from '../data/campaigns/the-5-treasures-foes.json'
-import prototypeBeats from '../data/campaigns/the-5-treasures-prototype-beats.json'
-import prototypeOptions from '../data/campaigns/the-5-treasures-prototype-options.json'
 import caveAdventure from '../data/campaigns/the-5-treasures/adventure.json'
 import caveEvents from '../data/campaigns/the-5-treasures/events.json'
 import caveAreas from '../data/campaigns/the-5-treasures/areas.json'
@@ -94,8 +92,6 @@ const registry: readonly CountedFile[] = Object.freeze([
   specialItems,
   adventureHooks,
   treasureFoes,
-  prototypeBeats,
-  prototypeOptions,
   caveAdventure,
   caveEvents,
   caveAreas,

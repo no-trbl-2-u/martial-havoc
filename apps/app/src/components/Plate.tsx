@@ -8,13 +8,14 @@
  * one per kind of check (R20, R21). A plate per Proficiency or per
  * area is a later pass; the key is the seam it would grow along.
  */
+import type { ReactElement } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import Svg, { G, Path, Rect } from 'react-native-svg'
 import { t } from '@martial-havoc/content'
 import { color, font } from '../theme/tokens'
 import { Slip } from './Slip'
 
-export type PlateKey = 'skill' | 'luck'
+export type PlateKey = 'skill' | 'luck' | 'event'
 
 /** The shut gate under its willow, for a SKILL check. */
 const Gate = () => (
@@ -51,17 +52,40 @@ const Moon = () => (
   </Svg>
 )
 
+/** A threshold: the way into an area, for the Event roll (5T a1). */
+const Threshold = () => (
+  <Svg width="100%" height="100%" viewBox="0 0 320 140" preserveAspectRatio="xMidYMid meet">
+    <G fill="none" stroke={color.ink} strokeWidth={6} strokeLinecap="square">
+      <Path d="M90 130 V30 H230 V130 M76 30 H244" />
+      <Path d="M110 130 V60 H210 V130" />
+    </G>
+    <G fill="none" stroke={color.ink} strokeWidth={4} strokeLinecap="round">
+      <Path d="M30 120 q40 -10 80 0 M210 120 q40 -10 80 0" />
+    </G>
+    <G fill={color.vermilion}>
+      <Rect x={155} y={80} width={10} height={10} />
+    </G>
+  </Svg>
+)
+
+const PLATES: Readonly<Record<PlateKey, () => ReactElement>> = { skill: Gate, luck: Moon, event: Threshold }
+
 type Props = { readonly plate: PlateKey; readonly height?: number }
 
-export const Plate = ({ plate, height = 120 }: Props) => (
+export const Plate = ({ plate, height = 120 }: Props) => {
+  const Drawn = PLATES[plate]
+  return (
   <Slip dashed style={styles.slip} testID={`plate-${plate}`}>
-    <View style={{ height }}>{plate === 'skill' ? <Gate /> : <Moon />}</View>
+    <View style={{ height }}>
+      <Drawn />
+    </View>
     <View style={styles.caption}>
       <Text style={styles.captionText}>{t(`ui.plate.${plate}`)}</Text>
       <Text style={styles.captionText}>{t('ui.plate.ours')}</Text>
     </View>
   </Slip>
-)
+  )
+}
 
 const styles = StyleSheet.create({
   slip: { padding: 8, gap: 4 },

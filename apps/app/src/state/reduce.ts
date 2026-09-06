@@ -15,26 +15,30 @@
  * injected source: the player rolls their own dice, not the foe's.
  */
 import {
+  attackRescue,
   attackStrength,
   behaviours,
   buy,
-  d6,
   endsFight,
   escape,
   finalBlow,
   fromSilver,
   importJson,
-  luckCheck,
+  learnFrom,
+  lootFrom,
   morale,
   nightsRest,
   placeRunning,
+  rescue,
+  resolveEncounter,
   resolveRound,
-  skillCheck,
   spendTechnique,
   stayTheNight,
+  step,
+  takeDrop,
+  takeHere,
   templeVisit,
   toSilver,
-  treasureBand,
   unexpectedEvent,
 } from '@martial-havoc/engine'
 import type { DiceSource } from '@martial-havoc/engine'
@@ -42,20 +46,20 @@ import {
   INCENSE_ID,
   effectFor,
   market,
-  optionById,
-  optionsForArea,
-  rollTreasure,
   rollUnexpectedEvent,
   t,
+  theFiveTreasures,
+  theFiveTreasuresAreaById,
   treasureFoeById,
   unexpectedEventLineFor,
   villagePlaces,
 } from '@martial-havoc/content'
-import type { MenuOption, Opponent } from '@martial-havoc/content'
+import type { Opponent } from '@martial-havoc/content'
 import { queued } from '../dice/random'
 import { fill } from '../lib/fill'
 import { newRecord } from './record'
 import { fromCampaign } from './campaign'
+import { RANK_AND_FILE, foeName, treasureName } from './menu'
 import {
   MAX_TRAINING,
   finishCreation,
@@ -105,6 +109,12 @@ const addDeed = (state: RecordState, deed: string): RecordState => ({
   deeds: [...state.deeds, deed],
 })
 
+/** `list` without its first `value`, if any. */
+const withoutFirst = (list: readonly string[], value: string): readonly string[] => {
+  const i = list.indexOf(value)
+  return i < 0 ? list : [...list.slice(0, i), ...list.slice(i + 1)]
+}
+
 /** R26 read off the current numbers. */
 const fightEnd = (state: RecordState, combat: Combat) =>
   endsFight({
@@ -114,54 +124,84 @@ const fightEnd = (state: RecordState, combat: Combat) =>
     unexpectedEvent: combat.event !== null,
   })
 
-// ---------------------------------------------------------------- the beat
+// ---------------------------------------------------------------- the cave
 
-const doSkillCheck = (state: RecordState, option: MenuOption, dice: DiceSource): RecordState => {
-  const { source, manual } = masterDice(state, dice)
-  const proficiency =
-    state.sheet.proficiencies.find((p) => p.name === option.proficiency) ?? null
-  const outcome = skillCheck({ skill: state.sheet.skill, proficiency: proficiency?.value })(source)
+const TABLES = theFiveTreasures
+
+/** The printed name of an area id. */
+const areaName = (id: string): string => theFiveTreasuresAreaById(id)?.name ?? id
+
+/**
+ * One turn of the adventure's own procedure (5T a1): walk into `to`,
+ * roll the Event table, and on 1-3 roll for the creature encountered.
+ * The engine's `step` draws exactly the printed dice, from the Master's
+ * source, so a face tapped by hand reaches the Event roll first and the
+ * creature roll second.
+ *
+ * A refused move (a gate without its key) draws nothing and changes
+ * nothing: the menu already shows that door disabled with its text.
+ */
+const doTurn = (state: RecordState, to: string, dice: DiceSource): RecordState => {
+  // One tapped face is enough here: the Event is a single d6, and a
+  // second face, if tapped, is the creature roll. The table fills in
+  // whatever the player did not tap.
+  const manual = state.manual.length > 0
+  const source = manual ? queued(state.manual, dice) : dice
+  const turn = step(TABLES, state.cave, to, source)
+  if (!turn.passage.ok || turn.area === undefined || turn.event === undefined) return state
+  const foes = turn.encounter?.foes.map((foe) => foe.id) ?? []
   return afterMasterRoll(
     {
       ...state,
+      cave: turn.state,
+      pending: foes,
       result: {
-        kind: 'check',
-        check: 'skill',
-        roll: outcome.roll,
-        threshold: outcome.threshold,
-        success: outcome.success,
-        doubleSix: outcome.doubleSix,
-        proficiency,
-        luckAfter: null,
+        kind: 'turn',
+        area: turn.area.name,
+        eventFace: turn.event.face,
+        event: turn.event.kind,
+        eventText: turn.event.text,
+        encounterFace: turn.encounter?.face ?? null,
+        foes: foes.map(foeName),
+        hint: turn.hintRevealed,
       },
     },
     manual,
   )
 }
 
-const doLuckCheck = (state: RecordState, dice: DiceSource): RecordState => {
-  const { source, manual } = masterDice(state, dice)
-  const { outcome, luck } = luckCheck(state.sheet.luck)(source)
-  return afterMasterRoll(
-    withSheet(
-      {
-        ...state,
-        result: {
-          kind: 'check',
-          check: 'luck',
-          roll: outcome.roll,
-          threshold: outcome.threshold,
-          success: outcome.success,
-          doubleSix: outcome.doubleSix,
-          proficiency: null,
-          luckAfter: luck,
-        },
-      },
-      { luck },
-    ),
-    manual,
-  )
+/** Open the card unrolled: the move is named, the face is the player's to tap. */
+const openPicker = (state: RecordState, to: string): RecordState => ({
+  ...state,
+  roll: { to, landed: false },
+  manual: [],
+})
+
+/** Tap an exit: roll now with MY DICE off, or open the picker with it on. */
+const doGo = (state: RecordState, to: string, dice: DiceSource): RecordState => {
+  if (state.pending.length > 0) return state
+  if (state.byHand) return openPicker(state, to)
+  const next = doTurn(state, to, dice)
+  return next === state ? state : { ...next, roll: { to, landed: true } }
 }
+
+/**
+ * CONTINUE on a picker card: resolve the move on the tapped face(s).
+ * No face is nothing to roll; the button is disabled and the reducer
+ * agrees. The override count moves inside `doTurn`.
+ */
+const rollCard = (state: RecordState, dice: DiceSource): RecordState => {
+  if (state.roll === null || state.roll.landed || state.manual.length === 0) return state
+  const next = doTurn(state, state.roll.to, dice)
+  return next === state ? state : { ...next, roll: { to: state.roll.to, landed: true } }
+}
+
+/** Close the card. What it rolled is already in `result`; nothing is undone. */
+const closeCard = (state: RecordState): RecordState => ({
+  ...state,
+  roll: null,
+  manual: [],
+})
 
 const doRest = (state: RecordState): RecordState => {
   const healed = nightsRest({
@@ -177,19 +217,100 @@ const doRest = (state: RecordState): RecordState => {
   )
 }
 
-const doTake = (state: RecordState, key: string): RecordState => {
-  if (state.held.includes(key)) return state
-  const held = [...state.held, key]
+/** Pick up a treasure lying in this area (I-38). */
+const doTake = (state: RecordState, treasure: string): RecordState => {
+  const cave = takeHere(TABLES, state.cave, treasure)
+  if (cave === state.cave) return state
   return addDeed(
-    { ...state, held, result: { kind: 'take', treasure: key, held: held.length } },
-    fill(t('ui.deed.took'), { name: t(`ui.treasure.${key}`) }),
+    {
+      ...state,
+      cave,
+      result: { kind: 'take', treasure: treasureName(treasure), held: cave.treasures.length },
+    },
+    fill(t('ui.deed.took'), { name: treasureName(treasure) }),
   )
+}
+
+/**
+ * Read a foe's LOOT line (5T a2) and put the drop where it belongs:
+ * a treasure, a key, an item. The result slip shows the printed item.
+ */
+const doLootOf = (state: RecordState, foeId: string, dice: DiceSource): RecordState => {
+  const drop = lootFrom(TABLES, foeId)(dice)
+  const cave = takeDrop(state.cave, drop.row)
+  const row = drop.row
+  const result: RecordState['result'] = {
+    kind: 'loot',
+    foe: foeName(foeId),
+    face: drop.face ?? null,
+    item: row?.item ?? t('ui.cave.loot.nothing'),
+    treasure: row?.treasure === undefined || row.treasure === null ? null : treasureName(row.treasure),
+    key: row?.key !== undefined && row.key !== null,
+  }
+  const next = { ...state, cave, result }
+  if (row === undefined || row.hint) return next
+  const took = row.treasure !== null ? treasureName(row.treasure) : row.item
+  return addDeed(next, fill(t('ui.deed.took'), { name: took }))
+}
+
+/** Free the rescue here (I-39): recorded, then rewarded with their LOOT line. */
+const doRescue = (state: RecordState, dice: DiceSource): RecordState => {
+  const here = theFiveTreasuresAreaById(state.cave.area)
+  const foe = here?.rescue?.foe
+  if (foe === undefined || state.cave.rescued.includes(foe) || state.pending.length > 0) return state
+  const freed = { ...state, cave: rescue(TABLES, state.cave) }
+  return doLootOf(
+    addDeed(freed, fill(t('ui.deed.freed'), { name: foeName(foe) })),
+    foe,
+    dice,
+  )
+}
+
+/** Attack the rescue instead (I-39): a Dishonor Point, then the fight. */
+const doAttackRescue = (state: RecordState): RecordState => {
+  const here = theFiveTreasuresAreaById(state.cave.area)
+  const foe = here?.rescue?.foe
+  const opponent = foe === undefined ? undefined : treasureFoeById(foe)
+  if (foe === undefined || opponent === undefined || state.pending.length > 0) return state
+  const cave = attackRescue(TABLES, state.cave)
+  return startFight(
+    withSheet({ ...state, cave, pending: [foe] }, { dishonor: state.sheet.dishonor + (cave.dishonor - state.cave.dishonor) }),
+    opponent,
+  )
+}
+
+/** Learn what this area teaches about the treasures (I-38b, I-41). */
+const doLearn = (state: RecordState): RecordState => {
+  if (state.pending.length > 0) return state
+  const cave = learnFrom(TABLES, state.cave, state.cave.area)
+  const learnt = cave.effects.filter((id) => !state.cave.effects.includes(id))
+  if (learnt.length === 0) return state
+  return {
+    ...state,
+    cave,
+    result: {
+      kind: 'note',
+      title: t('ui.cave.learn.title'),
+      text: learnt
+        .map((id) => `${treasureName(id)}: ${TABLES.treasures.find((tr) => tr.id === id)?.effect ?? ''}`)
+        .join('\n'),
+      label: 'reading',
+      cite: t('ui.cave.learn.cite'),
+    },
+  }
+}
+
+/** Face one of the foes the Event brought. */
+const doFight = (state: RecordState, foe: string): RecordState => {
+  const opponent = treasureFoeById(foe)
+  return opponent === undefined || !state.pending.includes(foe) ? state : startFight(state, opponent)
 }
 
 const startFight = (state: RecordState, foe: Opponent): RecordState => ({
   ...state,
   screen: 'combat',
   result: null,
+  roll: null,
   combat: {
     foeId: foe.id,
     foeEndurance: foe.endurance,
@@ -200,75 +321,9 @@ const startFight = (state: RecordState, foe: Opponent): RecordState => ({
     opening: false,
     blow: null,
     techniqueLine: null,
-    treasureRolled: false,
+    looted: false,
     over: { ended: false },
   },
-})
-
-const doOption = (state: RecordState, option: MenuOption, dice: DiceSource): RecordState => {
-  switch (option.action) {
-    case 'skill-check':
-      return doSkillCheck(state, option, dice)
-    case 'luck-check':
-      return doLuckCheck(state, dice)
-    case 'rest':
-      return doRest(state)
-    case 'go':
-      return { ...state, area: Number(option.target), result: null }
-    case 'fight': {
-      const foe = treasureFoeById(option.target ?? '')
-      return foe === undefined ? state : startFight(state, foe)
-    }
-    case 'take':
-      return doTake(state, option.target ?? '')
-    case 'leave-cave':
-      return { ...state, screen: 'region', result: null }
-  }
-}
-
-/** Whether an option is one of the two checks the roll card handles (R20, R21). */
-const isCheck = (option: MenuOption): boolean =>
-  option.action === 'skill-check' || option.action === 'luck-check'
-
-/** The primary roll button on the beat: the area's first check. */
-const firstCheck = (state: RecordState): MenuOption | undefined =>
-  optionsForArea(state.area).find(isCheck)
-
-/**
- * Roll a check now and open the card landed (design/roll-modal, reading
- * A, the operator's note: ROLL uses the rolled result, one CONTINUE).
- */
-const rollNow = (state: RecordState, option: MenuOption, dice: DiceSource): RecordState => ({
-  ...doOption(state, option, dice),
-  roll: { optionId: option.id, landed: true },
-})
-
-/** Open the card with the picker: the check is named, the faces are the player's to tap. */
-const openPicker = (state: RecordState, option: MenuOption): RecordState => ({
-  ...state,
-  roll: { optionId: option.id, landed: false },
-  manual: [],
-  manualOpen: true,
-})
-
-/**
- * CONTINUE on a picker card: resolve the check on the two tapped faces.
- * Fewer than two is nothing to roll; the button is disabled and the
- * reducer agrees. The override count moves inside `doOption`.
- */
-const rollCard = (state: RecordState, dice: DiceSource): RecordState => {
-  if (state.roll === null || state.roll.landed || state.manual.length !== 2) return state
-  const option = optionById(state.roll.optionId)
-  if (option === undefined || option.area !== state.area || !isCheck(option)) return state
-  return { ...doOption(state, option, dice), roll: { optionId: option.id, landed: true } }
-}
-
-/** Close the card. What it rolled is already in `result`; nothing is undone. */
-const closeCard = (state: RecordState): RecordState => ({
-  ...state,
-  roll: null,
-  manual: [],
-  manualOpen: false,
 })
 
 // --------------------------------------------------------------- the fight
@@ -386,18 +441,11 @@ const doMorale = (state: RecordState, dice: DiceSource): RecordState => {
   return withCombat(state, { morale: morale(dice) })
 }
 
-/** The R78 roll after a victory, offered once and declinable (I-30b). */
-const doTreasure = (state: RecordState, dice: DiceSource): RecordState => {
+/** After a victory: the foe's LOOT line (5T a2), read once. */
+const doLoot = (state: RecordState, dice: DiceSource): RecordState => {
   const c = state.combat
-  const foe = c === null ? undefined : treasureFoeById(c.foeId)
-  if (c === null || foe === undefined || c.foeEndurance > 0 || c.treasureRolled) return state
-  const face = d6(dice)
-  const band = treasureBand(foe.endurance)
-  const text = rollTreasure(band)(face)?.text ?? ''
-  return withCombat(
-    { ...state, result: { kind: 'treasure', face, band, text } },
-    { treasureRolled: true },
-  )
+  if (c === null || c.foeEndurance > 0 || c.looted) return state
+  return withCombat(doLootOf(state, c.foeId, dice), { looted: true })
 }
 
 /**
@@ -411,7 +459,14 @@ const doLeave = (state: RecordState, dice: DiceSource): RecordState => {
   const foe = c === null ? undefined : treasureFoeById(c.foeId)
   if (c === null || foe === undefined) return state
   if (c.over.ended && c.over.reason === 'master-down') return newRecord(dice)
-  const back: RecordState = { ...state, screen: 'beat', combat: null }
+  // The foe fought is no longer pending; a named foe beaten is gone
+  // from every table it appears in (I-33b, I-33c). Fleeing leaves the
+  // encounter behind: the rest of it does not follow.
+  const beaten = c.foeEndurance === 0
+  const remaining = beaten ? withoutFirst(state.pending, foe.id) : []
+  const cave =
+    beaten && !RANK_AND_FILE.includes(foe.id) ? resolveEncounter(state.cave, [foe.id]) : state.cave
+  const back: RecordState = { ...state, screen: 'beat', combat: null, cave, pending: remaining }
   if (c.over.ended) return back
   const fled = escape({ endurance: state.sheet.endurance })
   return addDeed(
@@ -626,20 +681,24 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
   switch (action.type) {
     case 'nav':
       return { ...state, screen: action.screen }
-    case 'option': {
-      const option = optionById(action.id)
-      if (option === undefined || option.area !== state.area) return state
-      // A check rolls now and opens the card on the result; the rest resolves plainly.
-      return isCheck(option) ? rollNow(state, option, dice) : doOption(state, option, dice)
-    }
-    case 'roll.open': {
-      const option = firstCheck(state)
-      return option === undefined ? state : rollNow(state, option, dice)
-    }
-    case 'roll.manual': {
-      const option = firstCheck(state)
-      return option === undefined ? state : openPicker(state, option)
-    }
+    case 'cave.go':
+      return doGo(state, action.to, dice)
+    case 'cave.take':
+      return state.pending.length > 0 ? state : doTake(state, action.treasure)
+    case 'cave.rescue':
+      return doRescue(state, dice)
+    case 'cave.attack':
+      return doAttackRescue(state)
+    case 'cave.learn':
+      return doLearn(state)
+    case 'cave.fight':
+      return doFight(state, action.foe)
+    case 'cave.rest':
+      return state.pending.length > 0 ? state : doRest(state)
+    case 'cave.leave':
+      return state.pending.length > 0 ? state : { ...state, screen: 'region', result: null, roll: null }
+    case 'roll.manual':
+      return { ...state, byHand: !state.byHand, manual: [] }
     case 'roll':
       return rollCard(state, dice)
     case 'roll.close':
@@ -673,8 +732,8 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return doBlow(state, dice)
     case 'combat.morale':
       return doMorale(state, dice)
-    case 'combat.treasure':
-      return doTreasure(state, dice)
+    case 'combat.loot':
+      return doLoot(state, dice)
     case 'combat.leave':
       return doLeave(state, dice)
     case 'rules.filter':
