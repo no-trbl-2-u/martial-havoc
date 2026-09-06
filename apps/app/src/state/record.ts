@@ -14,6 +14,7 @@ import {
   socialStatuses,
   techniqueByName,
 } from '@martial-havoc/content'
+import { emptyCreation } from './creation'
 import type { RecordState, Sheet } from './types'
 
 /** The one sheet the prototype plays. Phase 8 adds creation and the other seven. */
@@ -50,10 +51,17 @@ export const sheetFor =
     }
   }
 
-/** A new record at the cave entrance (area 2), region thrown. */
+/**
+ * A new record at the cave entrance (area 2), region thrown.
+ *
+ * The sheet is San Te's until the player makes their own: a record has
+ * to have numbers for the strip to draw, and a half-made Master has
+ * none. `creation` being non-null is what says "this Master has not
+ * begun yet"; the creation screen replaces the sheet when they do.
+ */
 export const newRecord = (dice: DiceSource): RecordState => ({
   version: 1,
-  screen: 'beat',
+  screen: 'creation',
   area: 2,
   sheet: sheetFor(PRESET_ID)(dice),
   result: null,
@@ -69,4 +77,5 @@ export const newRecord = (dice: DiceSource): RecordState => ({
   openId: null,
   region: throwRegion(REGION_POINTS)(dice),
   here: 0,
+  creation: emptyCreation(),
 })

@@ -45,7 +45,15 @@ import type { MenuOption, Opponent } from '@martial-havoc/content'
 import { queued } from '../dice/random'
 import { fill } from '../lib/fill'
 import { newRecord } from './record'
-import type { Action, Combat, RecordState, Sheet } from './types'
+import {
+  MAX_TRAINING,
+  finishCreation,
+  rollArt,
+  rollNumbers,
+  rollStanding,
+  takePreset,
+} from './creation'
+import type { Action, Combat, CreationState, RecordState, Sheet } from './types'
 
 /** The citation the engine registry carries for a behaviour id. */
 export const citeOf = (id: string): string => behaviours.find((b) => b.id === id)?.cite ?? id
@@ -363,6 +371,48 @@ const doLeave = (state: RecordState, dice: DiceSource): RecordState => {
   )
 }
 
+// -------------------------------------------------------------- creation
+
+/** Apply a change to the Master being made; a no-op once one has begun. */
+const onCreation = (
+  state: RecordState,
+  change: (c: CreationState) => CreationState,
+): RecordState =>
+  state.creation === null ? state : { ...state, creation: change(state.creation) }
+
+/**
+ * The ROLL button, whatever step it is on.
+ *
+ * One action rather than four means the screen has one primary control
+ * and the reducer owns the book's order (R02/R03 -> R04/R05 -> R09),
+ * rather than three components each knowing what comes next.
+ */
+const rollStep = (c: CreationState, dice: DiceSource): CreationState => {
+  switch (c.step) {
+    case 'who':
+    case 'standing':
+      return { ...rollStanding(c, dice), step: 'numbers' }
+    case 'numbers':
+      return { ...rollNumbers(c, dice), step: 'art' }
+    case 'art':
+      return { ...rollArt(c, dice), step: 'training' }
+    default:
+      return c
+  }
+}
+
+/**
+ * Move a Proficiency by `delta`, floored at zero.
+ *
+ * Not ceilinged: R10's pool is reported, never enforced (spec.md), and
+ * `flagsOf` says so on screen. A player who wants Yin's overspend can
+ * have it, because Yin's printed sheet has it.
+ */
+const withProficiency = (c: CreationState, name: string, delta: number): CreationState => {
+  const next = Math.max(0, (c.proficiencies[name] ?? 0) + delta)
+  return { ...c, proficiencies: { ...c.proficiencies, [name]: next } }
+}
+
 // ------------------------------------------------------------------ reduce
 
 /** The one way a record changes. Pure: same state, action and dice, same result. */
@@ -419,5 +469,47 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return state.region.points.some((p) => p.id === action.to) ? { ...state, here: action.to } : state
     case 'record.new':
       return newRecord(dice)
+
+    // ---------------------------------------------------------- creation
+    // Every branch is a no-op once `creation` is null: a Master who has
+    // begun cannot be re-rolled by a stale button or a replayed action.
+    case 'creation.name':
+      return onCreation(state, (c) => ({ ...c, name: action.name }))
+    case 'creation.preset':
+      return onCreation(state, (c) => takePreset(c, action.id, dice))
+    case 'creation.roll':
+      return onCreation(state, (c) => rollStep(c, dice))
+    case 'creation.art':
+      return onCreation(state, (c) => ({ ...c, martialArtId: action.id, step: 'training' }))
+    case 'creation.training':
+      return onCreation(state, (c) => ({
+        ...c,
+        training: Math.max(0, Math.min(MAX_TRAINING, action.points)),
+      }))
+    case 'creation.proficiency':
+      return onCreation(state, (c) => withProficiency(c, action.name, action.delta))
+    case 'creation.technique':
+      return onCreation(state, (c) => ({
+        ...c,
+        techniqueIds: c.techniqueIds.includes(action.id)
+          ? c.techniqueIds.filter((id) => id !== action.id)
+          : [...c.techniqueIds, action.id],
+      }))
+    case 'creation.kit':
+      return onCreation(state, (c) => ({
+        ...c,
+        kitItemId: c.kitItemId === action.id ? null : action.id,
+      }))
+    case 'creation.step':
+      return onCreation(state, (c) => ({ ...c, step: action.step }))
+    case 'creation.begin':
+      return state.creation === null
+        ? state
+        : {
+            ...state,
+            creation: null,
+            screen: 'beat',
+            sheet: finishCreation(state.creation),
+          }
   }
 }

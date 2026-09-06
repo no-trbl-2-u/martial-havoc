@@ -1,0 +1,338 @@
+/**
+ * Making a Master, in the book's order (MH p.5-21, R02-R19).
+ *
+ * One step on screen at a time, each carrying the folio it comes from,
+ * because the player is being walked through a procedure they may not
+ * know and the citation is the promise that nothing extra is being
+ * asked of them.
+ *
+ * Two things this screen will not do:
+ *
+ * 1. **It never refuses.** `spec.md`: the engine "reports the numbers
+ *    and never refuses". Every pool can be overspent, every step can be
+ *    skipped, and BEGIN is live from the first screen. What is outside
+ *    the printed limits is listed on the last step and carried nowhere
+ *    else. Yin's own printed sheet overspends (R83), so a build that
+ *    blocked an overspend could not load the author's eight.
+ * 2. **It holds no rule and no copy.** Every number comes from
+ *    `@martial-havoc/engine` through `../state/creation.ts`; every
+ *    string comes from `@martial-havoc/content`. This file arranges.
+ */
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+  martialArts,
+  presets,
+  startingKitItems,
+  t,
+  techniqueById,
+  techniques,
+} from '@martial-havoc/content'
+import { fill } from '../lib/fill'
+import {
+  MAX_TRAINING,
+  artOf,
+  flagsOf,
+  pool,
+  resourcePool,
+  skillAfterTraining,
+  spentProficiency,
+  spentResources,
+} from '../state/creation'
+import { CREATION_STEPS } from '../state/types'
+import type { Action, CreationState, CreationStep, RecordState } from '../state/types'
+import { color, font } from '../theme/tokens'
+import { Button } from '../components/Button'
+import { MenuButton } from '../components/MenuButton'
+import { Slip } from '../components/Slip'
+import { Counter } from '../components/creation/Counter'
+import { Step, Value } from '../components/creation/Step'
+
+type Props = { readonly state: RecordState; readonly dispatch: (a: Action) => void }
+
+/** The step a player is on, and the one after it. */
+const nextStep = (step: CreationStep): CreationStep =>
+  CREATION_STEPS[Math.min(CREATION_STEPS.length - 1, CREATION_STEPS.indexOf(step) + 1)] ?? 'ready'
+const prevStep = (step: CreationStep): CreationStep =>
+  CREATION_STEPS[Math.max(0, CREATION_STEPS.indexOf(step) - 1)] ?? 'who'
+
+/** The Techniques a style can teach, cheapest first. */
+const learnable = (c: CreationState) => {
+  const art = artOf(c)
+  if (art === undefined) return []
+  return [...techniques].sort((a, b) => a.cost - b.cost).slice(0, 12)
+}
+
+export const CreationScreen = ({ state, dispatch }: Props) => {
+  const c = state.creation
+  if (c === null) return null
+  const art = artOf(c)
+  const flags = flagsOf(c)
+  const stepNumber = CREATION_STEPS.indexOf(c.step) + 1
+
+  return (
+    <View style={styles.screen} testID="creation">
+      <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
+        {c.step === 'who' ? (
+          <>
+            <Step title={t('ui.creation.who.title')} note={t('ui.creation.who.note')} testID="step-who">
+              <Text style={styles.label}>{t('ui.creation.name.label')}</Text>
+              <View style={styles.field}>
+                <Text
+                  testID="creation-name"
+                  style={c.name === '' ? styles.placeholder : styles.fieldText}
+                >
+                  {c.name === '' ? t('ui.creation.name.placeholder') : c.name}
+                </Text>
+              </View>
+              <Button
+                testID="creation-roll-master"
+                primary
+                text={t('ui.creation.who.roll')}
+                onPress={() => dispatch({ type: 'creation.roll' })}
+              />
+            </Step>
+            <Step
+              title={t('ui.creation.presets.title')}
+              note={t('ui.creation.presets.note')}
+              testID="step-presets"
+            >
+              {presets.map((p) => (
+                <MenuButton
+                  key={p.id}
+                  testID={`preset-${p.id}`}
+                  title={p.name}
+                  note={`SKL ${p.skill} · END ${p.endurance} · LCK ${p.luck}`}
+                  line={p.martialArt}
+                  onPress={() => dispatch({ type: 'creation.preset', id: p.id })}
+                />
+              ))}
+            </Step>
+          </>
+        ) : null}
+
+        {c.step === 'standing' || (c.step !== 'who' && c.status !== null) ? (
+          <Step
+            title={t('ui.creation.standing.title')}
+            note={t('ui.creation.standing.note')}
+            testID="step-standing"
+          >
+            {c.status === null ? (
+              <Button primary text={t('ui.creation.roll')} onPress={() => dispatch({ type: 'creation.roll' })} />
+            ) : (
+              <Text testID="creation-standing" style={styles.reading}>
+                {fill(t('ui.creation.standing.value'), { name: c.status.name, gold: c.status.gold })}
+              </Text>
+            )}
+          </Step>
+        ) : null}
+
+        {c.step === 'numbers' || (c.skill !== null && c.step !== 'who') ? (
+          <Step
+            title={t('ui.creation.numbers.title')}
+            note={t('ui.creation.numbers.note')}
+            testID="step-numbers"
+          >
+            {c.skill === null ? (
+              <Button primary text={t('ui.creation.roll')} onPress={() => dispatch({ type: 'creation.roll' })} />
+            ) : (
+              <View style={styles.values}>
+                <Value label="SKL" value={skillAfterTraining(c)} testID="creation-skill" />
+                <Value label="END" value={c.endurance?.current ?? 0} testID="creation-endurance" />
+                <Value label="LCK" value={c.luck?.current ?? 0} testID="creation-luck" />
+              </View>
+            )}
+          </Step>
+        ) : null}
+
+        {c.step === 'art' ? (
+          <Step title={t('ui.creation.art.title')} note={t('ui.creation.art.note')} testID="step-art">
+            <Button primary text={t('ui.creation.roll')} onPress={() => dispatch({ type: 'creation.roll' })} />
+            <Text style={styles.label}>{t('ui.creation.art.choose')}</Text>
+            {martialArts.map((m) => (
+              <MenuButton
+                key={m.id}
+                testID={`art-${m.id}`}
+                title={m.name}
+                note={m.proficiencies.join(' · ')}
+                line=""
+                onPress={() => dispatch({ type: 'creation.art', id: m.id })}
+              />
+            ))}
+          </Step>
+        ) : null}
+
+        {c.step !== 'who' && c.step !== 'standing' && c.step !== 'numbers' && art !== undefined ? (
+          <Slip style={styles.artSlip} testID="creation-art">
+            <Text style={styles.artName}>{art.name.toUpperCase()}</Text>
+            <Text style={styles.artStyle}>{art.styleText}</Text>
+          </Slip>
+        ) : null}
+
+        {c.step === 'training' ? (
+          <Step
+            title={t('ui.creation.training.title')}
+            note={t('ui.creation.training.note')}
+            testID="step-training"
+          >
+            <Counter
+              testID="creation-training"
+              label={t('ui.creation.training.title')}
+              value={c.training}
+              onChange={(d) => dispatch({ type: 'creation.training', points: c.training + d })}
+            />
+            <Text style={styles.reading}>
+              {fill(t('ui.creation.training.value'), {
+                points: `${c.training} OF ${MAX_TRAINING}`,
+                skill: skillAfterTraining(c),
+                resources: resourcePool(c),
+              })}
+            </Text>
+          </Step>
+        ) : null}
+
+        {c.step === 'spend' ? (
+          <>
+            <Step
+              title={t('ui.creation.spend.title')}
+              note={t('ui.creation.spend.note')}
+              testID="step-spend"
+            >
+              <Text testID="creation-pool" style={styles.reading}>
+                {fill(t('ui.creation.spend.pool'), { spent: spentProficiency(c), pool: pool(c) })}
+              </Text>
+              {(art?.proficiencies ?? []).map((name) => (
+                <Counter
+                  key={name}
+                  testID={`proficiency-${name}`}
+                  label={name}
+                  value={c.proficiencies[name] ?? 0}
+                  onChange={(delta) => dispatch({ type: 'creation.proficiency', name, delta })}
+                />
+              ))}
+            </Step>
+            <Step
+              title={t('ui.creation.techniques.title')}
+              note={t('ui.creation.techniques.note')}
+              testID="step-techniques"
+            >
+              <Text testID="creation-resources" style={styles.reading}>
+                {fill(t('ui.creation.techniques.pool'), {
+                  spent: spentResources(c),
+                  pool: resourcePool(c),
+                })}
+              </Text>
+              {learnable(c).map((tech) => (
+                <MenuButton
+                  key={tech.id}
+                  testID={`technique-${tech.id}`}
+                  title={`${c.techniqueIds.includes(tech.id) ? '* ' : ''}${tech.name}`}
+                  note={`${tech.cost}`}
+                  line=""
+                  onPress={() => dispatch({ type: 'creation.technique', id: tech.id })}
+                />
+              ))}
+            </Step>
+          </>
+        ) : null}
+
+        {c.step === 'kit' ? (
+          <Step title={t('ui.creation.kit.title')} note={t('ui.creation.kit.note')} testID="step-kit">
+            {startingKitItems.slice(0, 14).map((item) => (
+              <MenuButton
+                key={item.id}
+                testID={`kit-${item.id}`}
+                title={`${c.kitItemId === item.id ? '* ' : ''}${item.item}`}
+                note={item.priceGp === null ? `${item.priceSp ?? 0} SP` : `${item.priceGp} GP`}
+                line=""
+                onPress={() => dispatch({ type: 'creation.kit', id: item.id })}
+              />
+            ))}
+          </Step>
+        ) : null}
+
+        {c.step === 'ready' ? (
+          <Step title={t('ui.creation.ready.title')} note={t('ui.creation.ready.note')} testID="step-ready">
+            <View style={styles.values}>
+              <Value label="SKL" value={skillAfterTraining(c)} testID="ready-skill" />
+              <Value label="END" value={c.endurance?.current ?? 0} />
+              <Value label="LCK" value={c.luck?.current ?? 0} />
+              <Value label="GP" value={c.status?.gold ?? 0} />
+            </View>
+            <Text style={styles.reading}>
+              {c.techniqueIds
+                .map((id) => techniqueById(id)?.name)
+                .filter((n): n is string => n !== undefined)
+                .join(' · ')}
+            </Text>
+          </Step>
+        ) : null}
+
+        {flags.length === 0 ? null : (
+          <Slip dashed style={styles.flags} testID="creation-flags">
+            <Text style={styles.flagsTitle}>{t('ui.creation.flags')}</Text>
+            {flags.map((f) => (
+              <Text key={f} style={styles.flag}>{f}</Text>
+            ))}
+          </Slip>
+        )}
+      </ScrollView>
+
+      <View style={styles.foot}>
+        <Text style={styles.progress}>
+          {fill(t('ui.creation.step'), {
+            n: stepNumber,
+            total: CREATION_STEPS.length,
+            name: c.step.toUpperCase(),
+          })}
+        </Text>
+        <View style={styles.bar}>
+          <Button
+            testID="creation-back"
+            text={t('ui.creation.back')}
+            onPress={() => dispatch({ type: 'creation.step', step: prevStep(c.step) })}
+            style={styles.grow}
+          />
+          {c.step === 'ready' ? (
+            <Button
+              testID="creation-begin"
+              primary
+              text={t('ui.creation.begin')}
+              onPress={() => dispatch({ type: 'creation.begin' })}
+              style={styles.grow}
+            />
+          ) : (
+            <Button
+              testID="creation-next"
+              primary
+              text={t('ui.creation.next')}
+              onPress={() => dispatch({ type: 'creation.step', step: nextStep(c.step) })}
+              style={styles.grow}
+            />
+          )}
+        </View>
+      </View>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  screen: { flex: 1 },
+  page: { flex: 1 },
+  pageContent: { paddingBottom: 12 },
+  label: { fontFamily: font.sans, fontSize: 10, fontWeight: '800', letterSpacing: 0.8, color: color.dim },
+  field: { borderWidth: 3, borderColor: color.ink, paddingVertical: 8, paddingHorizontal: 9 },
+  fieldText: { fontFamily: font.serif, fontSize: 15, color: color.ink },
+  placeholder: { fontFamily: font.serif, fontSize: 15, fontStyle: 'italic', color: color.dim },
+  reading: { fontFamily: font.mono, fontSize: 12, lineHeight: 17, color: color.ink },
+  values: { flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 4 },
+  artSlip: { marginTop: 10, marginHorizontal: 14, padding: 9 },
+  artName: { fontFamily: font.sans, fontSize: 12, fontWeight: '800', letterSpacing: 0.9, color: color.ink },
+  artStyle: { fontFamily: font.serif, fontSize: 13, lineHeight: 18, marginTop: 3, color: color.ink },
+  flags: { marginTop: 10, marginHorizontal: 14, padding: 9, gap: 3 },
+  flagsTitle: { fontFamily: font.sans, fontSize: 10, fontWeight: '800', letterSpacing: 0.8, color: color.vermilion },
+  flag: { fontFamily: font.mono, fontSize: 11, lineHeight: 15, color: color.ink },
+  foot: { flexShrink: 0, borderTopWidth: 3, borderTopColor: color.ink, backgroundColor: color.paper, paddingHorizontal: 14, paddingTop: 6, paddingBottom: 14, gap: 6 },
+  progress: { fontFamily: font.mono, fontSize: 10, color: color.dim },
+  bar: { flexDirection: 'row', gap: 7 },
+  grow: { flex: 1 },
+})

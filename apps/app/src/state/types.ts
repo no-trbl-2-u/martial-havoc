@@ -21,8 +21,71 @@ import type {
   UnexpectedEventRoll,
 } from '@martial-havoc/engine'
 
-/** The four screens of the prototype frame. */
-export type Screen = 'beat' | 'combat' | 'rules' | 'region'
+/** The screens of the frame. */
+export type Screen = 'creation' | 'beat' | 'combat' | 'rules' | 'region'
+
+/**
+ * Where creation has got to, in the book's own order (R02-R19).
+ *
+ * `who` asks the one question the book does not — a name, and whether
+ * to take a printed sheet (R83) or roll one — and every step after it
+ * is a rule. `ready` is a made Master who has not yet begun.
+ */
+export type CreationStep =
+  | 'who'
+  | 'standing'
+  | 'numbers'
+  | 'art'
+  | 'training'
+  | 'spend'
+  | 'kit'
+  | 'ready'
+
+/** The order the steps run in, which is the order the book prints them. */
+export const CREATION_STEPS: readonly CreationStep[] = [
+  'who',
+  'standing',
+  'numbers',
+  'art',
+  'training',
+  'spend',
+  'kit',
+  'ready',
+]
+
+/** A rolled attribute as creation holds it, before it reaches a sheet. */
+export type RolledAttribute = { readonly current: number; readonly initial: number }
+
+/**
+ * A Master part-way through being made.
+ *
+ * Nothing here is a `Sheet` yet: a half-made Master has no ENDURANCE to
+ * be hit in, and pretending otherwise would let the rest of the app
+ * read a number that has not been rolled. `finishCreation` in
+ * `./creation.ts` is the one place this becomes a sheet.
+ */
+export type CreationState = {
+  readonly step: CreationStep
+  readonly name: string
+  /** Set when the player took one of the eight printed sheets (R83). */
+  readonly presetId: string | null
+  /** R02, R03: the social band and the gold its dice gave. */
+  readonly status: { readonly id: string; readonly name: string; readonly gold: number } | null
+  /** R04, R05. */
+  readonly skill: RolledAttribute | null
+  readonly endurance: RolledAttribute | null
+  readonly luck: RolledAttribute | null
+  /** R09. */
+  readonly martialArtId: string | null
+  /** R15-R17: points bought, each costing 1 SKILL and giving 4 resources. */
+  readonly training: number
+  /** R10: Proficiency name to the points put on it. */
+  readonly proficiencies: Readonly<Record<string, number>>
+  /** R16: the `technique.*` ids learned. */
+  readonly techniqueIds: readonly string[]
+  /** R02: the one starting item, a `market.*` id. */
+  readonly kitItemId: string | null
+}
 
 /** The Master's numbers as the strip shows them, with the initial values R05 asks us to keep. */
 export type Sheet = {
@@ -145,6 +208,14 @@ export type RecordState = {
   readonly region: Region
   /** The region point the Master stands at. */
   readonly here: number
+  /**
+   * The Master being made, or null once one has begun.
+   *
+   * Null is the resting state: a record that is being played has a
+   * sheet, not a creation. A record that has never been played has a
+   * creation and a placeholder sheet.
+   */
+  readonly creation: CreationState | null
 }
 
 /** Everything a screen may ask the record to do. */
@@ -170,3 +241,13 @@ export type Action =
   | { readonly type: 'rules.open'; readonly id: string | null }
   | { readonly type: 'region.travel'; readonly to: number }
   | { readonly type: 'record.new' }
+  | { readonly type: 'creation.name'; readonly name: string }
+  | { readonly type: 'creation.preset'; readonly id: string }
+  | { readonly type: 'creation.roll' }
+  | { readonly type: 'creation.art'; readonly id: string }
+  | { readonly type: 'creation.training'; readonly points: number }
+  | { readonly type: 'creation.proficiency'; readonly name: string; readonly delta: number }
+  | { readonly type: 'creation.technique'; readonly id: string }
+  | { readonly type: 'creation.kit'; readonly id: string }
+  | { readonly type: 'creation.step'; readonly step: CreationStep }
+  | { readonly type: 'creation.begin' }

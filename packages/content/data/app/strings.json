@@ -716,6 +716,196 @@
       "id": "ui.treasure.vase-of-muttonfat-jade",
       "text": "Vase of muttonfat jade",
       "cite": "5T a2"
+    },
+    {
+      "id": "ui.creation.place",
+      "text": "MAKE YOUR MASTER",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.step",
+      "text": "STEP {n} OF {total} · {name}",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.who.title",
+      "text": "WHO ARE YOU?",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.who.note",
+      "text": "A name is yours. Everything after this is the book's.",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.name.label",
+      "text": "NAME",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.name.placeholder",
+      "text": "A wandering master",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.who.roll",
+      "text": "ROLL A MASTER",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.who.take",
+      "text": "OR TAKE A PRINTED SHEET",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.presets.title",
+      "text": "THE EIGHT SHEETS",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.presets.note",
+      "text": "MH p.91-92 (R83), as printed",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.standing.title",
+      "text": "YOUR STANDING",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.standing.note",
+      "text": "MH p.5 (R02, R03) · one d6 for the band, its own dice for the gold",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.standing.value",
+      "text": "{name} · {gold} GP",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.numbers.title",
+      "text": "YOUR NUMBERS",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.numbers.note",
+      "text": "MH p.6 (R04, R05) · SKILL 1d6+6, ENDURANCE 2d6+12, LUCK 1d6+6",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.art.title",
+      "text": "YOUR MARTIAL ART",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.art.note",
+      "text": "MH p.9 (R09) · roll the table, or choose",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.art.choose",
+      "text": "CHOOSE INSTEAD",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.training.title",
+      "text": "TRAINING",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.training.note",
+      "text": "MH p.15 (R15-R17) · each point costs 1 SKILL and gives 4 resource points",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.training.value",
+      "text": "{points} · SKILL {skill} · {resources} RESOURCE POINTS",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.spend.title",
+      "text": "PROFICIENCIES",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.spend.note",
+      "text": "MH p.10 (R10, D06) · the pool is your rolled SKILL, before Training",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.spend.pool",
+      "text": "{spent} OF {pool} SPENT",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.techniques.title",
+      "text": "TECHNIQUES",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.techniques.note",
+      "text": "MH p.16 (R16) · paid for out of resource points",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.techniques.pool",
+      "text": "{spent} OF {pool} RESOURCE POINTS",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.kit.title",
+      "text": "ONE THING TO CARRY",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.kit.note",
+      "text": "MH p.5 (R02) · one item under 20 GP, and your weapon",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.ready.title",
+      "text": "READY",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.ready.note",
+      "text": "Nothing here is enforced. The book's limits are reported; you decide.",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.begin",
+      "text": "BEGIN",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.back",
+      "text": "BACK",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.next",
+      "text": "NEXT",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.roll",
+      "text": "ROLL",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.reroll",
+      "text": "ROLL AGAIN",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.creation.flags",
+      "text": "OUTSIDE THE PRINTED LIMITS",
+      "cite": "spec.md, Horizon (creation)"
+    },
+    {
+      "id": "ui.nav.creation",
+      "text": "NEW",
+      "cite": "spec.md, Horizon (creation)"
     }
   ]
 }

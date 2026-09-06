@@ -101,12 +101,22 @@ export const toCampaign = (state: RecordState): CampaignRecord => ({
  * campaign's values win for every field it owns. A campaign that names
  * an area this build does not have falls back to the session's, which is
  * how a save from a build with more areas than this one still opens.
+ *
+ * A restored campaign is a Master who has already begun, so creation is
+ * always cleared. The screen is only redirected when the base would
+ * strand the player *in* creation — a stale or missing session snapshot
+ * falls back to the fresh record, which opens on creation, and dropping
+ * a returning player there on top of their own saved campaign would let
+ * the first tap roll a new Master over it. A session that names a real
+ * screen keeps it; carrying the screen is the session half's job.
  */
 export const fromCampaign = (record: CampaignRecord, session: RecordState): RecordState => {
   const cave = record.adventures[ADVENTURE_ID]
   const area = cave === undefined ? session.area : (AREA_NUMBER.get(cave.area) ?? session.area)
   return {
     ...session,
+    creation: null,
+    screen: session.screen === 'creation' ? 'beat' : session.screen,
     area,
     sheet: {
       ...session.sheet,

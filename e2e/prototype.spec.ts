@@ -11,8 +11,26 @@ import type { Page } from '@playwright/test'
 
 const button = (page: Page, name: RegExp | string) => page.getByRole('button', { name })
 
+/**
+ * Past creation and into the cave.
+ *
+ * A fresh record opens on creation (Phase 8), so every spec about the
+ * beat or the fight has to make a Master first. Taking San Te's printed
+ * sheet is two taps and is what these specs assumed implicitly before
+ * creation existed: the same Master, now actually chosen.
+ *
+ * It spends no `?dice=` faces. Creation rolls on the table's source,
+ * not the queue, so a spec's named rolls still reach the rolls it named.
+ */
+const begin = async (page: Page) => {
+  await page.getByTestId('preset-preset.san-te').click()
+  await page.getByTestId('creation-begin').click()
+  await expect(page.getByTestId('beat')).toBeVisible()
+}
+
 test('the beat opens at the cave entrance with the Master in reach', async ({ page }) => {
   await page.goto('/')
+  await begin(page)
   await expect(page.getByText('THE 5 TREASURES')).toBeVisible()
   await expect(page.getByTestId('place')).toHaveText('AREA 2 OF 8 · CAVE ENTRANCE')
   await expect(page.getByTestId('attr-skill')).toHaveText('8')
@@ -30,6 +48,7 @@ test('the beat opens at the cave entrance with the Master in reach', async ({ pa
 
 test('a check shows both dice, the total, the label pill and the citation', async ({ page }) => {
   await page.goto('/?dice=4,6')
+  await begin(page)
   await button(page, /FORCE THE SHUT GATE/).click()
   await expect(page.getByText('SKILL CHECK · PASSED')).toBeVisible()
   await expect(page.getByTestId('die-result-a')).toHaveAttribute('aria-label', '4')
@@ -42,6 +61,7 @@ test('a check shows both dice, the total, the label pill and the citation', asyn
 
 test('the dice on the table are used, counted as an override, and the record survives a reload', async ({ page }) => {
   await page.goto('/?dice=1,1')
+  await begin(page)
   await button(page, 'MY DICE').click()
   await expect(page.getByText('TAP THE TWO FACES YOU ROLLED')).toBeVisible()
   await page.getByRole('button', { name: '6', exact: true }).click()
@@ -60,6 +80,7 @@ test('the dice on the table are used, counted as an override, and the record sur
 
 test('a passage is optional and kept when written', async ({ page }) => {
   await page.goto('/')
+  await begin(page)
   await expect(page.getByText('YOUR PASSAGE · 0 WRITTEN')).toBeVisible()
   await expect(button(page, 'KEEP IT')).toHaveCount(0)
   await page.getByPlaceholder("Write it down, or don't.").fill('The willow had grown around the gate.')
@@ -69,6 +90,7 @@ test('a passage is optional and kept when written', async ({ page }) => {
 
 test('combat shows both rolls, both Proficiencies, both totals and the difference', async ({ page }) => {
   await page.goto('/?dice=6,5,1,1')
+  await begin(page)
   await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
   await expect(page.getByTestId('place')).toHaveText('AREA 3 OF 8 · ATTENDANTS ROOM')
   await button(page, /FACE THE DEXTEROUS GHOST/).click()
@@ -101,6 +123,7 @@ test('combat shows both rolls, both Proficiencies, both totals and the differenc
 test('a tie is an Unexpected Event and the retreat row rolls Morale', async ({ page }) => {
   // Master 3+4+8+4 = 19; Ghost 4+4+7+4 = 19. Event 2d6 = 2+2 = 4 (retreat). Morale d6 = 2 (flee).
   await page.goto('/?dice=3,4,4,4,2,2,2')
+  await begin(page)
   await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
   await button(page, /FACE THE DEXTEROUS GHOST/).click()
   await button(page, 'ROLL THE ROUND').click()
@@ -117,6 +140,7 @@ test('a tie is an Unexpected Event and the retreat row rolls Morale', async ({ p
 test('a lost round costs the difference; fleeing costs the last blow and Dishonor', async ({ page }) => {
   // Master 1+1+12 = 14; Ghost 6+6+11 = 23: nine off ENDURANCE, then two more for the escape.
   await page.goto('/?dice=1,1,6,6')
+  await begin(page)
   await button(page, /GO IN, TO THE ATTENDANTS ROOM/).click()
   await button(page, /FACE THE DEXTEROUS GHOST/).click()
   await button(page, 'ROLL THE ROUND').click()
@@ -131,6 +155,7 @@ test('a lost round costs the difference; fleeing costs the last blow and Dishono
 
 test('the rules panel lists every behaviour with its label and opens one', async ({ page }) => {
   await page.goto('/')
+  await begin(page)
   await button(page, 'RULES').click()
   await expect(page.getByText('RULES, READINGS AND INVENTIONS')).toBeVisible()
   await expect(page.getByText(/^\d+ BEHAVIOURS · 0 UNLABELLED$/)).toBeVisible()
@@ -148,6 +173,7 @@ test('the rules panel lists every behaviour with its label and opens one', async
 
 test('the region is seven linked points and says it is not to scale', async ({ page }) => {
   await page.goto('/')
+  await begin(page)
   await button(page, 'MAP').click()
   await expect(page.getByText('NOT TO SCALE')).toBeVisible()
   await expect(page.getByText(/7 POINTS · \d+ LINKS/)).toBeVisible()
@@ -163,11 +189,13 @@ test('the region is seven linked points and says it is not to scale', async ({ p
 
 test('an unknown route still serves the app (single-page fallback)', async ({ page }) => {
   await page.goto('/not-a-route')
+  await begin(page)
   await expect(page.getByText('THE 5 TREASURES')).toBeVisible()
 })
 
 test('the frame never scrolls sideways at phone width', async ({ page }) => {
   await page.goto('/')
+  await begin(page)
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
   expect(overflow).toBeLessThanOrEqual(1)
 })
@@ -183,6 +211,7 @@ test('the frame never scrolls sideways at phone width', async ({ page }) => {
 test('the beat keeps the menu and the roll bar in reach when a result lands', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/?dice=4,6')
+  await begin(page)
   const menuButton = page.getByRole('button', { name: /FORCE THE SHUT GATE/ })
   const before = await menuButton.boundingBox()
   await menuButton.click()
@@ -198,6 +227,7 @@ test('the beat keeps the menu and the roll bar in reach when a result lands', as
 
 test('the unchosen layouts are gone: ?layout= serves the same beat', async ({ page }) => {
   await page.goto('/?layout=c')
+  await begin(page)
   await expect(page.getByTestId('beat')).toBeVisible()
   await expect(page.getByTestId('authored-line')).toBeVisible()
   await expect(page.getByTestId('ledger')).toHaveCount(0)
