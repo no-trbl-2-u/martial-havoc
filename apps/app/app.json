@@ -29,6 +29,12 @@
         "projectId": "344d4bd5-661e-469c-83de-223cea93aaaf"
       }
     },
-    "owner": "no.trbl.2.u"
+    "owner": "no.trbl.2.u",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/344d4bd5-661e-469c-83de-223cea93aaaf"
+    }
   }
 }
