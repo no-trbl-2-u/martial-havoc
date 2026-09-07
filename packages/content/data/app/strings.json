@@ -393,6 +393,91 @@
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
     },
     {
+      "id": "ui.combat.act.technique.warning",
+      "text": "To make the fights more challenging, do not use the Technique to end a fight; even if you can knock down an opponent, it does not mean that they are defeated, but that you have gained a great advantage, or the chance to escape without consequences.",
+      "cite": "MH p.24"
+    },
+    {
+      "id": "ui.combat.act.technique.warning.cite",
+      "text": "MH p.24",
+      "cite": "MH p.24"
+    },
+    {
+      "id": "ui.combat.act.technique.choose",
+      "text": "{n} of yours work inside a round. Pick one.",
+      "cite": "MH p.23 (R25)"
+    },
+    {
+      "id": "ui.combat.act.technique.close",
+      "text": "Not this one after all.",
+      "cite": "MH p.23 (R25)"
+    },
+    {
+      "id": "ui.combat.act.minions",
+      "text": "Minions at 1",
+      "cite": "MH p.28 (R33, footnote)"
+    },
+    {
+      "id": "ui.combat.act.minions.cite",
+      "text": "MH p.28 · OPTIONAL",
+      "cite": "MH p.28 (R33, footnote)"
+    },
+    {
+      "id": "ui.combat.act.minions.off",
+      "text": "Off. Every body reads its printed ENDURANCE.",
+      "cite": "MH p.28 (R33, footnote)"
+    },
+    {
+      "id": "ui.combat.act.minions.on",
+      "text": "On. Every body reads ENDURANCE 1, and any hit removes one.",
+      "cite": "MH p.28 (R33, footnote)"
+    },
+    {
+      "id": "ui.combat.band.minion",
+      "text": "AT 1",
+      "cite": "MH p.28 (R33, footnote)"
+    },
+    {
+      "id": "ui.combat.act.treasure",
+      "text": "Search it for treasure",
+      "cite": "MH p.68 (R78)"
+    },
+    {
+      "id": "ui.combat.act.treasure.of",
+      "text": "Search the {name} for treasure",
+      "cite": "MH p.68 (R78)"
+    },
+    {
+      "id": "ui.combat.act.treasure.cite",
+      "text": "MH p.68 · R78 · READING I-30b",
+      "cite": "MH p.68 (R78, I-30b)"
+    },
+    {
+      "id": "ui.combat.act.treasure.line",
+      "text": "One d6 against its printed ENDURANCE. Only if you believe it carried something.",
+      "cite": "MH p.68 (R78, I-30b)"
+    },
+    {
+      "id": "ui.result.treasure.title",
+      "text": "TREASURE · {name}",
+      "cite": "MH p.68 (R78)"
+    },
+    {
+      "id": "ui.result.treasure.against",
+      "text": "read on the {band} row",
+      "cite": "MH p.68 (R78)"
+    },
+    {
+      "id": "ui.result.treasure.cite",
+      "text": "MH p.68 · R78 · READING I-30b",
+      "cite": "MH p.68 (R78, I-30b)"
+    },
+    {
+      "id": "ui.cave.loot.hint.cite",
+      "text": "5T a2 · LOOT · READING I-08",
+      "cite": "5T a2 (I-08)"
+    },
+    {
       "id": "ui.combat.act.weapon",
       "text": "Change or recover a weapon",
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
@@ -696,6 +781,21 @@
       "id": "ui.deed.took",
       "text": "took the {name}",
       "cite": "design/prototype/martial-havoc-prototype.dc.html"
+    },
+    {
+      "id": "ui.deed.hint",
+      "text": "learned the servant's secret of the {area}",
+      "cite": "5T a2 (I-08)"
+    },
+    {
+      "id": "ui.deed.searched",
+      "text": "searched the {name} and found {found}",
+      "cite": "MH p.68 (R78, I-30b)"
+    },
+    {
+      "id": "ui.deed.minions",
+      "text": "Minions at 1, MH p.28",
+      "cite": "MH p.28 (R33, footnote)"
     },
     {
       "id": "ui.deed.fell",

@@ -267,16 +267,26 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       that uses the second person, so they get their own gate in
       `voice.test.ts` rather than his.
 
-- [ ] Phase 10k — True to the book: the fight as the book runs it
+- [x] Phase 10k — True to the book: the fight as the book runs it
       (brief: `phase_10k_true_to_the_book.md`; from the merged
       `determined-intent.md` of 2026-09-07 and the fidelity rows
-      `plan/CRITIQUE.md` carries). A lost round is followed by another;
-      every known Technique is a winner's option with the book's
-      warning beside it; the Minions footnote is offered; the Oracle's
-      spans and the printed defects are pinned by test; the Devil
-      servant's 6 reveals the Hint; every table roll takes a manual
-      result. App and content only; the engine is already labelled
-      for all of it.
+      `plan/CRITIQUE.md` carries) — COMMIT_10K. A lost exchange is
+      followed by another and `readyToRoll` is the one answer both the
+      reducer and the screen ask (MH p.23, R26); the Technique row
+      opens a chooser over every Technique of the sheet that works
+      inside a round, with MH p.24's warning under it, upright;
+      MINIONS AT 1 is offered on a band, default off, and switching it
+      on is a deed (MH p.28 footnote, R33); `fidelity.test.ts` pins the
+      eleven Oracle rows face by face and seven printed defects
+      character for character; the Devil servant's 6 writes a deed and
+      cites I-08; R78's Treasures roll is a row over each fallen body,
+      offered and never taken for the player (I-30b), reading one
+      tapped face as an override. **Three calls are in the commit
+      body**: the brief said "no engine change" and two labelled
+      behaviours were registered anyway, the R78 roll had to be built
+      before its manual path could be wired, and the Oracle's Enemy
+      attack span disagreed with the docs — corrected against the PDF
+      in its own commit first (standing rule 9).
 - [ ] Phase 10l — Spirits immune to ordinary blows (brief:
       `phase_10l_spirits_gate.md`). R77's gate, reverted in 10g,
       turned on once a known Technique and the seven-star sword can

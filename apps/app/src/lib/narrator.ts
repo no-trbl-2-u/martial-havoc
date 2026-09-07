@@ -118,6 +118,11 @@ export const momentOf = (result: Result): string | null => {
       if (result.treasure !== null) return 'loot.treasure'
       if (result.key) return 'loot.key'
       return 'loot.item'
+    case 'treasure':
+      // R78's roll is bookkeeping over a body already fallen, and he has
+      // spoken for that body once (`kill`). He does not say the same
+      // thing twice (VOICE.md, "What he may not say").
+      return null
     case 'flee':
       // The fight left behind. `flee` was already a moment in
       // result-lines.json, spoken from the combat screen's end; Phase

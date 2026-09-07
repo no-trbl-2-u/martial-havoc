@@ -62,6 +62,7 @@ import {
   templeVisit,
   toggleFlag,
   toSilver,
+  treasureBand,
   unexpectedEvent,
   wards,
   withoutArmed,
@@ -86,6 +87,7 @@ import {
   rollAdventureHook,
   rollDeity,
   rollFinalBlow,
+  rollTreasure,
   rollUnexpectedEvent,
   t,
   techniqueById,
@@ -252,7 +254,31 @@ const EMPTY_FOE: FoeInFight = {
   bound: false,
   burning: false,
   looted: false,
+  searched: false,
 }
+
+/**
+ * May the Master roll the next exchange? (MH p.23, R26;
+ * `combat.lost-round-is-followed-by-another`.)
+ *
+ * The book lists three things that end a fight - a Final Blow lands,
+ * either side's ENDURANCE reaches zero, an Unexpected Event occurs -
+ * and losing an exchange is none of them. Until Phase 10k the app
+ * refused a roll while any round was still on the table, which made a
+ * lost exchange the last one a Master could roll and left FLEE as the
+ * only enabled control.
+ *
+ * So the question is not "has a round been rolled" but "is there a
+ * winner's option still open". A round the Master took *something* from
+ * - any standing body they were ahead of - waits for them to spend it,
+ * because rolling again would throw the option away. A round that left
+ * them nothing to spend is finished the moment they have read it.
+ *
+ * Exported because the screen has to ask the same question to enable
+ * the button, and two answers that could drift are one bug waiting.
+ */
+export const readyToRoll = (c: Combat): boolean =>
+  c.last === null || !standing(c).some((f) => f.outcome === 'master-wins')
 
 /**
  * R26 read off the current numbers, for a band rather than one body.
@@ -431,7 +457,13 @@ const doLootOf = (state: RecordState, foeId: string, dice: DiceSource, gift = fa
     hint,
   }
   const next = { ...state, cave, result }
-  if (row === undefined || hint) return next
+  if (row === undefined) return next
+  // The 6 is the one LOOT row that leaves nothing in the hand, and
+  // until Phase 10k it left nothing in the ledger either: the Hint was
+  // revealed and no line anywhere said why the grey paragraph had
+  // appeared. It is a deed like any other taking (I-08).
+  if (hint)
+    return addDeed(next, fill(t('ui.deed.hint'), { area: areaName(state.cave.area) }))
   const took = row.treasure !== null ? treasureName(row.treasure) : row.item
   return addDeed(next, fill(t('ui.deed.took'), { name: took }))
 }
@@ -625,6 +657,7 @@ const asFoeInFight = (foe: Opponent): FoeInFight => ({
   bound: false,
   burning: false,
   looted: false,
+  searched: false,
 })
 
 const startFight = (state: RecordState, band: readonly Opponent[], ambush = false): RecordState => ({
@@ -646,6 +679,7 @@ const startFight = (state: RecordState, band: readonly Opponent[], ambush = fals
     naming: null,
     blowSettled: false,
     warded: false,
+    minionsAtOne: false,
     over: { ended: false },
   },
 })
@@ -720,8 +754,16 @@ const resolveEvent = (roll: UnexpectedEventRoll, dice: DiceSource): EventShown =
  * of the comparison is SKILL and 2d6 with no Proficiency at all (I-08a).
  */
 const doRound = (state: RecordState, dice: DiceSource): RecordState => {
-  const c = state.combat
-  if (c === null || c.over.ended || c.last !== null) return state
+  const settled = state.combat
+  if (settled === null || settled.over.ended || !readyToRoll(settled)) return state
+  // A round the Master won nothing on is settled by the hit it already
+  // applied, so the slip stands until the next roll and the next roll
+  // clears it (`combat.lost-round-is-followed-by-another`, MH p.23,
+  // R26). Everything else clears `last` where it acts.
+  const c: Combat =
+    settled.last === null
+      ? settled
+      : { ...settled, last: null, foes: rolledOff(settled) }
   const alive = standing(c)
   if (alive.length === 0) return state
   const { source, manual } = masterDice(state, dice)
@@ -876,7 +918,12 @@ const doStrike = (state: RecordState): RecordState => {
   const aim = c === null ? null : aimedAt(c)
   if (c === null || aim === null || aim.outcome !== 'master-wins') return state
   const foe = treasureFoeById(aim.id)
-  const endurance = floor(aim.endurance - aim.difference)
+  // MH p.28's footnote, when the player has switched it on: the body is
+  // read at ENDURANCE 1 for damage, so any hit at all removes it
+  // (`combat.minions-at-endurance-one`). Its printed ENDURANCE is left
+  // on the card, marked, because the block is still what the book
+  // prints - the rule streamlines the fight, it does not rewrite p.71.
+  const endurance = c.minionsAtOne ? 0 : floor(aim.endurance - aim.difference)
   const struck = withFoe(c, c.target, { endurance })
   const combat: Combat = { ...struck, foes: rolledOff(struck), last: null, opening: false }
   const next = { ...state, combat: { ...combat, over: fightEnd(state, combat) } }
@@ -941,7 +988,12 @@ const doTechnique = (state: RecordState, id: string): RecordState => {
   const hurt: Combat = targets.reduce(
     (acc, index, at) =>
       withFoe(acc, index, {
-        endurance: floor((acc.foes[index]?.endurance ?? 0) - (spread[at] ?? 0)),
+        // Same footnote, same reading: a body that took anything at all
+        // is removed while MINIONS AT 1 is on.
+        endurance:
+          c.minionsAtOne && (spread[at] ?? 0) > 0
+            ? 0
+            : floor((acc.foes[index]?.endurance ?? 0) - (spread[at] ?? 0)),
       }),
     c,
   )
@@ -1285,6 +1337,69 @@ const doLoot = (state: RecordState, dice: DiceSource, index: number): RecordStat
   const body = c?.foes[index]
   if (c === null || body === undefined || body.endurance > 0 || body.looted) return state
   return { ...doLootOf(state, body.id, dice), combat: withFoe(c, index, { looted: true }) }
+}
+
+/**
+ * After a victory: R78's Treasures roll over one fallen body (MH p.68).
+ *
+ * The book's trigger is the player's belief - "if you believe that your
+ * defeated opponents may be in possession of, or guarding, something of
+ * valor" - so reading I-30b makes the roll a row that is always offered
+ * and never taken for them
+ * (`progression.treasure-roll-is-offered-and-declinable`). Declining is
+ * simply not pressing it; there is nothing to record about a search
+ * that was not made.
+ *
+ * One d6, so one tapped face is enough: the manual panel's `need: 1`
+ * shape, the same path the beat's Event roll already takes, and the
+ * override count moves for it exactly as it does there. The band is
+ * read off the opponent's *printed* ENDURANCE (R78, `treasureBand`),
+ * not off what is left of it, because the table asks what the creature
+ * is worth rather than how badly it was beaten.
+ */
+const doTreasure = (state: RecordState, dice: DiceSource, index: number): RecordState => {
+  const c = state.combat
+  const body = c?.foes[index]
+  const foe = body === undefined ? undefined : treasureFoeById(body.id)
+  if (c === null || body === undefined || foe === undefined || body.endurance > 0 || body.searched)
+    return state
+  // One face is enough here, and a second tapped face is left where it
+  // is: this roll reads a d6, not 2d6.
+  const manual = state.manual.length > 0
+  const source = manual ? queued(state.manual, dice) : dice
+  const face = d6(source)
+  const band = treasureBand(foe.endurance)
+  const row = rollTreasure(band)(face)
+  const found = row?.text ?? t('ui.cave.loot.nothing')
+  return afterMasterRoll(
+    addDeed(
+      {
+        ...state,
+        combat: withFoe(c, index, { searched: true }),
+        result: { kind: 'treasure', foe: foe.name, face, band, text: found },
+      },
+      fill(t('ui.deed.searched'), { name: foe.name.toLowerCase(), found }),
+    ),
+    manual,
+  )
+}
+
+/**
+ * MINIONS AT 1, on or off (MH p.28, footnote; R33).
+ *
+ * The book's only optional rule that changes a printed stat block, and
+ * the build's first switch of any kind. Switching it on is a deed,
+ * because it changes how the rest of this fight reads and the ledger is
+ * where a player finds out later why three bodies fell to three hits.
+ * Switching it off again is not: the ledger records what was done, not
+ * every time a mind was changed.
+ */
+const doMinions = (state: RecordState): RecordState => {
+  const c = state.combat
+  if (c === null || c.foes.length < 2) return state
+  const on = !c.minionsAtOne
+  const next = withCombat(state, { minionsAtOne: on })
+  return on ? addDeed(next, t('ui.deed.minions')) : next
 }
 
 /**
@@ -1852,6 +1967,10 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return doResume(state)
     case 'combat.loot':
       return doLoot(state, dice, action.index)
+    case 'combat.treasure':
+      return doTreasure(state, dice, action.index)
+    case 'combat.minions':
+      return doMinions(state)
     case 'combat.keep':
       return doKeep(state, dice)
     case 'combat.let-go':

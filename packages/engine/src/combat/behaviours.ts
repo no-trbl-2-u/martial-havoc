@@ -19,6 +19,10 @@ export const combatBehaviours: readonly Behaviour[] = Object.freeze([
   { id: 'combat.technique-costs-endurance-no-roll', label: 'rule', cite: 'MH p.24 (R27)' },
   { id: 'combat.opening', label: 'rule', cite: 'MH p.24 (R29)' },
   { id: 'combat.ends-fight', label: 'rule', cite: 'MH p.23 (R26)' },
+  // The other half of R26, and the one the build had missing: a round
+  // the Master lost is none of the three things that end a fight, so
+  // the fight continues and the next exchange is theirs to roll.
+  { id: 'combat.lost-round-is-followed-by-another', label: 'rule', cite: 'MH p.23 (R26)' },
   { id: 'combat.final-blow-doubles', label: 'rule', cite: 'MH p.25 (R30)' },
   {
     id: 'combat.double-six-lands-a-doubles-roll',
@@ -33,6 +37,9 @@ export const combatBehaviours: readonly Behaviour[] = Object.freeze([
   { id: 'combat.unexpected-event-ends-the-phase', label: 'rule', cite: 'MH p.27 (R32)' },
   { id: 'combat.unexpected-event-minimum-readings', label: 'reading', cite: 'I-30' },
   { id: 'combat.minions-on-a-d6', label: 'reading', cite: 'I-33' },
+  // The book's one optional rule that changes a printed stat block, and
+  // so the one behaviour here that is off until the player turns it on.
+  { id: 'combat.minions-at-endurance-one', label: 'rule', cite: 'MH p.28 (R33, footnote)' },
   {
     id: 'combat.armed-proficiency-needs-its-weapon',
     label: 'reading',
