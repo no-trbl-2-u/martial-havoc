@@ -9,6 +9,17 @@
 
 ## Pending
 
+### [MED] apps/app + packages/engine — half of I-30's either/or is unimplemented
+- pass: agent (commit 412b3f6)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: Reading I-30 resolves Unexpected Event rows 3 and 11 as "injury (-1d6 ENDURANCE) or loss of weapon, the operator's pick". Phase 10d shipped the injury half and applies it automatically; the weapon-loss half is not implemented at all, so an operator who would have picked it has no way to. Two things block it: the loss needs lingering state across rounds (the weapon Proficiency stops adding until a weapon is changed or recovered), and the sheet does not record which of a Master's Proficiencies is the weapon's - `attackStrength` simply takes the best one, so there is nothing to suppress. The phase brief proposed a third thing again, a flat -2 on Attack Strength, which contradicts the shipped reading and was not taken.
+- evidence: packages/engine/src/combat/unexpected-event.ts `EventReading` kind `injury-or-weapon-loss`; apps/app/src/state/reduce.ts `resolveEvent` applies `injuryDamage` unconditionally; plan/phases/phase_10d_the_fight_as_a_scene.md Scope, rows 3 and 11
+- suggested fix: Decide whether the weapon Proficiency is a nameable thing on the sheet. If it is, mark it at creation and give Combat a `weaponLost` flag plus a CHANGE OR RECOVER A WEAPON row, and offer the pick when the row comes up. If it is not, say so in the reading's own note and let injury be the single resolution rather than one of two, so the app stops implying a choice it cannot offer.
+- source: agent
+
+
 ### [HIGH] skills/ship-a-phase.md — the dispatcher picks by list order, not by dependency
 - pass: user-jot (commit 14d178e)
 - viewport: unspecified
