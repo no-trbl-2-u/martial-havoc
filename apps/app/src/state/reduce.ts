@@ -49,6 +49,7 @@ import {
   toggleFlag,
   toSilver,
   unexpectedEvent,
+  withoutArmed,
   withArea,
   withFlag,
 } from '@martial-havoc/engine'
@@ -497,9 +498,12 @@ const resolveEvent = (roll: UnexpectedEventRoll, dice: DiceSource): EventShown =
             : { name: found.name, action: found.action, object: found.object }
         })()
       : null
+  // Rolled, not yet spent: I-30 makes rows 3 and 11 the operator's pick
+  // between the injury and the weapon, so both are offered and neither
+  // is taken until one is chosen.
   const injury =
     reading?.kind === 'injury-or-weapon-loss'
-      ? { target: reading.target, amount: injuryDamage(dice) }
+      ? { target: reading.target, amount: injuryDamage(dice), resolved: null }
       : null
   const brought = reading?.kind === 'reinforcements' ? minions(dice) : null
   return {
@@ -526,28 +530,29 @@ const doRound = (state: RecordState, dice: DiceSource): RecordState => {
   const caught = c.ambush
   const master = attackStrength({
     skill: state.sheet.skill,
-    proficiencies: caught && ambush().masterRollsWithoutProficiency ? [] : state.sheet.proficiencies,
+    // Two things can take a Proficiency out of the Master's sum, and
+    // they are different sizes: an ambush takes all of them for one
+    // round (I-08a), a lost weapon takes only the armed ones and keeps
+    // taking them until the weapon is back (R68, I-02).
+    proficiencies:
+      caught && ambush().masterRollsWithoutProficiency
+        ? []
+        : state.weaponLost
+          ? withoutArmed(state.sheet.proficiencies)
+          : state.sheet.proficiencies,
   })(source)
   const opponent = attackStrength({ skill: foe.skill, proficiencies: foe.proficiencies })(dice)
   const outcome = resolveRound(master, opponent)
   const hit = outcome.kind === 'master-hit' ? outcome.damage : 0
   const afterHit = withSheet(state, { endurance: floor(state.sheet.endurance - hit) })
   const event = outcome.kind === 'unexpected-event' ? resolveEvent(unexpectedEvent(dice), dice) : null
-  // I-30's injury is taken the moment it is rolled, on whichever side
-  // the row names. The opponent's is off its ENDURANCE, which can end
-  // the fight on the spot, and that is the reading working, not a bug.
-  const injured =
-    event?.injury?.target === 'master'
-      ? withSheet(afterHit, { endurance: floor(afterHit.sheet.endurance - event.injury.amount) })
-      : afterHit
-  const foeEndurance =
-    event?.injury?.target === 'opponent'
-      ? floor(c.foeEndurance - event.injury.amount)
-      : c.foeEndurance
+  // An injury row's damage is rolled above and waits for the pick; the
+  // round itself takes nothing extra off either side.
+  const injured = afterHit
   const combat: Combat = {
     ...c,
     round: c.round + 1,
-    foeEndurance,
+    foeEndurance: c.foeEndurance,
     last: {
       master,
       opponent,
@@ -640,6 +645,38 @@ const doBlow = (state: RecordState, dice: DiceSource): RecordState => {
       : next,
     manual,
   )
+}
+
+/**
+ * Rows 3 and 11: the operator's pick (I-30).
+ *
+ * "Injury (-1d6 ENDURANCE) or loss of weapon, the operator's pick" - so
+ * the app offers both halves and applies exactly the one taken, once.
+ * The injury is the die already rolled with the row; the weapon is a
+ * fact that outlives this fight, and only the Master carries one this
+ * build can suspend (R68, I-02), so a row naming the opponent offers the
+ * injury alone. `resolved` closes the pick.
+ */
+const doInjury = (state: RecordState, take: 'injury' | 'weapon'): RecordState => {
+  const c = state.combat
+  const injury = c?.event?.injury
+  if (c === null || c.event === null || injury == null || injury.resolved !== null) return state
+  if (take === 'weapon' && injury.target !== 'master') return state
+  const event = { ...c.event, injury: { ...injury, resolved: take } }
+  if (take === 'weapon') return { ...state, weaponLost: true, combat: { ...c, event } }
+  // The opponent's injury comes off its ENDURANCE, which can end the
+  // fight on the spot: that is the reading working, not a bug.
+  const next =
+    injury.target === 'master'
+      ? withSheet(state, { endurance: floor(state.sheet.endurance - injury.amount) })
+      : state
+  const combat: Combat = {
+    ...c,
+    event,
+    foeEndurance:
+      injury.target === 'opponent' ? floor(c.foeEndurance - injury.amount) : c.foeEndurance,
+  }
+  return { ...next, combat: { ...combat, over: fightEnd(next, combat) } }
 }
 
 /** Morale on a retreat row (spec.md, sealed): the foe's roll, so the table's dice. */
@@ -993,13 +1030,20 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
     case 'combat.technique':
       return doTechnique(state, action.id)
     case 'combat.weapon':
-      return state.combat?.last?.outcome === 'master-wins' ? withCombat(state, { last: null }) : state
+      // R25c is also how a weapon lost to row 3 comes back (I-30): the
+      // book already prints the option for exactly this, so the pick
+      // needed no row of its own.
+      return state.combat?.last?.outcome === 'master-wins'
+        ? withCombat({ ...state, weaponLost: false }, { last: null })
+        : state
     case 'combat.opening':
       return doOpening(state)
     case 'combat.blow':
       return doBlow(state, dice)
     case 'combat.morale':
       return doMorale(state, dice)
+    case 'combat.injury':
+      return doInjury(state, action.take)
     case 'combat.resume':
       return doResume(state)
     case 'combat.loot':

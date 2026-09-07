@@ -95,3 +95,40 @@ export const attackStrength =
       total: roll.total + combatant.skill + (proficiency?.value ?? 0),
     }
   }
+
+/**
+ * The Proficiencies that need a weapon in hand (MH p.53, R68; I-02).
+ *
+ * R68 is plural — "armed Proficiencies add nothing without a weapon" —
+ * and the book never lists which of the forty-six printed Proficiencies
+ * are the armed ones. I-02 settles the other half of the question (any
+ * item flagged `weapon` satisfies "Armed combat") and names that one; the
+ * set below is this build's reading of the rest, and it is deliberately
+ * the smallest defensible one: a Proficiency is armed when a weapon is
+ * named in the Proficiency itself. "Quick draw" and "Disarm" are about
+ * weapons without being one, and are not included.
+ *
+ * Reopening this is editing this list and nothing else.
+ */
+export const ARMED_PROFICIENCIES: readonly string[] = Object.freeze([
+  'Armed combat',
+  'Ranged weapons',
+  'Versatile Weapon',
+])
+
+/** Is `name` a Proficiency that adds nothing without a weapon (R68, I-02)? */
+export const isArmedProficiency = (name: string): boolean =>
+  ARMED_PROFICIENCIES.some((armed) => armed.toLowerCase() === name.trim().toLowerCase())
+
+/**
+ * The Proficiencies that still add with no weapon in hand (R68).
+ *
+ * Used when an Unexpected Event took the weapon (row 3, I-30): the
+ * armed ones drop out of the round's candidates, so `relevantProficiency`
+ * picks the best of what is left — which is exactly R12's "fighting
+ * bare-handed ... they simply will not add points". A Master whose only
+ * Proficiency was the armed one rolls SKILL and 2d6, and nothing else.
+ */
+export const withoutArmed = (
+  proficiencies: readonly NamedValue[],
+): readonly NamedValue[] => proficiencies.filter((p) => !isArmedProficiency(p.name))

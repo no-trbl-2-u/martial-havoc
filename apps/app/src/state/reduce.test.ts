@@ -305,13 +305,57 @@ describe('every way a fight ends is a moment (Phase 10d)', () => {
     expect(back.pending.filter((id) => id === GHOST)).toHaveLength(3)
   })
 
-  it("takes I-30's injury off whoever the row names, at once", () => {
-    // 1 and 2: total 3, injury or loss of weapon for the Master. I-30's
-    // floor is -1d6 ENDURANCE, and the next face is it.
+  it("offers I-30's two halves and takes only the one picked", () => {
+    // 1 and 2: total 3, injury or loss of weapon for the Master. I-30
+    // makes it the operator's pick, so the -1d6 is rolled with the row
+    // and waits.
     const before = atGhost()
     const hurt = reduce(before, { type: 'combat.round' }, fromSequence([...TIE, 1, 2, 4]))
-    expect(hurt.combat?.event?.injury).toEqual({ target: 'master', amount: 4 })
-    expect(hurt.sheet.endurance).toBe(before.sheet.endurance - 4)
+    expect(hurt.combat?.event?.injury).toEqual({ target: 'master', amount: 4, resolved: null })
+    expect(hurt.sheet.endurance).toBe(before.sheet.endurance)
+
+    const took = reduce(hurt, { type: 'combat.injury', take: 'injury' }, fromSequence([]))
+    expect(took.sheet.endurance).toBe(before.sheet.endurance - 4)
+    expect(took.weaponLost).toBe(false)
+    // The pick closes: the row cannot be taken twice, nor swapped after.
+    expect(reduce(took, { type: 'combat.injury', take: 'weapon' }, fromSequence([]))).toBe(took)
+  })
+
+  it('the other half of I-30 takes the weapon instead, and R25c gives it back', () => {
+    const before = atGhost()
+    const hurt = reduce(before, { type: 'combat.round' }, fromSequence([...TIE, 1, 2, 4]))
+    const lost = reduce(hurt, { type: 'combat.injury', take: 'weapon' }, fromSequence([]))
+    expect(lost.weaponLost).toBe(true)
+    expect(lost.sheet.endurance).toBe(before.sheet.endurance)
+    expect(lost.combat?.event?.injury?.resolved).toBe('weapon')
+
+    // The armed Proficiency stops adding; the rest still do (R68, I-02).
+    const armed = {
+      ...lost,
+      sheet: {
+        ...lost.sheet,
+        proficiencies: [
+          { name: 'Armed combat', value: 4 },
+          { name: 'Acrobatics', value: 2 },
+        ],
+      },
+      combat: lost.combat === null ? null : { ...lost.combat, event: null, last: null, over: { ended: false } as const },
+    }
+    const round = reduce(armed, { type: 'combat.round' }, fromSequence([6, 5, 1, 1]))
+    expect(round.combat?.last?.master.proficiency).toEqual({ name: 'Acrobatics', value: 2 })
+
+    // CHANGE OR RECOVER A WEAPON is what puts it back (R25c).
+    const back = reduce(round, { type: 'combat.weapon' }, fromSequence([]))
+    expect(back.weaponLost).toBe(false)
+  })
+
+  it('a row naming the opponent has no weapon half to pick', () => {
+    // 5 and 6: total 11, injury or loss of weapon for the opponent.
+    const hurt = play(atGhost(), [[{ type: 'combat.round' }, [...TIE, 5, 6, 3]]])
+    expect(hurt.combat?.event?.injury).toEqual({ target: 'opponent', amount: 3, resolved: null })
+    expect(reduce(hurt, { type: 'combat.injury', take: 'weapon' }, fromSequence([]))).toBe(hurt)
+    const took = reduce(hurt, { type: 'combat.injury', take: 'injury' }, fromSequence([]))
+    expect(took.combat?.foeEndurance).toBe(5)
   })
 
   it('rolls the Deities table on a divine intervention and prints its three words', () => {

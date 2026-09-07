@@ -1115,12 +1115,12 @@
     {
       "id": "ui.result.flee.against",
       "cite": "MH p.30 (R38, R39)",
-      "text": "ENDURANCE {after} \u00b7 DISHONOR +{dishonor}"
+      "text": "ENDURANCE {after} · DISHONOR +{dishonor}"
     },
     {
       "id": "ui.result.flee.cite",
       "cite": "MH p.30; I-32",
-      "text": "MH p.30 \u00b7 a last blow of 2 on the way out (R38) \u00b7 a Dishonor Point for not getting away clean (I-32)"
+      "text": "MH p.30 · a last blow of 2 on the way out (R38) · a Dishonor Point for not getting away clean (I-32)"
     },
     {
       "id": "ui.combat.fallen.foe",
@@ -1140,7 +1140,7 @@
     {
       "id": "ui.combat.fallen.cite",
       "cite": "MH p.23 (R26)",
-      "text": "MH p.23 \u00b7 the combat continues until an ENDURANCE reaches zero"
+      "text": "MH p.23 · the combat continues until an ENDURANCE reaches zero"
     },
     {
       "id": "ui.combat.fallen.blow",
@@ -1170,7 +1170,7 @@
     {
       "id": "ui.combat.resume.cite",
       "cite": "MH p.28 (R32)",
-      "text": "MH p.28 \u00b7 the row says so"
+      "text": "MH p.28 · the row says so"
     },
     {
       "id": "ui.combat.resume.line",
@@ -1195,12 +1195,12 @@
     {
       "id": "ui.combat.event.deity",
       "cite": "MH p.29 (R34)",
-      "text": "{name} \u00b7 {action} \u00b7 {object}"
+      "text": "{name} · {action} · {object}"
     },
     {
       "id": "ui.combat.event.deity.cite",
       "cite": "MH p.29 (R34)",
-      "text": "MH p.29 \u00b7 R34 \u00b7 the three words are the book's; what they mean here is the player's"
+      "text": "MH p.29 · R34 · the three words are the book's; what they mean here is the player's"
     },
     {
       "id": "ui.combat.event.minions",
@@ -1220,12 +1220,12 @@
     {
       "id": "ui.act.mark",
       "cite": "MH p.85",
-      "text": "ACT {n} OF {of} \u00b7 {name}"
+      "text": "ACT {n} OF {of} · {name}"
     },
     {
       "id": "ui.act.cite",
       "cite": "MH p.82",
-      "text": "MH p.82 \u00b7 each act ends with a climax, a point of no return to a new act"
+      "text": "MH p.82 · each act ends with a climax, a point of no return to a new act"
     },
     {
       "id": "ui.momentum.title",
@@ -1240,12 +1240,12 @@
     {
       "id": "ui.momentum.rolled",
       "cite": "plan/phases/phase_10c_three_acts.md",
-      "text": "ROLLED {face} \u00b7 {was} \u00b7 READ AS ENCOUNTER"
+      "text": "ROLLED {face} · {was} · READ AS ENCOUNTER"
     },
     {
       "id": "ui.momentum.cite",
       "cite": "MH p.84 (R82)",
-      "text": "MH p.84 \u00b7 R82 \u00b7 the book's own example is this door"
+      "text": "MH p.84 · R82 · the book's own example is this door"
     },
     {
       "id": "ui.village.call.title",
@@ -1911,6 +1911,56 @@
       "id": "ui.intro.credits.map",
       "text": "Cave map: https://watabou.itch.io/cave-generator",
       "cite": "5T a2"
+    },
+    {
+      "id": "ui.combat.act.injury",
+      "text": "TAKE THE INJURY",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.act.injury.cite",
+      "text": "I-30",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.act.injury.line",
+      "text": "{n} off {who}, rolled with the row.",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.act.weapon-loss",
+      "text": "LOSE THE WEAPON",
+      "cite": "MH p.53 (R68); I-30"
+    },
+    {
+      "id": "ui.combat.act.weapon-loss.cite",
+      "text": "MH p.53 (R68); I-02",
+      "cite": "MH p.53"
+    },
+    {
+      "id": "ui.combat.act.weapon-loss.line",
+      "text": "No ENDURANCE lost; armed Proficiencies add nothing until it is changed or recovered.",
+      "cite": "MH p.53 (R68); I-02"
+    },
+    {
+      "id": "ui.combat.event.injury.pending",
+      "text": "INJURY OR LOSS OF WEAPON: THE PICK IS YOURS",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.event.injury.weapon",
+      "text": "THE WEAPON IS GONE",
+      "cite": "MH p.53 (R68); I-30"
+    },
+    {
+      "id": "ui.combat.weapon-lost",
+      "text": "No weapon in hand: Armed combat, Ranged weapons and Versatile Weapon add nothing until CHANGE OR RECOVER A WEAPON.",
+      "cite": "MH p.53 (R68); I-02"
+    },
+    {
+      "id": "ui.combat.weapon-lost.cite",
+      "text": "MH p.53 (R68); I-02",
+      "cite": "MH p.53"
     }
   ]
 }

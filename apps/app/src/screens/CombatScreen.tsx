@@ -71,6 +71,34 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
         enabled: true,
         action: { type: 'combat.resume' },
       })
+    // Rows 3 and 11 are a pick, not an effect (I-30): the injury the
+    // row rolled, or the weapon. Both rows show while it is open and
+    // neither once it is taken; a row naming the opponent offers only
+    // the injury, because only the Master carries a weapon this build
+    // can suspend (R68, I-02).
+    const injury = c.event.injury
+    if (injury != null && injury.resolved === null) {
+      rows.push({
+        id: 'injury',
+        title: t('ui.combat.act.injury'),
+        cite: t('ui.combat.act.injury.cite'),
+        line: fill(t('ui.combat.act.injury.line'), {
+          n: injury.amount,
+          who: t(`ui.combat.event.injury.${injury.target}`).toLowerCase(),
+        }),
+        enabled: true,
+        action: { type: 'combat.injury', take: 'injury' },
+      })
+      if (injury.target === 'master')
+        rows.push({
+          id: 'weapon-loss',
+          title: t('ui.combat.act.weapon-loss'),
+          cite: t('ui.combat.act.weapon-loss.cite'),
+          line: t('ui.combat.act.weapon-loss.line'),
+          enabled: true,
+          action: { type: 'combat.injury', take: 'weapon' },
+        })
+    }
     if (c.event.retreatRow)
       rows.push({ id: 'morale', title: t('ui.combat.act.morale'), cite: t('ui.combat.act.morale.cite'), line: t('ui.combat.act.morale.line'), enabled: c.morale === null, action: { type: 'combat.morale' } })
     rows.push({ id: 'leave-phase', title: t('ui.combat.act.leave-phase'), cite: t('ui.combat.act.leave-phase.cite'), line: t('ui.combat.act.leave-phase.line'), enabled: true, action: { type: 'combat.leave' } })
@@ -258,15 +286,25 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
           <Slip dashed style={styles.pad} testID="event-injury">
             <View style={styles.between}>
               <Text style={styles.strong}>
-                {fill(t('ui.combat.event.injury'), {
-                  n: c.event.injury.amount,
-                  who: t(`ui.combat.event.injury.${c.event.injury.target}`),
-                })}
+                {c.event.injury.resolved === null
+                  ? t('ui.combat.event.injury.pending')
+                  : c.event.injury.resolved === 'weapon'
+                    ? t('ui.combat.event.injury.weapon')
+                    : fill(t('ui.combat.event.injury'), {
+                        n: c.event.injury.amount,
+                        who: t(`ui.combat.event.injury.${c.event.injury.target}`),
+                      })}
               </Text>
               <Source cite="I-30" />
             </View>
           </Slip>
         )}
+        {state.weaponLost ? (
+          <Slip dashed style={styles.pad} testID="weapon-lost">
+            <Text style={styles.small}>{t('ui.combat.weapon-lost')}</Text>
+            <Source cite={t('ui.combat.weapon-lost.cite')} />
+          </Slip>
+        ) : null}
         {c.event?.deity == null ? null : (
           <Slip dashed style={styles.pad} testID="event-deity">
             <View style={styles.between}>
