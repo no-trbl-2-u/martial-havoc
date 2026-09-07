@@ -154,7 +154,10 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
 - [ ] Phase 10i — The ending scores the adventure (brief:
       `phase_10i_the_ending_scores.md`)
 - [ ] Phase 10j — Who the Master is, and the player's own words
-      `[needs-user-call]` (brief: `phase_10j_who_the_master_is.md`)
+      (brief: `phase_10j_who_the_master_is.md`; the call was made
+      2026-09-07: a motive is a hook from the Adventures table,
+      MH p.36-39, rolled or chosen at creation — option 1 in the
+      brief. No user call is outstanding on this row.)
 
 **The milestone (phase 10, by 2026-12-05):**
 - [ ] Phase 10 — The cave played to its ending `[needs-user-call]`
@@ -438,11 +441,12 @@ p.87–89.
 
 ### Phase 10j — Who the Master is, and the player's own words
 
-**Done when:** creation ends with a motive from the Adventures table
-(or the operator's alternative); the passage field is prompted at four
-moments; passages sit in the chronicle where written.
-**Waits on:** 10a, 10h; the operator's call on the motive
-**Cost:** one week after the call
+**Done when:** creation ends with a motive from the Adventures table,
+rolled or chosen; the passage field is prompted at four moments;
+passages sit in the chronicle where written.
+**Waits on:** 10a, 10h
+**Cost:** one week; the operator called the motive on 2026-09-07 —
+option 1, a hook from the Adventures table (MH p.36-39)
 
 MH p.3, p.36–39, p.51, p.85–86, p.92.
 
