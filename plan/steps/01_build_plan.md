@@ -267,10 +267,26 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       that uses the second person, so they get their own gate in
       `voice.test.ts` rather than his.
 
+- [ ] Phase 10k — True to the book: the fight as the book runs it
+      (brief: `phase_10k_true_to_the_book.md`; from the merged
+      `determined-intent.md` of 2026-09-07 and the fidelity rows
+      `plan/CRITIQUE.md` carries). A lost round is followed by another;
+      every known Technique is a winner's option with the book's
+      warning beside it; the Minions footnote is offered; the Oracle's
+      spans and the printed defects are pinned by test; the Devil
+      servant's 6 reveals the Hint; every table roll takes a manual
+      result. App and content only; the engine is already labelled
+      for all of it.
+- [ ] Phase 10l — Spirits immune to ordinary blows (brief:
+      `phase_10l_spirits_gate.md`). R77's gate, reverted in 10g,
+      turned on once a known Technique and the seven-star sword can
+      hurt a spirit, so the Dexterous Ghost stays beatable. Engine,
+      effects and readings; waits on 10k.
+
 **The milestone (phase 10, by 2026-12-05):**
 - [ ] Phase 10 — The cave played to its ending `[needs-user-call]`
-      (waits on 10a–10j: the sitting is only evidence once the cave
-      plays as a story)
+      (waits on 10a–10k: the sitting is only evidence once the cave
+      plays as a story and the fight runs as the book runs it)
 
 **The sandbox (phases 11–14, by 2027-03-05):**
 - [ ] Phase 11 — Word-table lines
@@ -558,12 +574,43 @@ option 1, a hook from the Adventures table (MH p.36-39)
 
 MH p.3, p.36–39, p.51, p.85–86, p.92.
 
+### Phase 10k — True to the book: the fight as the book runs it
+
+**Done when:** a Master who loses an exchange is offered the next
+exchange; a Master who knows several Techniques chooses among them
+and reads MH p.24's warning beside the choice; the Minions rule is a
+labelled, default-off offer on any fight of more than one body; a
+content test pins the Oracle's printed spans and the printed defects
+verbatim; the Devil servant's LOOT 6 reveals the area's Hint; the
+manual panel accepts one face for a 1d6 roll; the two stale critique
+rows shipped by 10e are moved to Done.
+**Waits on:** 10e, 10f
+**Cost:** one to two weeks
+
+`determined-intent.md` sections 3.1, 3.6, 3.8, 6 and 7; MH p.23-24,
+p.28 footnote, p.58, p.67-68, p.74, p.92; 5T a2; `plan/CRITIQUE.md`
+rows on the lost round, the first usable Technique, the Minions rule,
+the Devil servant's 6, the treasure d6.
+
+### Phase 10l — Spirits immune to ordinary blows
+
+**Done when:** STRIKE is refused against an incorporeal foe with the
+book's sentence; a known Technique whose effect record carries damage,
+or the seven-star sword, passes the gate; a scripted Master without
+the sword still takes the Dexterous Ghost's key on fixed dice.
+**Waits on:** 10k
+**Cost:** two weeks
+
+MH p.66 (R77), p.24 (R27-R28); 5T a2; I-29; `effects.json`;
+`plan/CRITIQUE.md` row "R77 has no gate". Order fixed by the critique:
+Technique damage first, the gate second, never the gate alone.
+
 ### Phase 10 — The cave played to its ending, by 2026-12-05
 
 **Done when:** on 2026-12-05 a campaign record exists whose cave reached
 the ending screen with the PDF closed, or the falsifier is recorded as
 fired with its reason.
-**Waits on:** Phase 9, and 10a–10j (the feel-of-play block)
+**Waits on:** Phase 9, and 10a–10k (the feel-of-play block)
 **Cost:** the operator's evenings; the date is fixed
 
 `[needs-user-call]` The operator plays the cave to the ending screen; the
