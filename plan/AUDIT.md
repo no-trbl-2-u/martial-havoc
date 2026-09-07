@@ -12,6 +12,11 @@ only populated finding source: `/critique` proper has never run
 `external-critique` row carried in from `/jot` and earlier `/march`
 ticks. One HIGH row stands alone at the top; the rest are MED.
 
+**Every scored row is closed as of 2026-09-07.** Two of them (4.0, 4.2)
+were shipped by phase 10e the tick after this pass was written and are
+marked here rather than re-scored; 3.6 was fixed directly. The next
+`/iterate` audit rewrites this file from a fresh pass.
+
 ## Top 5 findings (scored)
 
 ### [x] [5.3] packages/content — opponent roster carries no incorporeal tag (I-29)
@@ -30,23 +35,35 @@ ticks. One HIGH row stands alone at the top; the rest are MED.
 - next: shipped 2edf072 — the gourd's night and the Vixen's spells; the
   Junior King's nap waits on the sandbox's market
 
-### [ ] [4.2] apps/app — the Oracle is not asked how many Devil servants there are (I-34)
+### [x] [4.2] apps/app — the Oracle is not asked how many Devil servants there are (I-34)
 - category: external-critique
 - impact: 6 (four encounter rows fight one foe where the book asks for a number)
 - ease: 7 (roll in `doTurn`, push n ids onto `pending`, third die on the card)
-- next: `/iterate`, after the many-foes mode below (it needs the same queue)
+- next: shipped 2299f57 (phase 10e), the tick after this audit was written.
+  `doTurn` reads the count from the turn, pushes one id per body onto
+  `pending`, and the card shows the die it read (`countFace`).
 
-### [ ] [4.0] apps/app — "Both" and the Woodgatherer band are fought one after another, not as multiple combat (R35)
+### [x] [4.0] apps/app — "Both" and the Woodgatherer band are fought one after another, not as multiple combat (R35)
 - category: external-critique
 - impact: 8 (a sealed rule the engine implements and the UI bypasses)
 - ease: 5 (CombatScreen gains a mode; `packages/engine/src/multiple` is ready)
-- next: `/iterate` — many-foes mode on CombatScreen
+- next: shipped 2299f57 (phase 10e), the tick after this audit was written.
+  FACE THEM ALL puts the whole of `pending` into one fight, SKILL drops
+  by the number faced (R35), and CombatScreen draws the band with R37's
+  held-back bodies marked.
 
-### [ ] [3.6] packages/content — effects.json operation strings are unverified
+### [x] [3.6] packages/content — effects.json operation strings are unverified
 - category: external-critique
 - impact: 6 (a rename in the engine leaves 72 records pointing at nothing, silently)
 - ease: 6 (one engine-side test importing the effects table)
-- next: `/iterate` — the test belongs in `packages/engine`, which may import content
+- next: shipped. `packages/engine/src/operations.test.ts` resolves every
+  `operation` against the engine's public surface — the export exists, it
+  comes from the folder the string names, and it is a function. It was
+  red on arrival: 10 of the 25 records named nothing. `combat.opening`
+  (3) is now `combat.finalBlow` — R29's Opening is a state flag, and the
+  machinery it unlocks is R30's roll — and `oracle.consult` (7) is now
+  null, because the Oracle's 66 cells are content and the engine exports
+  no consult. Operator's call, 2026-09-07.
 
 ## Durable rows
 
