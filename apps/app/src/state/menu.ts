@@ -41,6 +41,8 @@ export type BeatAction =
   /** Call a named foe's name into the vase (I-38). */
   | { readonly kind: 'call'; readonly foe: string }
   | { readonly kind: 'leave' }
+  /** Open the ending: the freeze frame, the scores, the advancement. */
+  | { readonly kind: 'ending' }
   | { readonly kind: 'village' }
 
 /** One row of the beat's menu. */
@@ -296,14 +298,20 @@ export const menuFor = (state: RecordState): readonly BeatOption[] => {
   // yet walked into the cave a way out of the adventure they had not
   // yet begun - the region as an escape from the first act rather than
   // the thing the first act is for.
+  //
+  // Phase 10i puts the ending screen in front of it. Walking out of the
+  // adventure without scoring it would skip the half of the book's loop
+  // that turns a played adventure into a Master who has changed (R43),
+  // so THE ENDING is the row and LEAVE FOR THE REGION is the last thing
+  // on the screen it opens.
   if (ending(TABLES, state.cave) !== null) {
     rows.push({
-      id: 'leave',
-      title: t('ui.cave.leave'),
-      note: t('ui.cave.leave.note'),
+      id: 'ending',
+      title: t('ui.ending.title'),
+      note: t('ui.ending.scores.cite'),
       line: '',
       enabled: !engaged,
-      action: { kind: 'leave' },
+      action: { kind: 'ending' },
     })
   }
 

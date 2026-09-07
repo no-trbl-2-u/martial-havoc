@@ -45,6 +45,8 @@ const actionOf = (option: BeatOption): Action => {
       return { type: 'cave.gourd' }
     case 'leave':
       return { type: 'cave.leave' }
+    case 'ending':
+      return { type: 'nav', screen: 'ending' }
     case 'village':
       return { type: 'cave.village' }
   }

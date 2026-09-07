@@ -105,6 +105,26 @@ export type RecordedMaster = {
    * of every record written before they could.
    */
   readonly learned?: readonly LearnedTechnique[]
+  /**
+   * XP earned and not yet spent (R43, R47), and the resource points a
+   * Training point bought after creation (R16).
+   *
+   * Both optional and unversioned, for the reason
+   * {@link CampaignRecord.actsSeen} gives. A record written before an
+   * ending could be scored reads as a Master with nothing banked, which
+   * is what it is.
+   */
+  readonly xp?: number
+  readonly resources?: number
+  /**
+   * The adventure just played has been scored and its XP banked (R43).
+   *
+   * Durable, because the ending is a screen a player may open twice and
+   * banking twice would pay them twice. A boolean rather than a set of
+   * adventure ids because this build plays one adventure; the sandbox
+   * phase that brings a second will need the set, and will say so.
+   */
+  readonly adventureScored?: boolean
 }
 
 /**

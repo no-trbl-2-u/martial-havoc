@@ -32,6 +32,7 @@ import { CreationScreen } from './screens/CreationScreen'
 import { VillageScreen } from './screens/VillageScreen'
 import { RecordScreen } from './screens/RecordScreen'
 import { CombatScreen } from './screens/CombatScreen'
+import { EndingScreen } from './screens/EndingScreen'
 import { RegionScreen } from './screens/RegionScreen'
 import { RulesScreen } from './screens/RulesScreen'
 import { AboutScreen } from './screens/AboutScreen'
@@ -100,6 +101,7 @@ export const App = () => {
           {state.screen === 'combat' ? <CombatScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'rules' ? <RulesScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'region' ? <RegionScreen state={state} dispatch={dispatch} /> : null}
+          {state.screen === 'ending' ? <EndingScreen state={state} dispatch={dispatch} /> : null}
           {state.screen === 'about' ? <AboutScreen dispatch={dispatch} /> : null}
           </View>
           ) : (

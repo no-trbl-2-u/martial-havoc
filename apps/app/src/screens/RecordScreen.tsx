@@ -88,6 +88,9 @@ export const RecordScreen = ({ state, dispatch, at }: Props) => {
                 overrides: state.overrides,
               })}
             </Text>
+            <Text testID="record-xp" style={styles.counts}>
+              {fill(t('ui.record.xp'), { n: state.sheet.xp, r: state.sheet.resources })}
+            </Text>
             <Text style={styles.note}>{t('ui.record.overrides.note')}</Text>
           </View>
         </Slip>

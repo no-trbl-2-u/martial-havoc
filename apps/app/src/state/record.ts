@@ -19,6 +19,7 @@ import {
   theFiveTreasures,
 } from '@martial-havoc/content'
 import { emptyCreation } from './creation'
+import { blankScores } from './types'
 import type { RecordState, Sheet } from './types'
 
 /** The one sheet the prototype plays. Phase 8 adds creation and the other seven. */
@@ -45,6 +46,7 @@ export const sheetFor =
       age: preset.age,
       /** Invented in play, never at creation (R31). */
       learned: [],
+      resources: 0,
       martialArtId: art?.id ?? null,
       skill: preset.skill,
       skillInitial: preset.skill + preset.training,
@@ -92,6 +94,12 @@ export const newRecord = (dice: DiceSource): RecordState => ({
   draft: '',
   passages: [],
   chronicle: [],
+  // Built from the engine's list rather than typed out: the four names
+  // are the book's printed headings (MH p.34) and live in
+  // `rules/xp-categories.json`, so writing them here would be copying a
+  // table into a component (agents.md rule 7).
+  scores: blankScores(),
+  scoresBanked: false,
   overrides: 0,
   deeds: [],
   actsSeen: [],

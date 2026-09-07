@@ -21,6 +21,8 @@ import {
   attackOf,
   attackRescue,
   attackStrength,
+  RESOURCES_PER_TRAINING_POINT,
+  XP_CATEGORIES,
   behaviours,
   binds,
   buy,
@@ -44,12 +46,15 @@ import {
   newTechnique,
   nightsRest,
   placeRunning,
+  purchase,
   rescue,
   resolveEncounter,
   resolveRound,
   revealHint,
+  skillBand,
   skillForFight,
   spendTechnique,
+  xpAward,
   stayTheNight,
   step,
   takeDrop,
@@ -63,22 +68,31 @@ import {
   withArea,
   withFlag,
 } from '@martial-havoc/engine'
-import type { DiceSource, UnexpectedEventRoll } from '@martial-havoc/engine'
+import type {
+  DiceSource,
+  Increase,
+  UnexpectedEventRoll,
+  XpAward,
+  XpCategoryName,
+} from '@martial-havoc/engine'
 import {
   INCENSE_ID,
   isMomentumDoor,
   effectFor,
   market,
+  ritualById,
   rollDeity,
   rollFinalBlow,
   rollUnexpectedEvent,
   t,
+  techniqueById,
   theFiveTreasures,
   theFiveTreasuresAreaById,
   theFiveTreasuresTreasureById,
   treasureFoeById,
   unexpectedEventLineFor,
   villagePlaces,
+  xpCostFor,
 } from '@martial-havoc/content'
 import type { Opponent } from '@martial-havoc/content'
 import { queued } from '../dice/random'
@@ -1352,6 +1366,143 @@ const doLeave = (state: RecordState, dice: DiceSource): RecordState => {
   )
 }
 
+// --------------------------------------------------------------- the ending
+
+/**
+ * One of R43's four scores (MH p.34).
+ *
+ * "Assign a number from 1 (poor) to 3 (excellent)". Out of range is
+ * reported by the engine's `xpAward` and never corrected here, because
+ * spec.md refuses to refuse; what this does refuse is a score for a
+ * category the book does not print, which is not a judgement but a typo.
+ */
+const doScore = (state: RecordState, category: XpCategoryName, value: number): RecordState =>
+  // Once banked the scores are history: changing them would change a
+  // payment already made.
+  state.scoresBanked || !(XP_CATEGORIES as readonly string[]).includes(category)
+    ? state
+    : { ...state, scores: { ...state.scores, [category]: value } }
+
+/**
+ * What this adventure was worth (R43), read off the scores given so far.
+ *
+ * An unscored category counts as nothing rather than as one: the sum has
+ * to be visibly incomplete while it is, or a player reads a number that
+ * looks like a verdict and is only a partial tally.
+ */
+export const awardFor = (state: RecordState): XpAward =>
+  xpAward({
+    scores: Object.fromEntries(
+      XP_CATEGORIES.map((name) => [name, state.scores[name] ?? 0]),
+    ) as Record<XpCategoryName, number>,
+    dishonor: state.sheet.dishonor,
+  })
+
+/** Every score given: the ending is scored and the XP is real. */
+export const fullyScored = (state: RecordState): boolean =>
+  XP_CATEGORIES.every((name) => state.scores[name] !== null)
+
+/**
+ * Bank the four scores as XP, once (R43, R47).
+ *
+ * "Add the four values together and subtract your Dishonor Points from
+ * the total to obtain the XP you can spend on advancement." It is added
+ * to what the Master already carries rather than replacing it, because
+ * R47 carries the remainder forward: an ending is a payment, not a
+ * balance. Banking twice would pay twice, so it happens once.
+ */
+const doBank = (state: RecordState): RecordState => {
+  if (state.scoresBanked || !fullyScored(state)) return state
+  const award = awardFor(state)
+  return addDeed(
+    withSheet({ ...state, scoresBanked: true }, { xp: state.sheet.xp + award.total }),
+    fill(t('ui.ending.deed.banked'), { n: award.total }),
+  )
+}
+
+/**
+ * Spend XP on one +1 of the advancement table (R44, R45, R47).
+ *
+ * The cost is the table's, read at the Master's current SKILL band; the
+ * engine prices it and says whether the cap allows it. The cap is a
+ * **flag, never a refusal** (spec.md): a Master with SKILL 12 who buys
+ * another point gets SKILL 13 and a line saying so, because the app does
+ * not overrule a player at their own sheet. What it will not do is spend
+ * XP that is not there - that is arithmetic, not judgement.
+ *
+ * LUCK raises its initial value with it. R05 keeps the initial beside
+ * the current because the shrine restores toward it, and a Master who
+ * has bought a point of LUCK and then spent it would otherwise find the
+ * point they paid for gone for good. Labelled: the book does not say so.
+ */
+const doAdvance = (state: RecordState, increase: Increase): RecordState => {
+  const band = skillBand(state.sheet.skill)
+  const cost = xpCostFor(increase)(band)?.cost
+  if (cost === undefined) return state
+  const priced = purchase({ increase, cost, xp: state.sheet.xp, current: currentOf(state, increase) })
+  if (!priced.affordable) return state
+  const xp = state.sheet.xp - cost
+  const s = state.sheet
+  const bought =
+    increase === 'SKILL'
+      ? { skill: s.skill + 1 }
+      : increase === 'ENDURANCE'
+        ? { endurance: s.endurance + 1, enduranceInitial: s.enduranceInitial + 1 }
+        : increase === 'LUCK'
+          ? { luck: s.luck + 1, luckInitial: s.luckInitial + 1 }
+          : increase === 'Training skill'
+            ? { training: s.training + 1, resources: s.resources + RESOURCES_PER_TRAINING_POINT }
+            : { proficiencies: raiseBest(s.proficiencies) }
+  return addDeed(
+    withSheet(state, { ...bought, xp }),
+    fill(t('ui.ending.deed.bought'), { name: increase, n: cost }),
+  )
+}
+
+/** The value R45's cap is read against, or undefined where nothing caps it. */
+const currentOf = (state: RecordState, increase: Increase): number | undefined =>
+  increase === 'SKILL' ? state.sheet.skill : increase === 'LUCK' ? state.sheet.luck : undefined
+
+/**
+ * A Martial Proficiency +1 goes on the highest the Master has.
+ *
+ * The book says "Martial Proficiency" and does not say which, and the
+ * app has no business picking for a player who has three. The highest is
+ * the one they have been leaning on, which is the choice a player makes
+ * anyway; a picker for it is a later phase's row, not a reason to leave
+ * the whole line unbuyable.
+ */
+const raiseBest = (list: readonly Sheet['proficiencies'][number][]) => {
+  const best = list.reduce((top, p) => (p.value > top.value ? p : top), list[0] ?? { name: '', value: 0 })
+  return list.map((p) => (p.name === best.name ? { ...p, value: p.value + 1 } : p))
+}
+
+/**
+ * Learn a Technique or a Ritual with resource points (R16, R18; MH p.35).
+ *
+ * "To learn new Techniques or Rituals, you will need to increase your
+ * Training Skill (by spending XP)" - so the Training point bought above
+ * is what makes this row exist at all, and its four resource points are
+ * what pay for it. A Master who already knows it is not sold it twice.
+ */
+const doLearnAbility = (state: RecordState, id: string): RecordState => {
+  const technique = techniqueById(id)
+  const ritual = ritualById(id)
+  const cost = technique?.cost ?? ritual?.cost
+  const name = technique?.name ?? ritual?.name
+  if (cost === undefined || name === undefined || cost > state.sheet.resources) return state
+  if (state.sheet.techniques.includes(id) || state.sheet.rituals.includes(id)) return state
+  return addDeed(
+    withSheet(state, {
+      resources: state.sheet.resources - cost,
+      ...(technique === undefined
+        ? { rituals: [...state.sheet.rituals, id] }
+        : { techniques: [...state.sheet.techniques, id] }),
+    }),
+    fill(t('ui.ending.deed.learned'), { name }),
+  )
+}
+
 // -------------------------------------------------------------- creation
 
 /** Apply a change to the Master being made; a no-op once one has begun. */
@@ -1684,6 +1835,14 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return state.region.points.some((p) => p.id === action.to) ? { ...state, here: action.to } : state
     case 'record.draft':
       return { ...state, importDraft: action.text }
+    case 'ending.score':
+      return doScore(state, action.category, action.value)
+    case 'ending.bank':
+      return doBank(state)
+    case 'ending.buy':
+      return doAdvance(state, action.increase)
+    case 'ending.learn':
+      return doLearnAbility(state, action.id)
     case 'record.import':
       return doImport(state)
     case 'record.new':

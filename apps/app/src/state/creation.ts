@@ -314,6 +314,9 @@ export const finishCreation = (c: CreationState): Sheet => {
     age: ageOf(c),
     // A Master invents Techniques by playing; none is made at creation.
     learned: [],
+    // Creation spends its own resource pool; this is the one that opens
+    // afterwards, when a Training point is bought with XP (R16).
+    resources: 0,
     martialArtId: c.martialArtId,
     skill: skill - c.training,
     skillInitial: c.skill?.initial ?? skill,

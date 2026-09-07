@@ -12,6 +12,7 @@ import type {
   AttackStrength,
   ChronicleEntry,
   Die,
+  Increase,
   EventKind,
   EventReading,
   FightEnd,
@@ -24,8 +25,10 @@ import type {
   Region,
   RoundOutcome,
   TwoD6Roll,
+  XpCategoryName,
   UnexpectedEventRoll,
 } from '@martial-havoc/engine'
+import { XP_CATEGORIES } from '@martial-havoc/engine'
 
 /**
  * One line of the chronicle, re-exported from the engine (Phase 10h).
@@ -36,10 +39,26 @@ import type {
  */
 export type { ChronicleEntry }
 
+/**
+ * The four scores, all blank (R43).
+ *
+ * Built from the engine's own list of the book's printed headings so no
+ * component or reducer ever writes one of them down: they are a table
+ * (`rules/xp-categories.json`), and a table in a component is the thing
+ * agents.md rule 7 exists to stop.
+ */
+export const blankScores = (): Readonly<Record<XpCategoryName, number | null>> =>
+  Object.fromEntries(XP_CATEGORIES.map((name) => [name, null])) as Record<
+    XpCategoryName,
+    number | null
+  >
+
 /** The screens of the frame. */
 export type Screen =
   | 'creation'
   | 'beat'
+  /** The ending: the freeze frame, the four scores, and what XP buys. */
+  | 'ending'
   | 'combat'
   | 'rules'
   | 'region'
@@ -156,8 +175,25 @@ export type Sheet = {
   readonly rituals: readonly string[]
   /** R01, R02: equipment lines as printed or typed; common clothing first. */
   readonly equipment: readonly string[]
-  /** R01: Experience points. Zero at creation. */
+  /**
+   * R01, R43, R47: Experience points not yet spent.
+   *
+   * Zero at creation; an ending adds what the four scores earned, and
+   * an advancement spends from it. "Any remaining XP will remain
+   * available to spend on the next advancement" (MH p.35), which is
+   * why this is a running balance rather than a per-adventure total.
+   */
   readonly xp: number
+  /**
+   * R16, R45: resource points bought after creation, unspent.
+   *
+   * A Training point bought with XP gives four of them (R16), and they
+   * are what a Technique or a Ritual is learned with (MH p.35: "to
+   * learn new Techniques or Rituals, you will need to increase your
+   * Training Skill"). Creation spends its own pool at creation; this is
+   * the pool that opens afterwards.
+   */
+  readonly resources: number
   /**
    * The Techniques this Master invented off landed Final Blows (R31).
    *
@@ -581,6 +617,23 @@ export type RecordState = {
   readonly templeVisitedToday: boolean
   /** The last thing the village said, or null. */
   readonly villageNote: VillageNote | null
+  /**
+   * The four scores the player gives the adventure (R43), or null each
+   * until they do.
+   *
+   * Null rather than 2: the scores are the player's judgement of their
+   * own play, and a default is the app judging it for them. `spec.md`
+   * refuses to compute them.
+   */
+  readonly scores: Readonly<Record<XpCategoryName, number | null>>
+  /**
+   * The four scores have been banked as XP (R43).
+   *
+   * The ending is a screen, not a moment, and a player may open it
+   * twice; banking twice would pay them twice. Durable for the same
+   * reason.
+   */
+  readonly scoresBanked: boolean
   /** What has been pasted into the import field, unread. */
   readonly importDraft: string
   /** What the last import attempt said, or null. Already worded. */
@@ -682,3 +735,11 @@ export type Action =
   | { readonly type: 'village.trail' }
   | { readonly type: 'record.draft'; readonly text: string }
   | { readonly type: 'record.import' }
+  /** One of R43's four scores, 1-3. */
+  | { readonly type: 'ending.score'; readonly category: XpCategoryName; readonly value: number }
+  /** Bank the four scores as XP, once (R43). */
+  | { readonly type: 'ending.bank' }
+  /** Spend XP on one +1 of the advancement table (R44, R45, R47). */
+  | { readonly type: 'ending.buy'; readonly increase: Increase }
+  /** Spend resource points on a Technique or a Ritual (R16, R18). */
+  | { readonly type: 'ending.learn'; readonly id: string }

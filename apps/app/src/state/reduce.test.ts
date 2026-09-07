@@ -9,14 +9,14 @@
  * where it does not.
  */
 import { describe, expect, it } from 'vitest'
-import { actFor, fromSequence, withDefeated, withKey } from '@martial-havoc/engine'
+import { XP_CATEGORIES, actFor, fromSequence, skillBand, withDefeated, withKey } from '@martial-havoc/engine'
 import { theFiveTreasures } from '@martial-havoc/content'
 import type { Die } from '@martial-havoc/engine'
 import { randomSource } from '../dice/random'
 import { fromCampaign, toCampaign } from './campaign'
 import { menuFor } from './menu'
 import { newRecord } from './record'
-import { reduce } from './reduce'
+import { awardFor, fullyScored, reduce } from './reduce'
 import type { Action, RecordState } from './types'
 
 /** A record whose creation dice are all fours: deterministic, no sequence to count. */
@@ -911,7 +911,10 @@ describe('the cave, played to its ending on the reducer', () => {
     expect(s.cave.rescued).toEqual(['foe.monk'])
     expect(s.cave.items).toContain('elixir')
     expect(s.screen).toBe('beat')
-    expect(menuFor(s).some((o) => o.action.kind === 'leave')).toBe(true)
+    // Phase 10i: THE ENDING now stands where LEAVE FOR THE REGION did,
+    // because the book's loop closes with the scoring (R43) and the way
+    // out is the last row of the screen it opens.
+    expect(menuFor(s).some((o) => o.action.kind === 'ending')).toBe(true)
     // Sword, gourd, the Monk's elixir, fan, key, vase, cord.
     expect(s.deeds.filter((d) => d.startsWith('took the'))).toHaveLength(7)
   })
@@ -1422,5 +1425,130 @@ describe('the map and the chronicle (Phase 10h)', () => {
     // No two rooms share a spot: overlapping circles are one room.
     const spots = theFiveTreasures.areas.map((a) => `${String(a.pos.x)},${String(a.pos.y)}`)
     expect(new Set(spots).size).toBe(spots.length)
+  })
+})
+
+describe('the ending scores the adventure (Phase 10i)', () => {
+  const scoreAll = (a: number, b: number, c: number, d: number) =>
+    XP_CATEGORIES.map(
+      (category, i) =>
+        [
+          { type: 'ending.score', category, value: [a, b, c, d][i] ?? 0 },
+          [],
+        ] as const,
+    )
+
+  /** A Master with one Dishonor Point, standing at an ending. */
+  const scored = (dishonor = 1): RecordState => {
+    const base = fresh()
+    return play({ ...base, sheet: { ...base.sheet, dishonor } }, [...scoreAll(2, 3, 1, 3)])
+  }
+
+  it('adds the four scores and subtracts the Dishonor (R43)', () => {
+    const s = scored()
+    // The book's own worked example: 2+3+1+3 less 1 Dishonor is 8.
+    expect(awardFor(s).earned).toBe(9)
+    expect(awardFor(s).total).toBe(8)
+    expect(fullyScored(s)).toBe(true)
+  })
+
+  it('is incomplete until all four are given, and defaults to none', () => {
+    expect(fullyScored(fresh())).toBe(false)
+    const one = reduce(
+      fresh(),
+      { type: 'ending.score', category: 'Mission Success', value: 3 },
+      fromSequence([]),
+    )
+    expect(fullyScored(one)).toBe(false)
+    // An unscored category counts as nothing, not as one.
+    expect(awardFor(one).earned).toBe(3)
+  })
+
+  it('banks the XP once, and carries it (R43, R47)', () => {
+    const s = reduce(scored(), { type: 'ending.bank' }, fromSequence([]))
+    expect(s.sheet.xp).toBe(8)
+    expect(s.scoresBanked).toBe(true)
+    expect(s.deeds).toContain('scored the adventure at 8 XP')
+    // Twice would pay twice.
+    expect(reduce(s, { type: 'ending.bank' }, fromSequence([]))).toBe(s)
+    // And the scores are history now.
+    expect(
+      reduce(s, { type: 'ending.score', category: 'Mission Success', value: 1 }, fromSequence([])),
+    ).toBe(s)
+  })
+
+  it('spends at the Master’s band, and carries the remainder (R44, R47)', () => {
+    const banked = reduce(scored(), { type: 'ending.bank' }, fromSequence([]))
+    // San Te's SKILL is 8: the 7-9 column, where ENDURANCE is 4 XP.
+    expect(skillBand(banked.sheet.skill)).toBe('SKILL 7-9')
+    const once = reduce(banked, { type: 'ending.buy', increase: 'ENDURANCE' }, fromSequence([]))
+    expect(once.sheet.xp).toBe(4)
+    expect(once.sheet.endurance).toBe(banked.sheet.endurance + 1)
+    // The initial value rises with it: it is what a night's rest heals
+    // toward.
+    expect(once.sheet.enduranceInitial).toBe(banked.sheet.enduranceInitial + 1)
+    const twice = reduce(once, { type: 'ending.buy', increase: 'ENDURANCE' }, fromSequence([]))
+    expect(twice.sheet.xp).toBe(0)
+    // A third is not affordable and changes nothing.
+    expect(reduce(twice, { type: 'ending.buy', increase: 'ENDURANCE' }, fromSequence([]))).toBe(twice)
+  })
+
+  it('raises LUCK’s initial value with it, so a spent point is not lost (R05)', () => {
+    const rich: RecordState = { ...fresh(), sheet: { ...fresh().sheet, xp: 20 } }
+    const s = reduce(rich, { type: 'ending.buy', increase: 'LUCK' }, fromSequence([]))
+    expect(s.sheet.luck).toBe(rich.sheet.luck + 1)
+    expect(s.sheet.luckInitial).toBe(rich.sheet.luckInitial + 1)
+  })
+
+  it('flags the cap and does not refuse it (R45; spec.md)', () => {
+    const capped: RecordState = {
+      ...fresh(),
+      sheet: { ...fresh().sheet, skill: 12, xp: 40 },
+    }
+    const s = reduce(capped, { type: 'ending.buy', increase: 'SKILL' }, fromSequence([]))
+    // SKILL 13 is what the player asked for, and they get it.
+    expect(s.sheet.skill).toBe(13)
+    expect(s.sheet.xp).toBeLessThan(capped.sheet.xp)
+  })
+
+  it('gives a Training point four resource points, and spends them (R16, R18)', () => {
+    const rich: RecordState = { ...fresh(), sheet: { ...fresh().sheet, xp: 20, resources: 0 } }
+    const trained = reduce(rich, { type: 'ending.buy', increase: 'Training skill' }, fromSequence([]))
+    expect(trained.sheet.training).toBe(rich.sheet.training + 1)
+    expect(trained.sheet.resources).toBe(4)
+    // Butterfly Palms costs 1.
+    const learnt = reduce(
+      trained,
+      { type: 'ending.learn', id: 'technique.butterfly-palms' },
+      fromSequence([]),
+    )
+    expect(learnt.sheet.techniques).toContain('technique.butterfly-palms')
+    expect(learnt.sheet.resources).toBe(3)
+    expect(learnt.deeds).toContain('learned Butterfly Palms')
+    // Not twice, and not without the points.
+    expect(
+      reduce(learnt, { type: 'ending.learn', id: 'technique.butterfly-palms' }, fromSequence([])),
+    ).toBe(learnt)
+  })
+
+  it('carries the XP, the resources and the banked flag through an export', () => {
+    const spent = reduce(
+      reduce(scored(), { type: 'ending.bank' }, fromSequence([])),
+      { type: 'ending.buy', increase: 'ENDURANCE' },
+      fromSequence([]),
+    )
+    const back = fromCampaign(toCampaign(spent), fresh())
+    expect(back.sheet.xp).toBe(4)
+    expect(back.scoresBanked).toBe(true)
+    expect(back.sheet.resources).toBe(spent.sheet.resources)
+  })
+
+  it('reads a record written before this phase as unscored, with nothing banked', () => {
+    const older = toCampaign(fresh())
+    const { xp: _x, resources: _r, adventureScored: _a, ...master } = older.master
+    const back = fromCampaign({ ...older, master }, fresh())
+    expect(back.sheet.xp).toBe(0)
+    expect(back.sheet.resources).toBe(0)
+    expect(back.scoresBanked).toBe(false)
   })
 })

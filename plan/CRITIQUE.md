@@ -9,6 +9,16 @@
 
 ## Pending
 
+### [MEDIUM] The ending has no e2e, because reaching it is a whole sitting
+- pass: agent (commit pending, phase 10i)
+- viewport: unspecified
+- auth_state: anonymous
+- category: test-coverage
+- observation: Phase 10i asked for "one e2e case to the freeze frame and one spend" and shipped without one. The ending act is `treasures 5`: the screen cannot be reached in the browser without walking the whole cave and taking all five treasures, which is a twenty-five-step scripted playthrough with a roll card to dismiss at every move. The mechanics are covered per scenario in `reduce.test.ts` (scoring, banking once, the band, the cap flag, Training's resource points, the export), and the reducer already has a full playthrough test that reaches the ending; what is missing is the same walk through the real export, with the screen actually rendered.
+- evidence: `packages/content/data/campaigns/the-5-treasures/acts.json`, act 5 `treasures: 5`; `apps/app/src/state/reduce.test.ts`, "the cave, played to its ending on the reducer"
+- suggested fix: This is Phase 14's row ("the whole sitting"): one scripted `?dice=` walk of the cave end to end in Playwright, asserting the freeze frame and one spend at the end of it. Doing it as a 10i afterthought would produce a long brittle script nobody maintains; doing it as the sitting's own spec gives it a reason to exist.
+- source: agent
+
 ### [HIGH] R77 has no gate, and cannot have one until a Technique can hurt something
 - pass: agent (commit 07199af)
 - viewport: unspecified

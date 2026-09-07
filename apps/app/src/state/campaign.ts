@@ -58,6 +58,8 @@ const masterFrom = (sheet: Sheet): RecordedMaster => ({
   // exist (`CampaignRecord.actsSeen` states the rule).
   age: sheet.age,
   learned: sheet.learned,
+  xp: sheet.xp,
+  resources: sheet.resources,
 })
 
 /**
@@ -69,7 +71,7 @@ const adventureFrom = (state: RecordState): AdventureState => state.cave
 
 /** The durable half of a session, as the engine's record. */
 export const toCampaign = (state: RecordState): CampaignRecord => ({
-  ...newCampaign(masterFrom(state.sheet)),
+  ...newCampaign({ ...masterFrom(state.sheet), adventureScored: state.scoresBanked }),
   adventures: { [ADVENTURE_ID]: adventureFrom(state) },
   deeds: state.deeds.map((text) => ({ adventure: ADVENTURE_ID, text })),
   passages: state.passages,
@@ -174,10 +176,13 @@ export const fromCampaign = (record: CampaignRecord, session: RecordState): Reco
       // which is exactly what such a record says.
       age: record.master.age ?? null,
       learned: record.master.learned ?? [],
+      xp: record.master.xp ?? 0,
+      resources: record.master.resources ?? 0,
     },
     deeds: record.deeds.map((deed) => deed.text),
     passages: record.passages,
     chronicle: chronicleFrom(record),
+    scoresBanked: record.master.adventureScored ?? false,
     overrides: record.overrides,
     actsSeen: actsSeenFrom(record, cave),
   }

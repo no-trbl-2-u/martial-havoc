@@ -1618,6 +1618,171 @@
       "cite": "design/roll-modal/README.md"
     },
     {
+      "id": "ui.ending.title",
+      "text": "THE ENDING",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.freeze",
+      "text": "FREEZE FRAME",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.freeze.cite",
+      "text": "MH p.87-88 - Act 3",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.freeze.master",
+      "text": "{name}, of the {art}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.freeze.treasures",
+      "text": "{held} of {all} treasures",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.freeze.foes",
+      "text": "{n} named foes down",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.freeze.dishonor",
+      "text": "DISHONOR {n}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.scores",
+      "text": "THE FOUR SCORES",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.scores.cite",
+      "text": "MH p.34 - R43",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.scores.note",
+      "text": "1 is poor, 3 is excellent. Yours to give; the app does not score your play.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.xp",
+      "text": "XP",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.xp.sum",
+      "text": "{a}+{b}+{c}+{d} - {dishonor} = {total}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.xp.incomplete",
+      "text": "Score all four to bank the XP.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.xp.bank",
+      "text": "BANK {n} XP AND ADVANCE",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.xp.banked",
+      "text": "{n} XP banked. Spend it below, or carry it.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.advance",
+      "text": "ADVANCEMENT",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.advance.cite",
+      "text": "MH p.34-35 - R44, R45, R47",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.advance.band",
+      "text": "Your SKILL is {skill}: {band}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.advance.row",
+      "text": "+1 for {n} XP",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.advance.poor",
+      "text": "{n} XP - you have {have}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.advance.cap",
+      "text": "{name} above {cap} (R45). Flagged, not refused.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.unspent",
+      "text": "XP UNSPENT {n}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.resources",
+      "text": "{n} resource points to spend",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.learn",
+      "text": "LEARN",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.learn.cite",
+      "text": "MH p.35 - R16, R18",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.learn.row",
+      "text": "{name} - {n} resource points",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.learn.none",
+      "text": "Buy a Training point to open this.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.question",
+      "text": "Which figure in the shadows was pulling the strings of the boss you just defeated?",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.question.cite",
+      "text": "MH p.88",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.deed.banked",
+      "text": "scored the adventure at {n} XP",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.deed.bought",
+      "text": "raised {name} for {n} XP",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.ending.deed.learned",
+      "text": "learned {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.record.xp",
+      "text": "XP UNSPENT {n} · RESOURCE POINTS {r}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
       "id": "ui.map.cave.title",
       "text": "THE LOTUS FLOWER CAVE",
       "cite": "design/roll-modal/README.md"
