@@ -92,6 +92,43 @@ export const RecordScreen = ({ state, dispatch, at }: Props) => {
           </View>
         </Slip>
 
+        {/*
+          The adventure so far, in order (Phase 10h). The deeds ledger
+          below is the same play counted; this is it told. Each entry
+          carries the room it happened in, printed as a running head so
+          a reader sees where they were as well as what they did, and a
+          run of entries in one room says it once.
+        */}
+        <Slip style={styles.slip} testID="record-chronicle">
+          <View style={styles.head}>
+            <Text style={styles.title}>{t('ui.record.chronicle.title')}</Text>
+          </View>
+          <View style={styles.body}>
+            {state.chronicle.length === 0 ? (
+              <Text style={styles.empty}>{t('ui.record.chronicle.empty')}</Text>
+            ) : (
+              state.chronicle.map((entry, i) => {
+                const where = entry.area ?? t('ui.record.chronicle.nowhere')
+                const before = state.chronicle[i - 1]
+                const heading = before === undefined || (before.area ?? null) !== (entry.area ?? null)
+                return (
+                  <View key={`${String(i)}-${entry.text}`}>
+                    {!heading ? null : (
+                      <Text style={styles.where}>{where.toUpperCase()}</Text>
+                    )}
+                    <Text
+                      testID={`chronicle-${String(i)}`}
+                      style={entry.kind === 'passage' ? styles.passage : styles.line}
+                    >
+                      {entry.text}
+                    </Text>
+                  </View>
+                )
+              })
+            )}
+          </View>
+        </Slip>
+
         <Section
           testID="record-deeds"
           title={t('ui.record.deeds.title')}
@@ -193,6 +230,10 @@ const styles = StyleSheet.create({
   counts: { fontFamily: font.mono, fontSize: 11, color: color.ink },
   note: { fontFamily: font.mono, fontSize: 10, lineHeight: 14, color: color.dim },
   line: { fontFamily: font.serif, fontSize: 14, lineHeight: 19, color: color.ink },
+  /** The running head: which room the lines under it happened in. */
+  where: { fontFamily: font.sans, fontSize: 9, fontWeight: '800', letterSpacing: 0.9, marginTop: 6, color: color.dim },
+  /** The player's own words, set apart from the app's account of them. */
+  passage: { fontFamily: font.serif, fontSize: 14, lineHeight: 19, fontStyle: 'italic', color: color.ink },
   empty: { fontFamily: font.serif, fontSize: 14, fontStyle: 'italic', color: color.dim },
   json: {
     borderWidth: 2,

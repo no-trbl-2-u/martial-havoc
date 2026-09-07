@@ -10,6 +10,7 @@
 import type {
   AdventureState,
   AttackStrength,
+  ChronicleEntry,
   Die,
   EventKind,
   EventReading,
@@ -25,6 +26,15 @@ import type {
   TwoD6Roll,
   UnexpectedEventRoll,
 } from '@martial-havoc/engine'
+
+/**
+ * One line of the chronicle, re-exported from the engine (Phase 10h).
+ *
+ * The record owns the shape, because the chronicle is the durable half
+ * and travels in an export; the screens read it from here, the way they
+ * read everything else about a record.
+ */
+export type { ChronicleEntry }
 
 /** The screens of the frame. */
 export type Screen =
@@ -515,6 +525,15 @@ export type RecordState = {
   readonly byHand: boolean
   readonly draft: string
   readonly passages: readonly string[]
+  /**
+   * The adventure told in order (Phase 10h).
+   *
+   * Written beside the deeds rather than instead of them: the ledger is
+   * what the ending counts and it stays terse, and this is the same
+   * play as a story. Every deed writes one of these; so does every room
+   * entered, and every passage the player writes.
+   */
+  readonly chronicle: readonly ChronicleEntry[]
   /** How many rolls were typed instead of rolled (spec.md, Horizon). */
   readonly overrides: number
   readonly deeds: readonly string[]

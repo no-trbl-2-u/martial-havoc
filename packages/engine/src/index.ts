@@ -189,7 +189,13 @@ export {
   withOverride,
   withPassage,
 } from './campaign/record'
-export type { CampaignRecord, Deed, LearnedTechnique, RecordedMaster } from './campaign/record'
+export type {
+  CampaignRecord,
+  ChronicleEntry,
+  Deed,
+  LearnedTechnique,
+  RecordedMaster,
+} from './campaign/record'
 export { MIGRATIONS, applyChain, chainFrom, readingDrift } from './campaign/migrate'
 export type { Migration, MigrationProblem } from './campaign/migrate'
 export {

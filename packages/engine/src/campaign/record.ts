@@ -107,6 +107,28 @@ export type RecordedMaster = {
   readonly learned?: readonly LearnedTechnique[]
 }
 
+/**
+ * One line of the chronicle: the adventure told in order (Phase 10h).
+ *
+ * The deeds ledger is terse on purpose - it is what the ending counts -
+ * and terse is not a story. The chronicle is the same play written as it
+ * happened: a line for each room entered and what the Event brought
+ * there, a line for each deed, and the player's own passages standing
+ * where they wrote them.
+ *
+ * `area` is the printed name of the room the entry happened in, or null
+ * where there is none to give: a deed done in the village, or a line
+ * rebuilt from an older save that never recorded one.
+ */
+export type ChronicleEntry = {
+  /** How many rooms had been entered when this was written. */
+  readonly turn: number
+  readonly area: string | null
+  readonly kind: 'turn' | 'deed' | 'passage'
+  /** Already worded by whoever wrote it; the record stores no templates. */
+  readonly text: string
+}
+
 /** One line of the deeds ledger. */
 export type Deed = {
   /** Which adventure it happened in, or null for the sandbox. */
@@ -149,6 +171,17 @@ export type CampaignRecord = {
    * chain step to produce.
    */
   readonly actsSeen?: Readonly<Record<string, readonly number[]>>
+  /**
+   * The adventure told in order (Phase 10h).
+   *
+   * **Optional, and no version bump**, for the reason `actsSeen` gives:
+   * nothing about the saved shape became wrong when this arrived, and
+   * `MIGRATIONS` is keyed on estate readings that moved. A record
+   * without it is read by building one from its deeds - every line the
+   * older record actually kept, in the order it kept them, with no room
+   * to name because it never recorded one.
+   */
+  readonly chronicle?: readonly ChronicleEntry[]
 }
 
 /** A fresh record for a newly created Master. */
@@ -163,6 +196,7 @@ export const newCampaign = (master: RecordedMaster): CampaignRecord =>
     passages: Object.freeze([]),
     overrides: 0,
     actsSeen: Object.freeze({}),
+    chronicle: Object.freeze([]),
   })
 
 /** Replace the Master's numbers, leaving everything else alone. */

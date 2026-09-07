@@ -1593,6 +1593,71 @@
       "cite": "design/roll-modal/README.md"
     },
     {
+      "id": "ui.chronicle.turn",
+      "text": "{event} · {met}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.chronicle.alone",
+      "text": "nobody",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.record.chronicle.title",
+      "text": "THE ADVENTURE SO FAR",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.record.chronicle.empty",
+      "text": "Nothing has happened yet.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.record.chronicle.nowhere",
+      "text": "OFF THE MOUNTAIN",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.map.cave.title",
+      "text": "THE LOTUS FLOWER CAVE",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.map.cave.here",
+      "text": "YOU ARE HERE",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.map.cave.rooms",
+      "text": "{seen} of {all} rooms walked",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.map.cave.note",
+      "text": "Drawn from the passages you have walked. A room you have not entered has no name yet.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.map.cave.locked",
+      "text": "A barred passage is a door you have no key for.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.map.cave.unvisited",
+      "text": "?",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.map.cave.tapped",
+      "text": "{name} · {event}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.map.cave.tapped.none",
+      "text": "{name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
       "id": "ui.nav.about",
       "text": "ABOUT",
       "cite": "spec.md, Routine calls (Licence)"

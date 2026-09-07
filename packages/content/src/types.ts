@@ -517,6 +517,16 @@ export type AdventureArea = AdventureRecord & {
   /** The authored line the beat screen reads. Ours. */
   readonly line: string
   /** The ids of the areas reachable from here; undirected, so listed both ways. */
+  /**
+   * Where this area is drawn on the app's own cave map (Phase 10h).
+   *
+   * A 0-100 square, hand-set once for eight rooms rather than computed:
+   * a graph layout that moved between builds would make a player's own
+   * memory of the cave wrong. The printed map is not reproduced -
+   * spec.md refuses credited art - so this is the adjacency graph drawn
+   * as ours.
+   */
+  readonly pos: { readonly x: number; readonly y: number }
   readonly exits: readonly string[]
   readonly gate: AreaGate | null
   /** Treasure ids found here by exploration rather than as loot (I-38). */

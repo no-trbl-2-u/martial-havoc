@@ -88,6 +88,7 @@ import { fromCampaign } from './campaign'
 import {
   CORD,
   CORD_KNOWN,
+  LEFT,
   FAN,
   FIREPROOF,
   GOURD,
@@ -109,6 +110,7 @@ import type {
   Action,
   Combat,
   CreationState,
+  ChronicleEntry,
   EventShown,
   FoeInFight,
   Naming,
@@ -150,10 +152,38 @@ const withSheet = (state: RecordState, sheet: Partial<Sheet>): RecordState => ({
 const withCombat = (state: RecordState, combat: Partial<Combat>): RecordState =>
   state.combat === null ? state : { ...state, combat: { ...state.combat, ...combat } }
 
-const addDeed = (state: RecordState, deed: string): RecordState => ({
+/**
+ * Append one line to the chronicle (Phase 10h).
+ *
+ * The turn number is how many rooms have been entered, which is what
+ * `cave.visited` already counts: a chronicle written against a clock
+ * would need one, and this build reads no clock. The area is the room
+ * the Master stands in, named as the book names it, or null where they
+ * stand nowhere the adventure knows - the village, or before the trail.
+ */
+const chronicled = (
+  state: RecordState,
+  kind: ChronicleEntry['kind'],
+  text: string,
+  area: string | null = areaName(state.cave.area),
+): RecordState => ({
   ...state,
-  deeds: [...state.deeds, deed],
+  chronicle: [
+    ...state.chronicle,
+    { turn: state.cave.visited.length, area, kind, text },
+  ],
 })
+
+/**
+ * Write a deed, and the same fact into the chronicle.
+ *
+ * One call rather than two everywhere: the ledger and the story are two
+ * readings of the same event, and a deed that reached one and not the
+ * other would be a story with a hole in it exactly where something
+ * happened. Every deed in the build already goes through here.
+ */
+const addDeed = (state: RecordState, deed: string): RecordState =>
+  chronicled({ ...state, deeds: [...state.deeds, deed] }, 'deed', deed)
 
 /** `list` without its first `value`, if any. */
 const withoutFirst = (list: readonly string[], value: string): readonly string[] => {
@@ -254,8 +284,17 @@ const doTurn = (state: RecordState, to: string, dice: DiceSource): RecordState =
   const turn = step(TABLES, state.cave, to, source, { momentum: isMomentumDoor(to) })
   if (!turn.passage.ok || turn.area === undefined || turn.event === undefined) return state
   const foes = turn.encounter?.foes.map((foe) => foe.id) ?? []
+  // The room entered and what the Event brought there: the chronicle's
+  // spine, written where the turn is resolved so nothing else has to
+  // remember to. The area is the one just walked into, not the one just
+  // left, so it is taken from the turn rather than from the state.
+  const met = foes.map(foeName)
+  const line = fill(t('ui.chronicle.turn'), {
+    event: turn.event.text,
+    met: met.length === 0 ? t('ui.chronicle.alone') : met.join(', '),
+  })
   return afterMasterRoll(
-    {
+    chronicled({
       ...state,
       cave: turn.state,
       pending: foes,
@@ -272,6 +311,10 @@ const doTurn = (state: RecordState, to: string, dice: DiceSource): RecordState =
         momentum: turn.momentum,
       },
     },
+    'turn',
+    line,
+    turn.area.name,
+  ),
     manual,
   )
 }
@@ -1535,7 +1578,18 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
     case 'cave.gourd':
       return doGourd(state)
     case 'cave.leave':
-      return state.pending.length > 0 ? state : { ...state, screen: 'region', result: null, roll: null }
+      return state.pending.length > 0
+        ? state
+        : {
+            ...state,
+            screen: 'region',
+            result: null,
+            roll: null,
+            // The cave is behind them, and MAP is the region's again
+            // (Phase 10h). Durable, because walking off the mountain is
+            // not a thing a reload should undo.
+            cave: withFlag(state.cave, LEFT, true),
+          }
     // The way back down. The mountain's only exit off the adventure is
     // the trail it was reached by (Phase 10b): the region is the
     // ending's business, the village is the doorstep's.
@@ -1569,7 +1623,11 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return { ...state, draft: action.text }
     case 'passage.keep': {
       const text = state.draft.trim()
-      return text.length === 0 ? state : { ...state, passages: [...state.passages, text], draft: '' }
+      // The player's own words stand in the chronicle where they wrote
+      // them, which is the whole point of writing them there.
+      return text.length === 0
+        ? state
+        : chronicled({ ...state, passages: [...state.passages, text], draft: '' }, 'passage', text)
     }
     case 'combat.round':
       return doRound(state, dice)

@@ -279,6 +279,7 @@ describe('The 5 Treasures: flags, absences and acts', () => {
     expect(theFiveTreasuresFlags.map((f) => f.flag).sort()).toEqual([
       'cord-spells-known',
       'junior-king-asleep',
+      'left-the-mountain',
       'night',
       'sheets-read',
     ])

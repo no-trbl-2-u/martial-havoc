@@ -23,15 +23,19 @@ const button = (page: Page, name: RegExp | string) => page.getByRole('button', {
  * not the queue, and taking the trail rolls nothing at all, so a spec's
  * named rolls still reach the rolls it named.
  */
-const begin = async (page: Page) => {
+const madeAMaster = async (page: Page) => {
   await page.getByTestId('title-start').click()
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
+  await expect(page.getByTestId('village')).toBeVisible()
+}
+
+const begin = async (page: Page) => {
+  await madeAMaster(page)
   // Phase 10b: a made Master wakes in Fen Pass and reads the Call. The
   // trail out of the village is the point of no return and the only way
   // onto the mountain, so every spec about the beat takes it first. It
   // spends no `?dice=` faces.
-  await expect(page.getByTestId('village')).toBeVisible()
   await page.getByTestId('village-go').click()
   await expect(page.getByTestId('beat')).toBeVisible()
 }
@@ -262,8 +266,10 @@ test('the rules panel lists every behaviour with its label and opens one', async
 })
 
 test('the region is seven linked points and says it is not to scale', async ({ page }) => {
+  // MAP is the region while the Master is off the mountain (Phase 10h):
+  // before the trail is taken, and again once it is walked back down.
   await page.goto('/')
-  await begin(page)
+  await madeAMaster(page)
   await button(page, 'MAP').click()
   await expect(page.getByText('NOT TO SCALE')).toBeVisible()
   await expect(page.getByText(/7 POINTS · \d+ LINKS/)).toBeVisible()
@@ -274,7 +280,7 @@ test('the region is seven linked points and says it is not to scale', async ({ p
   await travel.click()
   await expect(page.getByTestId('here')).not.toBeEmpty()
   await button(page, 'BACK TO PLAY').click()
-  await expect(page.getByTestId('beat')).toBeVisible()
+  await expect(page.getByTestId('village')).toBeVisible()
 })
 
 test('an unknown route still serves the app (single-page fallback)', async ({ page }) => {
@@ -646,4 +652,46 @@ test('the sword takes the hits you are behind on', async ({ page }) => {
   await expect(page.getByTestId('warded')).toContainText('THE SWORD TAKES IT')
   // The fan is his, not yours: the row is not on this screen at all.
   await expect(page.getByTestId('act-fan')).toHaveCount(0)
+})
+
+test('the cave map fills as you walk it, and the paper door is barred', async ({ page }) => {
+  // Safe walks (4) to the entrance and the dining hall, then into the
+  // Attendants room on a safe 4 as well: three rooms plus the mountain.
+  await page.goto('/?dice=4,4,4')
+  await begin(page)
+  await button(page, 'MAP').click()
+  // On the mountain, one room is walked and the rest are outlines with
+  // no name (I-60's spirit).
+  await expect(page.getByTestId('cave-map')).toBeVisible()
+  await expect(page.getByTestId('room-label-1')).toHaveText('1')
+  await expect(page.getByTestId('room-label-8')).toHaveText('')
+  await expect(page.getByText('1 of 8 rooms walked')).toBeVisible()
+  await button(page, 'BACK TO PLAY').click()
+
+  await go(page, /TO THE CAVE ENTRANCE/)
+  await go(page, /TO THE DINING HALL/)
+  await go(page, /TO THE ATTENDANTS ROOM/)
+  await button(page, 'MAP').click()
+  await expect(page.getByText('4 of 8 rooms walked')).toBeVisible()
+  await expect(page.getByTestId('room-label-3')).toHaveText('3')
+  // The Attendants room is walked, so its doorways are drawn - and the
+  // Chieftain quarter's is barred, because the key is not held.
+  await expect(page.getByTestId('bar-8')).toBeVisible()
+  // Tapping a walked room says what last happened there.
+  await page.getByTestId('room-3').click()
+  await expect(page.getByTestId('room-card')).toContainText('ATTENDANTS ROOM')
+})
+
+test('the record tells the adventure so far, in order', async ({ page }) => {
+  await page.goto('/?dice=4,2,6')
+  await begin(page)
+  await go(page, /TO THE CAVE ENTRANCE/)
+  // An Encounter in the Dining hall (2) with the Senior King (6).
+  await go(page, /TO THE DINING HALL/)
+  await button(page, 'RECORD').click()
+  const chronicle = page.getByTestId('record-chronicle')
+  await expect(chronicle).toContainText('CAVE ENTRANCE')
+  await expect(chronicle).toContainText('Safe exploration · nobody')
+  await expect(chronicle).toContainText('DINING HALL')
+  await expect(chronicle).toContainText('Encounter · Senior King Golden Horn')
 })

@@ -107,6 +107,9 @@ export const NIGHT = 'night'
 /** The flag that says the Cord's spells are known (I-41). */
 export const CORD_KNOWN = 'cord-spells-known'
 
+/** The flag that says the Master has walked off the mountain (Phase 10h). */
+export const LEFT = 'left-the-mountain'
+
 /** A foe's printed name, or its id where the roster does not know it. */
 export const foeName = (id: string): string => treasureFoeById(id)?.name ?? id
 

@@ -8,9 +8,50 @@
   "label": "reading",
   "docs": "docs/campaigns/the-5-treasures/areas.md",
   "records": [
-    { "id": "flag.the-5-treasures.night", "cite": "I-45; 5T a2", "reading": "I-45", "adventure": "adventure.the-5-treasures", "flag": "night", "initial": false, "text": "The gourd, opened, swallows the sky and day becomes night; closing it brings the daylight back." },
-    { "id": "flag.the-5-treasures.junior-king-asleep", "cite": "I-40; 5T a1", "reading": "I-40", "adventure": "adventure.the-5-treasures", "flag": "junior-king-asleep", "initial": false, "text": "The Junior King naps in the Dining Hall once he has overdrunk wine: a state the Master causes by bringing it." },
-    { "id": "flag.the-5-treasures.sheets-read", "cite": "I-38b; 5T a1", "reading": "I-38b", "adventure": "adventure.the-5-treasures", "flag": "sheets-read", "initial": false, "text": "The Chieftain's scattered sheets have been interpreted, so two of the treasures' workings are known without holding them." },
-    { "id": "flag.the-5-treasures.cord-spells-known", "cite": "I-41; 5T a1", "reading": "I-41", "adventure": "adventure.the-5-treasures", "flag": "cord-spells-known", "initial": false, "text": "The spells that control the Dazzling Golden Cord are known; until then the Cord is inert loot." }
+    {
+      "id": "flag.the-5-treasures.night",
+      "cite": "I-45; 5T a2",
+      "reading": "I-45",
+      "adventure": "adventure.the-5-treasures",
+      "flag": "night",
+      "initial": false,
+      "text": "The gourd, opened, swallows the sky and day becomes night; closing it brings the daylight back."
+    },
+    {
+      "id": "flag.the-5-treasures.junior-king-asleep",
+      "cite": "I-40; 5T a1",
+      "reading": "I-40",
+      "adventure": "adventure.the-5-treasures",
+      "flag": "junior-king-asleep",
+      "initial": false,
+      "text": "The Junior King naps in the Dining Hall once he has overdrunk wine: a state the Master causes by bringing it."
+    },
+    {
+      "id": "flag.the-5-treasures.sheets-read",
+      "cite": "I-38b; 5T a1",
+      "reading": "I-38b",
+      "adventure": "adventure.the-5-treasures",
+      "flag": "sheets-read",
+      "initial": false,
+      "text": "The Chieftain's scattered sheets have been interpreted, so two of the treasures' workings are known without holding them."
+    },
+    {
+      "id": "flag.the-5-treasures.cord-spells-known",
+      "cite": "I-41; 5T a1",
+      "reading": "I-41",
+      "adventure": "adventure.the-5-treasures",
+      "flag": "cord-spells-known",
+      "initial": false,
+      "text": "The spells that control the Dazzling Golden Cord are known; until then the Cord is inert loot."
+    },
+    {
+      "id": "flag.the-5-treasures.left-the-mountain",
+      "cite": "5T a1",
+      "reading": "I-42",
+      "adventure": "adventure.the-5-treasures",
+      "flag": "left-the-mountain",
+      "initial": false,
+      "text": "The Master has walked off the mountain and into the region: the cave is behind them, and the map they carry is the region's again."
+    }
   ]
 }

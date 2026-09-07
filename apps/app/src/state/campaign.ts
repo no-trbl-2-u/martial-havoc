@@ -14,7 +14,12 @@
  * engine never learns what a screen is.
  */
 import { actSatisfied, newCampaign } from '@martial-havoc/engine'
-import type { AdventureState, CampaignRecord, RecordedMaster } from '@martial-havoc/engine'
+import type {
+  AdventureState,
+  CampaignRecord,
+  ChronicleEntry,
+  RecordedMaster,
+} from '@martial-havoc/engine'
 import {
   theFiveTreasures,
   theFiveTreasuresAreaById,
@@ -68,6 +73,7 @@ export const toCampaign = (state: RecordState): CampaignRecord => ({
   adventures: { [ADVENTURE_ID]: adventureFrom(state) },
   deeds: state.deeds.map((text) => ({ adventure: ADVENTURE_ID, text })),
   passages: state.passages,
+  chronicle: state.chronicle,
   overrides: state.overrides,
   actsSeen: { [ADVENTURE_ID]: state.actsSeen },
 })
@@ -93,6 +99,22 @@ const actsSeenFrom = (record: CampaignRecord, cave: AdventureState): readonly nu
   if (saved !== undefined) return saved
   return theFiveTreasures.acts.filter((act) => actSatisfied(cave, act)).map((act) => act.act)
 }
+
+/**
+ * The chronicle a saved record carries, or one built from what it kept.
+ *
+ * A record written by this build says outright what happened and in
+ * what order. One written before Phase 10h kept only the deeds ledger,
+ * and the honest reading of it is not "nothing happened": every line in
+ * that ledger is a thing this Master did, in the order they did it. So
+ * an absent chronicle is rebuilt from the deeds, one entry each, with
+ * no room named - because the older record never recorded one, and
+ * inventing a room for a line that has none would be putting words in
+ * a save's mouth.
+ */
+const chronicleFrom = (record: CampaignRecord): readonly ChronicleEntry[] =>
+  record.chronicle ??
+  record.deeds.map((deed, i) => ({ turn: i + 1, area: null, kind: 'deed' as const, text: deed.text }))
 
 /**
  * Lay a loaded campaign over a session.
@@ -155,6 +177,7 @@ export const fromCampaign = (record: CampaignRecord, session: RecordState): Reco
     },
     deeds: record.deeds.map((deed) => deed.text),
     passages: record.passages,
+    chronicle: chronicleFrom(record),
     overrides: record.overrides,
     actsSeen: actsSeenFrom(record, cave),
   }

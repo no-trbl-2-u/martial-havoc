@@ -1560,7 +1560,8 @@
           "exits",
           "gate",
           "treasures",
-          "rescue"
+          "rescue",
+          "pos"
         ],
         "properties": {
           "id": {
@@ -1659,6 +1660,27 @@
               "dishonorOnAttack": {
                 "description": "True where attacking the rescue costs the Master honour rather than earning a fight.",
                 "type": "boolean"
+              }
+            }
+          },
+          "pos": {
+            "description": "Where this area is drawn on the app's own cave map: a 0-100 square, hand-set once for eight rooms. Ours, not the printed map's - spec.md refuses credited art, so the map is redrawn from the adjacency graph.",
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "x",
+              "y"
+            ],
+            "properties": {
+              "x": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "y": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
               }
             }
           }

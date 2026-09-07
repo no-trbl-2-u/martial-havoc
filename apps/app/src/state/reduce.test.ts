@@ -1346,3 +1346,81 @@ describe('the five treasures work (Phase 10g)', () => {
     expect(lost.sheet.endurance).toBeLessThan(fighting.sheet.endurance)
   })
 })
+
+describe('the map and the chronicle (Phase 10h)', () => {
+  it('writes one chronicle line per room entered, naming the room and what it brought', () => {
+    const s = play(fresh(), [
+      // A safe walk into the Cave entrance, then an Encounter in the
+      // Dining hall on face 6: the Senior King.
+      ...walk(AREA.entrance),
+      [{ type: 'cave.go', to: AREA.hall }, [2, 6]],
+      [{ type: 'roll.close' }, []],
+    ])
+    const turns = s.chronicle.filter((e) => e.kind === 'turn')
+    expect(turns.map((e) => e.area)).toEqual(['Cave entrance', 'Dining Hall'])
+    expect(turns[0]?.text).toContain('Safe exploration')
+    expect(turns[0]?.text).toContain('nobody')
+    expect(turns[1]?.text).toContain('Encounter')
+    expect(turns[1]?.text).toContain('Senior King Golden Horn')
+  })
+
+  it('folds every deed into the chronicle, in the room it was done in', () => {
+    const s = play(fresh(), [
+      ...walk(AREA.entrance),
+      ...walk(AREA.storage),
+      [{ type: 'cave.take', treasure: GOURD }, []],
+    ])
+    const deed = s.chronicle.filter((e) => e.kind === 'deed').at(-1)
+    expect(deed?.area).toBe('Storage room')
+    expect(deed?.text).toBe(s.deeds.at(-1))
+    // The ledger is not replaced by the story: both hold it.
+    expect(s.deeds.length).toBeGreaterThan(0)
+  })
+
+  it('stands a written passage in the chronicle where it was written', () => {
+    const s = play(fresh(), [
+      ...walk(AREA.entrance),
+      [{ type: 'draft', text: 'The thrones are cold.' }, []],
+      [{ type: 'passage.keep' }, []],
+    ])
+    const last = s.chronicle.at(-1)
+    expect(last).toMatchObject({ kind: 'passage', area: 'Cave entrance', text: 'The thrones are cold.' })
+    expect(s.passages).toEqual(['The thrones are cold.'])
+  })
+
+  it('carries the chronicle through an export and back', () => {
+    const before = play(fresh(), [...walk(AREA.entrance)])
+    const back = fromCampaign(toCampaign(before), fresh())
+    expect(back.chronicle).toEqual(before.chronicle)
+  })
+
+  it('builds a chronicle from the deeds of a record written before this phase', () => {
+    const before = play(fresh(), [...walk(AREA.entrance), ...walk(AREA.storage), [{ type: 'cave.take', treasure: GOURD }, []]])
+    const older = toCampaign(before)
+    const { chronicle: _gone, ...rest } = older
+    const back = fromCampaign(rest, fresh())
+    expect(back.chronicle).toHaveLength(before.deeds.length)
+    expect(back.chronicle.every((e) => e.kind === 'deed' && e.area === null)).toBe(true)
+    expect(back.chronicle.map((e) => e.text)).toEqual(before.deeds)
+  })
+
+  it('sets the flag that turns MAP back into the region when the mountain is left', () => {
+    const inside = play(fresh(), [...walk(AREA.entrance)])
+    expect(inside.cave.flags['left-the-mountain']).toBe(false)
+    const gone = reduce(inside, { type: 'cave.leave' }, fromSequence([]))
+    expect(gone.cave.flags['left-the-mountain']).toBe(true)
+    expect(gone.screen).toBe('region')
+  })
+
+  it('gives every area a position on the map, inside the drawing', () => {
+    for (const area of theFiveTreasures.areas) {
+      expect(area.pos.x, area.id).toBeGreaterThanOrEqual(0)
+      expect(area.pos.x, area.id).toBeLessThanOrEqual(100)
+      expect(area.pos.y, area.id).toBeGreaterThanOrEqual(0)
+      expect(area.pos.y, area.id).toBeLessThanOrEqual(100)
+    }
+    // No two rooms share a spot: overlapping circles are one room.
+    const spots = theFiveTreasures.areas.map((a) => `${String(a.pos.x)},${String(a.pos.y)}`)
+    expect(new Set(spots).size).toBe(spots.length)
+  })
+})

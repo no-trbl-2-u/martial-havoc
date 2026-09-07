@@ -64,6 +64,7 @@ const area = (
   adventure: 'adventure.test',
   area: n,
   name: `Area ${String(n)}`,
+  pos: { x: 50, y: 50 },
   description: 'a test area',
   hint: `hint ${String(n)}`,
   line: `line ${String(n)}`,
