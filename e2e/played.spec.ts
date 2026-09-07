@@ -48,6 +48,7 @@ import {
   atTheEndingsDoor,
   atTheRecord,
   atTheRules,
+  facingTheBeast,
   facingTheGhost,
   facingThreeServants,
   inTheStorageRoom,
@@ -405,9 +406,13 @@ const inTheStorageRoomArea = (() => {
 })()
 
 test('a kill is a question too, asked on the beat the fight left', async ({ page }) => {
-  // A won round on 6,5 against 1,1; the difference struck off; the
-  // Ghost's LOOT line names the key and rolls nothing.
-  await open(page, facingTheGhost, '?dice=6,5,1,1')
+  // Two won rounds on 6,5 against 1,1, each worth 11 against the
+  // Beast's printed 13; the Beast's LOOT line names the key and rolls
+  // nothing. The Beast rather than the Ghost because R77 closes an
+  // ordinary blow against a spirit (MH p.66; Phase 10l).
+  await open(page, facingTheBeast, '?dice=6,5,1,1,6,5,1,1')
+  await button(page, 'ROLL THE ROUND').click()
+  await page.getByTestId('act-strike').click()
   await button(page, 'ROLL THE ROUND').click()
   await page.getByTestId('act-strike').click()
   await page.getByTestId('act-loot').click()
@@ -573,7 +578,7 @@ test('the narrator is silent on the title page and in creation', async ({ page }
  * until Phase 10k the app answered a lost exchange with FLEE alone.
  */
 test('a lost exchange is followed by another, not by FLEE alone', async ({ page }) => {
-  const state = await open(page, facingTheGhost, '?dice=1,1,6,6,6,6,1,1')
+  const state = await open(page, facingTheBeast, '?dice=1,1,6,6,6,6,1,1')
   await button(page, t('ui.combat.primary.roll')).click()
   // The round was lost: the ENDURANCE moved and the banner says behind.
   await expect(page.getByTestId('attr-endurance')).not.toHaveText(String(state.sheet.endurance))
@@ -662,7 +667,7 @@ test('MINIONS AT 1 is not offered in a duel', async ({ page }) => {
 test('an opponent’s card keeps its ENDURANCE through the round, over what it prints', async ({
   page,
 }) => {
-  const state = await open(page, facingTheGhost, '?dice=6,5,1,1')
+  const state = await open(page, facingTheBeast, '?dice=6,5,1,1')
   const printed = state.combat?.foes[0]?.endurance
   if (printed === undefined) throw new Error('no body in the seeded fight')
   const card = page.getByTestId('endurance-theirs')
@@ -680,4 +685,52 @@ test('an opponent’s card keeps its ENDURANCE through the round, over what it p
     fill(t('ui.combat.theirs.endurance'), { now: printed, printed }),
   )
   await expect(card).toContainText(String(printed))
+})
+
+// -------------------------------------------------------- spirits (R77)
+
+/**
+ * MH p.66: "Sometimes you will face spirits or ghosts, incorporeal
+ * beings immune to traditional weapons or blows; you will need to use a
+ * technique, ritual, or exceptional weapon to defeat them." Reading
+ * I-29 tags the Dexterous Ghost as one. Phase 10g built this gate and
+ * reverted it, because with no Technique doing damage the cave was
+ * unfinishable; Phase 10l ships the damage first and the gate second.
+ */
+test('a spirit refuses an ordinary blow, and says so in the book’s words', async ({ page }) => {
+  await open(page, facingTheGhost, '?dice=6,5,1,1')
+  await button(page, t('ui.combat.primary.roll')).click()
+  // The round was won, so the winner's options are on offer.
+  await expect(page.getByTestId('combat')).toContainText(t('ui.combat.banner.ahead'))
+  // The rule stands on the screen, not only inside a dead row.
+  await expect(page.getByTestId('spirit-banner')).toHaveText(t('ui.combat.spirit.banner'))
+  await expect(page.getByTestId('spirit')).toContainText(t('ui.combat.spirit.refused'))
+  // The two ordinary blows are closed; everything else is open.
+  await expect(page.getByTestId('act-strike')).toBeDisabled()
+  await expect(page.getByTestId('act-technique')).toBeEnabled()
+  await expect(page.getByTestId('act-opening')).toBeEnabled()
+})
+
+/**
+ * And the way through: a Technique whose printed effect is a blow does
+ * the exchange's difference (I-65), so a bare-handed Master takes the
+ * Dexterous Ghost's key and the private quarter opens. This is the
+ * scenario the reverted gate could not survive.
+ */
+test('a Technique is the way through a spirit, bare-handed', async ({ page }) => {
+  await open(page, facingTheGhost, '?dice=6,5,1,1')
+  await button(page, t('ui.combat.primary.roll')).click()
+  // San Te knows two Techniques that work inside a round, so the row is
+  // a chooser; Rising Wave Strike is the blow among them.
+  await page.getByTestId('act-technique').click()
+  const rising = page.getByRole('button', { name: /RISING WAVE STRIKE/ })
+  await rising.click()
+  // The body is down: the fight is over and the loot row stands.
+  await expect(page.getByTestId('fallen-title')).toContainText('DEXTEROUS GHOST')
+  await page.getByTestId('act-loot').click()
+  await page.getByTestId('act-go-on').click()
+  await expect(page.getByTestId('beat')).toBeVisible()
+  await button(page, /RECORD/).click()
+  await expect(page.getByTestId('record-deeds')).toContainText("private quarter's key")
+  await expect(page.getByTestId('record-deeds')).toContainText('killed dexterous ghost')
 })

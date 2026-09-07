@@ -6,7 +6,14 @@
  */
 import { useState } from 'react'
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
-import { effectFor, t, techniqueById, treasureFoeById } from '@martial-havoc/content'
+import {
+  effectFor,
+  isExceptionalWeapon,
+  isExceptionalWeaponName,
+  t,
+  techniqueById,
+  treasureFoeById,
+} from '@martial-havoc/content'
 import { LEARNED, readyToRoll } from '../state/reduce'
 import { CORD, CORD_KNOWN, FAN, FIREPROOF, SWORD } from '../state/menu'
 import type { AttackStrength } from '@martial-havoc/engine'
@@ -121,6 +128,22 @@ const aimedAt = (c: Combat): FoeInFight | undefined => c.foes[c.target] ?? c.foe
 const holds = (state: RecordState, treasure: string): boolean =>
   state.cave.treasures.includes(treasure)
 
+/**
+ * Is an ordinary blow refused against the body the Master is aimed at
+ * (MH p.66, R77)?
+ *
+ * The reducer answers the same question with the engine's
+ * `ordinaryBlowsPass` and refuses the action; this is the screen saying
+ * so before the tap, which is the half a player can act on. Both read
+ * the same two content facts - I-29's tag on the opponent, and I-29's
+ * three weapons against what the Master carries - so neither invents an
+ * answer of its own.
+ */
+const spiritRefusesBlows = (state: RecordState, aim: FoeInFight | undefined): boolean =>
+  treasureFoeById(aim?.id ?? '')?.incorporeal === true &&
+  !state.cave.treasures.some(isExceptionalWeapon) &&
+  !state.sheet.equipment.some(isExceptionalWeaponName)
+
 /** Every body still on its feet. */
 const standing = (c: Combat): readonly FoeInFight[] => c.foes.filter((f) => f.endurance > 0)
 
@@ -164,6 +187,10 @@ const actions = (state: RecordState, c: Combat, menu: Menu): readonly Act[] => {
   const won = aim?.outcome === 'master-wins'
   const diff = aim?.difference ?? 0
   const alive = standing(c)
+  // R77 closes on the two ordinary blows and on nothing else: the
+  // Technique row, the Cord, the Fan and an Opening all stay open,
+  // because none of them is a traditional weapon or blow.
+  const refused = spiritRefusesBlows(state, aim)
   if (c.over.ended && c.over.reason === 'master-down')
     return [{ id: 'fall', title: t('ui.combat.act.fall'), cite: t('ui.combat.act.fall.cite'), line: t('ui.combat.act.fall.line'), enabled: true, action: { type: 'combat.leave' } }]
   // A landed Final Blow is offered before anything else the fight has
@@ -287,8 +314,22 @@ const actions = (state: RecordState, c: Combat, menu: Menu): readonly Act[] => {
   }
   if (c.opening)
     return [
-      { id: 'blow', title: t('ui.combat.act.blow'), cite: t('ui.combat.act.blow.cite'), line: t('ui.combat.act.blow.line'), enabled: true, action: { type: 'combat.blow' } },
-      { id: 'strike-instead', title: t('ui.combat.act.strike-instead'), cite: t('ui.combat.act.strike.cite'), line: t('ui.combat.act.strike-instead.line'), enabled: won, action: { type: 'combat.strike' } },
+      {
+        id: 'blow',
+        title: t('ui.combat.act.blow'),
+        cite: refused ? t('ui.combat.spirit.cite') : t('ui.combat.act.blow.cite'),
+        line: refused ? t('ui.combat.spirit.refused') : t('ui.combat.act.blow.line'),
+        enabled: !refused,
+        action: { type: 'combat.blow' },
+      },
+      {
+        id: 'strike-instead',
+        title: t('ui.combat.act.strike-instead'),
+        cite: refused ? t('ui.combat.spirit.cite') : t('ui.combat.act.strike.cite'),
+        line: refused ? t('ui.combat.spirit.refused') : t('ui.combat.act.strike-instead.line'),
+        enabled: won && !refused,
+        action: { type: 'combat.strike' },
+      },
     ]
   // Both kinds of Technique are winner's options and both are offered
   // from one row: the printed ones the sheet names, and the ones this
@@ -346,9 +387,13 @@ const actions = (state: RecordState, c: Combat, menu: Menu): readonly Act[] => {
     {
       id: 'strike',
       title: t('ui.combat.act.strike'),
-      cite: t('ui.combat.act.strike.cite'),
-      line: won ? fill(t('ui.combat.act.strike.won'), { n: diff }) : t('ui.combat.act.strike.lost'),
-      enabled: won,
+      cite: refused ? t('ui.combat.spirit.cite') : t('ui.combat.act.strike.cite'),
+      line: refused
+        ? t('ui.combat.spirit.refused')
+        : won
+          ? fill(t('ui.combat.act.strike.won'), { n: diff })
+          : t('ui.combat.act.strike.lost'),
+      enabled: won && !refused,
       action: { type: 'combat.strike' },
     },
     ...(holds(state, CORD)
@@ -619,6 +664,25 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
           </Text>
         ) : null}
 
+        {/*
+          R77, said once and where it can be read before a round is
+          spent (MH p.66). Without it a player meets the rule only as a
+          disabled STRIKE row, which reads as the app being broken
+          rather than as the book being obeyed; and OPENING stays
+          enabled, so the fact has to stand somewhere other than on the
+          two rows it closes.
+        */}
+        {!spiritRefusesBlows(state, aimedAt(c)) ? null : (
+          <Slip dashed borderColor={color.vermilion} style={styles.pad} testID="spirit">
+            <View style={styles.between}>
+              <Text testID="spirit-banner" style={styles.strong}>
+                {t('ui.combat.spirit.banner')}
+              </Text>
+              <Source cite={t('ui.combat.spirit.cite')} />
+            </View>
+            <Text style={styles.eventText}>{t('ui.combat.spirit.refused')}</Text>
+          </Slip>
+        )}
         {/*
           Whoever fell, said as a moment rather than as a number going
           to zero (Phase 10d). It stands above the loot row for a beaten

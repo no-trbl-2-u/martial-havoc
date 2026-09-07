@@ -287,11 +287,23 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       before its manual path could be wired, and the Oracle's Enemy
       attack span disagreed with the docs — corrected against the PDF
       in its own commit first (standing rule 9).
-- [ ] Phase 10l — Spirits immune to ordinary blows (brief:
-      `phase_10l_spirits_gate.md`). R77's gate, reverted in 10g,
-      turned on once a known Technique and the seven-star sword can
-      hurt a spirit, so the Dexterous Ghost stays beatable. Engine,
-      effects and readings; waits on 10k.
+- [x] Phase 10l — Spirits immune to ordinary blows (brief:
+      `phase_10l_spirits_gate.md`) — COMMIT_10L. Shipped in the order
+      the critique row prescribed: damage first, gate second. Five
+      Techniques whose printed effect is a blow (Hand of 1000
+      characters, Iron Palm, Poisonous Bird, Rising Wave Strike, Three
+      Stars Fist) do the exchange's difference, a new reading **I-65**
+      assigned in the same commit; then `doStrike` and `doBlow` refuse
+      an ordinary blow against an I-29 foe, with MH p.66's sentence on
+      the screen and a slip that says it once before a round is spent.
+      The seven-star sword and Yin's Magical sword open the gate.
+      **Three calls are in the commit body**: a Technique that kills
+      now writes the `killed` deed as a strike does; the eleven scripts
+      that used the Dexterous Ghost as a sparring partner were
+      repointed (five to the Technique, one to the Junior King, three
+      e2e fixtures to the Skillful Beast) rather than given the sword
+      wholesale; and the Fan and the Cord are left open against
+      spirits, being neither traditional weapons nor blows.
 
 **The milestone (phase 10, by 2026-12-05):**
 - [ ] Phase 10 — The cave played to its ending `[needs-user-call]`

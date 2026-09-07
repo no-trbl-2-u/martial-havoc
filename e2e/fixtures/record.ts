@@ -83,6 +83,18 @@ const AREA = {
 
 /** The Dexterous Ghost, the Attendants room's Encounter creature 3. */
 const GHOST = 'foe.dexterous-ghost'
+
+/**
+ * The Skillful Beast, the other half of the Attendants room's creature
+ * 6 ("Both"), and the corporeal body of this adventure.
+ *
+ * R77 (MH p.66) makes the Ghost immune to ordinary blows, so a scene
+ * that means to demonstrate a strike, an Opening or a Final Blow needs
+ * a body an ordinary blow can reach. The Beast is that body, and it
+ * drops the same private quarter's key (5T a2), so a fixture that used
+ * the Ghost only to open the paper door loses nothing by using it.
+ */
+const BEAST = 'foe.skillful-beast'
 /** The foes the whole cave is played against (5T a2). */
 const FOE = {
   juniorKing: 'foe.junior-king-silver-horn',
@@ -131,6 +143,24 @@ export const facingTheGhost: Scene = extend(
   onTheMountain,
   [...go(AREA.entrance), ...go(AREA.diningHall), ...go(AREA.attendants), { type: 'cave.fight', foe: GHOST }],
   [4, 4, 2, 3],
+)
+
+/**
+ * The Skillful Beast faced in the Attendants room, the combat screen
+ * open. Event 4 into the entrance, 4 into the Dining Hall, then Event 2
+ * (Encounter) and creature 6 ("Both", 5T a1) into the Attendants room,
+ * where the Beast is faced alone and the Ghost is left pending.
+ * Spends `4,4,2,6`.
+ */
+export const facingTheBeast: Scene = extend(
+  onTheMountain,
+  [
+    ...go(AREA.entrance),
+    ...go(AREA.diningHall),
+    ...go(AREA.attendants),
+    { type: 'cave.fight', foe: BEAST },
+  ],
+  [4, 4, 2, 6],
 )
 
 /** The rules panel open from the mountain. Rolls nothing named. */
@@ -208,7 +238,19 @@ const struckDownAndLooted: readonly Action[] = [
  * 10c walk in `prototype.spec.ts` ("the paper door") up to the door
  * itself. Spends `4,4,2,3` reaching the Ghost and `6,5,1,1` on the round.
  */
-export const atThePaperDoor: Scene = extend(facingTheGhost, struckDownAndLooted, [6, 5, 1, 1])
+export const atThePaperDoor: Scene = extend(
+  facingTheBeast,
+  [
+    // The Beast prints ENDURANCE 13 and a won round on `6,5` against
+    // `1,1` is worth 11 (San Te 23, the Beast 7 + somersault leap 3 +
+    // 2), so it takes two rounds where the Ghost took one. Its LOOT is
+    // the same key (5T a2).
+    { type: 'combat.round' },
+    { type: 'combat.strike' },
+    ...struckDownAndLooted,
+  ],
+  [6, 5, 1, 1, 6, 5, 1, 1],
+)
 
 /**
  * The Master on the floor.

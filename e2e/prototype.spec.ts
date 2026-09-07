@@ -64,6 +64,23 @@ const toGhost = async (page: Page) => {
   await button(page, /FACE THE DEXTEROUS GHOST/).click()
 }
 
+/**
+ * Put the Dexterous Ghost down with Rising Wave Strike.
+ *
+ * R77 (MH p.66) makes a spirit immune to ordinary blows and reading
+ * I-29 tags this one, so from Phase 10l a walk that used STRIKE here
+ * uses the Technique the book points at instead: "you will need to use
+ * a technique, ritual, or exceptional weapon to defeat them". San Te
+ * knows two Techniques that work inside a round, so the row is a
+ * chooser; Rising Wave Strike is the blow among them, and I-65 gives it
+ * the exchange's difference - the same number the strike would have
+ * taken, which is why every count around this call is unchanged.
+ */
+const strikeTheGhost = async (page: Page) => {
+  await page.getByTestId('act-technique').click()
+  await button(page, /RISING WAVE STRIKE/).click()
+}
+
 test('the beat opens on the Flat-top mountain, the book’s text word for word', async ({ page }) => {
   await page.goto('/')
   await begin(page)
@@ -180,11 +197,13 @@ test('combat shows both rolls, both Proficiencies, both totals and the differenc
   await expect(page.getByText(/IMMATERIAL CHARGE \+4/)).toBeVisible()
   await expect(page.getByText('YOU ARE AHEAD BY')).toBeVisible()
   await expect(page.getByTestId('banner-value')).toHaveText('10')
-  await expect(page.getByTestId('act-strike')).toBeEnabled()
-  await expect(page.getByTestId('act-strike')).toContainText('Take 10 from its ENDURANCE.')
+  // R77: the Ghost is a spirit, so the ordinary blow is closed and says
+  // why in the book's own words; the Technique row is the way through.
+  await expect(page.getByTestId('act-strike')).toBeDisabled()
+  await expect(page.getByTestId('act-strike')).toContainText('immune to traditional weapons or blows')
   await expect(page.getByTestId('act-technique')).toBeEnabled()
   await expect(page.getByTestId('act-opening')).toBeEnabled()
-  await page.getByTestId('act-strike').click()
+  await strikeTheGhost(page)
   await expect(button(page, 'FIGHT IS OVER')).toBeVisible()
   // Its LOOT line, as printed: the private quarter's key, no die.
   await page.getByTestId('act-loot').click()
@@ -470,7 +489,7 @@ test('the paper door: a quiet roll is read as an Encounter, in the open', async 
   await begin(page)
   await toGhost(page)
   await button(page, 'ROLL THE ROUND').click()
-  await page.getByTestId('act-strike').click()
+  await strikeTheGhost(page)
   await page.getByTestId('act-loot').click()
   await page.getByTestId('act-go-on').click()
 
@@ -497,7 +516,7 @@ test('a kill has its own slip before the loot row', async ({ page }) => {
   await begin(page)
   await toGhost(page)
   await button(page, 'ROLL THE ROUND').click()
-  await page.getByTestId('act-strike').click()
+  await strikeTheGhost(page)
 
   // The fall, said as a moment: who, how, and Old Ping's line.
   await expect(page.getByTestId('fallen-title')).toHaveText('DEXTEROUS GHOST FALLS')
@@ -586,13 +605,17 @@ test('several foes: the Oracle counts them, the band is a column of cards, ATTAC
 })
 
 test('a landed Final Blow becomes a Technique of the Master’s own', async ({ page }) => {
-  // Into the Attendants room and the Ghost (4,4,2,3); the round on
-  // 6,5 against 1,1; the blow on 3,3 (doubles, it lands); the LUCK
-  // roll on 2,4 = 6 against San Te's LUCK 9; the inspiration table on
+  // The Junior King at the Cave entrance (Event 2, creature 5) rather
+  // than the Ghost: R30's blow is a blow, so R77 closes it against a
+  // spirit (MH p.66; Phase 10l) and this scenario is about R31, not
+  // about spirits. The round on 6,5 against 1,1; the blow on 3,3
+  // (doubles, it lands, whatever the body's ENDURANCE); the LUCK roll
+  // on 2,4 = 6 against San Te's LUCK 9; the inspiration table on
   // 1,1 - the first band, the first row.
-  await page.goto('/?dice=4,4,2,3,6,5,1,1,3,3,2,4,1,1')
+  await page.goto('/?dice=2,5,6,5,1,1,3,3,2,4,1,1')
   await begin(page)
-  await toGhost(page)
+  await go(page, /TO THE CAVE ENTRANCE/)
+  await button(page, /FACE THE JUNIOR KING SILVER HORN/).click()
   await button(page, 'ROLL THE ROUND').click()
   await page.getByTestId('act-opening').click()
   await page.getByTestId('act-blow').click()

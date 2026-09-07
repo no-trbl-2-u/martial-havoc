@@ -25,6 +25,7 @@ export {
   atTheRecord,
   atTheRules,
   extend,
+  facingTheBeast,
   facingTheGhost,
   facingThreeServants,
   fold,

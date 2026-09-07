@@ -146,8 +146,12 @@ test('a made Master wins a fight', async ({ page }) => {
   await expect(page.getByTestId('total-mine')).toHaveText('23')
   await expect(page.getByTestId('total-theirs')).toHaveText('13')
 
-  // 10 off its ENDURANCE of 8 ends it.
-  await page.getByTestId('act-strike').click()
+  // The Ghost is a spirit, so R77 closes the ordinary blow (MH p.66,
+  // I-29; Phase 10l) and the Technique is the way the book points at.
+  // Rising Wave Strike carries the same 10 (I-65) against its 8.
+  await expect(page.getByTestId('act-strike')).toBeDisabled()
+  await page.getByTestId('act-technique').click()
+  await button(page, /RISING WAVE STRIKE/).click()
   await expect(button(page, 'FIGHT IS OVER')).toBeVisible()
   await page.getByTestId('act-loot').click()
   await page.getByTestId('act-go-on').click()
@@ -222,7 +226,10 @@ test('the record shows what was played, and reads its own export back', async ({
   }
   await button(page, /FACE THE DEXTEROUS GHOST/).click()
   await button(page, 'ROLL THE ROUND').click()
-  await page.getByTestId('act-strike').click()
+  // R77 closes the ordinary blow against a spirit; the Technique is the
+  // book's own way through (MH p.66, I-29, I-65; Phase 10l).
+  await page.getByTestId('act-technique').click()
+  await button(page, /RISING WAVE STRIKE/).click()
   await page.getByTestId('act-loot').click()
   await page.getByTestId('act-go-on').click()
 

@@ -61,6 +61,26 @@ const toGhost = (): RecordState =>
   ])
 
 /** Beat a foe that stands at full ENDURANCE: a won round, an Opening, then doubles. */
+/** The seven-star sword, the adventure's own "exceptional weapon" (I-29). */
+const SEVEN_STAR = 'treasure.the-5-treasures.seven-star-sword'
+
+/**
+ * The sword in the Master's hands.
+ *
+ * R77 (MH p.66) makes a spirit immune to ordinary blows, and the
+ * Dexterous Ghost is one (I-29), so a script that means to demonstrate
+ * R23, R25, R29, R30 or R31 - rules that have nothing to do with
+ * spirits - has to put an exceptional weapon in the Master's hands
+ * first. The alternative was to move every one of those cases onto a
+ * corporeal body and re-derive every number in them; the sword changes
+ * no number at all, because I-44 wards only rounds the Master is
+ * behind in and every one of those scripts wins its round.
+ */
+const withSword = (state: RecordState): RecordState => ({
+  ...state,
+  cave: { ...state.cave, treasures: [...state.cave.treasures, SEVEN_STAR] },
+})
+
 const finish = (): readonly (readonly [Action, readonly Die[]])[] => [
   [{ type: 'combat.round' }, [6, 5, 1, 1]],
   [{ type: 'combat.opening' }, []],
@@ -535,6 +555,9 @@ describe('my dice on the beat', () => {
 
 describe('the fight with the Dexterous Ghost', () => {
   const atGhost = (): RecordState => reduce(toGhost(), { type: 'cave.fight', foe: GHOST }, fromSequence([]))
+  /** The same fight with the seven-star sword in hand, so R77's gate is open. */
+  const armed = (): RecordState =>
+    reduce(withSword(toGhost()), { type: 'cave.fight', foe: GHOST }, fromSequence([]))
 
   it('starts on the combat screen with the foe’s printed ENDURANCE', () => {
     const s = atGhost()
@@ -561,7 +584,7 @@ describe('the fight with the Dexterous Ghost', () => {
 
   it('a won round shows both strengths and offers the difference (R23, R25)', () => {
     // Master 6+5 + SKILL 8 + Non lethal combat 4 = 23; Ghost 1+1 + 7 + immaterial charge 4 = 13.
-    const s = play(atGhost(), [[{ type: 'combat.round' }, [6, 5, 1, 1]]])
+    const s = play(armed(), [[{ type: 'combat.round' }, [6, 5, 1, 1]]])
     expect(s.combat?.last).toMatchObject({
       outcome: 'master-wins',
       difference: 10,
@@ -599,7 +622,7 @@ describe('the fight with the Dexterous Ghost', () => {
   })
 
   it('an Opening then doubles lands the Final Blow (R29, R30)', () => {
-    const s = play(atGhost(), finish())
+    const s = play(armed(), finish())
     expect(s.combat?.blow).toMatchObject({ landed: true })
     expect(s.combat?.foes[0]?.endurance).toBe(0)
     expect(s.combat?.over).toEqual({ ended: true, reason: 'final-blow' })
@@ -607,7 +630,7 @@ describe('the fight with the Dexterous Ghost', () => {
   })
 
   it('no doubles: the Opening holds and the fight goes on', () => {
-    const s = play(atGhost(), [
+    const s = play(armed(), [
       [{ type: 'combat.round' }, [6, 5, 1, 1]],
       [{ type: 'combat.opening' }, []],
       [{ type: 'combat.blow' }, [3, 4]],
@@ -644,7 +667,7 @@ describe('the fight with the Dexterous Ghost', () => {
   })
 
   it('a beaten named foe is gone from every table, and its LOOT line is read once (5T a2, I-33c)', () => {
-    const won = play(atGhost(), [...finish()])
+    const won = play(armed(), [...finish()])
     const looted = reduce(won, { type: 'combat.loot', index: 0 }, fromSequence([]))
     expect(looted.result).toMatchObject({ kind: 'loot', foe: 'Dexterous Ghost', face: null, item: "private quarter's key", key: true, treasure: null })
     expect(looted.cave.keys).toContain(KEY)
@@ -1094,7 +1117,7 @@ describe('many foes at once (Phase 10e)', () => {
 describe('the Final Blow becomes a Technique of your own (Phase 10f)', () => {
   /** From the mountain to the Ghost, an Opening, and a blow that lands. */
   const landed = (): RecordState =>
-    play(toGhost(), [
+    play(withSword(toGhost()), [
       [{ type: 'cave.fight', foe: GHOST }, []],
       [{ type: 'combat.round' }, [6, 5, 1, 1]],
       [{ type: 'combat.opening' }, []],
@@ -1619,7 +1642,7 @@ describe('who the Master is, and the player’s own words (Phase 10j)', () => {
   })
 
   it('asks after a kill, and after an Unexpected Event instead where both land', () => {
-    const killed = play(toGhost(), [
+    const killed = play(withSword(toGhost()), [
       [{ type: 'cave.fight', foe: GHOST }, []],
       ...finish(),
       [{ type: 'combat.leave' }, []],
@@ -1838,5 +1861,99 @@ describe('the fight runs as the book runs it (Phase 10k)', () => {
       const fighting = facing()
       expect(reduce(fighting, { type: 'combat.treasure', index: 0 }, fromSequence([5]))).toBe(fighting)
     })
+  })
+})
+
+describe('spirits are immune to ordinary blows (Phase 10l)', () => {
+  const BEAST = 'foe.skillful-beast'
+  const RISING = 'technique.rising-wave-strike'
+
+  /** The Dexterous Ghost faced, bare-handed. San Te holds no treasure. */
+  const bare = (): RecordState =>
+    reduce(toGhost(), { type: 'cave.fight', foe: GHOST }, fromSequence([]))
+
+  // MH p.66 (R77): "Sometimes you will face spirits or ghosts,
+  // incorporeal beings immune to traditional weapons or blows; you will
+  // need to use a technique, ritual, or exceptional weapon to defeat
+  // them." I-29 tags the Dexterous Ghost as one.
+  it('refuses STRIKE against a spirit, on a round the Master won', () => {
+    const won = play(bare(), [[{ type: 'combat.round' }, [6, 5, 1, 1]]])
+    expect(won.combat?.last?.outcome).toBe('master-wins')
+    // The winner's option is there; this one is not takeable.
+    expect(reduce(won, { type: 'combat.strike' }, fromSequence([]))).toBe(won)
+    expect(won.combat?.foes[0]?.endurance).toBe(8)
+  })
+
+  it('refuses the Final Blow against a spirit, Opening and all (R30)', () => {
+    const open = play(bare(), [
+      [{ type: 'combat.round' }, [6, 5, 1, 1]],
+      [{ type: 'combat.opening' }, []],
+    ])
+    expect(open.combat?.opening).toBe(true)
+    // Doubles that would land on any body in the cave.
+    expect(reduce(open, { type: 'combat.blow' }, fromSequence([3, 3]))).toBe(open)
+  })
+
+  it('lets an ordinary blow land once the seven-star sword is in hand (I-29)', () => {
+    const won = play(withSword(toGhost()), [
+      [{ type: 'cave.fight', foe: GHOST }, []],
+      [{ type: 'combat.round' }, [6, 5, 1, 1]],
+    ])
+    const struck = reduce(won, { type: 'combat.strike' }, fromSequence([]))
+    expect(struck.combat?.foes[0]?.endurance).toBe(0)
+  })
+
+  it('leaves a corporeal body alone: the Skillful Beast is struck bare-handed', () => {
+    // The Attendants room on creature 6 is "Both": the Beast and the Ghost.
+    const both = play(fresh(), [
+      ...walk(AREA.entrance),
+      ...walk(AREA.hall),
+      [{ type: 'cave.go', to: AREA.attendants }, [2, 6]],
+      [{ type: 'roll.close' }, []],
+      [{ type: 'cave.fight', foe: BEAST }, []],
+      [{ type: 'combat.round' }, [6, 5, 1, 1]],
+    ])
+    const struck = reduce(both, { type: 'combat.strike' }, fromSequence([]))
+    expect(struck.combat?.foes[0]?.endurance).toBeLessThan(both.combat?.foes[0]?.endurance ?? 0)
+  })
+
+  // I-65: a Technique whose printed effect is a blow does the exchange's
+  // difference. San Te's Rising Wave Strike ("Unleash a disruptive air
+  // wave in front of you") is one of the five.
+  it('kills the Ghost with a Technique, bare-handed, and writes the deed', () => {
+    const won = play(bare(), [[{ type: 'combat.round' }, [6, 5, 1, 1]]])
+    // The difference is 10 against the Ghost's printed 8.
+    expect(won.combat?.last?.difference).toBe(10)
+    const struck = reduce(won, { type: 'combat.technique', id: RISING }, fromSequence([]))
+    expect(struck.combat?.foes[0]?.endurance).toBe(0)
+    expect(struck.combat?.over).toEqual({ ended: true, reason: 'opponent-down' })
+    // The Technique's value is its cost, never its damage (R27, I-65).
+    expect(struck.sheet.endurance).toBe(won.sheet.endurance - 1)
+    expect(struck.deeds).toContain('killed dexterous ghost')
+  })
+
+  it('takes the private quarter’s key off the body a Technique put down', () => {
+    const down = play(bare(), [
+      [{ type: 'combat.round' }, [6, 5, 1, 1]],
+      [{ type: 'combat.technique', id: RISING }, []],
+      [{ type: 'combat.loot', index: 0 }, []],
+    ])
+    expect(down.cave.keys).toContain(KEY)
+    // The soft-lock the critique row named is gone: the cave is finishable
+    // bare-handed, and it was already finishable through the Skillful
+    // Beast, who drops the same key (5T a2).
+    const back = reduce(down, { type: 'combat.leave' }, fromSequence([]))
+    expect(menuFor(back).find((o) => o.id === `go-${AREA.chieftain}`)?.enabled).toBe(true)
+  })
+
+  it('does not arm a Technique the book does not make a blow', () => {
+    // "By channeling Qi to your head, you can achieve an indestructible
+    // skull" is not a blow, so Iron Head costs its ENDURANCE and hurts
+    // nothing - against a spirit or anyone else.
+    const won = play(bare(), [[{ type: 'combat.round' }, [6, 5, 1, 1]]])
+    const used = reduce(won, { type: 'combat.technique', id: 'technique.iron-head' }, fromSequence([]))
+    expect(used.combat?.foes[0]?.endurance).toBe(8)
+    expect(used.sheet.endurance).toBe(won.sheet.endurance - 2)
+    expect(used.deeds).not.toContain('killed dexterous ghost')
   })
 })

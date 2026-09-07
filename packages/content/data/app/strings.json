@@ -433,6 +433,21 @@
       "cite": "MH p.28 (R33, footnote)"
     },
     {
+      "id": "ui.combat.spirit.refused",
+      "text": "Sometimes you will face spirits or ghosts, incorporeal beings immune to traditional weapons or blows; you will need to use a technique, ritual, or exceptional weapon to defeat them.",
+      "cite": "MH p.66"
+    },
+    {
+      "id": "ui.combat.spirit.cite",
+      "text": "MH p.66 · R77 · READING I-29",
+      "cite": "MH p.66 (R77, I-29)"
+    },
+    {
+      "id": "ui.combat.spirit.banner",
+      "text": "NO ORDINARY BLOW TOUCHES IT",
+      "cite": "MH p.66 (R77)"
+    },
+    {
       "id": "ui.combat.theirs.endurance",
       "text": "END {now} / {printed}",
       "cite": "MH p.23 (R24); 5T a2"

@@ -97,7 +97,9 @@
       "class": "combat-narrative",
       "cost": 1,
       "timing": "combat-winner-option",
-      "operation": null,
+      "operation": "multiple.areaDamage",
+      "reading": "I-65",
+      "reach": 1,
       "line": "You leave a word on them. They will carry it, and everyone who meets them afterwards will read it."
     },
     {
@@ -137,7 +139,9 @@
       "class": "combat-narrative",
       "cost": 1,
       "timing": "combat-winner-option",
-      "operation": null,
+      "operation": "multiple.areaDamage",
+      "reading": "I-65",
+      "reach": 1,
       "line": "Your open hand goes through what a blade would notch, and your hand is unmarked."
     },
     {
@@ -198,7 +202,9 @@
       "class": "combat-narrative",
       "cost": 2,
       "timing": "combat-winner-option",
-      "operation": null,
+      "operation": "multiple.areaDamage",
+      "reading": "I-65",
+      "reach": 1,
       "line": "The blow lands quietly, and the sickness arrives later, when they can no longer connect it to you."
     },
     {
@@ -218,7 +224,9 @@
       "class": "combat-narrative",
       "cost": 1,
       "timing": "combat-winner-option",
-      "operation": null,
+      "operation": "multiple.areaDamage",
+      "reading": "I-65",
+      "reach": 1,
       "line": "The air in front of you goes hard and moves, and everything loose in the room goes with it."
     },
     {
@@ -328,7 +336,9 @@
       "class": "combat-narrative",
       "cost": 2,
       "timing": "combat-winner-option",
-      "operation": null,
+      "operation": "multiple.areaDamage",
+      "reading": "I-65",
+      "reach": 1,
       "line": "One point, chosen: they lose the sight, or the scent, or the shout they were about to give."
     },
     {
