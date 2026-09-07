@@ -114,9 +114,21 @@ Later UI phases carry their own version marker.
 The first bucket of that verdict shipped as 2299932 and 34c5e63 (the
 area named, citations folded behind SOURCE, foe descriptions, the
 rules panel's titles, three lies fixed). What remains is phase-sized:
-- [ ] Phase 10a — The voice (brief: `phase_10a_the_voice.md`; the
+- [x] Phase 10a — The voice (brief: `phase_10a_the_voice.md`; the
       root of the block; the call was made 2026-09-06: a named
       narrator, Old Ping; `plan/VOICE.md`, `VISION.md`, `RE-SEED.md`)
+      — 139d503. Old Ping speaks on the area slip, the result slip, the
+      roll card and at the end of a fight, in italic under a dashed
+      rule headed with his name; 19 lines ship in
+      `packages/content/data/app/result-lines.json` and the count on
+      ABOUT moved from 162 to 181. `packages/content/src/voice.test.ts`
+      is the gate: every line the app speaks in its own voice is held
+      to `plan/VOICE.md`, and a third sentence, a forty-first word, an
+      exclamation mark, a digit, the second person or a word of the
+      table is red. The oracle, Unexpected Event and effect lines are
+      deliberately **not** his and are not held to it — see the commit
+      body. Act lines still print where Phase 5 put them; moving them
+      onto an act change is 10c's row.
 - [ ] Phase 10b — The opening: the village as the Call (brief:
       `phase_10b_the_opening.md`)
 - [ ] Phase 10c — The three acts on screen (brief:
