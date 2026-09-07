@@ -9,6 +9,17 @@
 
 ## Pending
 
+### [LOW] skills/iterate.md + .claude/hooks/guard.mjs — the two commit-verb lists disagree
+- pass: agent (/iterate 2026-09-07)
+- viewport: unspecified
+- auth_state: anonymous
+- category: reliability
+- observation: `skills/iterate.md` §5 documents seven commit subject prefixes for the iterate tick - `content:`, `data:`, `seo:`, `fix:`, `a11y:`, `test:`, `perf:`, `refactor:` - and the guard's VERBS (mirroring `plan/bearings.md` "Commit verb vocabulary") allows only digest, expand, jot, oversight, triage, plan, feat, fix, docs, chore, re-seed. Five of the skill's eight are refused. An agent that follows the skill's own instruction is blocked by the hook mid-tick, which is a rule firing as a surprise rather than as a gate; hit live on the 2026-09-07 iterate tick, where `test:` was refused and the commit went out as `fix:`.
+- evidence: `skills/iterate.md` §5 "Commit subject prefixes"; `.claude/hooks/guard.mjs` VERBS; `plan/bearings.md` "Commit verb vocabulary"; the block fired on `test: the copy leg sees a citation as copy`
+- suggested fix: Pick one list. Either widen bearings.md and VERBS to carry the category prefixes the iterate skill teaches, or narrow `skills/iterate.md` §5 to the vocabulary the guard actually enforces and say which verb each category maps to. Whichever way, the skill and the hook are edited in the same commit, as agents.md asks of the guard.
+- source: agent
+
+
 ### [MED] packages/content — the narrator's Ambush line is spoken only for an ambush by nobody
 - pass: agent (commit pending, the played-not-recited e2e)
 - viewport: 390x844
@@ -27,16 +38,6 @@
 - observation: VISION.md: the book's text is upright, the narrator's italic, "and a reader can always tell them apart". `EndingScreen` prints MH p.88's "Which figure in the shadows was pulling the strings of the boss you just defeated?" in `styles.question`, which is italic serif under a dashed slip, the narrator's typography without his name. `e2e/played.spec.ts` carries the assertion as `test.fail` until the style changes.
 - evidence: `apps/app/src/screens/EndingScreen.tsx`, `styles.question` (`fontStyle: 'italic'`); `e2e/played.spec.ts`, "the book's closing question is set upright"
 - suggested fix: drop `fontStyle: 'italic'` from `styles.question`, or give the question the same upright serif the freeze frame's lines use; then remove the `test.fail`.
-- source: agent
-
-### [HIGH] scripts/copy-check.test.ts — the copy leg does not see a citation as copy
-- pass: agent (commit 5d25011)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: The copy leg catches JSX text, string props that render, and literals of three or more words, which is what let three hardcoded citations ship green in Phase 10d: `<Source cite="I-30" />`, `cite: 'MH p.6'`, and `<Source cite="MH p.28 · R33 · I-33" />`. The first two are under the word threshold; the third is over it and still passed, so the threshold is not the only hole. A citation is exactly the class of string agents.md rule 7 exists for - it is the thing that says where a rule came from, and a component that invents one is a component asserting the book said something. The three were moved into strings.json in this same commit, but the leg that should have refused them still would not.
-- evidence: scripts/copy-check.test.ts, "three shapes of hardcoded copy"; the three literals passed `npm run test` on commit 2c528b9 and were caught only by reading the diff afterwards
-- suggested fix: Give the leg a fourth shape: any string literal reaching a `cite` prop or a `cite:` field under apps/app/src must be a `t(...)` call or a value read from the engine's registry (`citeOf`). That is a narrow, mechanical rule with no judgement in it, and it is the shape the existing violations all had. Extend `.claude/hooks/guard.mjs` in the same commit if the rule wants teeth outside the test.
 - source: agent
 
 ### [LOW] e2e — the ?dice= sequences are long, positional and undocumented
@@ -289,6 +290,17 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [HIGH] scripts/copy-check.test.ts — the copy leg does not see a citation as copy
+- pass: agent (commit 5d25011)
+- closed: the leg has a fourth shape. A `cite` prop or `cite:` field under `apps/app/src` may not be given a string literal; `t(...)`, a registry value or a variable all pass, and a template built only out of interpolations passes too (what is checked is whether a letter or digit survives with the `${...}` groups removed). Eleven cases pin the rule itself against the three citations Phase 10d shipped and the two forms that are legitimate, so a later simplification that stops matching is red rather than quietly permissive. Two live violations it found on the way in - `cite: 'MH p.52-55'` twice in `doBuy` - now read `t('ui.village.market.source')`. (/iterate 2026-09-07)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: The copy leg catches JSX text, string props that render, and literals of three or more words, which is what let three hardcoded citations ship green in Phase 10d: `<Source cite="I-30" />`, `cite: 'MH p.6'`, and `<Source cite="MH p.28 · R33 · I-33" />`. The first two are under the word threshold; the third is over it and still passed, so the threshold is not the only hole. A citation is exactly the class of string agents.md rule 7 exists for - it is the thing that says where a rule came from, and a component that invents one is a component asserting the book said something. The three were moved into strings.json in this same commit, but the leg that should have refused them still would not.
+- evidence: scripts/copy-check.test.ts, "three shapes of hardcoded copy"; the three literals passed `npm run test` on commit 2c528b9 and were caught only by reading the diff afterwards
+- suggested fix: Give the leg a fourth shape: any string literal reaching a `cite` prop or a `cite:` field under apps/app/src must be a `t(...)` call or a value read from the engine's registry (`citeOf`). That is a narrow, mechanical rule with no judgement in it, and it is the shape the existing violations all had. Extend `.claude/hooks/guard.mjs` in the same commit if the rule wants teeth outside the test.
+- source: agent
 
 ### [HIGH] R77 has no gate, and cannot have one until a Technique can hurt something
 - pass: agent (commit 07199af)

@@ -111,6 +111,50 @@ const renderedProps = (text: string): readonly Omit<Finding, 'file'>[] =>
     .filter((m) => !isKeyToken(m[3] ?? ''))
     .map((m) => ({ line: lineOf(text, m.index ?? 0), shape: `prop:${m[1] ?? ''}`, text: m[3] ?? '' }))
 
+/**
+ * A citation written into a component instead of read from the data
+ * (the fourth shape; `plan/CRITIQUE.md`, the copy leg row).
+ *
+ * The first three shapes are about sentences, and a citation is not
+ * one: `cite="I-30"` and `cite: 'MH p.6'` are both under the
+ * three-word threshold, so all three hardcoded citations of Phase 10d
+ * shipped green and were caught only by reading the diff. One of them
+ * (`cite="MH p.28 · R33 · I-33"`) was over the threshold and still
+ * passed, so the threshold was never the only hole.
+ *
+ * A citation is the exact class of string standing rule 7 exists for:
+ * it is the thing that says where a rule came from, and a component
+ * that invents one is a component asserting the book said something.
+ * So the rule here has no judgement in it at all - a `cite` prop or a
+ * `cite:` field may not be given a string literal. `t(...)`, a value
+ * off the engine's registry, or a variable are all fine.
+ *
+ * A template built only out of interpolations is fine too: what is
+ * checked is whether any letter or digit survives with the `${...}`
+ * groups removed, so `` cite={`${t('a')} · ${t('b')}`} `` passes and
+ * `` cite={`MH p.${n}`} `` does not.
+ */
+const CITE_VALUE = /\bcite\s*[:=]\s*\{?\s*(['"`])((?:\\.|(?!\1)[^\\])*)\1/g
+
+/**
+ * The literal text of a template, with every `${...}` group removed.
+ *
+ * The second replace handles a nested template: a regex cannot match
+ * balanced backticks, so `` cite={`${t('a')} ${t(`b.${x}`)}`} `` is
+ * captured only as far as the inner backtick and leaves a dangling
+ * `${t(` behind. Dropping an unterminated trailing interpolation is
+ * what makes that case read as "nothing outside the interpolations",
+ * which is what it is. A citation with real text in it still has that
+ * text before the dangling fragment, so nothing hides behind this.
+ */
+const outsideInterpolations = (s: string): string =>
+  s.replace(/\$\{[^}]*\}/g, '').replace(/\$\{[^}]*$/, '')
+
+const citeLiterals = (text: string): readonly Omit<Finding, 'file'>[] =>
+  [...text.matchAll(CITE_VALUE)]
+    .filter((m) => /[A-Za-z0-9]/.test(outsideInterpolations(m[2] ?? '')))
+    .map((m) => ({ line: lineOf(text, m.index ?? 0), shape: 'cite', text: m[2] ?? '' }))
+
 /** String and template literals that read as a sentence. */
 const sentenceLiterals = (text: string): readonly Omit<Finding, 'file'>[] =>
   [...text.matchAll(/(['"`])((?:\\.|(?!\1)[^\\\n])*)\1/g)]
@@ -122,7 +166,9 @@ const sentenceLiterals = (text: string): readonly Omit<Finding, 'file'>[] =>
 const findingsIn = (file: string): readonly Finding[] => {
   const text = stripComments(readFileSync(file, 'utf-8'))
   const rel = relative(root, file)
-  return [...jsxTextNodes(text), ...renderedProps(text), ...sentenceLiterals(text)].map((f) => ({ ...f, file: rel }))
+  return [...jsxTextNodes(text), ...renderedProps(text), ...citeLiterals(text), ...sentenceLiterals(text)].map(
+    (f) => ({ ...f, file: rel }),
+  )
 }
 
 describe('copy-check: no hardcoded copy in the app (agents.md rule 7)', () => {
@@ -142,5 +188,47 @@ describe('copy-check: no hardcoded copy in the app (agents.md rule 7)', () => {
     for (const [literal, reason] of Object.entries(ALLOWED)) {
       expect(reason.length, `ALLOWED[${literal}] has no reason`).toBeGreaterThan(0)
     }
+  })
+})
+
+/**
+ * The fourth shape, proved against the exact strings that got past the
+ * first three.
+ *
+ * The leg above is a sweep over the shipped app: it goes green the
+ * moment the app is clean and says nothing about whether the rule
+ * would still catch anything. These cases are the rule itself, held to
+ * the three citations Phase 10d shipped and to the two forms that are
+ * legitimate - so a later simplification of the regex that quietly
+ * stops matching is red here rather than silently permissive.
+ */
+describe('copy-check: a citation is never written into a component', () => {
+  const found = (line: string) => citeLiterals(line).map((f) => f.text)
+
+  it.each([
+    // The three that shipped green on 2c528b9 (Phase 10d).
+    ['<Source cite="I-30" />', 'I-30'],
+    ["const r = { cite: 'MH p.6' }", 'MH p.6'],
+    ['<Source cite="MH p.28 · R33 · I-33" />', 'MH p.28 · R33 · I-33'],
+    // The two the village carried until this tick.
+    ["{ roll: null, cite: 'MH p.52-55' }", 'MH p.52-55'],
+    // Braces and backticks are the same rule.
+    ['<Source cite={"MH p.66"} />', 'MH p.66'],
+    ['<Source cite={`MH p.${n}`} />', 'MH p.${n}'],
+  ])('catches %s', (line, text) => {
+    expect(found(line)).toEqual([text])
+  })
+
+  it.each([
+    // Read from the data: the whole point.
+    ["<Source cite={t('ui.combat.spirit.cite')} />", 'a t() call'],
+    ["const r = { cite: t('ui.village.market.source') }", 'a t() call in a field'],
+    // Built out of interpolations only, including a nested template.
+    ['<Source cite={`${t(`a.${x}`)} · ${t("b")}`} />', 'interpolations only'],
+    // A variable, or a value off the engine's registry.
+    ['<Source cite={cite} />', 'a variable'],
+    ['<Source cite={citeOf(id)} />', 'the registry'],
+  ])('allows %s (%s)', (line) => {
+    expect(found(line)).toEqual([])
   })
 })

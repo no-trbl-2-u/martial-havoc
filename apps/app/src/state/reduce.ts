@@ -1775,7 +1775,11 @@ const doBuy = (state: RecordState, id: string): RecordState => {
   if (!bought.bought) {
     return {
       ...state,
-      villageNote: { text: fill(t('ui.village.poor'), { item: name }), roll: null, cite: 'MH p.52-55' },
+      villageNote: {
+        text: fill(t('ui.village.poor'), { item: name }),
+        roll: null,
+        cite: t('ui.village.market.source'),
+      },
     }
   }
   const paid = fromSilver(bought.cost)
@@ -1792,7 +1796,7 @@ const doBuy = (state: RecordState, id: string): RecordState => {
         cost: paid.gp === 0 ? `${paid.sp} SP` : `${paid.gp} GP ${paid.sp} SP`,
       }),
       roll: null,
-      cite: 'MH p.52-55',
+      cite: t('ui.village.market.source'),
     },
   }
 }
