@@ -108,6 +108,17 @@ them:
   and the reading that applied; never a stack trace.
 - **Comments / community / login:** out of scope.
 
+## Plan expansion posture
+
+- Mode: **bold** (default)
+
+`/expand` runs on the `/march` cadence and files scored candidates
+to `plan/PHASE_CANDIDATES.md`; `/oversight` promotes. `strict` makes
+`/expand` a no-op; `autonomous` writes phase rows straight into the
+build plan (document that choice under Hard rules if ever set).
+Added 2026-09-07 by the first expand pass, per `skills/expand.md`
+failure mode 1: the section was missing, so the default is recorded.
+
 ## Hard rules
 
 (Mirrors `agents.md` Standing Rules. Update there first; this echoes.)
