@@ -54,6 +54,59 @@ git pull --ff-only
 
 If divergence, stop per §5.
 
+### Step 0.5 — Is the loop still scheduled?
+
+**The loop must check its own heartbeat, because nothing else
+does.** `/loop 30m /march` schedules through `CronCreate`, which is
+in-memory and session-only. On the cloud surface the container is
+reclaimed between turns and the job goes with it: the loop looks
+alive, ticks stop, and nobody finds out until somebody runs
+`CronList` by hand. That has happened twice, once for roughly
+forty-five minutes.
+
+So every tick, before any work:
+
+```
+CronList
+```
+
+- **A job is listed** → say nothing, carry on to Step 1.
+- **"No scheduled jobs"** *and this tick was fired by a schedule
+  rather than by a person* → impossible by definition; the tick
+  would not have fired. Carry on.
+- **"No scheduled jobs"** and the tick was started by hand → the
+  schedule died. This is a standing-rule-8 condition: say so
+  **loudly and first**, before reporting any other work.
+
+  ```bash
+  node scripts/notify.mjs --title "march: loop schedule died" \
+    --body "CronList empty; re-armed. Ticks between <last known> and now did not fire." \
+    --priority high
+  ```
+
+  Then re-arm it (`CronCreate`, same cadence) and name in the tick's
+  report: the dead job's id, when it was created, and that the
+  interval since is unaccounted for. Never re-arm silently — a
+  silently re-armed loop is indistinguishable from one that never
+  died, which is what made this invisible in the first place.
+
+**On the cloud surface, an hourly Routine is the only durable
+cadence.** `CronCreate` is per-session; a Routine
+(`claude.ai/code/routines`, or `/schedule` in the CLI) is stored on
+the account and survives the container. Its minimum interval is one
+hour and its runs draw against a daily per-account cap, so a
+sub-hourly autonomous loop cannot be made durable here at all — the
+30-minute cadence is a convenience of an open session, not a
+guarantee. Treat a long unattended window as needing a Routine, and
+a `/loop` cadence as best-effort.
+
+`scripts/notify.mjs` is itself best-effort: with neither
+`NOTIFY_NTFY_TOPIC` nor `NOTIFY_WEBHOOK_URL` set it prints
+`notify (no channel configured)` and exits clean. That is not a
+failure of this step — but it does mean the loud report in the
+tick's own output is the only channel that always works, which is
+why it comes first rather than instead.
+
 ### Step 1 — Triage gate (cheapest check)
 
 Load `GH_TOKEN` from `.env` and count unlabeled open issues:
@@ -204,6 +257,9 @@ Otherwise inherited from the dispatched skill.
 ## 6. Quick reference
 
 ```bash
+# The loop's own heartbeat (Step 0.5)
+CronList                             # empty on a hand-started tick = the schedule died
+
 # State files
 plan/steps/01_build_plan.md          # pending phases
 data/BACKLOG.md                      # pending data work
