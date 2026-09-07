@@ -69,7 +69,13 @@ export { check, isDoubleSix, luckCheck, skillCheck } from './checks/checks'
 export type { CheckOutcome, SkillCheckInput } from './checks/checks'
 
 // Combat: the round, the Final Blow, the Unexpected Event (MH p.23-29).
-export { attackStrength, relevantProficiency } from './combat/attack-strength'
+export {
+  ARMED_PROFICIENCIES,
+  attackStrength,
+  isArmedProficiency,
+  relevantProficiency,
+  withoutArmed,
+} from './combat/attack-strength'
 export type { AttackStrength, Combatant } from './combat/attack-strength'
 export { endsFight, resolveRound, spendTechnique } from './combat/round'
 export type { FightEnd, FightState, RoundOutcome, WinnerOption } from './combat/round'

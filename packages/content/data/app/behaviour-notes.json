@@ -328,6 +328,17 @@
       "reversed": "those rows would be narration with no effect on the sheet"
     },
     {
+      "id": "note.combat.armed-proficiency-needs-its-weapon",
+      "cite": "MH p.53 (R68); I-02",
+      "ref": "combat.armed-proficiency-needs-its-weapon",
+      "text": "Armed combat, Ranged weapons and Versatile Weapon add nothing while the weapon is gone; the others still do.",
+      "title": "An armed Proficiency needs the weapon in hand",
+      "says": "\"armed Proficiencies\" add nothing without a weapon, without listing which ones are armed",
+      "silent": "which of the printed Proficiencies count as armed",
+      "source": "estate-inventory.md, I-02; MH p.53 (R68)",
+      "reversed": "a disarmed Master would keep the full bonus of a Proficiency they cannot use"
+    },
+    {
       "id": "note.combat.minions-on-a-d6",
       "cite": "I-33",
       "ref": "combat.minions-on-a-d6",

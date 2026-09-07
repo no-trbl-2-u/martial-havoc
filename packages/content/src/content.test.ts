@@ -44,10 +44,10 @@ const repoRoot = join(packageDir, '..', '..')
  * half-transcribed table impossible to ship.
  */
 const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
-  'app.strings': 449,
+  'app.strings': 459,
   // The rules panel's notes: one per engine behaviour (the label leg
   // checks the pairing; this only pins the count).
-  'app.behaviour-notes': 121,
+  'app.behaviour-notes': 122,
   // The narrator's lines: one per moment of play the app narrates
   // (Phase 10a). `voice.test.ts` holds each to plan/VOICE.md; this pins
   // the set, so a moment that loses its line is red rather than silent.

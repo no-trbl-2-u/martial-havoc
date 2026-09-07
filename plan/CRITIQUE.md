@@ -40,17 +40,6 @@
 - source: agent
 
 
-### [MED] apps/app + packages/engine — half of I-30's either/or is unimplemented
-- pass: agent (commit 412b3f6)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: Reading I-30 resolves Unexpected Event rows 3 and 11 as "injury (-1d6 ENDURANCE) or loss of weapon, the operator's pick". Phase 10d shipped the injury half and applies it automatically; the weapon-loss half is not implemented at all, so an operator who would have picked it has no way to. Two things block it: the loss needs lingering state across rounds (the weapon Proficiency stops adding until a weapon is changed or recovered), and the sheet does not record which of a Master's Proficiencies is the weapon's - `attackStrength` simply takes the best one, so there is nothing to suppress. The phase brief proposed a third thing again, a flat -2 on Attack Strength, which contradicts the shipped reading and was not taken.
-- evidence: packages/engine/src/combat/unexpected-event.ts `EventReading` kind `injury-or-weapon-loss`; apps/app/src/state/reduce.ts `resolveEvent` applies `injuryDamage` unconditionally; plan/phases/phase_10d_the_fight_as_a_scene.md Scope, rows 3 and 11
-- suggested fix: Decide whether the weapon Proficiency is a nameable thing on the sheet. If it is, mark it at creation and give Combat a `weaponLost` flag plus a CHANGE OR RECOVER A WEAPON row, and offer the pick when the row comes up. If it is not, say so in the reading's own note and let injury be the single resolution rather than one of two, so the app stops implying a choice it cannot offer.
-- source: agent
-
-
 ### [HIGH] skills/ship-a-phase.md — the dispatcher picks by list order, not by dependency
 - pass: user-jot (commit 14d178e)
 - viewport: unspecified
@@ -340,6 +329,33 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [MED] apps/app + packages/engine — half of I-30's either/or is unimplemented
+- pass: agent (commit 412b3f6)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: Reading I-30 resolves Unexpected Event rows 3 and 11 as "injury (-1d6 ENDURANCE) or loss of weapon, the operator's pick". Phase 10d shipped the injury half and applies it automatically; the weapon-loss half is not implemented at all, so an operator who would have picked it has no way to. Two things block it: the loss needs lingering state across rounds (the weapon Proficiency stops adding until a weapon is changed or recovered), and the sheet does not record which of a Master's Proficiencies is the weapon's - `attackStrength` simply takes the best one, so there is nothing to suppress. The phase brief proposed a third thing again, a flat -2 on Attack Strength, which contradicts the shipped reading and was not taken.
+- evidence: packages/engine/src/combat/unexpected-event.ts `EventReading` kind `injury-or-weapon-loss`; apps/app/src/state/reduce.ts `resolveEvent` applies `injuryDamage` unconditionally; plan/phases/phase_10d_the_fight_as_a_scene.md Scope, rows 3 and 11
+- suggested fix: Decide whether the weapon Proficiency is a nameable thing on the sheet. If it is, mark it at creation and give Combat a `weaponLost` flag plus a CHANGE OR RECOVER A WEAPON row, and offer the pick when the row comes up. If it is not, say so in the reading's own note and let injury be the single resolution rather than one of two, so the app stops implying a choice it cannot offer.
+- source: agent
+- resolved: the pick is offered and the weapon half is implemented
+  (2026-09-07). Rows 3 and 11 no longer apply the injury automatically:
+  the -1d6 is rolled with the row and waits, and the screen offers TAKE
+  THE INJURY or LOSE THE WEAPON (the latter only where the row names the
+  Master, who is the side carrying a weapon). A lost weapon is
+  `weaponLost` on the record - session state, no version bump - and
+  suppresses only the armed Proficiencies, which the engine now names:
+  `ARMED_PROFICIENCIES` and `withoutArmed`, a labelled behaviour
+  (`combat.armed-proficiency-needs-its-weapon`, reading, MH p.53 (R68);
+  I-02). R25c's CHANGE OR RECOVER A WEAPON puts it back, which is the
+  option the book already prints for exactly this. The jot's third
+  option - the brief's flat -2 on Attack Strength - was not taken: it
+  contradicts the shipped reading, as the jot said. The same finding was
+  filed twice, once at 5d25011 and again at 412b3f6 ("half of I-30's
+  either/or is unimplemented"); the second copy is drained by this same
+  change and was removed from Pending rather than resolved separately.
+
 
 ### [MED] general — CronCreate loop schedules do not survive the cloud container
 - pass: loop (commit 2338c05)

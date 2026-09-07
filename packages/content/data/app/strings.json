@@ -2251,6 +2251,56 @@
       "id": "ui.intro.credits.map",
       "text": "Cave map: https://watabou.itch.io/cave-generator",
       "cite": "5T a2"
+    },
+    {
+      "id": "ui.combat.act.injury",
+      "text": "TAKE THE INJURY",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.act.injury.cite",
+      "text": "I-30",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.act.injury.line",
+      "text": "{n} off {who}, rolled with the row.",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.act.weapon-loss",
+      "text": "LOSE THE WEAPON",
+      "cite": "MH p.53 (R68); I-30"
+    },
+    {
+      "id": "ui.combat.act.weapon-loss.cite",
+      "text": "MH p.53 (R68); I-02",
+      "cite": "MH p.53"
+    },
+    {
+      "id": "ui.combat.act.weapon-loss.line",
+      "text": "No ENDURANCE lost; armed Proficiencies add nothing until it is changed or recovered.",
+      "cite": "MH p.53 (R68); I-02"
+    },
+    {
+      "id": "ui.combat.event.injury.pending",
+      "text": "INJURY OR LOSS OF WEAPON: THE PICK IS YOURS",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.event.injury.weapon",
+      "text": "THE WEAPON IS GONE",
+      "cite": "MH p.53 (R68); I-30"
+    },
+    {
+      "id": "ui.combat.weapon-lost",
+      "text": "No weapon in hand: Armed combat, Ranged weapons and Versatile Weapon add nothing until CHANGE OR RECOVER A WEAPON.",
+      "cite": "MH p.53 (R68); I-02"
+    },
+    {
+      "id": "ui.combat.weapon-lost.cite",
+      "text": "MH p.53 (R68); I-02",
+      "cite": "MH p.53"
     }
   ]
 }

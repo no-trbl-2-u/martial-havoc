@@ -388,9 +388,15 @@ export type FoeInFight = {
  * Phase 10d gave the row its second half. The trigger was always
  * mechanical and the resolution never was: nine of the eleven rows print
  * no effect, and I-30 supplies the floor. `reading` is that floor,
- * already applied where applying it costs nothing (an injury is rolled
- * and taken at once) and offered as a row where it is a choice (the two
- * "The fight resumes" rows).
+ * already applied where applying it costs nothing (a Deity is rolled,
+ * Minions are counted) and offered as a row where it is a choice (the
+ * two "The fight resumes" rows, Morale, and rows 3 and 11).
+ *
+ * Rows 3 and 11 are the operator's pick, not the app's: I-30 reads them
+ * as "injury (-1d6 ENDURANCE) **or** loss of weapon, the operator's
+ * pick", so the damage is rolled here and applied only if the injury is
+ * the half chosen. Taking it automatically would be the app making a
+ * choice the reading gives away.
  */
 export type EventShown = {
   readonly roll: UnexpectedEventRoll
@@ -399,8 +405,18 @@ export type EventShown = {
   readonly retreatRow: boolean
   /** I-30's mechanical floor for this row, or null for a row outside 2-12. */
   readonly reading: EventReading | null
-  /** The ENDURANCE an injury row cost, and to whom (I-30). */
-  readonly injury: { readonly target: 'master' | 'opponent'; readonly amount: number } | null
+  /**
+   * What an injury row would cost, and to whom (I-30).
+   *
+   * Rolled when the row lands, spent only if the injury half is the one
+   * taken. `resolved` says which half was, and null means the pick is
+   * still open - the row is still on the screen.
+   */
+  readonly injury: {
+    readonly target: 'master' | 'opponent'
+    readonly amount: number
+    readonly resolved: 'injury' | 'weapon' | null
+  } | null
   /** The Deity rows 2 and 12 rolled, in the book's three words (MH p.29, R34). */
   readonly deity: { readonly name: string; readonly action: string; readonly object: string } | null
   /** Minions row 7 brought (R33, I-33), joined to the room on leaving. */
@@ -512,6 +528,19 @@ export type RecordState = {
    */
   readonly actsSeen: readonly number[]
   readonly combat: Combat | null
+  /**
+   * The Master's weapon is gone, taken by Unexpected Event row 3 (I-30).
+   *
+   * Not on `Combat`, because it outlives the fight it was lost in: the
+   * weapon stays gone until CHANGE OR RECOVER A WEAPON is taken (R25c),
+   * which is the option the book already prints for exactly this. While
+   * it is set the armed Proficiencies do not add (R68, I-02).
+   *
+   * Session state, not campaign state: a lost weapon is a fact about
+   * the fight in progress, and a record that is exported and re-imported
+   * comes back armed. No version bump, no migration.
+   */
+  readonly weaponLost: boolean
   readonly filter: Filter
   readonly openId: string | null
   readonly region: Region
@@ -584,6 +613,8 @@ export type Action =
   | { readonly type: 'combat.morale' }
   /** Rows 6 and 8 say the fight resumes: back into the round loop (R32). */
   | { readonly type: 'combat.resume' }
+  /** Rows 3 and 11: take the injury, or lose the weapon instead (I-30). */
+  | { readonly type: 'combat.injury'; readonly take: 'injury' | 'weapon' }
   /** Tap one of several opponents: the winner's option applies to it. */
   | { readonly type: 'combat.target'; readonly index: number }
   /** Face every foe the Event brought at once (R35; Phase 10e). */
