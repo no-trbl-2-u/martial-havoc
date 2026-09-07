@@ -51,16 +51,6 @@
 - source: agent
 
 
-### [HIGH] skills/ship-a-phase.md — the dispatcher picks by list order, not by dependency
-- pass: user-jot (commit 14d178e)
-- viewport: unspecified
-- auth_state: anonymous
-- category: reliability
-- observation: ship-a-phase §Step 1 takes "the first `[ ]` row" and skips only `[skipped]` and `[blocked: ...]`. It never reads the `Waits on` line that every phase brief and every per-phase scope section carries. The feel-of-play block is a DAG, not a chain - 10c, 10d, 10f and 10h are all unblocked right now, while 10e waits on 10d, 10g waits on 10d, and 10i waits on 10c and 10f - so the plan's own row order is the only thing keeping the loop from picking a phase whose dependency has not shipped. It happens to be correct today; nothing enforces that it stays correct, and a reordering or an /expand insertion would break it silently.
-- evidence: skills/ship-a-phase.md Step 1 and §10; plan/steps/01_build_plan.md "Waits on" at lines 390, 412, 433, 444; observed while answering a direct question about phase dependencies, 2026-09-07T04:34:50Z
-- suggested fix: Have Step 1 read the candidate row's brief for `Waits on` and skip any phase whose named dependencies are not `[x]`, reporting which one it skipped and why. Cheap version: assert in a test that the row order in 01_build_plan.md is a topological order of the Waits on graph, so a bad reordering is red rather than silent.
-- source: user
-
 ### [MED] packages/content — the fight prints a second-person line beside the narrator's third-person one
 - pass: user-jot (commit 14d178e)
 - viewport: unspecified
@@ -72,6 +62,7 @@
 - source: user
 
 ### [MED] packages/content — 149 authored lines are held to no style guide at all
+- superseded: 2026-09-07. The operator's call is to cut these 149 lines to the book's printed text rather than write them a guide, so the fix this row suggests is dead. The work is now a scored candidate in `plan/PHASE_CANDIDATES.md` (expand pass 1, 6.0) and is blocked on the spec: `spec.md`'s "About 440 authored lines" and its 437 criterion are sealed, and the field report asking for their re-issue is the third entry in `RE-SEED.md` (both merged as PR #61). Not iterate work; do not re-score it as such.
 - pass: user-jot (commit 14d178e)
 - viewport: unspecified
 - auth_state: anonymous
@@ -138,16 +129,6 @@ the deploy to be green (set via oversight 2026-09-05). The rows below are
 not from that pass: they are the carry-overs the `/march` loop of
 2026-09-05/06 left behind after shipping Phases 3 and 4, filed here so
 `/iterate` drains them rather than losing them.
-
-### [MED] packages/content — effects.json operation strings are unverified
-- pass: user-jot (commit 884f341)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: The 72 effect records name engine calls (combat.opening, healing.heal, multiple.areaDamage, progression.ordinaryBlowsPass, oracle.consult). effects.test.ts only checks the shape `namespace.name`, not that the export exists, so a rename in packages/engine leaves a dangling operation silently. The content package deliberately imports no engine, so the check cannot live there.
-- evidence: carried over from the /march loop of 2026-09-05/06 (Phases 3 and 4), user-spotted at 2026-09-06T01:20:04Z
-- suggested fix: Add an engine-side test that imports the effects table and asserts every non-null operation resolves against the engine's public surface. Natural home is the Phase 8 wiring commit.
-- source: user
 
 ### [MED] scripts/loop-issue.mjs — phase mirror dies when the gh CLI is absent
 - pass: user-jot (commit 884f341)
@@ -290,6 +271,29 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [HIGH] skills/ship-a-phase.md — the dispatcher picks by list order, not by dependency
+- pass: user-jot (commit 14d178e); shipped by /iterate 2026-09-07 (commit 1648bad)
+- closed: the cheap version the row names. A new `plan` leg in the verify gate (`scripts/plan-check.test.ts`) reads the build plan as text and asserts the status block is a topological order of the `Waits on` graph: each phase named once, every row with a scope section and every section with a row (8c named as the one out-of-band exception), every id on a `Waits on` line a phase that exists, and every such phase listed earlier than the phase waiting on it. A semicolon ends the dependency list so Phase 13's "may run beside Phases 11 and 12" is read as the commentary it is, and a dash between two ids is a range so Phase 10's "10a-10k" is the whole block. Proven red on three bad plans before it was proven green on this one. The fuller fix - teaching ship-a-phase Step 1 to read `Waits on` itself and skip a phase whose dependency is not `[x]` - is unshipped and phase-shaped; this makes the plan's order trustworthy, which is what the dispatcher relies on.
+- issue: #62
+- viewport: unspecified
+- auth_state: anonymous
+- category: reliability
+- observation: ship-a-phase §Step 1 takes "the first `[ ]` row" and skips only `[skipped]` and `[blocked: ...]`. It never reads the `Waits on` line that every phase brief and every per-phase scope section carries. The feel-of-play block is a DAG, not a chain - 10c, 10d, 10f and 10h are all unblocked right now, while 10e waits on 10d, 10g waits on 10d, and 10i waits on 10c and 10f - so the plan's own row order is the only thing keeping the loop from picking a phase whose dependency has not shipped. It happens to be correct today; nothing enforces that it stays correct, and a reordering or an /expand insertion would break it silently.
+- evidence: skills/ship-a-phase.md Step 1 and §10; plan/steps/01_build_plan.md "Waits on" at lines 390, 412, 433, 444; observed while answering a direct question about phase dependencies, 2026-09-07T04:34:50Z
+- suggested fix: Have Step 1 read the candidate row's brief for `Waits on` and skip any phase whose named dependencies are not `[x]`, reporting which one it skipped and why. Cheap version: assert in a test that the row order in 01_build_plan.md is a topological order of the Waits on graph, so a bad reordering is red rather than silent.
+- source: user
+
+### [MED] packages/content — effects.json operation strings are unverified
+- pass: user-jot (commit 884f341); shipped by commit f3e4475
+- closed: `packages/engine/src/operations.test.ts` resolves every non-null `operation` against the engine's public surface, in two halves - the export is a value export of `index.ts` (not a type, not an internal), and the folder segment is the folder that export is actually re-exported from, so `combat.heal` cannot pass on the strength of `healing.heal`. Found already shipped and still sitting in Pending by the /iterate pass of 2026-09-07; moved here as bookkeeping, not as new work.
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: The 72 effect records name engine calls (combat.opening, healing.heal, multiple.areaDamage, progression.ordinaryBlowsPass, oracle.consult). effects.test.ts only checks the shape `namespace.name`, not that the export exists, so a rename in packages/engine leaves a dangling operation silently. The content package deliberately imports no engine, so the check cannot live there.
+- evidence: carried over from the /march loop of 2026-09-05/06 (Phases 3 and 4), user-spotted at 2026-09-06T01:20:04Z
+- suggested fix: Add an engine-side test that imports the effects table and asserts every non-null operation resolves against the engine's public surface. Natural home is the Phase 8 wiring commit.
+- source: user
 
 ### [HIGH] scripts/copy-check.test.ts — the copy leg does not see a citation as copy
 - pass: agent (commit 5d25011)
