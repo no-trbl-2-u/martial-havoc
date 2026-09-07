@@ -137,7 +137,7 @@ const fallenSlip = (
     return {
       title: t('ui.combat.fallen.master'),
       how: t('ui.combat.fallen.master.line'),
-      cite: 'MH p.6',
+      cite: t('ui.combat.fallen.master.cite'),
       line,
     }
   if (c.foeEndurance > 0) return null
@@ -263,7 +263,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
                   who: t(`ui.combat.event.injury.${c.event.injury.target}`),
                 })}
               </Text>
-              <Source cite="I-30" />
+              <Source cite={t('ui.combat.event.injury.cite')} />
             </View>
           </Slip>
         )}
@@ -290,7 +290,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
                   face: c.event.minions.face,
                 })}
               </Text>
-              <Source cite="MH p.28 · R33 · I-33" />
+              <Source cite={t('ui.combat.event.minions.cite')} />
             </View>
           </Slip>
         )}

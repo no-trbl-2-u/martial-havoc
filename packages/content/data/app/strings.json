@@ -1198,6 +1198,21 @@
       "text": "{name} \u00b7 {action} \u00b7 {object}"
     },
     {
+      "id": "ui.combat.event.injury.cite",
+      "cite": "I-30",
+      "text": "I-30 \u00b7 the row prints no effect; this is the reading's floor"
+    },
+    {
+      "id": "ui.combat.event.minions.cite",
+      "cite": "MH p.28 (R33); I-33",
+      "text": "MH p.28 \u00b7 R33 \u00b7 1-4 Minions on a d6 (I-33)"
+    },
+    {
+      "id": "ui.combat.fallen.master.cite",
+      "cite": "MH p.6",
+      "text": "MH p.6 \u00b7 if ENDURANCE reaches zero, the Master dies or becomes unconscious"
+    },
+    {
       "id": "ui.combat.event.deity.cite",
       "cite": "MH p.29 (R34)",
       "text": "MH p.29 \u00b7 R34 \u00b7 the three words are the book's; what they mean here is the player's"

@@ -9,6 +9,27 @@
 
 ## Pending
 
+### [HIGH] scripts/copy-check.test.ts — the copy leg does not see a citation as copy
+- pass: agent (commit 5d25011)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: The copy leg catches JSX text, string props that render, and literals of three or more words, which is what let three hardcoded citations ship green in Phase 10d: `<Source cite="I-30" />`, `cite: 'MH p.6'`, and `<Source cite="MH p.28 · R33 · I-33" />`. The first two are under the word threshold; the third is over it and still passed, so the threshold is not the only hole. A citation is exactly the class of string agents.md rule 7 exists for - it is the thing that says where a rule came from, and a component that invents one is a component asserting the book said something. The three were moved into strings.json in this same commit, but the leg that should have refused them still would not.
+- evidence: scripts/copy-check.test.ts, "three shapes of hardcoded copy"; the three literals passed `npm run test` on commit 2c528b9 and were caught only by reading the diff afterwards
+- suggested fix: Give the leg a fourth shape: any string literal reaching a `cite` prop or a `cite:` field under apps/app/src must be a `t(...)` call or a value read from the engine's registry (`citeOf`). That is a narrow, mechanical rule with no judgement in it, and it is the shape the existing violations all had. Extend `.claude/hooks/guard.mjs` in the same commit if the rule wants teeth outside the test.
+- source: agent
+
+### [LOW] e2e — the ?dice= sequences are long, positional and undocumented
+- pass: agent (commit 5d25011)
+- viewport: unspecified
+- auth_state: anonymous
+- category: maintainability
+- observation: Specs name their rolls with a single flat queue - `?dice=4,4,2,3,6,5,1,1,4,1` - consumed in whatever order the code happens to draw. Adding one roll anywhere upstream shifts every face after it, and a wrong guess fails as a timeout on an unrelated assertion rather than as a bad die. Phase 10c's boss-door test and Phase 10d's ambush test both cost a round of dice archaeology for this reason, and the ambush one is padded with four spare faces whose only job is to stop a tie exhausting the queue.
+- evidence: e2e/prototype.spec.ts, the `?dice=` strings in the 10c and 10d cases; reduce.test.ts pairs each action with its own faces and does not have this problem
+- suggested fix: Let `?dice=` take labelled groups the way reduce.test.ts pairs actions with faces - or, cheaper, require a comment above every queue naming what each face is for, the way the existing "Event 4 (safe) twice, then Event 2 and creature 3" comment does. The reducer tests are the model; the e2e specs drifted from it.
+- source: agent
+
+
 ### [MED] apps/app + packages/engine — half of I-30's either/or is unimplemented
 - pass: agent (commit 412b3f6)
 - viewport: unspecified
