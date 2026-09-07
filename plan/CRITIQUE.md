@@ -9,6 +9,16 @@
 
 ## Pending
 
+### [MEDIUM] The Minions rule is not offered anywhere (MH p.28 footnote)
+- pass: agent (commit 2299f57)
+- viewport: unspecified
+- auth_state: anonymous
+- category: content
+- observation: Phase 10e's brief asked for the Minions rule as a toggle on the fight's first screen - "To streamline combat while maintaining the idea of a chaotic scene, you can consider Minions with ENDURANCE=1; if you hit you can remove one minion" (MH p.28, footnote) - default off. The phase shipped everything else in its scope and not this: the rule is optional, it is the only optional rule in the book that changes a printed stat block, and there is nowhere in the app that a rule is switched on or off. Giving it the first such switch is a UI decision worth making deliberately rather than as the tail of a phase about crowds.
+- evidence: plan/phases/phase_10e_many_foes.md, Scope, the fourth bullet; no `minions` flag exists in apps/app/src/state/types.ts after 2299f57
+- suggested fix: A row on the fight's first screen when the band is more than one, cited MH p.28, default off, that reads each body's ENDURANCE as 1 for the length of that fight. It wants a home for optional rules in the record, which is the part worth designing: a second one will follow.
+- source: agent
+
 ### [HIGH] scripts/copy-check.test.ts — the copy leg does not see a citation as copy
 - pass: agent (commit 5d25011)
 - viewport: unspecified

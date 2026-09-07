@@ -168,7 +168,24 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       either/or is not implemented — it needs lingering state and the
       sheet does not say which Proficiency is the weapon's. Filed to
       `plan/CRITIQUE.md`; the injury half ships.
-- [ ] Phase 10e — Many foes (brief: `phase_10e_many_foes.md`)
+- [x] Phase 10e — Many foes (brief: `phase_10e_many_foes.md`) — 2299f57.
+      A fight is against a list, not a body. The Oracle's No. of enemies
+      row counts the devils in the dice-less rooms and the roll card
+      shows the third die; the Woodgatherers are a band of five (I-05b);
+      the Attendants room fields both. FACE THEM ALL (n) stands beside
+      the single rows on the beat. The combat screen puts the Master's
+      one roll against a column of opponent cards (I-06), SKILL reduced
+      by the number faced (R35) and ATTACK saying who may wound, per
+      kind (R37); a card is tapped to aim at it. An area Technique
+      carries the same damage to as many opponents as its prose reaches
+      (R36, I-11, `reach` on the effect record). One LOOT line per
+      fallen body. **Two calls are in the commit body**: the brief's
+      BDD contradicts itself on ATTACK and was resolved in favour of
+      capping (what spec.md's sealed rule allows and I-05b assumes),
+      and its reading id I-09b does not exist, so the per-kind cap is
+      labelled against I-06. **Carry-over:** the Minions-at-ENDURANCE-1
+      toggle (MH p.28 footnote) is unimplemented; filed to
+      `plan/CRITIQUE.md`.
 - [ ] Phase 10f — The sheet that grows: the Final Blow's Technique,
       and age (brief: `phase_10f_the_sheet_that_grows.md`)
 - [ ] Phase 10g — The five treasures work (brief:
