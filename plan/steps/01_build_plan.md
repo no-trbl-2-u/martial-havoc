@@ -140,8 +140,19 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       lets `lib/opening.ts` ask whether the adventure has begun — with
       no record version bump and no migration. The premise slip is
       gone from the beat with the code that fed it.
-- [ ] Phase 10c — The three acts on screen (brief:
-      `phase_10c_three_acts.md`)
+- [x] Phase 10c — The three acts on screen (brief:
+      `phase_10c_three_acts.md`) — 795fad8. The act-change slip arrives
+      once per rung with the act's name and line and is dismissed by
+      any tap; a five-square outline over the beat says which act the
+      Master is in and never scrolls away; at the Chieftain quarter the
+      book's pacing rule (MH p.84, R82) reads a quiet Event as an
+      Encounter and prints the face that was rolled beside the book's
+      own sentence. The rule is a labelled engine behaviour, the door
+      is one row of `momentum.json` (invention, with its reason). The
+      record carries the acts already announced, with no version bump:
+      an absent field is filled from the acts the saved state already
+      satisfies. Act lines are now rendered on an act change, which was
+      the carry-over 10a left.
 - [ ] Phase 10d — The fight as a scene (brief:
       `phase_10d_the_fight_as_a_scene.md`)
 - [ ] Phase 10e — Many foes (brief: `phase_10e_many_foes.md`)
