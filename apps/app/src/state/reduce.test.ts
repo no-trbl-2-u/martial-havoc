@@ -356,7 +356,8 @@ describe('every way a fight ends is a moment (Phase 10d)', () => {
     expect(hurt.combat?.event?.injury).toEqual({ target: 'opponent', amount: 3, resolved: null })
     expect(reduce(hurt, { type: 'combat.injury', take: 'weapon' }, fromSequence([]))).toBe(hurt)
     const took = reduce(hurt, { type: 'combat.injury', take: 'injury' }, fromSequence([]))
-    expect(took.combat?.foeEndurance).toBe(5)
+    // The wound lands on the body the Master is aimed at (Phase 10e).
+    expect(took.combat?.foes[0]?.endurance).toBe(5)
   })
 
   it('rolls the Deities table on a divine intervention and prints its three words', () => {
