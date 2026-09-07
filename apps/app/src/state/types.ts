@@ -220,6 +220,27 @@ export type LootResult = {
   readonly hint: boolean
 }
 
+/**
+ * A fight left with the foe still standing (R38, R39, I-32; Phase 10d).
+ *
+ * The flight is the one way out of a fight that costs something and
+ * lands nowhere: before this phase it changed two numbers on the sheet
+ * and printed nothing, so a player who fled saw a beat that looked
+ * exactly like the beat they had left. The slip is what makes it a
+ * moment - the foe by name, the last blow, and the Dishonor Point.
+ */
+export type FleeResult = {
+  readonly kind: 'flee'
+  /** The printed name of what was left standing. */
+  readonly foe: string
+  /** The last blow suffered: 2, or 0 with a stratagem (R38). */
+  readonly damage: number
+  /** 1 without a stratagem (R39, I-32). */
+  readonly dishonor: number
+  /** ENDURANCE after the last blow. */
+  readonly endurance: number
+}
+
 /** A line of feedback that is not a roll: a rescue, what the sheets taught. */
 export type NoteResult = {
   readonly kind: 'note'
@@ -245,7 +266,14 @@ export type VillageNote = {
 }
 
 /** What the result slip shows, when it shows anything. */
-export type Result = CheckResult | RestResult | TakeResult | TurnResult | LootResult | NoteResult
+export type Result =
+  | CheckResult
+  | RestResult
+  | TakeResult
+  | TurnResult
+  | LootResult
+  | FleeResult
+  | NoteResult
 
 /**
  * The roll card over the beat (design/roll-modal, reading A; the
@@ -277,16 +305,45 @@ export type EventShown = {
   readonly retreatRow: boolean
 }
 
+/** The three words the Table of Deities gave a divine intervention (MH p.29). */
+export type DeityShown = {
+  readonly name: string
+  readonly action: string
+  readonly object: string
+}
+
 /** A fight in progress or just finished. */
 export type Combat = {
   readonly foeId: string
   readonly foeEndurance: number
   readonly round: number
+  /**
+   * The opening round is the opponent's alone (I-08a).
+   *
+   * Set when the Event that brought this foe was an Ambush and cleared
+   * by the first round rolled. While it is set the Master rolls 2d6 and
+   * SKILL with no Proficiency, no winner's option is offered, and the
+   * banner says so.
+   */
+  readonly ambush: boolean
   readonly last: RoundShown | null
   readonly event: EventShown | null
   readonly morale: Morale | null
+  /** Rows 2 and 12: the Deities roll, printed as its three words (MH p.29). */
+  readonly deity: DeityShown | null
+  /** Row 7 (and a rally): how many Minions joined, on a d6 (I-33). */
+  readonly minions: { readonly face: Die; readonly count: number } | null
   readonly opening: boolean
   readonly blow: FinalBlowRoll | null
+  /**
+   * The difference that dropped the foe, kept for the slip that says so.
+   *
+   * `last` is cleared the moment the winner's option is taken, which is
+   * the same moment the foe falls - so the number that killed it has to
+   * be written down here or it is gone before anything can print it. A
+   * Final Blow leaves it null: `blow` is how that one is told.
+   */
+  readonly felledBy: number | null
   /** The authored line of the Technique last used, if one was. */
   readonly techniqueLine: string | null
   /** The LOOT line has been read (once per victory). */
@@ -342,6 +399,31 @@ export type RecordState = {
    */
   readonly actsSeen: readonly number[]
   readonly combat: Combat | null
+  /**
+   * Foes left standing in this area by an Unexpected Event (R32, I-30).
+   *
+   * Distinct from `pending`, and the difference is the whole point: a
+   * pending foe is an encounter in progress and holds the exits shut,
+   * while a standing one is a fight the tie interrupted - the room is
+   * the Master's to leave, and the foe is theirs to face again.
+   */
+  readonly standing: readonly string[]
+  /**
+   * Who carries the injury row's penalty into the next round (I-30).
+   *
+   * One round only: the next Attack Strength rolled is 2 lower for the
+   * marked side, and rolling it clears the mark.
+   */
+  readonly marked: 'master' | 'opponent' | null
+  /**
+   * The Master's weapon was lost to row 3 (I-30).
+   *
+   * While it is set the weapon Proficiency does not add to Attack
+   * Strength; the winner's option CHANGE OR RECOVER A WEAPON (R25c) is
+   * what clears it, which is the option the book already prints for
+   * exactly this.
+   */
+  readonly weaponLost: boolean
   readonly filter: Filter
   readonly openId: string | null
   readonly region: Region
@@ -412,6 +494,8 @@ export type Action =
   | { readonly type: 'combat.opening' }
   | { readonly type: 'combat.blow' }
   | { readonly type: 'combat.morale' }
+  /** Rows 6 and 8: back into the round loop with the same foe (R32). */
+  | { readonly type: 'combat.resume' }
   /** After a victory: the foe's LOOT line (5T a2). */
   | { readonly type: 'combat.loot' }
   | { readonly type: 'combat.leave' }

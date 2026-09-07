@@ -1120,12 +1120,12 @@
     {
       "id": "ui.act.mark",
       "cite": "MH p.85",
-      "text": "ACT {n} OF {of} \u00b7 {name}"
+      "text": "ACT {n} OF {of} · {name}"
     },
     {
       "id": "ui.act.cite",
       "cite": "MH p.82",
-      "text": "MH p.82 \u00b7 each act ends with a climax, a point of no return to a new act"
+      "text": "MH p.82 · each act ends with a climax, a point of no return to a new act"
     },
     {
       "id": "ui.momentum.title",
@@ -1140,12 +1140,12 @@
     {
       "id": "ui.momentum.rolled",
       "cite": "plan/phases/phase_10c_three_acts.md",
-      "text": "ROLLED {face} \u00b7 {was} \u00b7 READ AS ENCOUNTER"
+      "text": "ROLLED {face} · {was} · READ AS ENCOUNTER"
     },
     {
       "id": "ui.momentum.cite",
       "cite": "MH p.84 (R82)",
-      "text": "MH p.84 \u00b7 R82 \u00b7 the book's own example is this door"
+      "text": "MH p.84 · R82 · the book's own example is this door"
     },
     {
       "id": "ui.village.call.title",
@@ -1811,6 +1811,146 @@
       "id": "ui.intro.credits.map",
       "text": "Cave map: https://watabou.itch.io/cave-generator",
       "cite": "5T a2"
+    },
+    {
+      "id": "ui.cave.again",
+      "text": "FACE {name} AGAIN",
+      "cite": "MH p.27-28 (R32); I-30"
+    },
+    {
+      "id": "ui.cave.again.note",
+      "text": "STILL HERE",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.result.flee.title",
+      "text": "FLED {name}",
+      "cite": "MH p.30 (R38)"
+    },
+    {
+      "id": "ui.result.flee.against",
+      "text": "LAST BLOW -{damage} · ENDURANCE {endurance}",
+      "cite": "MH p.30 (R38)"
+    },
+    {
+      "id": "ui.result.flee.dishonor",
+      "text": "DISHONOR +{n}",
+      "cite": "MH p.30 (R39)"
+    },
+    {
+      "id": "ui.result.flee.clean",
+      "text": "NO DISHONOR: THE STRATAGEM HELD",
+      "cite": "I-32"
+    },
+    {
+      "id": "ui.result.flee.cite",
+      "text": "MH p.30 (R38, R39); I-32",
+      "cite": "MH p.30"
+    },
+    {
+      "id": "ui.combat.banner.ambush",
+      "text": "AMBUSH, THEIR ROUND",
+      "cite": "MH p.58; I-08a"
+    },
+    {
+      "id": "ui.combat.ambush.note",
+      "text": "An Ambush is one unopposed round: SKILL and the dice, no Proficiency.",
+      "cite": "I-08a"
+    },
+    {
+      "id": "ui.combat.ambush.cite",
+      "text": "MH p.58; I-08a",
+      "cite": "MH p.58"
+    },
+    {
+      "id": "ui.combat.fallen.foe",
+      "text": "{name} FALLS",
+      "cite": "MH p.23 (R26)"
+    },
+    {
+      "id": "ui.combat.fallen.master",
+      "text": "THE MASTER FALLS",
+      "cite": "MH p.6 (R06)"
+    },
+    {
+      "id": "ui.combat.fallen.master.text",
+      "text": "If ENDURANCE reaches zero, the Master dies or becomes unconscious.",
+      "cite": "MH p.6"
+    },
+    {
+      "id": "ui.combat.fallen.blow",
+      "text": "THE BLOW LANDS",
+      "cite": "MH p.25 (R30)"
+    },
+    {
+      "id": "ui.combat.fallen.difference",
+      "text": "THE DIFFERENCE OF {n}",
+      "cite": "MH p.23 (R25)"
+    },
+    {
+      "id": "ui.combat.fallen.cite",
+      "text": "MH p.23 (R26); MH p.6 (R06)",
+      "cite": "MH p.23"
+    },
+    {
+      "id": "ui.combat.marked",
+      "text": "MARKED: {who} rolls 2 lower next round.",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.marked.master",
+      "text": "the Master",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.marked.opponent",
+      "text": "the opponent",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.weapon-lost",
+      "text": "The weapon is gone: no Proficiency adds until it is changed or recovered.",
+      "cite": "MH p.23 (R25c); I-30"
+    },
+    {
+      "id": "ui.combat.deity",
+      "text": "{name}, {action} of {object}",
+      "cite": "MH p.28-29"
+    },
+    {
+      "id": "ui.combat.deity.note",
+      "text": "The three words are the whole of it: the book offers no mechanic here.",
+      "cite": "I-30"
+    },
+    {
+      "id": "ui.combat.deity.cite",
+      "text": "MH p.28-29",
+      "cite": "MH p.28-29"
+    },
+    {
+      "id": "ui.combat.minions",
+      "text": "{n} more join the fight.",
+      "cite": "MH p.30 (R33); I-33"
+    },
+    {
+      "id": "ui.combat.minions.cite",
+      "text": "MH p.30 (R33); I-33",
+      "cite": "MH p.30"
+    },
+    {
+      "id": "ui.combat.act.resume",
+      "text": "RESUME THE FIGHT",
+      "cite": "MH p.28"
+    },
+    {
+      "id": "ui.combat.act.resume.cite",
+      "text": "MH p.28",
+      "cite": "MH p.28"
+    },
+    {
+      "id": "ui.combat.act.resume.line",
+      "text": "The row says so: back into the round, the same foe, the same ENDURANCE.",
+      "cite": "MH p.28"
     }
   ]
 }

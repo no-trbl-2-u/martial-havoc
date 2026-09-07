@@ -378,6 +378,8 @@ describe('the fight with the Dexterous Ghost', () => {
     })
     const struck = reduce(s, { type: 'combat.strike' }, fromSequence([]))
     expect(struck.combat?.foeEndurance).toBe(0)
+    // The difference that killed it outlives the round it was rolled in.
+    expect(struck.combat?.felledBy).toBe(10)
     expect(struck.combat?.over).toEqual({ ended: true, reason: 'opponent-down' })
     expect(struck.deeds).toContain('killed dexterous ghost')
   })
@@ -449,6 +451,117 @@ describe('the fight with the Dexterous Ghost', () => {
     expect(s.sheet.dishonor).toBe(1)
     expect(s.deeds).toContain('fled dexterous ghost · dishonor +1')
     expect(s.pending).toEqual([])
+  })
+
+  /**
+   * Phase 10d: what the tie leaves behind.
+   *
+   * Every case here rolls the same tie - Master 3+4 and Ghost 4+4, which
+   * is 19 against 19 - and differs only in the two faces the Unexpected
+   * Event table then draws. That is deliberate: the tie is not what is
+   * under test, the eleven rows are.
+   */
+  describe('the Unexpected Event resolves back into the room (R32, I-30)', () => {
+    /** Tie, then an event of `a + b`, then whatever the row draws. */
+    const tieOn = (faces: readonly Die[]): RecordState =>
+      play(atGhost(), [[{ type: 'combat.round' }, [3, 4, 4, 4, ...faces]]])
+
+    it('rows 6 and 8 resume the fight with the same foe at the same ENDURANCE', () => {
+      const s = tieOn([3, 3])
+      expect(s.combat?.event).toMatchObject({ roll: { total: 6 } })
+      expect(s.combat?.over).toEqual({ ended: true, reason: 'unexpected-event' })
+      const back = reduce(s, { type: 'combat.resume' }, fromSequence([]))
+      expect(back.combat?.event).toBeNull()
+      expect(back.combat?.over).toEqual({ ended: false })
+      expect(back.combat?.foeEndurance).toBe(8)
+      expect(back.screen).toBe('combat')
+    })
+
+    it('an environmental change leaves the foe standing, and the exits open', () => {
+      const s = tieOn([2, 3])
+      expect(s.combat?.event).toMatchObject({ roll: { total: 5 } })
+      const left = reduce(s, { type: 'combat.leave' }, fromSequence([]))
+      expect(left.screen).toBe('beat')
+      expect(left.standing).toEqual([GHOST])
+      expect(left.pending).toEqual([])
+      // The encounter is over, so the doors are open again ...
+      expect(menuFor(left).find((o) => o.id === `go-${AREA.hall}`)?.enabled).toBe(true)
+      // ... and the Ghost is still there to be faced.
+      const again = menuFor(left).find((o) => o.id === `again-${GHOST}-0`)
+      expect(again?.enabled).toBe(true)
+      const refought = reduce(left, { type: 'cave.fight', foe: GHOST }, fromSequence([]))
+      expect(refought.screen).toBe('combat')
+      expect(refought.combat).toMatchObject({ foeId: GHOST, ambush: false })
+    })
+
+    it('row 7 brings Minions, counted on a d6 (R33, I-33)', () => {
+      // Event 3+4 = 7; the Minions die of 3 is two more of the same foe.
+      const s = tieOn([3, 4, 3])
+      expect(s.combat?.event).toMatchObject({ roll: { total: 7 } })
+      expect(s.combat?.minions).toEqual({ face: 3, count: 2 })
+      const left = reduce(s, { type: 'combat.leave' }, fromSequence([]))
+      expect(left.pending).toEqual([GHOST, GHOST])
+      expect(left.standing).toEqual([GHOST])
+    })
+
+    it('row 3 marks the Master and takes the weapon; the next round is 2 lower', () => {
+      // Event 1+2 = 3: injury or loss of weapon for the Master.
+      const s = tieOn([1, 2])
+      const left = reduce(s, { type: 'combat.leave' }, fromSequence([]))
+      expect(left.marked).toBe('master')
+      expect(left.weaponLost).toBe(true)
+      const again = reduce(left, { type: 'cave.fight', foe: GHOST }, fromSequence([]))
+      // 6+5 and SKILL 8 with no Proficiency is 19, less the mark of 2.
+      const round = reduce(again, { type: 'combat.round' }, fromSequence([6, 5, 1, 1]))
+      expect(round.combat?.last?.master).toMatchObject({ total: 17, proficiency: null })
+      // One round only, and the mark is spent.
+      expect(round.marked).toBeNull()
+    })
+
+    it('rows 2 and 12 print the Deities table and nothing else', () => {
+      // Event 1+1 = 2, then the Deities table on 2d6: band 1, row 4.
+      const s = tieOn([1, 1, 1, 4])
+      expect(s.combat?.deity).toMatchObject({ name: 'Great Sage' })
+      expect(s.combat?.minions).toBeNull()
+    })
+
+    it('a rally keeps the foe and brings company; a flight takes it away', () => {
+      // Event 2+2 = 4, a retreat row. Morale 6 rallies, +1d6 = 3 -> two.
+      const rallied = reduce(tieOn([2, 2]), { type: 'combat.morale' }, fromSequence([6, 3]))
+      expect(rallied.combat?.minions).toEqual({ face: 3, count: 2 })
+      const after = reduce(rallied, { type: 'combat.leave' }, fromSequence([]))
+      expect(after.standing).toEqual([GHOST])
+      expect(after.pending).toEqual([GHOST, GHOST])
+    })
+  })
+
+  it('an Ambush is the opponent’s round alone (MH p.58, I-08a)', () => {
+    // The Cave entrance on Event 1 (Ambush!) and a creature face of 2.
+    const ambushed = play(fresh(), [
+      [{ type: 'cave.go', to: AREA.entrance }, [1, 2]],
+      [{ type: 'roll.close' }, []],
+    ])
+    const foe = ambushed.pending[0]
+    expect(foe).toBeDefined()
+    const facing = reduce(ambushed, { type: 'cave.fight', foe: foe ?? '' }, fromSequence([]))
+    expect(facing.combat?.ambush).toBe(true)
+    // The Master meets it with SKILL and the dice: no Proficiency adds.
+    const round = reduce(facing, { type: 'combat.round' }, fromSequence([1, 1, 6, 6]))
+    expect(round.combat?.last?.master.proficiency).toBeNull()
+    expect(round.combat?.last?.outcome).toBe('master-hit')
+    // And the round after it is a normal one.
+    expect(round.combat?.ambush).toBe(false)
+  })
+
+  it('fleeing lands as a slip on the beat, with the blow and the Dishonor', () => {
+    const s = reduce(atGhost(), { type: 'combat.leave' }, fromSequence([]))
+    expect(s.result).toEqual({
+      kind: 'flee',
+      foe: 'Dexterous Ghost',
+      damage: 2,
+      dishonor: 1,
+      endurance: 18,
+    })
   })
 
   it('a beaten named foe is gone from every table, and its LOOT line is read once (5T a2, I-33c)', () => {
@@ -600,11 +713,15 @@ describe('the Old Vixen teaches the Cord\u2019s spells (I-41)', () => {
         foeId: VIXEN,
         foeEndurance: 0,
         round: 2,
+        ambush: false,
         last: null,
         event: null,
         morale: null,
+        deity: null,
+        minions: null,
         opening: false,
         blow: null,
+        felledBy: null,
         techniqueLine: null,
         looted: true,
         over: { ended: true, reason: 'final-blow' },

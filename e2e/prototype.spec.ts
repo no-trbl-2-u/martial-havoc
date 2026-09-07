@@ -221,6 +221,65 @@ test('a lost round costs the difference; fleeing costs the last blow and Dishono
   await expect(page.getByText('DEEDS 2')).toBeVisible()
 })
 
+test('a kill lands as a slip before the loot row (Phase 10d)', async ({ page }) => {
+  // The won round of the spec above, struck home: the Ghost's 8
+  // ENDURANCE against a difference of 10.
+  await page.goto('/?dice=4,4,2,3,6,5,1,1')
+  await begin(page)
+  await toGhost(page)
+  await button(page, 'ROLL THE ROUND').click()
+  await page.getByTestId('act-strike').click()
+  await expect(page.getByTestId('fallen')).toBeVisible()
+  await expect(page.getByTestId('fallen')).toContainText('DEXTEROUS GHOST FALLS')
+  await expect(page.getByTestId('fallen-how')).toHaveText('THE DIFFERENCE OF 10')
+  // And the loot row sits under it, as the book's order has it.
+  await expect(page.getByTestId('act-loot')).toBeEnabled()
+})
+
+test('fleeing is narrated on the beat: the blow, the Dishonor, the foe by name', async ({ page }) => {
+  await page.goto('/?dice=4,4,2,3')
+  await begin(page)
+  await toGhost(page)
+  await button(page, /FLEE/).click()
+  await expect(page.getByTestId('beat')).toBeVisible()
+  await expect(page.getByText('FLED DEXTEROUS GHOST')).toBeVisible()
+  await expect(page.getByTestId('result-total')).toHaveText('DISHONOR +1')
+  await expect(page.getByTestId('attr-endurance')).toHaveText('18')
+  // The Ghost is not offered again: the encounter was left behind (I-32).
+  await expect(button(page, /FACE THE DEXTEROUS GHOST/)).toHaveCount(0)
+})
+
+test('an Ambush is their round first, and the Master meets it bare (I-08a)', async ({ page }) => {
+  // Event 1 at the Cave entrance is an Ambush; the creature face of 2
+  // names who springs it. Then the ambush round's four faces.
+  await page.goto('/?dice=1,2,1,1,6,6')
+  await begin(page)
+  await button(page, /TO THE CAVE ENTRANCE/).click()
+  await page.getByTestId('roll-card-continue').click()
+  await button(page, /^FACE /).click()
+  await expect(page.getByTestId('combat')).toBeVisible()
+  await expect(page.getByText('AMBUSH, THEIR ROUND')).toBeVisible()
+  await expect(page.getByTestId('ambush')).toBeVisible()
+  await button(page, 'ROLL THE ROUND').click()
+  // No Proficiency on the Master's side of an ambush round.
+  await expect(page.getByTestId('total-mine')).toHaveText('10')
+  await expect(page.getByTestId('act-strike')).toBeDisabled()
+})
+
+test('the fight resumes on a 6, with the same foe at the same ENDURANCE', async ({ page }) => {
+  // The tie again, and an Unexpected Event of 3+3 = 6.
+  await page.goto('/?dice=4,4,2,3,3,4,4,4,3,3')
+  await begin(page)
+  await toGhost(page)
+  await button(page, 'ROLL THE ROUND').click()
+  await expect(page.getByText('UNEXPECTED EVENT · 2d6 = 6')).toBeVisible()
+  await expect(page.getByTestId('event')).toContainText('The fight resumes')
+  await page.getByTestId('act-resume').click()
+  await expect(page.getByTestId('event')).toHaveCount(0)
+  await expect(button(page, 'ROLL THE ROUND')).toBeEnabled()
+  await expect(page.getByText(/END 8 ·/)).toBeVisible()
+})
+
 test('the rules panel lists every behaviour with its label and opens one', async ({ page }) => {
   await page.goto('/')
   await begin(page)

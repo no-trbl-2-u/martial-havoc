@@ -10,7 +10,15 @@ import { fromSequence } from '../dice/sources'
 import { attackStrength, relevantProficiency } from './attack-strength'
 import { endsFight, resolveRound, spendTechnique } from './round'
 import { finalBlow, namingRoll, newTechnique } from './final-blow'
-import { eventReading, injuryDamage, minions, morale, unexpectedEvent } from './unexpected-event'
+import {
+  INJURY_PENALTY,
+  aftermath,
+  eventReading,
+  injuryDamage,
+  minions,
+  morale,
+  unexpectedEvent,
+} from './unexpected-event'
 
 describe('relevantProficiency (D10, I-21)', () => {
   const two = [
@@ -300,5 +308,58 @@ describe('unexpectedEvent and Morale (R32-R33, I-30, I-33, spec.md)', () => {
 
   it('rolls 1d6 for the injury reading (I-30)', () => {
     expect(injuryDamage(fromSequence([5]))).toBe(5)
+  })
+})
+
+/**
+ * I-30's aftermath: what each row leaves standing in the room.
+ *
+ * The default the reading argues for is that the opponent stays, so
+ * these cases are written as "which rows are the exception" rather than
+ * row by row: the exceptions are the whole content of the reading.
+ */
+describe('aftermath (R32, I-30)', () => {
+  const of = (total: number, m?: ReturnType<typeof morale>) => {
+    const reading = eventReading(total)
+    if (reading === undefined) throw new Error(`no reading for ${total}`)
+    return aftermath(reading, m)
+  }
+
+  it('resumes the fight on 6 and 8, with the opponent still there', () => {
+    for (const total of [6, 8]) {
+      expect(of(total)).toMatchObject({ resumes: true, opponentStays: true })
+    }
+  })
+
+  it('leaves the opponent in the room on every row that does not remove it', () => {
+    for (const total of [2, 3, 5, 7, 9, 11, 12]) {
+      expect(of(total).opponentStays).toBe(true)
+    }
+  })
+
+  it('takes the opponent away on a retreat it wins, and keeps it on a rally', () => {
+    const flee = morale(fromSequence([2]))
+    const cautious = morale(fromSequence([4]))
+    const rally = morale(fromSequence([6, 3]))
+    expect(of(4, flee)).toMatchObject({ opponentStays: false, reinforcements: false })
+    expect(of(10, cautious)).toMatchObject({ opponentStays: false, reinforcements: false })
+    expect(of(4, rally)).toMatchObject({ opponentStays: true, reinforcements: true })
+  })
+
+  it('marks the injured side on 3 and 11, and nobody elsewhere', () => {
+    expect(of(3).marked).toBe('master')
+    expect(of(11).marked).toBe('opponent')
+    expect(of(5).marked).toBeNull()
+  })
+
+  it('calls for Minions on 7 and the Deities table on 2 and 12', () => {
+    expect(of(7).reinforcements).toBe(true)
+    expect(of(2).deity).toBe(true)
+    expect(of(12).deity).toBe(true)
+    expect(of(5).deity).toBe(false)
+  })
+
+  it('charges the injured side the same 2 the book charges for a last blow', () => {
+    expect(INJURY_PENALTY).toBe(2)
   })
 })

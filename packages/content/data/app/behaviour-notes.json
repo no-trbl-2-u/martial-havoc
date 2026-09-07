@@ -328,6 +328,28 @@
       "reversed": "those rows would be narration with no effect on the sheet"
     },
     {
+      "id": "note.combat.unexpected-event-leaves-the-opponent-in-the-room",
+      "cite": "I-30",
+      "ref": "combat.unexpected-event-leaves-the-opponent-in-the-room",
+      "text": "The tie ends the combat phase, not the encounter: unless the row took the opponent away, it is still standing in the room and can be faced again.",
+      "title": "An Unexpected Event stops the fight, it does not remove the foe",
+      "says": "\"After an Unexpected Event, you are no longer in the combat phase\"",
+      "silent": "what became of the opponent once the phase ended",
+      "source": "estate-inventory.md, I-30",
+      "reversed": "every tie would delete the foe, and a fight could be ended by drawing level with it"
+    },
+    {
+      "id": "note.combat.injury-marks-two-off-the-next-attack-strength",
+      "cite": "I-30",
+      "ref": "combat.injury-marks-two-off-the-next-attack-strength",
+      "text": "Rows 3 and 11 mark the injured side: their next Attack Strength is 2 lower, the same number the book charges for a blow suffered outside a round.",
+      "title": "An injury costs 2 off the next Attack Strength",
+      "says": "\"Injury or loss of weapon\", and no number",
+      "silent": "what an injury does to the numbers",
+      "source": "estate-inventory.md, I-30",
+      "reversed": "the row would be narration and the injured side would fight on unhurt"
+    },
+    {
       "id": "note.combat.minions-on-a-d6",
       "cite": "I-33",
       "ref": "combat.minions-on-a-d6",

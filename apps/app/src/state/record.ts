@@ -79,6 +79,11 @@ export const newRecord = (dice: DiceSource): RecordState => ({
   // The book's first area: the Flat-top mountain (5T a1, `startArea`).
   cave: beginAdventure(theFiveTreasures),
   pending: [],
+  // A tie leaves a foe standing in the room, not in the encounter
+  // (R32, I-30); both marks it can leave start clear.
+  standing: [],
+  marked: null,
+  weaponLost: false,
   sheet: sheetFor(PRESET_ID)(dice),
   result: null,
   roll: null,

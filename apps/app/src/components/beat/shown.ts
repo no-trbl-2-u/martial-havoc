@@ -182,6 +182,28 @@ const book = (r: Result, sheet: RecordState['sheet']): Omit<ShownResult, 'narrat
         cite: t('ui.cave.loot.cite'),
         passage: null,
       }
+    case 'flee':
+      // The one result whose numbers are both losses, so both are said
+      // out loud: the last blow on the `against` line, the Dishonor
+      // Point under it. A stratagem that cost neither says that instead
+      // of printing two zeroes (I-32).
+      return {
+        title: fill(t('ui.result.flee.title'), { name: r.foe.toUpperCase() }),
+        label: 'rule',
+        pill: t('ui.result.flee.cite'),
+        a: null,
+        b: null,
+        total:
+          r.dishonor === 0
+            ? t('ui.result.flee.clean')
+            : fill(t('ui.result.flee.dishonor'), { n: r.dishonor }),
+        against: fill(t('ui.result.flee.against'), {
+          damage: r.damage,
+          endurance: r.endurance,
+        }),
+        cite: t('ui.result.flee.cite'),
+        passage: null,
+      }
     case 'note':
       return {
         title: r.title,

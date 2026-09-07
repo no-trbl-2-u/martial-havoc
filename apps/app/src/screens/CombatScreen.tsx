@@ -6,6 +6,7 @@
  */
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { effectFor, t, techniqueById, treasureFoeById } from '@martial-havoc/content'
+import { aftermath, eventReading } from '@martial-havoc/engine'
 import type { AttackStrength } from '@martial-havoc/engine'
 import { fill } from '../lib/fill'
 import { momentOfFightEnd, narrate } from '../lib/narrator'
@@ -43,7 +44,35 @@ const Side = ({ title, strength, idle, prefix }: { title: string; strength: Atta
   </Slip>
 )
 
+/**
+ * A body on the floor: the foe's, or the Master's (R26, R06).
+ *
+ * The phase before this one ended a fight by simply changing the menu -
+ * the loot row appeared and the foe's ENDURANCE read zero, and a player
+ * who was reading the dice rather than the numbers never saw the moment
+ * happen. The slip is the moment: who fell, and how.
+ */
+const FallenSlip = ({ title, how, text }: { title: string; how: string; text?: string }) => (
+  <Slip borderColor={color.ink} testID="fallen">
+    <View style={styles.eventHead}>
+      <Text style={styles.eventTitle}>{title}</Text>
+      <Source cite={t('ui.combat.fallen.cite')} />
+    </View>
+    <View style={styles.eventBody}>
+      <Text testID="fallen-how" style={styles.eventText}>{how}</Text>
+      {text === undefined ? null : <Text style={styles.eventLine}>{text}</Text>}
+    </View>
+  </Slip>
+)
+
 type Act = { id: string; title: string; cite: string; line: string; enabled: boolean; action: Action }
+
+/** Did the tie land on a row that says the fight resumes (R32, rows 6 and 8)? */
+const resumes = (c: Combat): boolean => {
+  if (c.event === null) return false
+  const reading = eventReading(c.event.roll.total)
+  return reading !== undefined && aftermath(reading).resumes
+}
 
 /** The menu for the fight's current state: R25's four when ahead, else what the phase allows. */
 const actions = (state: RecordState, c: Combat): readonly Act[] => {
@@ -58,6 +87,10 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
     ]
   if (c.event !== null) {
     const rows: Act[] = []
+    // Rows 6 and 8 say what happens, so the row that acts on them comes
+    // first: the fight is not over, whatever `endsFight` reported.
+    if (resumes(c))
+      rows.push({ id: 'resume', title: t('ui.combat.act.resume'), cite: t('ui.combat.act.resume.cite'), line: t('ui.combat.act.resume.line'), enabled: true, action: { type: 'combat.resume' } })
     if (c.event.retreatRow)
       rows.push({ id: 'morale', title: t('ui.combat.act.morale'), cite: t('ui.combat.act.morale.cite'), line: t('ui.combat.act.morale.line'), enabled: c.morale === null, action: { type: 'combat.morale' } })
     rows.push({ id: 'leave-phase', title: t('ui.combat.act.leave-phase'), cite: t('ui.combat.act.leave-phase.cite'), line: t('ui.combat.act.leave-phase.line'), enabled: true, action: { type: 'combat.leave' } })
@@ -89,6 +122,9 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
 
 const banner = (state: RecordState, c: Combat): { label: string; value: string; bg: string } => {
   if (c.over.ended && c.over.reason === 'master-down') return { label: t('ui.combat.banner.down'), value: '0', bg: color.ink }
+  // Before anything has been rolled, an ambush says whose round this is
+  // rather than inviting one (I-08a).
+  if (c.ambush && c.last === null) return { label: t('ui.combat.banner.ambush'), value: '-', bg: color.vermilion }
   const r = c.last
   if (r === null) return { label: t('ui.combat.banner.roll'), value: '-', bg: color.ink }
   if (r.difference > 0) return { label: t('ui.combat.banner.ahead'), value: String(r.difference), bg: color.vermilion }
@@ -133,6 +169,44 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
       </View>
 
       <ScrollView style={styles.body} contentContainerStyle={styles.bodyContent}>
+        {/*
+          The three things that can be true before the round is rolled,
+          each said once: whose round this is, and the two marks a tie
+          can leave on the next Attack Strength (I-08a, I-30).
+        */}
+        {c.ambush && c.last === null ? (
+          <Slip dashed style={styles.pad} testID="ambush">
+            <Text style={styles.small}>{t('ui.combat.ambush.note')}</Text>
+            <Source cite={t('ui.combat.ambush.cite')} />
+          </Slip>
+        ) : null}
+        {state.marked === null ? null : (
+          <Slip dashed style={styles.pad} testID="marked">
+            <Text style={styles.small}>
+              {fill(t('ui.combat.marked'), { who: t(`ui.combat.marked.${state.marked}`) })}
+            </Text>
+          </Slip>
+        )}
+        {state.weaponLost ? (
+          <Slip dashed style={styles.pad} testID="weapon-lost">
+            <Text style={styles.small}>{t('ui.combat.weapon-lost')}</Text>
+          </Slip>
+        ) : null}
+        {c.over.ended && c.over.reason === 'master-down' ? (
+          <FallenSlip
+            title={t('ui.combat.fallen.master')}
+            how={t('ui.combat.fallen.master.text')}
+          />
+        ) : c.foeEndurance === 0 ? (
+          <FallenSlip
+            title={fill(t('ui.combat.fallen.foe'), { name: foe.name.toUpperCase() })}
+            how={
+              c.blow?.landed === true
+                ? t('ui.combat.fallen.blow')
+                : fill(t('ui.combat.fallen.difference'), { n: c.felledBy ?? c.last?.difference ?? 0 })
+            }
+          />
+        ) : null}
         {c.event === null ? null : (
           <Slip borderColor={color.vermilion} testID="event">
             <View style={styles.eventHead}>
@@ -153,6 +227,24 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
               <Text style={styles.mono}>{fill(t('ui.combat.morale.die'), { n: c.morale.face })}</Text>
             </View>
             <Source cite={t('ui.combat.morale.cite')} />
+          </Slip>
+        )}
+        {c.deity === null ? null : (
+          <Slip dashed borderColor={color.vermilion} style={styles.pad} testID="deity">
+            <Text style={styles.strong}>
+              {fill(t('ui.combat.deity'), { name: c.deity.name, action: c.deity.action, object: c.deity.object })}
+            </Text>
+            <Text style={styles.small}>{t('ui.combat.deity.note')}</Text>
+            <Source cite={t('ui.combat.deity.cite')} />
+          </Slip>
+        )}
+        {c.minions === null ? null : (
+          <Slip dashed borderColor={color.vermilion} style={styles.pad} testID="minions">
+            <View style={styles.between}>
+              <Text style={styles.strong}>{fill(t('ui.combat.minions'), { n: c.minions.count })}</Text>
+              <Text style={styles.mono}>{fill(t('ui.combat.morale.die'), { n: c.minions.face })}</Text>
+            </View>
+            <Source cite={t('ui.combat.minions.cite')} />
           </Slip>
         )}
         {c.blow === null ? null : (

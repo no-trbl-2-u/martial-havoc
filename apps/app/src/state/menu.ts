@@ -118,6 +118,21 @@ export const menuFor = (state: RecordState): readonly BeatOption[] => {
     })
   })
 
+  // A foe an Unexpected Event left in the room (R32, I-30). It is
+  // offered under its own row, after the encounter's own foes and before
+  // the doors, and - unlike a pending foe - it holds nothing shut: the
+  // fight ended, so the Master may walk away instead.
+  state.standing.forEach((foe, i) => {
+    rows.push({
+      id: `again-${foe}-${i}`,
+      title: fill(t('ui.cave.again'), { name: foeName(foe).toUpperCase() }),
+      note: t('ui.cave.again.note'),
+      line: foeLine(foe),
+      enabled: !engaged,
+      action: { kind: 'fight', foe },
+    })
+  })
+
   here.exits.forEach((to) => {
     const passage = canEnter(TABLES, state.cave, to)
     const name = theFiveTreasuresAreaById(to)?.name ?? to

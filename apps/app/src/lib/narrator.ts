@@ -118,6 +118,11 @@ export const momentOf = (result: Result): string | null => {
       if (result.treasure !== null) return 'loot.treasure'
       if (result.key) return 'loot.key'
       return 'loot.item'
+    case 'flee':
+      // The moment already existed for the combat screen's own use; a
+      // fled fight now reaches the beat as a result, and it is the same
+      // moment heard from the room the Master ran into.
+      return 'flee'
     case 'note':
       // A note is already the app speaking in its own words. He does not
       // say the same thing twice (VOICE.md, "What he may not say").

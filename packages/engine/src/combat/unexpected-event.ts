@@ -149,3 +149,82 @@ export const minions = (dice: DiceSource): { readonly face: Die; readonly count:
  * the injury branch rolls.
  */
 export const injuryDamage = (dice: DiceSource): Die => d6(dice)
+
+/**
+ * What a marked side loses off its next Attack Strength (I-30).
+ *
+ * Row 3 and row 11 print "Injury or loss of weapon" and stop there. The
+ * injury half needs a number and the book gives none, so this build
+ * takes the one number the book already uses for a blow suffered
+ * outside a round - R38's last blow of 2 - rather than inventing a
+ * second scale. Labelled `reading`, cited I-30, and reopenable: raising
+ * or lowering it changes this constant and nothing else.
+ *
+ * It is a penalty on the *next round's* Attack Strength, not damage:
+ * the row says the side is hurt, not that it has lost ENDURANCE, and
+ * `injuryDamage` above is the other half of I-30 for an operator who
+ * reads the row as damage instead. Only one of the two is applied.
+ */
+export const INJURY_PENALTY = 2
+
+/** How the marked side was marked (row 3, row 11). */
+export type InjuryMark = 'injury' | 'weapon-loss'
+
+/**
+ * What the room looks like once the Unexpected Event has been resolved.
+ *
+ * R32 ends the combat phase whatever the row said, but it does not say
+ * what became of the opponent - and the difference matters to every
+ * screen downstream: an opponent that is still in the room can be faced
+ * again, and one that left cannot. I-30 is the reading; this function
+ * is the whole of it in one place, so no caller has to re-derive which
+ * of the eleven rows removes a foe.
+ *
+ * `morale` is supplied only for the retreat rows (4 and 10), which are
+ * the only rows whose outcome is itself a roll. Passing it for any
+ * other row is ignored rather than an error: refusing to answer is a
+ * flag, never an exception (spec.md, Refusals).
+ */
+export type Aftermath = {
+  /** Rows 6 and 8: the round loop continues with the same opponent. */
+  readonly resumes: boolean
+  /** The opponent is still in the room and may be faced again. */
+  readonly opponentStays: boolean
+  /** Rows 3 and 11: who carries {@link INJURY_PENALTY} into the next round. */
+  readonly marked: 'master' | 'opponent' | null
+  /** Row 7: Minions join, counted by {@link minions}. */
+  readonly reinforcements: boolean
+  /** Rows 2 and 12: roll the Table of Deities and print its three words. */
+  readonly deity: boolean
+}
+
+/**
+ * I-30's reading of what each row leaves behind, as a total function.
+ *
+ * The default is that the opponent stays: R32 stops the phase, it does
+ * not remove anyone from the room, so a row that says nothing about the
+ * opponent leaves it standing where it was. Only two rows take it away
+ * - the retreat rows, and only when Morale says flee or a cautious
+ * retreat; a rally leaves it there with company.
+ */
+export const aftermath = (reading: EventReading, morale?: Morale): Aftermath => {
+  const base = { resumes: false, opponentStays: true, marked: null, reinforcements: false, deity: false } as const
+  switch (reading.kind) {
+    case 'fight-resumes':
+      return { ...base, resumes: true }
+    case 'retreat':
+      return {
+        ...base,
+        opponentStays: morale?.result === 'rally',
+        reinforcements: morale?.result === 'rally',
+      }
+    case 'reinforcements':
+      return { ...base, reinforcements: true }
+    case 'injury-or-weapon-loss':
+      return { ...base, marked: reading.target }
+    case 'divine-intervention':
+      return { ...base, deity: true }
+    case 'environmental-change':
+      return base
+  }
+}

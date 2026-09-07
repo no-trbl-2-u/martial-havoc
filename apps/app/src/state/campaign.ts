@@ -125,6 +125,11 @@ export const fromCampaign = (record: CampaignRecord, session: RecordState): Reco
         : session.screen,
     cave,
     pending: [],
+    // A tie leaves a foe standing in the room, not in the encounter
+    // (R32, I-30); both marks it can leave start clear.
+    standing: [],
+    marked: null,
+    weaponLost: false,
     roll: null,
     sheet: {
       ...session.sheet,

@@ -15,19 +15,25 @@
  * injected source: the player rolls their own dice, not the foe's.
  */
 import {
+  INJURY_PENALTY,
+  aftermath,
   attackRescue,
   actFor,
   attackStrength,
   behaviours,
   buy,
   endsFight,
+  d6,
   escape,
+  eventReading,
   finalBlow,
   flag,
+  fromSequence,
   fromSilver,
   importJson,
   learnFrom,
   lootFrom,
+  minions,
   morale,
   nightsRest,
   placeRunning,
@@ -47,12 +53,13 @@ import {
   withArea,
   withFlag,
 } from '@martial-havoc/engine'
-import type { DiceSource } from '@martial-havoc/engine'
+import type { AttackStrength, DiceSource } from '@martial-havoc/engine'
 import {
   INCENSE_ID,
   isMomentumDoor,
   effectFor,
   market,
+  rollDeity,
   rollUnexpectedEvent,
   t,
   theFiveTreasures,
@@ -415,13 +422,27 @@ const doGourd = (state: RecordState): RecordState => {
   )
 }
 
-/** Face one of the foes the Event brought. */
+/**
+ * Face a foe: one the Event brought (`pending`), or one an Unexpected
+ * Event left standing in the room (`standing`, I-30).
+ *
+ * The two lists are faced the same way and differ only in what they do
+ * to the exits, which is `menu.ts`'s business, not this one's.
+ */
 const doFight = (state: RecordState, foe: string): RecordState => {
   const opponent = treasureFoeById(foe)
-  return opponent === undefined || !state.pending.includes(foe) ? state : startFight(state, opponent)
+  const here = state.pending.includes(foe) || state.standing.includes(foe)
+  if (opponent === undefined || !here) return state
+  // An Ambush gives the opponent one unopposed opening round (I-08a,
+  // already a labelled behaviour of the progression folder). Only the
+  // Event that *brought* the foe ambushes: a foe faced again after a
+  // tie is simply standing there, and the second fight opens normally.
+  const ambush =
+    state.pending.includes(foe) && state.result?.kind === 'turn' && state.result.event === 'ambush'
+  return startFight(state, opponent, ambush)
 }
 
-const startFight = (state: RecordState, foe: Opponent): RecordState => ({
+const startFight = (state: RecordState, foe: Opponent, ambush = false): RecordState => ({
   ...state,
   screen: 'combat',
   result: null,
@@ -430,11 +451,15 @@ const startFight = (state: RecordState, foe: Opponent): RecordState => ({
     foeId: foe.id,
     foeEndurance: foe.endurance,
     round: 1,
+    ambush,
     last: null,
     event: null,
     morale: null,
+    deity: null,
+    minions: null,
     opening: false,
     blow: null,
+    felledBy: null,
     techniqueLine: null,
     looted: false,
     over: { ended: false },
@@ -443,50 +468,134 @@ const startFight = (state: RecordState, foe: Opponent): RecordState => ({
 
 // --------------------------------------------------------------- the fight
 
+/**
+ * The Master's Attack Strength for this round, with the two marks an
+ * Unexpected Event can leave on it (I-30).
+ *
+ * - `weaponLost` (row 3): no Proficiency adds. The engine picks exactly
+ *   one Proficiency per round (R23, D10), and with the weapon gone the
+ *   one it would pick is the one that cannot add (R68); CHANGE OR
+ *   RECOVER A WEAPON, the option the book prints for exactly this, is
+ *   what puts it back.
+ * - `marked` (rows 3 and 11): 2 off the total, once.
+ *
+ * An Ambush is the third case and not a mark: the opening round is the
+ * opponent's alone, and the Master meets it with SKILL and the dice and
+ * nothing else (I-08a).
+ */
+const masterStrength = (
+  state: RecordState,
+  source: DiceSource,
+  bare: boolean,
+): AttackStrength => {
+  const rolled = attackStrength({
+    skill: state.sheet.skill,
+    proficiencies: bare || state.weaponLost ? [] : state.sheet.proficiencies,
+  })(source)
+  return state.marked === 'master'
+    ? { ...rolled, total: rolled.total - INJURY_PENALTY }
+    : rolled
+}
+
+/** The opponent's, with its own half of the same mark. */
+const opponentStrength = (
+  state: RecordState,
+  foe: Opponent,
+  dice: DiceSource,
+): AttackStrength => {
+  const rolled = attackStrength({ skill: foe.skill, proficiencies: foe.proficiencies })(dice)
+  return state.marked === 'opponent'
+    ? { ...rolled, total: rolled.total - INJURY_PENALTY }
+    : rolled
+}
+
+/**
+ * The Unexpected Event a tie produced, resolved as far as the table
+ * itself goes: the row, its authored line, and the rolls the row calls
+ * for - the Deities table on 2 and 12, the Minions d6 on 7 (I-30, I-33).
+ *
+ * Morale stays a separate action: it is the one roll the screen offers
+ * as a row of its own, because the player watches it decide whether the
+ * fight is over.
+ */
+const resolveEvent = (dice: DiceSource): Pick<Combat, 'event' | 'deity' | 'minions'> => {
+  const roll = unexpectedEvent(dice)
+  const row = rollUnexpectedEvent(roll.total)
+  const reading = eventReading(roll.total)
+  const after = reading === undefined ? undefined : aftermath(reading)
+  // The Table of Deities is read as two dice: the band, then the row
+  // (MH p.28-29). Both come off the table's own source, like the event.
+  const deity = after?.deity === true ? rollDeity(d6(dice), d6(dice)) : undefined
+  return {
+    event: {
+      roll,
+      text: row?.text ?? '',
+      line: row === undefined ? '' : (unexpectedEventLineFor(row.id)?.line ?? ''),
+      retreatRow: row?.retreatRow === true,
+    },
+    deity:
+      deity === undefined
+        ? null
+        : { name: deity.name, action: deity.action, object: deity.object },
+    // Row 7's Minions arrive with the row; a rally's arrive with the
+    // Morale roll, which has not happened yet.
+    minions: after?.reinforcements === true && after.opponentStays ? minions(dice) : null,
+  }
+}
+
 const doRound = (state: RecordState, dice: DiceSource): RecordState => {
   const c = state.combat
   const foe = c === null ? undefined : treasureFoeById(c.foeId)
   if (c === null || foe === undefined || c.over.ended || c.last !== null) return state
   const { source, manual } = masterDice(state, dice)
-  const master = attackStrength({
-    skill: state.sheet.skill,
-    proficiencies: state.sheet.proficiencies,
-  })(source)
-  const opponent = attackStrength({ skill: foe.skill, proficiencies: foe.proficiencies })(dice)
+  const master = masterStrength(state, source, c.ambush)
+  const opponent = opponentStrength(state, foe, dice)
   const outcome = resolveRound(master, opponent)
+  // The ambush round is theirs: the Master takes the difference if they
+  // lose it and is offered nothing if they win, because a round they did
+  // not get to make is not a round they can spend an option on (I-08a).
   const hit = outcome.kind === 'master-hit' ? outcome.damage : 0
   const next = withSheet(state, { endurance: floor(state.sheet.endurance - hit) })
-  const event =
-    outcome.kind === 'unexpected-event'
-      ? (() => {
-          const roll = unexpectedEvent(dice)
-          const row = rollUnexpectedEvent(roll.total)
-          return {
-            roll,
-            text: row?.text ?? '',
-            line: row === undefined ? '' : (unexpectedEventLineFor(row.id)?.line ?? ''),
-            retreatRow: row?.retreatRow === true,
-          }
-        })()
-      : null
+  const tie = outcome.kind === 'unexpected-event'
+  const resolved = tie ? resolveEvent(dice) : { event: null, deity: null, minions: null }
   const combat: Combat = {
     ...c,
     round: c.round + 1,
+    ambush: false,
     last: {
       master,
       opponent,
       outcome: outcome.kind,
       difference: master.total - opponent.total,
     },
-    event,
+    ...resolved,
     morale: null,
     blow: null,
     techniqueLine: null,
   }
+  // The mark is spent by the round it marked, whoever carried it, and
+  // an ambush round on the Master's side clears its own flag above.
   return afterMasterRoll(
-    { ...next, combat: { ...combat, over: fightEnd(next, combat) } },
+    { ...next, marked: null, combat: { ...combat, over: fightEnd(next, combat) } },
     manual,
   )
+}
+
+/**
+ * Rows 6 and 8: back into the round loop (R32).
+ *
+ * The row is the one place the book resolves its own event, so this is
+ * the one row that does not end the encounter: the event is cleared,
+ * the foe keeps its ENDURANCE, and `endsFight` stops reporting a
+ * finished fight because the reason it reported has gone.
+ */
+const doResume = (state: RecordState): RecordState => {
+  const c = state.combat
+  if (c === null || c.event === null) return state
+  const reading = eventReading(c.event.roll.total)
+  if (reading === undefined || !aftermath(reading).resumes) return state
+  const combat: Combat = { ...c, event: null, deity: null, minions: null, morale: null, last: null }
+  return { ...state, combat: { ...combat, over: fightEnd(state, combat) } }
 }
 
 /** The winner's option (a): the difference off the foe's ENDURANCE (R25a). */
@@ -495,7 +604,14 @@ const doStrike = (state: RecordState): RecordState => {
   if (c === null || c.last === null || c.last.outcome !== 'master-wins') return state
   const foe = treasureFoeById(c.foeId)
   const foeEndurance = floor(c.foeEndurance - c.last.difference)
-  const combat: Combat = { ...c, foeEndurance, last: null, opening: false }
+  const combat: Combat = {
+    ...c,
+    foeEndurance,
+    // Written down before `last` goes, so the slip can say what killed it.
+    felledBy: foeEndurance === 0 ? c.last.difference : c.felledBy,
+    last: null,
+    opening: false,
+  }
   const next = { ...state, combat: { ...combat, over: fightEnd(state, combat) } }
   return foeEndurance === 0 && foe !== undefined
     ? addDeed(next, fill(t('ui.deed.killed'), { name: foe.name.toLowerCase() }))
@@ -549,11 +665,24 @@ const doBlow = (state: RecordState, dice: DiceSource): RecordState => {
   )
 }
 
-/** Morale on a retreat row (spec.md, sealed): the foe's roll, so the table's dice. */
+/**
+ * Morale on a retreat row (spec.md, sealed): the foe's roll, so the
+ * table's dice.
+ *
+ * A rally brings company, and the die Morale already drew for it is the
+ * same d6 the Minions rule reads (R33, I-33) - so it is replayed through
+ * `minions` rather than counted here, which would be this file keeping a
+ * rule of its own.
+ */
 const doMorale = (state: RecordState, dice: DiceSource): RecordState => {
   const c = state.combat
   if (c === null || c.event === null || !c.event.retreatRow || c.morale !== null) return state
-  return withCombat(state, { morale: morale(dice) })
+  const rolled = morale(dice)
+  return withCombat(state, {
+    morale: rolled,
+    minions:
+      rolled.result === 'rally' ? minions(fromSequence([rolled.reinforcements])) : c.minions,
+  })
 }
 
 /** After a victory: the foe's LOOT line (5T a2), read once. */
@@ -564,8 +693,43 @@ const doLoot = (state: RecordState, dice: DiceSource): RecordState => {
 }
 
 /**
+ * What an Unexpected Event left in the room (R32, I-30).
+ *
+ * The engine's `aftermath` decides; this reads its answer onto the two
+ * lists the beat keeps. A foe that stays goes to `standing` rather than
+ * `pending`, because the encounter is over even though the foe is not:
+ * the exits open, and FACE IT AGAIN is offered beside them.
+ */
+const afterEvent = (
+  state: RecordState,
+  c: Combat,
+  foe: Opponent,
+): Pick<RecordState, 'pending' | 'standing' | 'marked' | 'weaponLost'> => {
+  const reading = c.event === null ? undefined : eventReading(c.event.roll.total)
+  const after = reading === undefined ? undefined : aftermath(reading, c.morale ?? undefined)
+  const stays = after?.opponentStays === true
+  // Row 7's Minions, and a rally's, are the same kind of arrival: they
+  // join the encounter, which is what `pending` is.
+  const joined: readonly string[] =
+    c.minions === null ? [] : Array.from({ length: c.minions.count }, () => foe.id)
+  return {
+    // The foe fought leaves `pending` either way - it is standing, or it
+    // is gone - and whatever else the Event brought is still waiting.
+    pending: [...withoutFirst(state.pending, foe.id), ...joined],
+    standing: stays ? [...withoutFirst(state.standing, foe.id), foe.id] : withoutFirst(state.standing, foe.id),
+    // Row 3 is the Master's: the injury is a mark on the next round, and
+    // the operator's other half of I-30 (a lost weapon) is taken when the
+    // row named the Master, because the Master is the side that carries a
+    // weapon Proficiency this build can suspend.
+    marked: after?.marked ?? null,
+    weaponLost: state.weaponLost || (after?.marked === 'master' && c.event?.roll.total === 3),
+  }
+}
+
+/**
  * Leaving the fight. Won, or ended by an Unexpected Event: back to the
- * beat. Fled with the foe standing: the last blow and a Dishonor Point
+ * beat, with whatever the event left behind. Fled with the foe
+ * standing: the last blow, a Dishonor Point and a slip that says so
  * (R38, R39, I-32). Master down: the world dies with the Master and a
  * new record begins (spec.md, Horizon).
  */
@@ -578,21 +742,41 @@ const doLeave = (state: RecordState, dice: DiceSource): RecordState => {
   // from every table it appears in (I-33b, I-33c). Fleeing leaves the
   // encounter behind: the rest of it does not follow.
   const beaten = c.foeEndurance === 0
-  const remaining = beaten ? withoutFirst(state.pending, foe.id) : []
   const cave =
     beaten && !RANK_AND_FILE.includes(foe.id)
       ? // A named foe beaten is also a source the treasures may name
         // (I-41): what the Old Vixen knew is on her body either way.
         learntInto(resolveEncounter(state.cave, [foe.id]), foe.id)
       : state.cave
-  const back: RecordState = { ...state, screen: 'beat', combat: null, cave, pending: remaining }
+  const back: RecordState = {
+    ...state,
+    screen: 'beat',
+    combat: null,
+    cave,
+    pending: beaten ? withoutFirst(state.pending, foe.id) : [],
+    standing: withoutFirst(state.standing, foe.id),
+  }
+  if (c.over.ended && c.over.reason === 'unexpected-event')
+    return { ...back, ...afterEvent(state, c, foe) }
   if (c.over.ended) return back
   const fled = escape({ endurance: state.sheet.endurance })
   return addDeed(
-    withSheet(back, {
-      endurance: floor(fled.endurance),
-      dishonor: state.sheet.dishonor + fled.dishonor,
-    }),
+    withSheet(
+      {
+        ...back,
+        result: {
+          kind: 'flee',
+          foe: foe.name,
+          damage: fled.damage,
+          dishonor: fled.dishonor,
+          endurance: floor(fled.endurance),
+        },
+      },
+      {
+        endurance: floor(fled.endurance),
+        dishonor: state.sheet.dishonor + fled.dishonor,
+      },
+    ),
     fill(t('ui.deed.fled'), { name: foe.name.toLowerCase() }),
   )
 }
@@ -862,13 +1046,20 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
     case 'combat.technique':
       return doTechnique(state, action.id)
     case 'combat.weapon':
-      return state.combat?.last?.outcome === 'master-wins' ? withCombat(state, { last: null }) : state
+      // R25c is also how a weapon lost to row 3 comes back (I-30): the
+      // book already prints the option for exactly this, so the phase
+      // needs no row of its own.
+      return state.combat?.last?.outcome === 'master-wins'
+        ? withCombat({ ...state, weaponLost: false }, { last: null })
+        : state
     case 'combat.opening':
       return doOpening(state)
     case 'combat.blow':
       return doBlow(state, dice)
     case 'combat.morale':
       return doMorale(state, dice)
+    case 'combat.resume':
+      return doResume(state)
     case 'combat.loot':
       return doLoot(state, dice)
     case 'combat.leave':

@@ -76,13 +76,21 @@ export type { FightEnd, FightState, RoundOutcome, WinnerOption } from './combat/
 export { finalBlow, namingRoll, newTechnique } from './combat/final-blow'
 export type { FinalBlowInput, FinalBlowRoll, NamingRoll, NewTechnique } from './combat/final-blow'
 export {
+  INJURY_PENALTY,
+  aftermath,
   eventReading,
   injuryDamage,
   minions,
   morale,
   unexpectedEvent,
 } from './combat/unexpected-event'
-export type { EventReading, Morale, UnexpectedEventRoll } from './combat/unexpected-event'
+export type {
+  Aftermath,
+  EventReading,
+  InjuryMark,
+  Morale,
+  UnexpectedEventRoll,
+} from './combat/unexpected-event'
 
 // Multiple combat: several opponents at once (MH p.30).
 export { areaDamage, attackersThisRound, roundAgainstMany, skillForFight } from './multiple/multiple'
