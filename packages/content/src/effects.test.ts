@@ -102,6 +102,9 @@ describe('effect records (MH p.12-19; A23)', () => {
   })
 
   it('names an engine operation only where one exists, and null otherwise', () => {
+    // Shape only. That the string resolves to an export that actually
+    // exists is `packages/engine/src/operations.test.ts` - this package
+    // may not import the engine, so it cannot check it here.
     for (const e of effects) {
       if (e.operation === null) continue
       expect(e.operation, e.id).toMatch(/^[a-z]+\.[a-zA-Z]+$/)

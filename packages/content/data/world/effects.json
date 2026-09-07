@@ -6,7 +6,7 @@
   "cite": "MH p.12-19; A23",
   "label": "invention",
   "docs": "docs/rules/readings/techniques-rituals-items.md",
-  "$comment": "Reading A23 is the estate's one row with no defensible inference: all 72 Technique and Ritual effects are prose without numbers, and 'each Technique needs a hand-authored effect record'. This file is those records. The printed effect text is NOT here - it stays verbatim in techniques.json and rituals.json, and each record points at it by ref. class is A23's own five-way classification; timing follows R14, R25 and I-23 for Techniques and I-24 for Rituals; operation names an engine call where the class implies one and is null where the effect is narrative. Every line is authored for this build, which is why the file's label is invention.",
+  "$comment": "Reading A23 is the estate's one row with no defensible inference: all 72 Technique and Ritual effects are prose without numbers, and 'each Technique needs a hand-authored effect record'. This file is those records. The printed effect text is NOT here - it stays verbatim in techniques.json and rituals.json, and each record points at it by ref. class is A23's own five-way classification; timing follows R14, R25 and I-23 for Techniques and I-24 for Rituals; operation names an engine call where the class implies one - as '<folder>.<export>' on the engine's public surface, which packages/engine/src/operations.test.ts resolves so a rename on that side is caught here - and is null where the effect is narrative. The oracle-like and summoning rituals are null for that reason and not by omission: the Oracle's 66 cells are content, R29's Opening is a state flag, and neither is a function the engine exports. Every line is authored for this build, which is why the file's label is invention.",
   "records": [
     {
       "id": "effect.technique.blue-dragon",
@@ -56,7 +56,7 @@
       "class": "combat-narrative",
       "cost": 2,
       "timing": "combat-winner-option",
-      "operation": "combat.opening",
+      "operation": "combat.finalBlow",
       "line": "You come down over their guard and they go to the floor, which is where a Final Blow starts."
     },
     {
@@ -117,7 +117,7 @@
       "class": "combat-narrative",
       "cost": 2,
       "timing": "combat-winner-option",
-      "operation": "combat.opening",
+      "operation": "combat.finalBlow",
       "line": "You take their legs out from under them, and what is left is not a stance."
     },
     {
@@ -248,7 +248,7 @@
       "class": "combat-narrative",
       "cost": 2,
       "timing": "combat-winner-option",
-      "operation": "combat.opening",
+      "operation": "combat.finalBlow",
       "line": "You go up under the taller one, and the height they were counting on puts them on the ground."
     },
     {
@@ -378,7 +378,7 @@
       "class": "oracle-like",
       "cost": 3,
       "timing": "preparation",
-      "operation": "oracle.consult",
+      "operation": null,
       "line": "You sit until the room offers two futures: one you would welcome, one you would not. Both are true."
     },
     {
@@ -408,7 +408,7 @@
       "class": "oracle-like",
       "cost": 2,
       "timing": "preparation",
-      "operation": "oracle.consult",
+      "operation": null,
       "line": "The lines fall, you read them, and the thing that has not happened yet acquires a shape."
     },
     {
@@ -468,7 +468,7 @@
       "class": "summoning",
       "cost": 4,
       "timing": "preparation",
-      "operation": "oracle.consult",
+      "operation": null,
       "line": "You call one of the dead back far enough to answer one question, and they answer the question you asked."
     },
     {
@@ -538,7 +538,7 @@
       "class": "oracle-like",
       "cost": 2,
       "timing": "preparation",
-      "operation": "oracle.consult",
+      "operation": null,
       "line": "Mid-conversation you know which sentence opens the door and which one closes it."
     },
     {
@@ -588,7 +588,7 @@
       "class": "oracle-like",
       "cost": 2,
       "timing": "preparation",
-      "operation": "oracle.consult",
+      "operation": null,
       "line": "A few words in, you know whether the words are true."
     },
     {
@@ -678,7 +678,7 @@
       "class": "oracle-like",
       "cost": 3,
       "timing": "preparation",
-      "operation": "oracle.consult",
+      "operation": null,
       "line": "You stop looking at the event and start looking at its opposite, which is where the detail was."
     },
     {
@@ -718,7 +718,7 @@
       "class": "oracle-like",
       "cost": 3,
       "timing": "preparation",
-      "operation": "oracle.consult",
+      "operation": null,
       "line": "You look at them long enough and their last life surfaces, and with it the thing this one is hiding."
     },
     {
