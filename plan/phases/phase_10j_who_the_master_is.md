@@ -3,8 +3,9 @@
 > Agent-facing brief, from the verdict of 2026-09-06. The player is
 > never told who they are, and the field the book gives them for their
 > own story (the passage field, "the story comes from your
-> imagination") is never invited to be used. `[needs-user-call]` on
-> the shape of a motive; the prompting ships regardless.
+> imagination") is never invited to be used. The call on the shape of
+> a motive was made by the operator on 2026-09-07: option 1, a hook
+> from the Adventures table. The prompting ships regardless.
 
 ## Outcome
 
@@ -22,7 +23,7 @@ and the record carries it.
 
 **Waits on:** 10a (the prompts are lines of ours), 10h (the
 chronicle).
-**Cost:** one week after the call.
+**Cost:** one week; the call is made.
 
 ## What the book gives
 
@@ -50,22 +51,23 @@ chronicle).
   ... then something happens." The book asks the player to imagine at
   the tie.
 
-## The call the operator must make
+## The call, made
 
-`[needs-user-call]` What a motive is in this app:
+**Called 2026-09-07 by the operator: option 1 — a hook from the
+Adventures table.** What a motive is in this app:
 
-1. **A hook from the Adventures table** (MH p.36–39), rolled or
+1. **A hook from the Adventures table** (MH p.36-39), rolled or
    chosen at creation, printed as the Master's own story, unrelated to
    the cave. The 5 Treasures is then an episode on the way to it.
-   (Recommended: it is the book's own tool and it costs one table
-   that is already in the content package.)
-2. **The premise alone.** No personal motive; the Call is enough.
-   Nothing to build.
-3. **A written one.** The player types a sentence at creation.
+   **This is the call.** It is the book's own tool and it costs one
+   table that is already in the content package.
+2. ~~**The premise alone.** No personal motive; the Call is enough.
+   Nothing to build.~~ Not taken.
+3. ~~**A written one.** The player types a sentence at creation.
    Cheapest to build; the verdict's experience says blank fields go
-   unfilled.
+   unfilled.~~ Not taken.
 
-## Scope (once called; option 1 assumed)
+## Scope (option 1, as called)
 
 - Creation step `who` gains WHY ARE YOU ON THE ROAD: ROLL on the
   Adventures table (d66) or CHOOSE from the thirty-six; the chosen
