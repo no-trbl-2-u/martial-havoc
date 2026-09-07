@@ -41,6 +41,10 @@ a room, never speaks to the Master. He speaks to the listener.
   Master has not earned). A rule, a number, or a citation. A choice
   the menu still offers, foreclosed or recommended. Anything about
   the player. Anything a line of the book already says, restated.
+  Any word of the table: "roll", "rolled", "dice", "check",
+  "result". The listener is in the story, not at the table
+  (operator, 2026-09-07: "maximize immersion"; sample 7 was
+  corrected for this).
 - **The Master's words.** He never puts words in the Master's mouth.
   If the player wrote a passage, he does not comment on it.
 - **Names.** He uses the book's printed names, as printed: "Senior
@@ -85,8 +89,8 @@ like one of them.
 6. *A flight.* "Lin Shu leaves with two of the Ogre's marks on her
    and one on her name. The cave will remember both."
 7. *A tie, an Unexpected Event.* "Two blades stop a finger apart and
-   hold there. Something is about to decide this that neither of
-   them has rolled."
+   hold there. Something neither of them brought is about to decide
+   this."
 8. *A treasure taken: the vase.* "It is lighter than it should be.
    Lin Shu does not say a name near it."
 9. *The rescue of the Monk.* "The man in the pool stops praying long

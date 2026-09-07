@@ -276,7 +276,11 @@ describe('R77: the incorporeal gate has data on both sides (I-29)', () => {
     )
     .flatMap((f) => f.parsed.records)
 
-  /** The names reading I-29 gives, confident ones only. */
+  /**
+   * The names reading I-29 gives: the eight confident ones, plus the
+   * two it marked doubtful (Bai Gu Jing, Jiangshi), tagged by the
+   * operator's call of 2026-09-07 after the book was found silent.
+   */
   const I29_NAMES: readonly string[] = [
     'Gui',
     'Ghost Pirate',
@@ -284,6 +288,8 @@ describe('R77: the incorporeal gate has data on both sides (I-29)', () => {
     'Tutelary Spirit',
     'Huli Jing',
     'Yogi',
+    'Bai Gu Jing',
+    'Jiangshi',
     'Dexterous Ghost',
     'Old Vixen',
   ]
