@@ -182,6 +182,22 @@ const book = (r: Result, sheet: RecordState['sheet']): Omit<ShownResult, 'narrat
         cite: t('ui.cave.loot.cite'),
         passage: null,
       }
+    case 'flee':
+      return {
+        title: fill(t('ui.result.flee.title'), { name: r.foe.toUpperCase() }),
+        // The escape's cost is the book's (R38: a last blow of 2); the
+        // Dishonor Point for not getting away clean is I-32's reading
+        // of a rule the book states for a different case, so the slip
+        // carries the reading's label rather than the rule's.
+        label: 'reading',
+        pill: citeOf('escape.stratagem-and-the-two-is-damage'),
+        a: null,
+        b: null,
+        total: `-${r.before - r.after}`,
+        against: fill(t('ui.result.flee.against'), { after: r.after, dishonor: r.dishonor }),
+        cite: t('ui.result.flee.cite'),
+        passage: null,
+      }
     case 'note':
       return {
         title: r.title,

@@ -1108,6 +1108,106 @@
       "cite": "spec.md, Horizon (the village)"
     },
     {
+      "id": "ui.result.flee.title",
+      "cite": "MH p.30 (R38, R39)",
+      "text": "FLED {name}"
+    },
+    {
+      "id": "ui.result.flee.against",
+      "cite": "MH p.30 (R38, R39)",
+      "text": "ENDURANCE {after} \u00b7 DISHONOR +{dishonor}"
+    },
+    {
+      "id": "ui.result.flee.cite",
+      "cite": "MH p.30; I-32",
+      "text": "MH p.30 \u00b7 a last blow of 2 on the way out (R38) \u00b7 a Dishonor Point for not getting away clean (I-32)"
+    },
+    {
+      "id": "ui.combat.fallen.foe",
+      "cite": "MH p.23 (R26)",
+      "text": "{name} FALLS"
+    },
+    {
+      "id": "ui.combat.fallen.master",
+      "cite": "MH p.6",
+      "text": "THE MASTER FALLS"
+    },
+    {
+      "id": "ui.combat.fallen.master.line",
+      "cite": "MH p.6",
+      "text": "If ENDURANCE reaches zero, the Master dies or becomes unconscious."
+    },
+    {
+      "id": "ui.combat.fallen.cite",
+      "cite": "MH p.23 (R26)",
+      "text": "MH p.23 \u00b7 the combat continues until an ENDURANCE reaches zero"
+    },
+    {
+      "id": "ui.combat.fallen.blow",
+      "cite": "MH p.25 (R30)",
+      "text": "THE BLOW LANDS"
+    },
+    {
+      "id": "ui.combat.fallen.difference",
+      "cite": "MH p.23 (R25a)",
+      "text": "{n} OFF ITS ENDURANCE"
+    },
+    {
+      "id": "ui.combat.ambush.banner",
+      "cite": "I-08a",
+      "text": "AMBUSH, THEIR ROUND"
+    },
+    {
+      "id": "ui.combat.ambush.note",
+      "cite": "I-08a",
+      "text": "Caught: SKILL and 2d6 with no Proficiency for this round alone."
+    },
+    {
+      "id": "ui.combat.resume",
+      "cite": "MH p.28 (R32)",
+      "text": "RESUME THE FIGHT"
+    },
+    {
+      "id": "ui.combat.resume.cite",
+      "cite": "MH p.28 (R32)",
+      "text": "MH p.28 \u00b7 the row says so"
+    },
+    {
+      "id": "ui.combat.resume.line",
+      "cite": "MH p.28 (R32)",
+      "text": "Back into the round, both sides as they stand."
+    },
+    {
+      "id": "ui.combat.event.injury",
+      "cite": "I-30",
+      "text": "INJURY {n} OFF {who}"
+    },
+    {
+      "id": "ui.combat.event.injury.master",
+      "cite": "I-30",
+      "text": "THE MASTER"
+    },
+    {
+      "id": "ui.combat.event.injury.opponent",
+      "cite": "I-30",
+      "text": "THE OPPONENT"
+    },
+    {
+      "id": "ui.combat.event.deity",
+      "cite": "MH p.29 (R34)",
+      "text": "{name} \u00b7 {action} \u00b7 {object}"
+    },
+    {
+      "id": "ui.combat.event.deity.cite",
+      "cite": "MH p.29 (R34)",
+      "text": "MH p.29 \u00b7 R34 \u00b7 the three words are the book's; what they mean here is the player's"
+    },
+    {
+      "id": "ui.combat.event.minions",
+      "cite": "MH p.28 (R33, I-33)",
+      "text": "{n} MORE, ON A {face}"
+    },
+    {
       "id": "ui.act.heading",
       "cite": "MH p.82 (R82)",
       "text": "ACT {n} OF {of}"

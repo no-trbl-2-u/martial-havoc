@@ -209,6 +209,137 @@ describe('the opening: the village as the Call (Phase 10b)', () => {
   })
 })
 
+describe('every way a fight ends is a moment (Phase 10d)', () => {
+  /** In the Attendants room, facing the Dexterous Ghost. */
+  const atGhost = (): RecordState =>
+    reduce(toGhost(), { type: 'cave.fight', foe: GHOST }, fromSequence([]))
+
+  /**
+   * The dice that tie a round: Master 3+4+12 = 19, Ghost 4+4+11 = 19.
+   * Everything after them is the Unexpected Event's own 2d6 and
+   * whatever reading I-30 makes of the row.
+   */
+  const TIE: readonly Die[] = [3, 4, 4, 4]
+
+  it('narrates a flight on the beat: the last blow, the Dishonor, the foe left behind', () => {
+    const before = atGhost()
+    const fled = reduce(before, { type: 'combat.leave' }, fromSequence([]))
+    expect(fled.screen).toBe('beat')
+    expect(fled.result?.kind).toBe('flee')
+    const r = fled.result as Extract<typeof fled.result, { kind: 'flee' }>
+    // R38: a last blow of 2. I-32: a Dishonor Point for not getting
+    // away clean.
+    expect(r.before - r.after).toBe(2)
+    expect(r.dishonor).toBe(1)
+    expect(r.foe).toBe('Dexterous Ghost')
+    expect(fled.sheet.endurance).toBe(before.sheet.endurance - 2)
+    expect(fled.sheet.dishonor).toBe(before.sheet.dishonor + 1)
+    // The encounter is left behind entirely: it does not follow (I-32).
+    expect(fled.pending).toEqual([])
+  })
+
+  it('gives an Ambush one unopposed round, then a fair one', () => {
+    // Event 1 is "Ambush!" at the Cave entrance; the second face is the
+    // area's creature. The first round is theirs: the Master rolls
+    // SKILL and 2d6 with no Proficiency at all (I-08a).
+    const ambushed = play(reduce(fresh(), { type: 'village.trail' }, fromSequence([])), [
+      [{ type: 'cave.go', to: AREA.entrance }, [1, 2]],
+      [{ type: 'roll.close' }, []],
+    ])
+    const turn = ambushed.result as Extract<typeof ambushed.result, { kind: 'turn' }>
+    expect(turn.event).toBe('ambush')
+    const foe = ambushed.pending[0] ?? ''
+    const fighting = reduce(ambushed, { type: 'cave.fight', foe }, fromSequence([]))
+    expect(fighting.combat?.ambush).toBe(true)
+
+    // The same four faces, with the ambush and without it: the Master's
+    // total is lower by exactly the Proficiency the reading takes away.
+    // The tail is spare - one of the two rounds ties on these faces and
+    // an Unexpected Event has its own dice to draw.
+    const spare: readonly Die[] = [3, 3, 3, 3, 1, 1, 1, 1]
+    const caught = reduce(fighting, { type: 'combat.round' }, fromSequence(spare))
+    const fair = reduce(
+      { ...fighting, combat: { ...fighting.combat, ambush: false } as NonNullable<RecordState['combat']> },
+      { type: 'combat.round' },
+      fromSequence(spare),
+    )
+    const caughtTotal = caught.combat?.last?.master.total ?? 0
+    const fairTotal = fair.combat?.last?.master.total ?? 0
+    expect(caughtTotal).toBeLessThan(fairTotal)
+    // And the ambush is spent: whatever that round was, the next is fair.
+    expect(caught.combat?.ambush).toBe(false)
+  })
+
+  it('puts the player back in the round on a row that says the fight resumes', () => {
+    // The tie, then an Unexpected Event of 3 and 3: total 6, "The fight
+    // resumes" (R32) - the one row whose printed text states its effect.
+    const tied = play(atGhost(), [[{ type: 'combat.round' }, [...TIE, 3, 3]]])
+    expect(tied.combat?.event?.roll.total).toBe(6)
+    expect(tied.combat?.event?.reading?.kind).toBe('fight-resumes')
+    const endurance = tied.combat?.foeEndurance
+    const resumed = reduce(tied, { type: 'combat.resume' }, fromSequence([]))
+    expect(resumed.combat?.event).toBeNull()
+    expect(resumed.combat?.over.ended).toBe(false)
+    expect(resumed.combat?.foeEndurance).toBe(endurance)
+    expect(resumed.screen).toBe('combat')
+  })
+
+  it('leaves the foe in the room after an environmental change', () => {
+    // 2 and 3: total 5. The fight is over; the room is not empty.
+    const tied = play(atGhost(), [[{ type: 'combat.round' }, [...TIE, 2, 3]]])
+    expect(tied.combat?.event?.reading?.kind).toBe('environmental-change')
+    const back = reduce(tied, { type: 'combat.leave' }, fromSequence([]))
+    expect(back.screen).toBe('beat')
+    expect(back.pending).toContain(GHOST)
+    expect(menuFor(back).some((o) => o.action.kind === 'fight')).toBe(true)
+  })
+
+  it('brings Minions into the room on row 7', () => {
+    // 3 and 4: total 7, Reinforcements. A minion die of 3 is two of
+    // them (I-33), and they are waiting when the Master steps back out.
+    const tied = play(atGhost(), [[{ type: 'combat.round' }, [...TIE, 3, 4, 3]]])
+    expect(tied.combat?.event?.reading?.kind).toBe('reinforcements')
+    expect(tied.combat?.event?.minions?.count).toBe(2)
+    const back = reduce(tied, { type: 'combat.leave' }, fromSequence([]))
+    // The Ghost that was fought, plus the two who arrived.
+    expect(back.pending.filter((id) => id === GHOST)).toHaveLength(3)
+  })
+
+  it("takes I-30's injury off whoever the row names, at once", () => {
+    // 1 and 2: total 3, injury or loss of weapon for the Master. I-30's
+    // floor is -1d6 ENDURANCE, and the next face is it.
+    const before = atGhost()
+    const hurt = reduce(before, { type: 'combat.round' }, fromSequence([...TIE, 1, 2, 4]))
+    expect(hurt.combat?.event?.injury).toEqual({ target: 'master', amount: 4 })
+    expect(hurt.sheet.endurance).toBe(before.sheet.endurance - 4)
+  })
+
+  it('rolls the Deities table on a divine intervention and prints its three words', () => {
+    // 1 and 1: total 2, adverse divine intervention. R34's banded
+    // d6 x d6 follows, and 1,1 is the Rakshasa.
+    const tied = play(atGhost(), [[{ type: 'combat.round' }, [...TIE, 1, 1, 1, 1]]])
+    expect(tied.combat?.event?.reading).toEqual({ kind: 'divine-intervention', favourable: false })
+    expect(tied.combat?.event?.deity).toEqual({
+      name: 'Rakshasa',
+      action: 'Protector',
+      object: 'Purity',
+    })
+  })
+
+  it('empties the room of a foe whose Morale broke, and fills it on a rally', () => {
+    // 2 and 2: total 4, a retreat row (sealed: spec.md).
+    const tied = play(atGhost(), [[{ type: 'combat.round' }, [...TIE, 2, 2]]])
+    expect(tied.combat?.event?.retreatRow).toBe(true)
+    // Morale 1 is flight: the Ghost is gone from the room.
+    const broke = reduce(tied, { type: 'combat.morale' }, fromSequence([1]))
+    expect(reduce(broke, { type: 'combat.leave' }, fromSequence([])).pending).not.toContain(GHOST)
+    // Morale 6 is a rally, and +1d6 more arrive beside it.
+    const rallied = reduce(tied, { type: 'combat.morale' }, fromSequence([6, 2]))
+    const after = reduce(rallied, { type: 'combat.leave' }, fromSequence([]))
+    expect(after.pending.filter((id) => id === GHOST)).toHaveLength(3)
+  })
+})
+
 describe('the act ladder (Phase 10c)', () => {
   /** Which acts the record has been told about. */
   const seen = (s: RecordState): readonly number[] => s.actsSeen
@@ -606,6 +737,7 @@ describe('the Old Vixen teaches the Cord\u2019s spells (I-41)', () => {
         opening: false,
         blow: null,
         techniqueLine: null,
+        ambush: false,
         looted: true,
         over: { ended: true, reason: 'final-blow' },
       },

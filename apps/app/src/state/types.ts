@@ -12,6 +12,7 @@ import type {
   AttackStrength,
   Die,
   EventKind,
+  EventReading,
   FightEnd,
   FinalBlowRoll,
   Label,
@@ -220,6 +221,26 @@ export type LootResult = {
   readonly hint: boolean
 }
 
+/**
+ * A fight left with the foe still standing (R38, R39, I-32).
+ *
+ * Escaping is not free: the book charges a last blow of 2 ENDURANCE and
+ * a Dishonor Point for failing to get away clean (MH p.30). Phase 10d
+ * gives that its own result kind rather than a bare deed, because
+ * running away is a beat of the story and the ledger is not where a
+ * player reads what just happened to them.
+ */
+export type FleeResult = {
+  readonly kind: 'flee'
+  /** The printed name of who was left behind. */
+  readonly foe: string
+  /** ENDURANCE before and after the last blow. */
+  readonly before: number
+  readonly after: number
+  /** Dishonor Points earned by the escape (I-32: always one). */
+  readonly dishonor: number
+}
+
 /** A line of feedback that is not a roll: a rescue, what the sheets taught. */
 export type NoteResult = {
   readonly kind: 'note'
@@ -245,7 +266,14 @@ export type VillageNote = {
 }
 
 /** What the result slip shows, when it shows anything. */
-export type Result = CheckResult | RestResult | TakeResult | TurnResult | LootResult | NoteResult
+export type Result =
+  | CheckResult
+  | RestResult
+  | TakeResult
+  | TurnResult
+  | LootResult
+  | FleeResult
+  | NoteResult
 
 /**
  * The roll card over the beat (design/roll-modal, reading A; the
@@ -269,12 +297,30 @@ export type RoundShown = {
   readonly difference: number
 }
 
-/** The Unexpected Event a tie produced (R32), with its row and line. */
+/**
+ * The Unexpected Event a tie produced (R32), with its row, its line and
+ * what reading I-30 made of it.
+ *
+ * Phase 10d gave the row its second half. The trigger was always
+ * mechanical and the resolution never was: nine of the eleven rows print
+ * no effect, and I-30 supplies the floor. `reading` is that floor,
+ * already applied where applying it costs nothing (an injury is rolled
+ * and taken at once) and offered as a row where it is a choice (the two
+ * "The fight resumes" rows).
+ */
 export type EventShown = {
   readonly roll: UnexpectedEventRoll
   readonly text: string
   readonly line: string
   readonly retreatRow: boolean
+  /** I-30's mechanical floor for this row, or null for a row outside 2-12. */
+  readonly reading: EventReading | null
+  /** The ENDURANCE an injury row cost, and to whom (I-30). */
+  readonly injury: { readonly target: 'master' | 'opponent'; readonly amount: number } | null
+  /** The Deity rows 2 and 12 rolled, in the book's three words (MH p.29, R34). */
+  readonly deity: { readonly name: string; readonly action: string; readonly object: string } | null
+  /** Minions row 7 brought (R33, I-33), joined to the room on leaving. */
+  readonly minions: { readonly face: number; readonly count: number } | null
 }
 
 /** A fight in progress or just finished. */
@@ -289,6 +335,15 @@ export type Combat = {
   readonly blow: FinalBlowRoll | null
   /** The authored line of the Technique last used, if one was. */
   readonly techniqueLine: string | null
+  /**
+   * The opponent's unopposed first round (I-08a; Phase 10d).
+   *
+   * True from the moment an Ambush starts the fight until that round
+   * has been rolled. While it holds, the Master's Attack Strength is
+   * built without Proficiencies and a round they lose offers no
+   * winner's option, because it was never their round.
+   */
+  readonly ambush: boolean
   /** The LOOT line has been read (once per victory). */
   readonly looted: boolean
   readonly over: FightEnd
@@ -412,6 +467,8 @@ export type Action =
   | { readonly type: 'combat.opening' }
   | { readonly type: 'combat.blow' }
   | { readonly type: 'combat.morale' }
+  /** Rows 6 and 8 say the fight resumes: back into the round loop (R32). */
+  | { readonly type: 'combat.resume' }
   /** After a victory: the foe's LOOT line (5T a2). */
   | { readonly type: 'combat.loot' }
   | { readonly type: 'combat.leave' }

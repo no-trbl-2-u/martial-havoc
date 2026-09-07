@@ -118,6 +118,12 @@ export const momentOf = (result: Result): string | null => {
       if (result.treasure !== null) return 'loot.treasure'
       if (result.key) return 'loot.key'
       return 'loot.item'
+    case 'flee':
+      // The fight left behind. `flee` was already a moment in
+      // result-lines.json, spoken from the combat screen's end; Phase
+      // 10d gave running away a result slip of its own, so the same
+      // line now lands where the player is actually standing.
+      return 'flee'
     case 'note':
       // A note is already the app speaking in its own words. He does not
       // say the same thing twice (VOICE.md, "What he may not say").

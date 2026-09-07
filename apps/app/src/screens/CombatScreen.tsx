@@ -58,6 +58,19 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
     ]
   if (c.event !== null) {
     const rows: Act[] = []
+    // Rows 6 and 8 are the only ones whose printed text states its own
+    // effect, and the only ones that put the player back where they
+    // were (R32). They get the first row, because leaving the phase
+    // when the row says the fight resumes is the wrong default.
+    if (c.event.reading?.kind === 'fight-resumes')
+      rows.push({
+        id: 'resume',
+        title: t('ui.combat.resume'),
+        cite: t('ui.combat.resume.cite'),
+        line: t('ui.combat.resume.line'),
+        enabled: true,
+        action: { type: 'combat.resume' },
+      })
     if (c.event.retreatRow)
       rows.push({ id: 'morale', title: t('ui.combat.act.morale'), cite: t('ui.combat.act.morale.cite'), line: t('ui.combat.act.morale.line'), enabled: c.morale === null, action: { type: 'combat.morale' } })
     rows.push({ id: 'leave-phase', title: t('ui.combat.act.leave-phase'), cite: t('ui.combat.act.leave-phase.cite'), line: t('ui.combat.act.leave-phase.line'), enabled: true, action: { type: 'combat.leave' } })
@@ -89,11 +102,54 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
 
 const banner = (state: RecordState, c: Combat): { label: string; value: string; bg: string } => {
   if (c.over.ended && c.over.reason === 'master-down') return { label: t('ui.combat.banner.down'), value: '0', bg: color.ink }
+  // The Ambush says whose round it is before it says anything about
+  // numbers (I-08a). It is the one state where a Master who loses is
+  // not offered a winner's option, so the banner has to explain it
+  // rather than leave the missing rows unexplained.
+  if (c.ambush) return { label: t('ui.combat.ambush.banner'), value: '-', bg: color.vermilion }
   const r = c.last
   if (r === null) return { label: t('ui.combat.banner.roll'), value: '-', bg: color.ink }
   if (r.difference > 0) return { label: t('ui.combat.banner.ahead'), value: String(r.difference), bg: color.vermilion }
   if (r.difference < 0) return { label: t('ui.combat.banner.behind'), value: String(-r.difference), bg: color.ink }
   return { label: t('ui.combat.banner.tie'), value: '0', bg: color.vermilion }
+}
+
+/**
+ * The slip for a fall, or null while both sides are still standing.
+ *
+ * Two falls, one shape. The foe's carries how it went down - the
+ * difference struck off, or the Final Blow landing - because those are
+ * two different endings and the round card has already scrolled past by
+ * the time a player reads this. The Master's carries the book's own
+ * sentence (MH p.6), which is the only place the app says what running
+ * out of ENDURANCE means.
+ *
+ * `line` is the narrator's, already resolved by the caller: `kill` and
+ * `down` are moments he has lines for (Phase 10a).
+ */
+const fallenSlip = (
+  state: RecordState,
+  c: Combat,
+  foeName: string,
+  line: string | null,
+): { title: string; how: string; cite: string; line: string | null } | null => {
+  if (c.over.ended && c.over.reason === 'master-down')
+    return {
+      title: t('ui.combat.fallen.master'),
+      how: t('ui.combat.fallen.master.line'),
+      cite: 'MH p.6',
+      line,
+    }
+  if (c.foeEndurance > 0) return null
+  return {
+    title: fill(t('ui.combat.fallen.foe'), { name: foeName.toUpperCase() }),
+    how:
+      c.blow?.landed === true
+        ? t('ui.combat.fallen.blow')
+        : fill(t('ui.combat.fallen.difference'), { n: c.last?.difference ?? 0 }),
+    cite: t('ui.combat.fallen.cite'),
+    line,
+  }
 }
 
 const moraleText = (m: NonNullable<Combat['morale']>): string =>
@@ -115,6 +171,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
   // for how the fight ended, this is the narrator's, and they are two
   // different jobs on two different lines (plan/VOICE.md).
   const end = c.over.ended ? narrate(momentOfFightEnd(c.over.reason), state.sheet.name) : null
+  const fallen = fallenSlip(state, c, foe.name, end)
   return (
     <View style={styles.screen} testID="combat">
       <View style={styles.sides}>
@@ -133,6 +190,25 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
       </View>
 
       <ScrollView style={styles.body} contentContainerStyle={styles.bodyContent}>
+        {/*
+          Whoever fell, said as a moment rather than as a number going
+          to zero (Phase 10d). It stands above the loot row for a beaten
+          foe and above BEGIN AGAIN for a beaten Master, because in both
+          cases the next thing offered is housekeeping and the fall is
+          the thing that happened.
+        */}
+        {fallen === null ? null : (
+          <Slip dashed style={styles.pad} testID="fallen">
+            <View style={styles.between}>
+              <Text testID="fallen-title" style={styles.strong}>
+                {fallen.title}
+              </Text>
+              <Source cite={fallen.cite} />
+            </View>
+            <Text style={styles.eventText}>{fallen.how}</Text>
+            <Narrator testID="fallen-narrator" line={fallen.line} style={styles.narrator} />
+          </Slip>
+        )}
         {c.event === null ? null : (
           <Slip borderColor={color.vermilion} testID="event">
             <View style={styles.eventHead}>
@@ -171,19 +247,54 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
           </Slip>
         )}
         {/*
-          The narrator speaks once a fight is over, and only then: mid-fight
-          the screen is already dense with the book's own rows, and VOICE.md
-          keeps him off anything that is still a live choice ("A choice the
-          menu still offers, foreclosed or recommended"). A tie resolved by
-          an Unexpected Event prints the table's own line above, so
-          `momentOfFightEnd` returns silence for it rather than talking over
-          it (Phase 10a).
+          What the tie's row actually did, under the row's own words
+          (Phase 10d). Reading I-30 supplies the mechanical floor for
+          the nine rows that print none, and this is where a player
+          reads it: an injury and whose it was, the three words of a
+          Deity, how many Minions arrived. Each is labelled with the
+          reading it stands on, never with the book's authority.
         */}
-        {end === null ? null : (
-          <Slip dashed style={styles.pad} testID="fight-end">
-            <Narrator testID="combat-narrator" line={end} style={styles.narrator} />
+        {c.event?.injury == null ? null : (
+          <Slip dashed style={styles.pad} testID="event-injury">
+            <View style={styles.between}>
+              <Text style={styles.strong}>
+                {fill(t('ui.combat.event.injury'), {
+                  n: c.event.injury.amount,
+                  who: t(`ui.combat.event.injury.${c.event.injury.target}`),
+                })}
+              </Text>
+              <Source cite="I-30" />
+            </View>
           </Slip>
         )}
+        {c.event?.deity == null ? null : (
+          <Slip dashed style={styles.pad} testID="event-deity">
+            <View style={styles.between}>
+              <Text style={styles.strong}>
+                {fill(t('ui.combat.event.deity'), {
+                  name: c.event.deity.name,
+                  action: c.event.deity.action,
+                  object: c.event.deity.object,
+                })}
+              </Text>
+              <Source cite={t('ui.combat.event.deity.cite')} />
+            </View>
+          </Slip>
+        )}
+        {c.event?.minions == null ? null : (
+          <Slip dashed style={styles.pad} testID="event-minions">
+            <View style={styles.between}>
+              <Text style={styles.strong}>
+                {fill(t('ui.combat.event.minions'), {
+                  n: c.event.minions.count,
+                  face: c.event.minions.face,
+                })}
+              </Text>
+              <Source cite="MH p.28 · R33 · I-33" />
+            </View>
+          </Slip>
+        )}
+
         {actions(state, c).map((a) => (
           <MenuButton key={a.id} testID={`act-${a.id}`} title={a.title} note="" line={a.line} source={a.cite} enabled={a.enabled} onPress={() => dispatch(a.action)} />
         ))}

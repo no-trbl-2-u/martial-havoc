@@ -451,3 +451,60 @@ test('the paper door: a quiet roll is read as an Encounter, in the open', async 
   await expect(page.getByTestId('momentum-rolled')).toContainText('Safe exploration')
   await expect(page.getByTestId('momentum-rolled')).toContainText('READ AS ENCOUNTER')
 })
+
+/**
+ * Phase 10d, the fight as a scene. The brief's first three scenarios on
+ * the web export: a kill, a flight, and an Ambush.
+ *
+ * Combat's arithmetic was right and labelled before this phase; what a
+ * round meant to the story was never said. These three are the ways a
+ * fight most often ends.
+ */
+test('a kill has its own slip before the loot row', async ({ page }) => {
+  await page.goto('/?dice=4,4,2,3,6,5,1,1')
+  await begin(page)
+  await toGhost(page)
+  await button(page, 'ROLL THE ROUND').click()
+  await page.getByTestId('act-strike').click()
+
+  // The fall, said as a moment: who, how, and Old Ping's line.
+  await expect(page.getByTestId('fallen-title')).toHaveText('DEXTEROUS GHOST FALLS')
+  await expect(page.getByTestId('fallen')).toContainText('OFF ITS ENDURANCE')
+  await expect(page.getByTestId('fallen-narrator-name')).toHaveText('OLD PING')
+  // And the housekeeping sits under it, not over it.
+  await expect(page.getByTestId('act-loot')).toBeVisible()
+  await expect(page.getByTestId('act-go-on')).toBeVisible()
+})
+
+test('fleeing is narrated on the beat, with the blow and the Dishonor', async ({ page }) => {
+  await page.goto('/?dice=4,4,2,3')
+  await begin(page)
+  await toGhost(page)
+  // Leave with the Ghost standing: R38's last blow of 2, and I-32's
+  // Dishonor Point for not getting away clean.
+  await button(page, /FLEE/).click()
+  await expect(page.getByTestId('beat')).toBeVisible()
+  const slip = page.getByTestId('result')
+  await expect(slip).toContainText('FLED DEXTEROUS GHOST')
+  await expect(page.getByTestId('result-total')).toHaveText('-2')
+  await expect(slip).toContainText('DISHONOR +1')
+  await expect(page.getByTestId('attr-endurance')).toHaveText('18')
+  // The encounter is left behind: the Ghost is not offered again.
+  await expect(button(page, /FACE THE DEXTEROUS GHOST/)).toHaveCount(0)
+})
+
+test('an ambush is their round first, and says so', async ({ page }) => {
+  // Event 1 is "Ambush!" at the Cave entrance; 2 is the area's creature.
+  await page.goto('/?dice=1,2,3,3,3,3,1,1,1,1')
+  await begin(page)
+  await button(page, /TO THE CAVE ENTRANCE/).click()
+  await page.getByTestId('roll-card-continue').click()
+  await expect(page.getByTestId('roll-card')).toHaveCount(0)
+  await expect(page.getByTestId('result-total')).toContainText('Ambush')
+
+  await page.getByRole('button', { name: /^FACE / }).first().click()
+  await expect(page.getByTestId('combat')).toBeVisible()
+  // The banner explains the missing winner's options before the roll.
+  await expect(page.getByTestId('banner-value')).toBeVisible()
+  await expect(page.getByText('AMBUSH, THEIR ROUND')).toBeVisible()
+})
