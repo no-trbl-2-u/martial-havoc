@@ -34,7 +34,7 @@ Several cells span more than one die value. The printed table has no vertical ru
 | Encounter Outcome | Ambush | Attack | Attack | Attack | NPC/Creature Reaction | NPC/Creature Reaction |
 | Enemy Type | Minion | Subordinate | Subordinate | Warrior | Warrior | Boss |
 | No. of enemies | 1d6 | 3 | 3 | 2 | 2 | 1 |
-| Enemy attack | Normal | Normal | Normal | Special | Special | Special |
+| Enemy attack | Normal | Normal | Normal | Normal | Special | Special |
 | Door | Open | Open | Open | Trapped | Locked | Closed |
 | Object amount | Finished | One more | One more | Many remaining | Many remaining | Many remaining |
 | Value | 5 GP | 10 GP | 25 GP | 50 GP | 100 GP | 250 GP |
@@ -45,7 +45,7 @@ Several cells span more than one die value. The printed table has no vertical ru
 - Encounter Outcome: Attack 2-4, NPC/Creature Reaction 5-6 (span inferred; "Attack" is centred under 3, "NPC/Creature Reaction" under 5-6).
 - Enemy Type: Subordinate 2-3, Warrior 4-5 (span inferred).
 - No. of enemies: 3 on 2-3, 2 on 4-5 (span inferred, aligned with Enemy Type so that Subordinate = 3, Warrior = 2, Boss = 1, Minion = 1d6).
-- Enemy attack: Normal 1-3, Special 4-6 (span inferred).
+- Enemy attack: Normal 1-4, Special 5-6 (span read from the rendered page: "Normal" is centred at x=203.3, the centre of a cell merged across columns 1-4 (x=202.9); "Special" at x=327.4, the centre of 5-6 (x=326.7)).
 - Door: Open 1-3 (span inferred).
 - Object amount: One more 2-3, Many remaining 4-6 (span inferred).
 - Closed Question, NPC reaction, Creature Reaction and Value have one cell per die value; no span is inferred.[^inventory]
