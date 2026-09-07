@@ -28,6 +28,11 @@ export const adventureBehaviours: readonly Behaviour[] = Object.freeze([
     cite: '5T a1',
   },
   {
+    id: 'adventure.the-story-outranks-the-dice-at-a-plot-point',
+    label: 'rule',
+    cite: 'MH p.84 (R82)',
+  },
+  {
     id: 'adventure.event-1-to-3-brings-the-area-encounter',
     label: 'rule',
     cite: '5T a1',

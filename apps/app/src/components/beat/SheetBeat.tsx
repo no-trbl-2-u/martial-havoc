@@ -24,8 +24,9 @@
  * CONTINUE, then the slip does. Nothing under the card moves.
  */
 import { ScrollView, StyleSheet, View } from 'react-native'
-import type { AdventureArea } from '@martial-havoc/content'
+import type { AdventureAct, AdventureArea } from '@martial-havoc/content'
 import type { Ending } from '@martial-havoc/engine'
+import { ActMark, ActSlip, MomentumSlip } from './ActSlip'
 import { AreaSlip, BeatFoot, EndingSlip, MenuList, ResultSlip } from './pieces'
 import { RollCard } from './RollCard'
 import type { RollCardReason } from './RollCard'
@@ -43,6 +44,14 @@ export type SheetBeatProps = {
   readonly hint: string | null
   /** The ending, once the ending act is satisfied. */
   readonly ending: Ending | null
+  /** Every rung of the act ladder, in order (Phase 10c). */
+  readonly acts: readonly AdventureAct[]
+  /** The act the Master is on, or null before any is satisfied. */
+  readonly act: AdventureAct | null
+  /** The act to announce now, or null when there is nothing new to say. */
+  readonly announce: AdventureAct | null
+  /** The pacing override to show beside the result, or null. */
+  readonly momentum: { readonly face: number; readonly was: string } | null
   /** The menu the cave allows here. */
   readonly options: readonly BeatOption[]
   readonly onPick: (option: BeatOption) => void
@@ -60,6 +69,10 @@ export const SheetBeat = ({
   area,
   hint,
   ending,
+  acts,
+  act,
+  announce,
+  momentum,
   options,
   onPick,
   result,
@@ -67,8 +80,26 @@ export const SheetBeat = ({
   card,
 }: SheetBeatProps) => (
   <View style={styles.screen} testID="beat">
+    {/*
+      The outline the book asks a player to draw as they go (MH p.85).
+      It sits above the page rather than in it so it never scrolls away:
+      "which act am I in" is a question with a permanent answer.
+    */}
+    <View style={styles.outline}>
+      <ActMark acts={acts} current={act?.act ?? 0} />
+    </View>
+
     <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
       {ending === null ? null : <EndingSlip ending={ending} master={state.sheet.name} />}
+      {announce === null ? null : (
+        <ActSlip
+          act={announce}
+          of={acts.length}
+          master={state.sheet.name}
+          onSeen={() => dispatch({ type: 'act.seen' })}
+        />
+      )}
+      {momentum === null ? null : <MomentumSlip face={momentum.face} was={momentum.was} />}
       <AreaSlip area={area} hint={hint} master={state.sheet.name} />
     </ScrollView>
 
@@ -88,6 +119,8 @@ export const SheetBeat = ({
 
 const styles = StyleSheet.create({
   screen: { flex: 1 },
+  /** The act outline: a thin strip over the page, always visible. */
+  outline: { paddingTop: 2, paddingBottom: 4, paddingHorizontal: 14, alignItems: 'flex-start' },
   /** The upper page: the book's text and nothing else. */
   page: { flex: 1 },
   pageContent: { paddingBottom: 10 },

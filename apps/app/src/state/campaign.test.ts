@@ -36,6 +36,7 @@ const played = (): RecordState => ({
   deeds: ['forced the gate', 'faced the Ghost'],
   passages: ['Tea things behind glass.'],
   overrides: 4,
+  actsSeen: [1, 2],
 })
 
 /**
@@ -104,6 +105,64 @@ describe('laying a campaign back over a session', () => {
     expect(after.screen).toBe('region')
     expect(after.here).toBe(3)
     expect(after.region).toBe(session.region)
+  })
+})
+
+describe('the acts a record has already announced (Phase 10c)', () => {
+  it('carries them out and back, so an import does not replay the arc', () => {
+    const back = fromCampaign(toCampaign(played()), fresh())
+    expect(back.actsSeen).toEqual([1, 2])
+  })
+
+  it('fills them from the saved state when the field is absent', () => {
+    // A record written before this phase carries no actsSeen at all,
+    // and "none" would be wrong: the rungs a saved state already
+    // satisfies are rungs that Master lived through, and replaying
+    // those slips would be the app announcing something they watched
+    // happen.
+    //
+    // Note this is derived from the state, not from the dropped field:
+    // `played()` says it had seen acts 1 and 2, but its visited list
+    // never includes the Cave entrance, so act 2's `enter` condition is
+    // not satisfied and the honest answer is act 1 alone. The
+    // difference from the test above is the whole point - a written
+    // field is believed, an absent one is worked out.
+    const { actsSeen: _dropped, ...old } = toCampaign(played())
+    const back = fromCampaign(old as ReturnType<typeof toCampaign>, fresh())
+    expect(back.actsSeen).toEqual([1])
+  })
+
+  it('does not fill in a rung the saved state has not reached', () => {
+    // The same record has not entered the Chieftain quarter and has not
+    // killed Golden Horn, so acts 3 and 4 are still ahead of it and
+    // still owed their slips.
+    const { actsSeen: _dropped, ...old } = toCampaign(played())
+    const back = fromCampaign(old as ReturnType<typeof toCampaign>, fresh())
+    expect(back.actsSeen).not.toContain(3)
+    expect(back.actsSeen).not.toContain(4)
+  })
+
+  it('trusts an empty list that was actually written, rather than refilling it', () => {
+    // A player who exported without dismissing a single slip has an
+    // empty list on purpose. Refilling it would make the field
+    // unwritable.
+    const record = { ...toCampaign(played()), actsSeen: { [ADVENTURE_ID]: [] } }
+    expect(fromCampaign(record, fresh()).actsSeen).toEqual([])
+  })
+})
+
+describe('where a restored campaign opens (Phase 10b)', () => {
+  it('opens on the beat for a Master who has taken the trail', () => {
+    const back = fromCampaign(toCampaign(played()), { ...fresh(), screen: 'creation' })
+    expect(back.screen).toBe('beat')
+  })
+
+  it('opens in the village for one who has not', () => {
+    // Exporting from Fen Pass before the climb is legal, and importing
+    // it must not step over the first act.
+    const doorstep = { ...played(), cave: { ...played().cave, visited: [] } }
+    const back = fromCampaign(toCampaign(doorstep), { ...fresh(), screen: 'creation' })
+    expect(back.screen).toBe('village')
   })
 })
 

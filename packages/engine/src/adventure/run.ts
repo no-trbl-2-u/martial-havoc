@@ -21,7 +21,7 @@ import { areaById, enterArea } from './graph'
 import type { Encounter } from './encounter'
 import { encounterIn } from './encounter'
 import type { EventRoll } from './event'
-import { bringsEncounter, rollEvent } from './event'
+import { bringsEncounter, forMomentum, rollEvent } from './event'
 import { revealHint } from './hints'
 import { takeAreaTreasure } from './loot'
 import type { Ending } from './acts'
@@ -41,6 +41,14 @@ export type Turn = {
   readonly encounter: Encounter | undefined
   /** True where the event revealed this area's Hint (I-06b, I-60). */
   readonly hintRevealed: boolean
+  /**
+   * True where the book's pacing rule overruled the roll (MH p.84, R82).
+   *
+   * The `event` above already carries the forced kind and the face that
+   * was actually rolled, so a screen can print both: what the dice said
+   * and what the story did with it.
+   */
+  readonly momentum: boolean
   /** The act the Master is in after the turn. */
   readonly act: AdventureAct | undefined
   /** The ending screen, or null while the adventure runs. */
@@ -65,6 +73,15 @@ export const step = (
   state: AdventureState,
   to: string,
   dice: DiceSource,
+  /**
+   * Options the caller supplies from the adventure's own judgement.
+   *
+   * `momentum` says this door is a plot point, so the book's pacing rule
+   * applies to the Event rolled at it (MH p.84, R82). Which door that is
+   * belongs to the adventure's content, never to the engine, which is
+   * why it arrives as an argument rather than a table lookup.
+   */
+  options: { readonly momentum?: boolean } = {},
 ): Turn => {
   const walked = enterArea(tables, state, to)
   if (!walked.passage.ok)
@@ -75,12 +92,18 @@ export const step = (
       event: undefined,
       encounter: undefined,
       hintRevealed: false,
+      momentum: false,
       act: actFor(tables, state),
       ending: ending(tables, state),
     }
 
   const area = walked.passage.area
-  const event = rollEvent(tables.events)(dice)
+  const rolled = rollEvent(tables.events)(dice)
+  // The roll first, then the story's veto over it. The order matters:
+  // the die is drawn either way, so a forced Encounter costs the same
+  // dice as a free one and a fixed sequence stays fixed.
+  const event = options.momentum === true ? forMomentum(rolled) : rolled
+  const momentum = event.kind !== rolled.kind
   const hinted = event.kind === 'hint'
   const afterHint = hinted ? revealHint(walked.state, area.id) : walked.state
   const encounter = bringsEncounter(event.kind)
@@ -94,6 +117,7 @@ export const step = (
     event,
     encounter,
     hintRevealed: hinted,
+    momentum,
     act: actFor(tables, afterHint),
     ending: ending(tables, afterHint),
   }

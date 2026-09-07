@@ -26,6 +26,7 @@ import lootFile from '../../data/campaigns/the-5-treasures/loot.json'
 import adventureTreasuresFile from '../../data/campaigns/the-5-treasures/treasures.json'
 import flagsFile from '../../data/campaigns/the-5-treasures/flags.json'
 import absencesFile from '../../data/campaigns/the-5-treasures/absences.json'
+import momentumFile from '../../data/campaigns/the-5-treasures/momentum.json'
 import actsFile from '../../data/campaigns/the-5-treasures/acts.json'
 
 import { byD66, byId, inColumn } from '../lookup'
@@ -41,6 +42,7 @@ import type {
   AdventureTreasure,
   Band,
   D66Text,
+  MomentumDoor,
   Opponent,
 } from '../types'
 
@@ -115,6 +117,26 @@ export const theFiveTreasuresAbsences: readonly AdventureAbsence[] = Object.free
 export const theFiveTreasuresActs: readonly AdventureAct[] = Object.freeze(
   actsFile.records as readonly AdventureAct[],
 )
+
+/**
+ * The doors this adventure treats as plot points (MH p.84, R82).
+ *
+ * Not part of {@link theFiveTreasures}: the engine's `step` takes the
+ * judgement as an argument rather than reading it from the tables,
+ * because the rule is the book's and the choice of door is ours. A
+ * caller asks {@link isMomentumDoor} on the way in.
+ */
+export const theFiveTreasuresMomentum: readonly MomentumDoor[] = Object.freeze(
+  momentumFile.records as readonly MomentumDoor[],
+)
+
+/** Is this door one the story outranks the dice at? */
+export const isMomentumDoor = (area: string): boolean =>
+  theFiveTreasuresMomentum.some((d) => d.area === area)
+
+/** Why this door is a plot point, or undefined where it is not one. */
+export const momentumReason = (area: string): string | undefined =>
+  theFiveTreasuresMomentum.find((d) => d.area === area)?.reason
 
 /**
  * Every table of The 5 Treasures in one object, ready to hand to the

@@ -2005,6 +2005,41 @@
           }
         }
       },
+      "momentumDoor": {
+        "description": "One door of an adventure that is a plot point: the book's pacing rule applies to the Event rolled on entering it (MH p.84, R82 - \"if the result of the dice roll conflicts with the linear development of the story, ignore the dice\"). The rule is the book's; *which* door is this adventure's judgement, which is why these rows are `invention` and live beside the transcription rather than inside it.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "adventure",
+          "area",
+          "reason"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "adventure": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "area": {
+            "description": "The area id whose door this is.",
+            "$ref": "#/$defs/atoms/id"
+          },
+          "reason": {
+            "description": "Why this door and not another, in a sentence a player could read.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
       "villagePlace": {
         "description": "One place in the trail-head village (spec.md, Horizon: \"a trail-head village is a City on fixed data\"). The village is an invention of this build - the rulebook describes a City (MH p.46-51) and the adventure describes a mountain, neither describes this settlement - so every record here is cited to the Horizon, while the procedure each place runs is the book's. A `location` is somewhere the Master stands and acts; the single `trail` is the departure edge out of the village, and it names the adventure it leads to rather than running a procedure.",
         "type": "object",
@@ -2521,6 +2556,9 @@
                 },
                 {
                   "$ref": "#/$defs/records/adventureAct"
+                },
+                {
+                  "$ref": "#/$defs/records/momentumDoor"
                 },
                 {
                   "$ref": "#/$defs/records/villagePlace"

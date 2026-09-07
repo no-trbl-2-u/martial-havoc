@@ -44,10 +44,10 @@ const repoRoot = join(packageDir, '..', '..')
  * half-transcribed table impossible to ship.
  */
 const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
-  'app.strings': 353,
+  'app.strings': 361,
   // The rules panel's notes: one per engine behaviour (the label leg
   // checks the pairing; this only pins the count).
-  'app.behaviour-notes': 110,
+  'app.behaviour-notes': 111,
   // The narrator's lines: one per moment of play the app narrates
   // (Phase 10a). `voice.test.ts` holds each to plan/VOICE.md; this pins
   // the set, so a moment that loses its line is red rather than silent.
@@ -55,6 +55,10 @@ const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
 
   // The 5 Treasures: the nine foes as printed.
   'campaigns.the-5-treasures-foes': 9,
+  // The one door the story outranks the dice at (MH p.84, R82). The
+  // book gives one example and the cave has one boss's door; a second
+  // row would need a reason as good as the first's.
+  'campaigns.the-5-treasures.momentum': 1,
 
   // The world: the lists a Master is built from and the tables the
   // sandbox is rolled on.

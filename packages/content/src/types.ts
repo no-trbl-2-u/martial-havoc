@@ -589,6 +589,24 @@ export type AdventureAct = AdventureRecord & {
 }
 
 /**
+ * One door of an adventure that is a plot point (MH p.84, R82).
+ *
+ * The book's pacing rule — "if the result of the dice roll conflicts
+ * with the linear development of the story, ignore the dice" — needs a
+ * place to be applied, and the book gives an example rather than a
+ * list. This record is one adventure's answer for one door. It is not
+ * part of {@link AdventureTables}: the engine takes the judgement as an
+ * argument, so the rule stays the engine's and the choice stays the
+ * adventure's.
+ */
+export type MomentumDoor = AdventureRecord & {
+  /** The area id whose door this is. */
+  readonly area: string
+  /** Why this door and not another, in a sentence a player could read. */
+  readonly reason: string
+}
+
+/**
  * Every table of one adventure, in one object.
  *
  * This is the argument the engine's adventure module takes. The engine

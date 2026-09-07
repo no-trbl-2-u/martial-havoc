@@ -13,9 +13,13 @@
  * without touching storage, and keeping them out of the engine means the
  * engine never learns what a screen is.
  */
-import { newCampaign } from '@martial-havoc/engine'
+import { actSatisfied, newCampaign } from '@martial-havoc/engine'
 import type { AdventureState, CampaignRecord, RecordedMaster } from '@martial-havoc/engine'
-import { theFiveTreasuresAreaById, theFiveTreasuresMeta } from '@martial-havoc/content'
+import {
+  theFiveTreasures,
+  theFiveTreasuresAreaById,
+  theFiveTreasuresMeta,
+} from '@martial-havoc/content'
 import type { RecordState, Sheet } from './types'
 
 /** The adventure the app plays. */
@@ -59,7 +63,30 @@ export const toCampaign = (state: RecordState): CampaignRecord => ({
   deeds: state.deeds.map((text) => ({ adventure: ADVENTURE_ID, text })),
   passages: state.passages,
   overrides: state.overrides,
+  actsSeen: { [ADVENTURE_ID]: state.actsSeen },
 })
+
+/**
+ * The acts a saved record has already announced.
+ *
+ * A record written by this build says so outright. One written before
+ * Phase 10c does not carry the field at all, and the honest answer for
+ * it is *not* "none": a Master standing in the Chieftain quarter with
+ * Golden Horn dead has plainly passed acts one to four, whatever the
+ * save says. So an absent field is filled from the acts the saved cave
+ * state already satisfies, which replays nothing and needs no migration
+ * step (see `CampaignRecord.actsSeen` for why there is none).
+ *
+ * The one thing this deliberately does not do is announce the act the
+ * Master is *about* to see. `actSatisfied` is asked of the state as
+ * saved, so a rung not yet climbed stays unclimbed and its slip still
+ * arrives when it is earned.
+ */
+const actsSeenFrom = (record: CampaignRecord, cave: AdventureState): readonly number[] => {
+  const saved = record.actsSeen?.[ADVENTURE_ID]
+  if (saved !== undefined) return saved
+  return theFiveTreasures.acts.filter((act) => actSatisfied(cave, act)).map((act) => act.act)
+}
 
 /**
  * Lay a loaded campaign over a session.
@@ -86,7 +113,16 @@ export const fromCampaign = (record: CampaignRecord, session: RecordState): Reco
   return {
     ...session,
     creation: null,
-    screen: session.screen === 'creation' ? 'beat' : session.screen,
+    // A restored campaign never opens in creation. Where it would, it
+    // opens where that Master actually is: the village until they have
+    // taken the trail, the beat after (Phase 10b). Sending an
+    // un-begun campaign to the beat would step over its own first act.
+    screen:
+      session.screen === 'creation'
+        ? cave.visited.includes(theFiveTreasures.meta.startArea)
+          ? 'beat'
+          : 'village'
+        : session.screen,
     cave,
     pending: [],
     roll: null,
@@ -107,5 +143,6 @@ export const fromCampaign = (record: CampaignRecord, session: RecordState): Reco
     deeds: record.deeds.map((deed) => deed.text),
     passages: record.passages,
     overrides: record.overrides,
+    actsSeen: actsSeenFrom(record, cave),
   }
 }

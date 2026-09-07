@@ -16,6 +16,7 @@
  */
 import {
   attackRescue,
+  actFor,
   attackStrength,
   behaviours,
   buy,
@@ -49,6 +50,7 @@ import {
 import type { DiceSource } from '@martial-havoc/engine'
 import {
   INCENSE_ID,
+  isMomentumDoor,
   effectFor,
   market,
   rollUnexpectedEvent,
@@ -152,7 +154,11 @@ const doTurn = (state: RecordState, to: string, dice: DiceSource): RecordState =
   // whatever the player did not tap.
   const manual = state.manual.length > 0
   const source = manual ? queued(state.manual, dice) : dice
-  const turn = step(TABLES, state.cave, to, source)
+  // The book's pacing rule, at the one door this adventure marks as a
+  // plot point (MH p.84, R82; `momentum.json`). The engine applies the
+  // rule; the content decides where, and the roll is still made and
+  // still shown.
+  const turn = step(TABLES, state.cave, to, source, { momentum: isMomentumDoor(to) })
   if (!turn.passage.ok || turn.area === undefined || turn.event === undefined) return state
   const foes = turn.encounter?.foes.map((foe) => foe.id) ?? []
   return afterMasterRoll(
@@ -169,6 +175,7 @@ const doTurn = (state: RecordState, to: string, dice: DiceSource): RecordState =
         encounterFace: turn.encounter?.face ?? null,
         foes: foes.map(foeName),
         hint: turn.hintRevealed,
+        momentum: turn.momentum,
       },
     },
     manual,
@@ -818,6 +825,15 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
     // ending's business, the village is the doorstep's.
     case 'cave.village':
       return state.pending.length > 0 ? state : { ...state, screen: 'village', result: null, roll: null }
+    // The act slip is dismissed by any tap and never returns (Phase
+    // 10c). Marking it seen is the whole of the action: nothing else
+    // about the record moves, and the act itself is derived, never
+    // stored.
+    case 'act.seen': {
+      const act = actFor(TABLES, state.cave)
+      if (act === undefined || state.actsSeen.includes(act.act)) return state
+      return { ...state, actsSeen: [...state.actsSeen, act.act] }
+    }
     case 'roll.manual':
       return { ...state, byHand: !state.byHand, manual: [] }
     case 'roll':

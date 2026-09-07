@@ -648,6 +648,13 @@
       "title": "Entering an area rolls the Event table"
     },
     {
+      "id": "note.adventure.the-story-outranks-the-dice-at-a-plot-point",
+      "cite": "MH p.84 (R82)",
+      "ref": "adventure.the-story-outranks-the-dice-at-a-plot-point",
+      "title": "At a plot point the story outranks the dice",
+      "text": "The book says that when a roll conflicts with where the story has got to, you ignore the dice and reach the plot point anyway - its own example is a Rest result at the boss's door, which would slow the momentum, so you let the Encounter happen instead. The die is still rolled and still shown; what changes is what it is read as. Which door counts as a plot point is the adventure's judgement, not a rule."
+    },
+    {
       "id": "note.adventure.event-1-to-3-brings-the-area-encounter",
       "cite": "5T a1",
       "ref": "adventure.event-1-to-3-brings-the-area-encounter",

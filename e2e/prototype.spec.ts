@@ -389,3 +389,65 @@ test('the opening: a made Master wakes in Fen Pass, and the trail is the point o
   await button(page, 'RULES').click()
   await expect(page.getByTestId('beat')).toBeVisible()
 })
+
+/**
+ * Phase 10c, the acts on screen. The brief's first two scenarios.
+ *
+ * The ladder has existed in `acts.json` since Phase 5 and the engine
+ * has computed the current rung since then; until now no screen showed
+ * either, so a player could cross the point of no return into the cave
+ * and the app would not say anything had changed.
+ */
+test('the acts: the page turns to act 2 once, and the outline remembers', async ({ page }) => {
+  await page.goto('/?dice=4,4')
+  await begin(page)
+
+  // Act 1 on the mountain: one square filled of five, no slip yet
+  // announced beyond the one the first act brings.
+  await expect(page.getByTestId('act-mark')).toBeVisible()
+  await page.getByTestId('act-slip').click()
+  await expect(page.getByTestId('act-slip')).toHaveCount(0)
+
+  // Into the cave: the page turns.
+  await go(page, /TO THE CAVE ENTRANCE/)
+  const slip = page.getByTestId('act-slip')
+  await expect(page.getByTestId('act-name')).toHaveText('INSIDE THE LOTUS FLOWER')
+  await expect(page.getByTestId('act-line')).toContainText('The gate is behind San Te now')
+  await expect(page.getByTestId('act-line')).not.toContainText('{name}')
+
+  // Any tap dismisses it, and it does not come back.
+  await slip.click()
+  await expect(slip).toHaveCount(0)
+  await go(page, /TO THE FLAT-TOP MOUNTAIN/)
+  await expect(page.getByTestId('act-slip')).toHaveCount(0)
+  await expect(page.getByTestId('act-mark')).toBeVisible()
+})
+
+/**
+ * The boss's door. The book's own example of its own pacing rule: the
+ * generals are behind the Master, the door is opening, and a quiet roll
+ * here would let the finale down (MH p.84, R82).
+ */
+test('the paper door: a quiet roll is read as an Encounter, in the open', async ({ page }) => {
+  // The proven path to the key: `toGhost` walks 4,4,2,3 to the
+  // Attendants room and meets the Dexterous Ghost, whose LOOT line is
+  // the private quarter's key. 6,5 wins the round, 1,1 is the strike.
+  // The last two faces open the Chieftain quarter on a 4 - Safe
+  // exploration on the printed table - and roll its creature.
+  await page.goto('/?dice=4,4,2,3,6,5,1,1,4,1')
+  await begin(page)
+  await toGhost(page)
+  await button(page, 'ROLL THE ROUND').click()
+  await page.getByTestId('act-strike').click()
+  await page.getByTestId('act-loot').click()
+  await page.getByTestId('act-go-on').click()
+
+  await go(page, /TO THE CHIEFTAIN QUARTER/)
+  // The override is visible and labelled: the book's sentence, the face
+  // that was actually rolled, and what it was read as instead.
+  const slip = page.getByTestId('momentum')
+  await expect(slip).toContainText('ignore the dice')
+  await expect(page.getByTestId('momentum-rolled')).toContainText('ROLLED 4')
+  await expect(page.getByTestId('momentum-rolled')).toContainText('Safe exploration')
+  await expect(page.getByTestId('momentum-rolled')).toContainText('READ AS ENCOUNTER')
+})

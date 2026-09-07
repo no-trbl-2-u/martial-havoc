@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schema/content.schema.json",
+  "$comment": "The doors of this adventure that are plot points. The rule is the book's (MH p.84, R82: ignore the dice when they conflict with where the story has got to), and its printed example is precisely this door - the generals dead, the boss's room opening, a Rest result that would slow the momentum. Which door is ours, so this file is `invention` and sits beside the transcription rather than adding a cell to it. One row: the Chieftain quarter, the locked room the two Kings keep. The book's example is the boss's door and no other, so no other door is listed and none should be added without a reason as good as this one.",
+  "id": "campaigns.the-5-treasures.momentum",
+  "kind": "list",
+  "title": "The 5 Treasures: the doors the story outranks the dice at",
+  "cite": "MH p.84 (R82); plan/phases/phase_10c_three_acts.md",
+  "label": "invention",
+  "docs": "docs/world/cinematic-journey.md",
+  "records": [
+    {
+      "id": "momentum.the-5-treasures.chieftain-quarter",
+      "cite": "MH p.84 (R82); 5T a1",
+      "adventure": "adventure.the-5-treasures",
+      "area": "area.the-5-treasures.chieftain-quarter",
+      "reason": "The locked room the two Kings keep, and the book's own example of the rule: the generals are behind the Master, the door is opening, and a quiet roll here would let the finale down."
+    }
+  ]
+}

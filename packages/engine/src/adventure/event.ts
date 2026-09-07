@@ -76,3 +76,35 @@ export const rollEvent =
 /** True where the event brings the area's encounter (Event = 1, 2, 3). */
 export const bringsEncounter = (kind: EventKind): boolean =>
   kind === 'ambush' || kind === 'encounter'
+
+/**
+ * The book's pacing rule, applied to one roll (MH p.84, R82).
+ *
+ * "If the result of the dice roll conflicts with the linear development
+ * of the story, ignore the dice. Reach the plot point without lowering
+ * the tension. For example, at the beginning of the third act, the
+ * protagonist has defeated the generals guarding the room where the boss
+ * resides and is opening the door; a roll on the Event table with Rest
+ * result, although plausible, would slow down the momentum. Instead, let
+ * the Encounter happen and prepare for the finale."
+ *
+ * Two things are deliberate here.
+ *
+ * **The face is kept.** The roll happened and the screen shows it; what
+ * changes is what it is read as. Hiding the die and printing an
+ * Encounter would make the book's instruction into a lie about the
+ * dice, and the whole point of the rule is that the storyteller is
+ * overruling them in the open.
+ *
+ * **A roll that already brings an encounter is returned untouched**, so
+ * the override is only ever visible when it did something. An Ambush at
+ * the boss's door is already the finale arriving; there is nothing to
+ * force.
+ *
+ * *Where* the rule applies is not this function's business and not the
+ * engine's: it is one adventure's judgement about one of its doors, and
+ * it lives in that adventure's content
+ * (`campaigns/the-5-treasures/momentum.json`).
+ */
+export const forMomentum = (event: EventRoll): EventRoll =>
+  bringsEncounter(event.kind) ? event : { ...event, kind: 'encounter' }

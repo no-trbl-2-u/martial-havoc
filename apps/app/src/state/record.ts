@@ -89,6 +89,7 @@ export const newRecord = (dice: DiceSource): RecordState => ({
   passages: [],
   overrides: 0,
   deeds: [],
+  actsSeen: [],
   combat: null,
   filter: 'all',
   openId: null,

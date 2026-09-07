@@ -129,7 +129,7 @@ export {
   withTreasure,
 } from './adventure/state'
 export type { AdventureState } from './adventure/state'
-export { EVENT_KINDS, bringsEncounter, eventFor, rollEvent } from './adventure/event'
+export { EVENT_KINDS, bringsEncounter, eventFor, forMomentum, rollEvent } from './adventure/event'
 export type { EventKind, EventRoll } from './adventure/event'
 export { areaById, canEnter, currentArea, enterArea, exitsFrom } from './adventure/graph'
 export type { Passage } from './adventure/graph'

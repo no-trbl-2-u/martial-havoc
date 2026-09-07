@@ -1108,6 +1108,46 @@
       "cite": "spec.md, Horizon (the village)"
     },
     {
+      "id": "ui.act.heading",
+      "cite": "MH p.82 (R82)",
+      "text": "ACT {n} OF {of}"
+    },
+    {
+      "id": "ui.act.dismiss",
+      "cite": "plan/phases/phase_10c_three_acts.md",
+      "text": "GO ON"
+    },
+    {
+      "id": "ui.act.mark",
+      "cite": "MH p.85",
+      "text": "ACT {n} OF {of} \u00b7 {name}"
+    },
+    {
+      "id": "ui.act.cite",
+      "cite": "MH p.82",
+      "text": "MH p.82 \u00b7 each act ends with a climax, a point of no return to a new act"
+    },
+    {
+      "id": "ui.momentum.title",
+      "cite": "MH p.84 (R82)",
+      "text": "THE STORY OUTRANKS THE DICE"
+    },
+    {
+      "id": "ui.momentum.line",
+      "cite": "MH p.84 (R82)",
+      "text": "If the result of the dice roll conflicts with the linear development of the story, ignore the dice. Reach the plot point without lowering the tension."
+    },
+    {
+      "id": "ui.momentum.rolled",
+      "cite": "plan/phases/phase_10c_three_acts.md",
+      "text": "ROLLED {face} \u00b7 {was} \u00b7 READ AS ENCOUNTER"
+    },
+    {
+      "id": "ui.momentum.cite",
+      "cite": "MH p.84 (R82)",
+      "text": "MH p.84 \u00b7 R82 \u00b7 the book's own example is this door"
+    },
+    {
       "id": "ui.village.call.title",
       "cite": "MH p.84 (Act I, Call/Incident); 5T a1",
       "text": "THE CALL"

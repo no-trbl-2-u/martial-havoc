@@ -88,6 +88,26 @@ export type CampaignRecord = {
   readonly passages: readonly string[]
   /** How many rolls were typed instead of rolled (spec.md, Horizon). */
   readonly overrides: number
+  /**
+   * The act numbers whose change-of-act slip has already been shown
+   * (Phase 10c), per adventure id.
+   *
+   * Durable rather than session state, and the distinction is the
+   * usual one: which screen is open is the app's, but *whether this
+   * player has already been told they are in act three* is something
+   * they would be sorry to be told twice. An export that dropped it
+   * would replay the whole ladder on import.
+   *
+   * **Optional, and no version bump.** Nothing about the saved shape
+   * became wrong when this was added - a v2 record is still a correct
+   * v2 record, it simply does not say which acts were announced - and
+   * `MIGRATIONS` is keyed on estate readings that moved, not on fields
+   * that arrived. No reading moved here. A record without the field is
+   * read by filling it from the acts the saved state already satisfies
+   * (`fromCampaign`), which is a better answer than "none" and needs no
+   * chain step to produce.
+   */
+  readonly actsSeen?: Readonly<Record<string, readonly number[]>>
 }
 
 /** A fresh record for a newly created Master. */
@@ -101,6 +121,7 @@ export const newCampaign = (master: RecordedMaster): CampaignRecord =>
     deeds: Object.freeze([]),
     passages: Object.freeze([]),
     overrides: 0,
+    actsSeen: Object.freeze({}),
   })
 
 /** Replace the Master's numbers, leaving everything else alone. */

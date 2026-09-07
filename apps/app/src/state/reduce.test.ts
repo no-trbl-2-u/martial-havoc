@@ -9,7 +9,8 @@
  * where it does not.
  */
 import { describe, expect, it } from 'vitest'
-import { fromSequence } from '@martial-havoc/engine'
+import { actFor, fromSequence, withDefeated, withKey } from '@martial-havoc/engine'
+import { theFiveTreasures } from '@martial-havoc/content'
 import type { Die } from '@martial-havoc/engine'
 import { randomSource } from '../dice/random'
 import { menuFor } from './menu'
@@ -205,6 +206,93 @@ describe('the opening: the village as the Call (Phase 10b)', () => {
     expect(back.screen).toBe('village')
     expect(again.cave.visited).toEqual([AREA.mountain])
     expect(again.deeds).toEqual(['took the trail'])
+  })
+})
+
+describe('the act ladder (Phase 10c)', () => {
+  /** Which acts the record has been told about. */
+  const seen = (s: RecordState): readonly number[] => s.actsSeen
+
+  it('starts on act 1 with nothing announced, since no slip has been dismissed', () => {
+    const r = reduce(fresh(), { type: 'village.trail' }, fromSequence([]))
+    expect(actFor(theFiveTreasures, r.cave)?.act).toBe(1)
+    expect(seen(r)).toEqual([])
+  })
+
+  it('turns to act 2 on entering the cave, and marks it seen once', () => {
+    const inside = play(reduce(fresh(), { type: 'village.trail' }, fromSequence([])), [
+      ...walk(AREA.entrance),
+    ])
+    expect(actFor(theFiveTreasures, inside.cave)?.act).toBe(2)
+    const dismissed = reduce(inside, { type: 'act.seen' }, fromSequence([]))
+    expect(seen(dismissed)).toEqual([2])
+    // Dismissing again is a no-op: a rung is announced once.
+    expect(seen(reduce(dismissed, { type: 'act.seen' }, fromSequence([])))).toEqual([2])
+  })
+
+  it('does not announce an act again after walking out and back in', () => {
+    const there = play(reduce(fresh(), { type: 'village.trail' }, fromSequence([])), [
+      ...walk(AREA.entrance),
+    ])
+    const dismissed = reduce(there, { type: 'act.seen' }, fromSequence([]))
+    const out = play(dismissed, [...walk(AREA.mountain), ...walk(AREA.entrance)])
+    expect(actFor(theFiveTreasures, out.cave)?.act).toBe(2)
+    expect(seen(out)).toEqual([2])
+  })
+
+  it('announces the rung actually reached, not the ones stepped over', () => {
+    // Act 3 wants the Chieftain quarter entered and act 4 wants Golden
+    // Horn down. A Master who kills him first is on act 4 and was never
+    // on act 3, so act 3 is not something they are owed a slip for.
+    const killed = { ...fresh(), cave: withDefeated(fresh().cave, 'foe.senior-king-golden-horn') }
+    expect(actFor(theFiveTreasures, killed.cave)?.act).toBe(4)
+    expect(seen(reduce(killed, { type: 'act.seen' }, fromSequence([])))).toEqual([4])
+  })
+})
+
+describe("the boss's door: the story outranks the dice (MH p.84, R82)", () => {
+  /** In the Attendants room holding the key, one step from the Chieftain quarter. */
+  const atTheDoor = (): RecordState => {
+    const base = play(reduce(fresh(), { type: 'village.trail' }, fromSequence([])), [
+      ...walk(AREA.entrance),
+      ...walk(AREA.hall),
+      ...walk(AREA.attendants),
+    ])
+    return { ...base, cave: withKey(base.cave, KEY) }
+  }
+
+  it('reads a quiet roll at the boss door as an Encounter, and says the roll happened', () => {
+    // 4 is Safe exploration on the printed table. The die is drawn and
+    // kept; only what it is read as changes.
+    const through = play(atTheDoor(), [
+      [{ type: 'cave.go', to: AREA.chieftain }, [4, 1]],
+      [{ type: 'roll.close' }, []],
+    ])
+    expect(through.result?.kind).toBe('turn')
+    const turn = through.result as Extract<typeof through.result, { kind: 'turn' }>
+    expect(turn.momentum).toBe(true)
+    expect(turn.eventFace).toBe(4)
+    expect(turn.eventText).toBe('Safe exploration')
+    expect(turn.event).toBe('encounter')
+  })
+
+  it('leaves a roll that already brings an encounter alone', () => {
+    const through = play(atTheDoor(), [
+      [{ type: 'cave.go', to: AREA.chieftain }, [2, 1]],
+      [{ type: 'roll.close' }, []],
+    ])
+    const turn = through.result as Extract<typeof through.result, { kind: 'turn' }>
+    expect(turn.event).toBe('encounter')
+    expect(turn.momentum).toBe(false)
+  })
+
+  it('applies to that door only, and not to the rooms on the way', () => {
+    const quiet = play(reduce(fresh(), { type: 'village.trail' }, fromSequence([])), [
+      ...walk(AREA.entrance),
+    ])
+    const turn = quiet.result as Extract<typeof quiet.result, { kind: 'turn' }>
+    expect(turn.event).toBe('safe')
+    expect(turn.momentum).toBe(false)
   })
 })
 
@@ -587,8 +675,14 @@ describe('the cave, played to its ending on the reducer', () => {
       [{ type: 'roll.close' }, []],
       ...beat(BEAST),
       [{ type: 'cave.take', treasure: VASE }, []],
-      // 6. The Chieftain quarter: Hint; the sheets.
-      [{ type: 'cave.go', to: AREA.chieftain }, [6]],
+      // 6. The Chieftain quarter: the boss's door, so the book's pacing
+      //    rule overrules the roll (MH p.84, R82; Phase 10c). A 6 is a
+      //    Hint on the printed table and is read as an Encounter here,
+      //    which costs a second die for the area's creature - and finds
+      //    nobody, since both Kings are already down (I-36). The sheets
+      //    are learned from the room, not from the Hint, so they still
+      //    come.
+      [{ type: 'cave.go', to: AREA.chieftain }, [6, 1]],
       [{ type: 'roll.close' }, []],
       [{ type: 'cave.learn' }, []],
       // 7. The Women quarter: Encounter, fixed: the Old Vixen; the Cord.

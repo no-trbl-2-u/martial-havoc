@@ -52,6 +52,7 @@ import caveTreasures from '../data/campaigns/the-5-treasures/treasures.json'
 import caveFlags from '../data/campaigns/the-5-treasures/flags.json'
 import caveAbsences from '../data/campaigns/the-5-treasures/absences.json'
 import caveActs from '../data/campaigns/the-5-treasures/acts.json'
+import caveMomentum from '../data/campaigns/the-5-treasures/momentum.json'
 import strings from '../data/app/strings.json'
 import behaviourNotes from '../data/app/behaviour-notes.json'
 import resultLines from '../data/app/result-lines.json'
@@ -104,6 +105,7 @@ const registry: readonly CountedFile[] = Object.freeze([
   caveFlags,
   caveAbsences,
   caveActs,
+  caveMomentum,
   strings,
   behaviourNotes,
   resultLines,

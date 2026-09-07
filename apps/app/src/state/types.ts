@@ -194,6 +194,12 @@ export type TurnResult = {
   readonly foes: readonly string[]
   /** True where the Event revealed this area's Hint. */
   readonly hint: boolean
+  /**
+   * True where the book's pacing rule overruled the roll at this door
+   * (MH p.84, R82; Phase 10c). `eventFace` is still the face that was
+   * rolled, so the slip can print both.
+   */
+  readonly momentum: boolean
 }
 
 /** A foe's LOOT line read after a victory or a rescue (5T a2). */
@@ -326,6 +332,15 @@ export type RecordState = {
   /** How many rolls were typed instead of rolled (spec.md, Horizon). */
   readonly overrides: number
   readonly deeds: readonly string[]
+  /**
+   * The act numbers already announced to this player (Phase 10c).
+   *
+   * The beat shows an act slip the first time each rung of the ladder
+   * is satisfied and never again, so this is what "never again" is made
+   * of. Durable: it rides in the campaign record, so an export and an
+   * import do not replay the whole arc.
+   */
+  readonly actsSeen: readonly number[]
   readonly combat: Combat | null
   readonly filter: Filter
   readonly openId: string | null
@@ -377,6 +392,8 @@ export type Action =
   | { readonly type: 'cave.leave' }
   /** Back off the mountain to the trail-head village (Phase 10b). */
   | { readonly type: 'cave.village' }
+  /** Dismiss the act-change slip, marking the act announced (Phase 10c). */
+  | { readonly type: 'act.seen' }
   /** MY DICE on the beat: toggle entering the next move's die by hand. */
   | { readonly type: 'roll.manual' }
   /** CONTINUE on a picker card: resolve the move on the tapped face. */
