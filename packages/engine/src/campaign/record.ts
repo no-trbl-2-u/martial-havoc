@@ -41,6 +41,28 @@ export const RECORD_READINGS: readonly string[] = Object.freeze([
   'I-60', // hints and treasure effects are hidden until earned
 ])
 
+/**
+ * A Technique the Master made from a landed Final Blow (R31).
+ *
+ * The book gives it a name, a value of 1-4 and "a brief description",
+ * and nothing else: no table, no id, no printed effect. So it is kept
+ * whole on the record rather than as an id into a table, because there
+ * is no table for it to be an id into - this Technique exists only in
+ * this campaign.
+ *
+ * `words` are the three the inspiration table gave, kept because the
+ * player may have named it after them and a record that dropped them
+ * would lose where the name came from. Empty where the table was never
+ * rolled, which R31 allows ("for inspiration").
+ */
+export type LearnedTechnique = {
+  readonly name: string
+  /** 1-4, assigned by the player (R31). It is also the ENDURANCE cost (R28). */
+  readonly value: number
+  readonly description: string
+  readonly words: readonly string[]
+}
+
 /** The Master as the record keeps them, between scenes. */
 export type RecordedMaster = {
   readonly name: string
@@ -64,6 +86,25 @@ export type RecordedMaster = {
    * record carries it for the rest of the campaign.
    */
   readonly overspent: boolean
+  /**
+   * The Master's age (R01), or null where the sheet leaves it blank.
+   *
+   * **Optional, and no version bump**, for the reason
+   * {@link CampaignRecord.actsSeen} gives: nothing about the saved shape
+   * became wrong when this arrived, and `MIGRATIONS` is keyed on estate
+   * readings that moved, not on fields that did not exist. A record
+   * without it reads as a Master whose age was never given, which is
+   * exactly what such a record says.
+   */
+  readonly age?: number | null
+  /**
+   * The Techniques this Master invented off landed Final Blows (R31).
+   *
+   * Optional and unversioned for the same reason as `age`. A record
+   * without it reads as a Master who has invented none, which is true
+   * of every record written before they could.
+   */
+  readonly learned?: readonly LearnedTechnique[]
 }
 
 /** One line of the deeds ledger. */

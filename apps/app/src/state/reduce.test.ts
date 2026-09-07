@@ -13,6 +13,7 @@ import { actFor, fromSequence, withDefeated, withKey } from '@martial-havoc/engi
 import { theFiveTreasures } from '@martial-havoc/content'
 import type { Die } from '@martial-havoc/engine'
 import { randomSource } from '../dice/random'
+import { fromCampaign, toCampaign } from './campaign'
 import { menuFor } from './menu'
 import { newRecord } from './record'
 import { reduce } from './reduce'
@@ -276,11 +277,11 @@ describe('every way a fight ends is a moment (Phase 10d)', () => {
     const tied = play(atGhost(), [[{ type: 'combat.round' }, [...TIE, 3, 3]]])
     expect(tied.combat?.event?.roll.total).toBe(6)
     expect(tied.combat?.event?.reading?.kind).toBe('fight-resumes')
-    const endurance = tied.combat?.foeEndurance
+    const endurance = tied.combat?.foes[0]?.endurance
     const resumed = reduce(tied, { type: 'combat.resume' }, fromSequence([]))
     expect(resumed.combat?.event).toBeNull()
     expect(resumed.combat?.over.ended).toBe(false)
-    expect(resumed.combat?.foeEndurance).toBe(endurance)
+    expect(resumed.combat?.foes[0]?.endurance).toBe(endurance)
     expect(resumed.screen).toBe('combat')
   })
 
@@ -536,7 +537,10 @@ describe('the fight with the Dexterous Ghost', () => {
   it('starts on the combat screen with the foe’s printed ENDURANCE', () => {
     const s = atGhost()
     expect(s.screen).toBe('combat')
-    expect(s.combat).toMatchObject({ foeId: GHOST, foeEndurance: 8, round: 1 })
+    expect(s.combat).toMatchObject({ target: 0, round: 1 })
+    expect(s.combat?.foes).toEqual([
+      { id: GHOST, endurance: 8, strength: null, outcome: null, difference: 0, heldBack: false, looted: false },
+    ])
     // A foe the Event did not bring cannot be fought.
     const before = toGhost()
     expect(reduce(before, { type: 'cave.fight', foe: 'foe.ogre' }, fromSequence([]))).toBe(before)
@@ -552,7 +556,7 @@ describe('the fight with the Dexterous Ghost', () => {
       opponent: { total: 13, proficiency: { name: 'immaterial charge', value: 4 } },
     })
     const struck = reduce(s, { type: 'combat.strike' }, fromSequence([]))
-    expect(struck.combat?.foeEndurance).toBe(0)
+    expect(struck.combat?.foes[0]?.endurance).toBe(0)
     expect(struck.combat?.over).toEqual({ ended: true, reason: 'opponent-down' })
     expect(struck.deeds).toContain('killed dexterous ghost')
   })
@@ -584,7 +588,7 @@ describe('the fight with the Dexterous Ghost', () => {
   it('an Opening then doubles lands the Final Blow (R29, R30)', () => {
     const s = play(atGhost(), finish())
     expect(s.combat?.blow).toMatchObject({ landed: true })
-    expect(s.combat?.foeEndurance).toBe(0)
+    expect(s.combat?.foes[0]?.endurance).toBe(0)
     expect(s.combat?.over).toEqual({ ended: true, reason: 'final-blow' })
     expect(s.deeds).toContain('final blow on dexterous ghost')
   })
@@ -628,11 +632,11 @@ describe('the fight with the Dexterous Ghost', () => {
 
   it('a beaten named foe is gone from every table, and its LOOT line is read once (5T a2, I-33c)', () => {
     const won = play(atGhost(), [...finish()])
-    const looted = reduce(won, { type: 'combat.loot' }, fromSequence([]))
+    const looted = reduce(won, { type: 'combat.loot', index: 0 }, fromSequence([]))
     expect(looted.result).toMatchObject({ kind: 'loot', foe: 'Dexterous Ghost', face: null, item: "private quarter's key", key: true, treasure: null })
     expect(looted.cave.keys).toContain(KEY)
     expect(looted.deeds).toContain("took the private quarter's key")
-    expect(reduce(looted, { type: 'combat.loot' }, fromSequence([]))).toBe(looted)
+    expect(reduce(looted, { type: 'combat.loot', index: 0 }, fromSequence([]))).toBe(looted)
     const back = reduce(looted, { type: 'combat.leave' }, fromSequence([]))
     expect(back.screen).toBe('beat')
     expect(back.cave.defeated).toEqual([GHOST])
@@ -669,13 +673,16 @@ describe('the Kitchen Monk (I-39) and the Chieftain’s sheets (I-38b)', () => {
   })
 
   it('a Devil servant’s 6 is a Hint, not a thing carried: the area’s grey paragraph is revealed (I-08)', () => {
+    // The Storage room is dice-less (I-34), so after the Event die the
+    // next face is the Oracle's No. of enemies for a Minion: a 1 is one
+    // devil, and one devil is the fight this test is about.
     const met = play(atKitchen(), [
-      [{ type: 'cave.go', to: AREA.storage }, [2]],
+      [{ type: 'cave.go', to: AREA.storage }, [2, 1]],
       [{ type: 'roll.close' }, []],
     ])
     expect(met.pending).toEqual(['foe.devil-servant'])
     const won = play(reduce(met, { type: 'cave.fight', foe: 'foe.devil-servant' }, fromSequence([])), [...finish()])
-    const looted = reduce(won, { type: 'combat.loot' }, fromSequence([6]))
+    const looted = reduce(won, { type: 'combat.loot', index: 0 }, fromSequence([6]))
     expect(looted.result).toMatchObject({ kind: 'loot', foe: 'Devil servant', face: 6, hint: true, gift: false, key: false, treasure: null })
     expect((looted.result as { item: string }).item).not.toContain('[')
     expect(looted.cave.hints).toContain(AREA.storage)
@@ -685,7 +692,7 @@ describe('the Kitchen Monk (I-39) and the Chieftain’s sheets (I-38b)', () => {
   it('attacking him costs a Dishonor Point and starts the fight', () => {
     const s = reduce(atKitchen(), { type: 'cave.attack' }, fromSequence([]))
     expect(s.screen).toBe('combat')
-    expect(s.combat?.foeId).toBe('foe.monk')
+    expect(s.combat?.foes[0]?.id).toBe('foe.monk')
     expect(s.cave.dishonor).toBe(1)
     expect(s.sheet.dishonor).toBe(1)
   })
@@ -772,8 +779,18 @@ describe('the Old Vixen teaches the Cord\u2019s spells (I-41)', () => {
       cave: { ...base.cave, area: AREA.women },
       pending: [VIXEN],
       combat: {
-        foeId: VIXEN,
-        foeEndurance: 0,
+        foes: [
+          {
+            id: VIXEN,
+            endurance: 0,
+            strength: null,
+            outcome: null,
+            difference: 0,
+            heldBack: false,
+            looted: true,
+          },
+        ],
+        target: 0,
         round: 2,
         last: null,
         event: null,
@@ -782,7 +799,8 @@ describe('the Old Vixen teaches the Cord\u2019s spells (I-41)', () => {
         blow: null,
         techniqueLine: null,
         ambush: false,
-        looted: true,
+        naming: null,
+        blowSettled: false,
         over: { ended: true, reason: 'final-blow' },
       },
     }
@@ -809,7 +827,15 @@ describe('the Old Vixen teaches the Cord\u2019s spells (I-41)', () => {
         ...beaten(),
         cave: { ...base.cave, area: AREA.attendants },
         pending: [GHOST],
-        combat: { ...(beaten().combat as NonNullable<RecordState['combat']>), foeId: GHOST },
+        combat: {
+          ...(beaten().combat as NonNullable<RecordState['combat']>),
+          foes: [
+            {
+              ...(beaten().combat as NonNullable<RecordState['combat']>).foes[0]!,
+              id: GHOST,
+            },
+          ],
+        },
       },
       { type: 'combat.leave' },
       fromSequence([]),
@@ -828,7 +854,7 @@ describe('the cave, played to its ending on the reducer', () => {
     const beat = (foe: string): readonly (readonly [Action, readonly Die[]])[] => [
       [{ type: 'cave.fight', foe }, []],
       ...finish(),
-      [{ type: 'combat.loot' }, []],
+      [{ type: 'combat.loot', index: 0 }, []],
       [{ type: 'combat.leave' }, []],
     ]
     const s = play(fresh(), [
@@ -914,5 +940,264 @@ describe('the rest of the record', () => {
       [{ type: 'combat.round' }, [6, 5, 1, 1]],
     ])
     expect(JSON.stringify(s)).toBe(frozen)
+  })
+})
+
+describe('many foes at once (Phase 10e)', () => {
+  /** The Storage room is dice-less (I-34): Event 2, then the Oracle's count. */
+  const toStorage = (count: Die): RecordState =>
+    play(fresh(), [
+      ...walk(AREA.entrance),
+      [{ type: 'cave.go', to: AREA.storage }, [2, count]],
+      [{ type: 'roll.close' }, []],
+    ])
+
+  it('counts the devils from the Oracle and shows the die it read (I-34, MH p.58)', () => {
+    const met = toStorage(4)
+    expect(met.pending).toEqual(Array.from({ length: 4 }, () => 'foe.devil-servant'))
+    expect(met.result).toMatchObject({ kind: 'turn', countFace: 4 })
+    const row = menuFor(met).find((o) => o.id === 'fight-all')
+    expect(row?.title).toBe('FACE THEM ALL (4)')
+  })
+
+  it('offers no FACE THEM ALL row when the Event brought one', () => {
+    expect(menuFor(toStorage(1)).some((o) => o.id === 'fight-all')).toBe(false)
+  })
+
+  it('fields both attendants on the "Both" row, and offers them as a pair', () => {
+    const both = play(fresh(), [
+      ...walk(AREA.entrance),
+      ...walk(AREA.hall),
+      [{ type: 'cave.go', to: AREA.attendants }, [2, 6]],
+      [{ type: 'roll.close' }, []],
+    ])
+    expect(both.pending).toEqual(['foe.skillful-beast', GHOST])
+    // No die was drawn for the count: the row prints both, and two is
+    // what reading the row gives.
+    expect(both.result).toMatchObject({ kind: 'turn', countFace: null })
+    expect(menuFor(both).find((o) => o.id === 'fight-all')?.title).toBe('FACE THEM ALL (2)')
+  })
+
+  it('drops SKILL by the number faced, and lets ATTACK say who may reach (R35, R37)', () => {
+    const band = reduce(toStorage(3), { type: 'cave.fight-all' }, fromSequence([]))
+    expect(band.screen).toBe('combat')
+    expect(band.combat?.foes).toHaveLength(3)
+    // The Master's 5 and 4 first, then two per servant in the order
+    // they are listed: 3+3, 6+6, 2+2.
+    const round = reduce(band, { type: 'combat.round' }, fromSequence([5, 4, 3, 3, 6, 6, 2, 2]))
+    const c = round.combat
+    // SKILL 8 reduced by the three faced (R35).
+    expect(c?.last?.master.skill).toBe(5)
+    // Each servant is SKILL 5 with Surround 3: 14, 20 and 12.
+    expect(c?.foes.map((f) => f.strength?.total)).toEqual([14, 20, 12])
+    // A Devil servant is ATT 1, so one of the three may reach the
+    // Master this round - and it is not the one that rolled 20.
+    expect(c?.foes.map((f) => f.heldBack)).toEqual([false, true, true])
+    expect(round.sheet.endurance).toBe(band.sheet.endurance)
+  })
+
+  it('applies the winner’s option to the card the Master is aimed at', () => {
+    const band = reduce(toStorage(2), { type: 'cave.fight-all' }, fromSequence([]))
+    // Master 6+6 on SKILL 6; both servants roll 1+1.
+    const round = reduce(band, { type: 'combat.round' }, fromSequence([6, 6, 1, 1, 1, 1]))
+    const aimed = reduce(round, { type: 'combat.target', index: 1 }, fromSequence([]))
+    expect(aimed.combat?.target).toBe(1)
+    const struck = reduce(aimed, { type: 'combat.strike' }, fromSequence([]))
+    // The difference came off the second body, and only the second.
+    expect(struck.combat?.foes[0]?.endurance).toBe(7)
+    expect(struck.combat?.foes[1]?.endurance).toBeLessThan(7)
+    // The fight is not over: one of the two is still standing.
+    expect(struck.combat?.over.ended).toBe(false)
+  })
+
+  it('reads one LOOT line per body, and each only once (5T a2)', () => {
+    const band = reduce(toStorage(2), { type: 'cave.fight-all' }, fromSequence([]))
+    // Both servants flattened by hand: the loot rows are what is being
+    // tested, not the arithmetic that got them there.
+    const down: RecordState = {
+      ...band,
+      combat: {
+        ...(band.combat as NonNullable<RecordState['combat']>),
+        foes: (band.combat as NonNullable<RecordState['combat']>).foes.map((f) => ({
+          ...f,
+          endurance: 0,
+        })),
+      },
+    }
+    const first = reduce(down, { type: 'combat.loot', index: 0 }, fromSequence([1]))
+    expect(first.result).toMatchObject({ kind: 'loot', foe: 'Devil servant' })
+    expect(first.combat?.foes[0]?.looted).toBe(true)
+    expect(first.combat?.foes[1]?.looted).toBe(false)
+    // The same body a second time is a no-op; the other body is not.
+    expect(reduce(first, { type: 'combat.loot', index: 0 }, fromSequence([1]))).toBe(first)
+    const second = reduce(first, { type: 'combat.loot', index: 1 }, fromSequence([4]))
+    expect(second.combat?.foes[1]?.looted).toBe(true)
+  })
+
+  it('carries an area Technique to as many as its prose reaches (R36, I-11)', () => {
+    const met = toStorage(3)
+    const knows: RecordState = {
+      ...met,
+      sheet: { ...met.sheet, techniques: ['technique.butterfly-palms'] },
+    }
+    const band = reduce(knows, { type: 'cave.fight-all' }, fromSequence([]))
+    // Master 6+6 on SKILL 5; all three servants roll 1+1, so the
+    // Master is ahead of each of them by the same amount.
+    const round = reduce(band, { type: 'combat.round' }, fromSequence([6, 6, 1, 1, 1, 1, 1, 1]))
+    const by = round.combat?.foes[0]?.difference ?? 0
+    expect(by).toBeGreaterThan(0)
+    const palms = reduce(
+      round,
+      { type: 'combat.technique', id: 'technique.butterfly-palms' },
+      fromSequence([]),
+    )
+    // "You can hit two opponents": two of the three take the round's
+    // damage, repeated rather than divided (the same `by` twice, never
+    // half each), and the third takes none. ENDURANCE floors at zero.
+    const hit = Math.max(0, 7 - by)
+    expect(palms.combat?.foes.map((f) => f.endurance)).toEqual([hit, hit, 7])
+    // Its cost came off the Master's ENDURANCE (R27, I-23).
+    expect(palms.sheet.endurance).toBe(round.sheet.endurance - 1)
+  })
+
+  it('leaves the ones not fought waiting on the beat', () => {
+    const met = toStorage(3)
+    const one = reduce(met, { type: 'cave.fight', foe: 'foe.devil-servant' }, fromSequence([]))
+    const fled = reduce(one, { type: 'combat.leave' }, fromSequence([]))
+    // Fleeing leaves the encounter behind entirely (I-32).
+    expect(fled.pending).toEqual([])
+    expect(fled.screen).toBe('beat')
+  })
+})
+
+describe('the Final Blow becomes a Technique of your own (Phase 10f)', () => {
+  /** From the mountain to the Ghost, an Opening, and a blow that lands. */
+  const landed = (): RecordState =>
+    play(toGhost(), [
+      [{ type: 'cave.fight', foe: GHOST }, []],
+      [{ type: 'combat.round' }, [6, 5, 1, 1]],
+      [{ type: 'combat.opening' }, []],
+      [{ type: 'combat.blow' }, [3, 3]],
+    ])
+
+  it('offers to keep the blow, and the LUCK roll costs nothing on a success (R31, I-12)', () => {
+    const s = landed()
+    expect(s.combat?.blow?.landed).toBe(true)
+    expect(s.combat?.blowSettled).toBe(false)
+    // San Te's LUCK is 9; 2+4 = 6 passes.
+    const kept = reduce(s, { type: 'combat.keep' }, fromSequence([2, 4]))
+    expect(kept.sheet.luck).toBe(s.sheet.luck)
+    expect(kept.combat?.naming).toMatchObject({ words: null, name: '', value: 2, description: '' })
+    // The offer is answered: it is not made twice.
+    expect(reduce(kept, { type: 'combat.keep' }, fromSequence([2, 4]))).toBe(kept)
+  })
+
+  it('costs 1 LUCK on a failure, and adds nothing (R31, I-12; sealed)', () => {
+    const s = landed()
+    // LUCK 9; 5+6 = 11 fails.
+    const missed = reduce(s, { type: 'combat.keep' }, fromSequence([5, 6]))
+    expect(missed.sheet.luck).toBe(s.sheet.luck - 1)
+    expect(missed.combat?.naming).toBeNull()
+    expect(missed.combat?.blowSettled).toBe(true)
+    expect(missed.sheet.learned).toEqual([])
+  })
+
+  it('fails on a double six whatever LUCK is, and still costs the point', () => {
+    const s = landed()
+    const missed = reduce(s, { type: 'combat.keep' }, fromSequence([6, 6]))
+    expect(missed.combat?.naming).toBeNull()
+    expect(missed.sheet.luck).toBe(s.sheet.luck - 1)
+  })
+
+  it('lets the blow go without a roll, and does not ask again', () => {
+    const s = landed()
+    const gone = reduce(s, { type: 'combat.let-go' }, fromSequence([]))
+    expect(gone.sheet.luck).toBe(s.sheet.luck)
+    expect(gone.combat?.naming).toBeNull()
+    expect(gone.combat?.blowSettled).toBe(true)
+    expect(reduce(gone, { type: 'combat.keep' }, fromSequence([2, 4]))).toBe(gone)
+  })
+
+  it('rolls the inspiration table and prefills the name from its three words (MH p.26)', () => {
+    const kept = reduce(landed(), { type: 'combat.keep' }, fromSequence([2, 4]))
+    // 1 and 1: the first band, the first row - Strike, Furious, Dragon.
+    const words = reduce(kept, { type: 'combat.inspire' }, fromSequence([1, 1]))
+    expect(words.combat?.naming?.words).toMatchObject({
+      action: 'Strike',
+      attribute: 'Furious',
+      animal: 'Dragon',
+    })
+    expect(words.combat?.naming?.name).toBe('Furious Strike of the Dragon')
+    // Rolled once: it is inspiration, not a table the fight keeps asking.
+    expect(reduce(words, { type: 'combat.inspire' }, fromSequence([2, 2]))).toBe(words)
+  })
+
+  it('writes the named Technique onto the sheet and into the ledger', () => {
+    const named = play(reduce(landed(), { type: 'combat.keep' }, fromSequence([2, 4])), [
+      [{ type: 'combat.name', name: 'Impetuous Slap of the Phoenix' }, []],
+      [{ type: 'combat.value', value: 2 }, []],
+      [{ type: 'combat.describe', text: 'I jump and strike the cheek' }, []],
+      [{ type: 'combat.learn' }, []],
+    ])
+    expect(named.sheet.learned).toEqual([
+      {
+        name: 'Impetuous Slap of the Phoenix',
+        value: 2,
+        description: 'I jump and strike the cheek',
+        words: [],
+      },
+    ])
+    expect(named.deeds).toContain('learned Impetuous Slap of the Phoenix')
+    expect(named.combat?.naming).toBeNull()
+  })
+
+  it('refuses a Technique with no name', () => {
+    const kept = reduce(landed(), { type: 'combat.keep' }, fromSequence([2, 4]))
+    expect(reduce(kept, { type: 'combat.learn' }, fromSequence([]))).toBe(kept)
+  })
+
+  it('offers a learned Technique as a winner’s option in a later fight, at its own cost', () => {
+    const own = {
+      name: 'Impetuous Slap of the Phoenix',
+      value: 2,
+      description: 'I jump and strike the cheek',
+      words: [],
+    }
+    const master = play(toGhost(), [[{ type: 'cave.fight', foe: GHOST }, []]])
+    const armed: RecordState = {
+      ...master,
+      sheet: { ...master.sheet, techniques: [], learned: [own] },
+    }
+    const won = reduce(armed, { type: 'combat.round' }, fromSequence([6, 5, 1, 1]))
+    const used = reduce(won, { type: 'combat.technique', id: 'learned:0' }, fromSequence([]))
+    // It costs its value in ENDURANCE (R28) and strikes for the same
+    // (an invention, labelled: the book gives it no effect).
+    expect(used.sheet.endurance).toBe(won.sheet.endurance - 2)
+    expect(used.combat?.foes[0]?.endurance).toBe(8 - 2)
+    expect(used.combat?.techniqueLine).toBe('I jump and strike the cheek')
+  })
+
+  it('carries the age and the learned Technique through an export and back', () => {
+    const own = {
+      name: 'Sweeping Palm of the Turtle',
+      value: 3,
+      description: 'a low sweep',
+      words: ['Sweep', 'Sharp', 'Turtle'],
+    }
+    const before: RecordState = {
+      ...fresh(),
+      sheet: { ...fresh().sheet, age: 27, learned: [own] },
+    }
+    const back = fromCampaign(toCampaign(before), fresh())
+    expect(back.sheet.age).toBe(27)
+    expect(back.sheet.learned).toEqual([own])
+  })
+
+  it('reads a record written before this phase as ageless, with nothing learned', () => {
+    const older = toCampaign(fresh())
+    const { age: _age, learned: _learned, ...master } = older.master
+    const back = fromCampaign({ ...older, master }, fresh())
+    expect(back.sheet.age).toBeNull()
+    expect(back.sheet.learned).toEqual([])
   })
 })

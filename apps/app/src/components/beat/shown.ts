@@ -41,9 +41,14 @@ export type ShownResult = {
   readonly label: Label
   /** The citation the label stands on; folded on screen. */
   readonly pill: string
-  /** The two dice, where the result had dice. Null renders nothing. */
+  /** The dice, where the result had dice. Null renders nothing. */
   readonly a: DieFace | null
   readonly b: DieFace | null
+  /**
+   * The third die: the headcount an encounter was counted on (Phase
+   * 10e). Null on every result that counted without one.
+   */
+  readonly c: DieFace | null
   /** The big number, or the short text that stands in for one. */
   readonly total: string
   /** The line under it: what the roll was against, or what it brought. */
@@ -55,9 +60,41 @@ export type ShownResult = {
   readonly narrator: string | null
 }
 
+/**
+ * The foes met, tallied by name (Phase 10e).
+ *
+ * A crowd arrives as one entry per body - four Devil servants are four
+ * entries - because that is what a fight needs. What a player needs to
+ * read is "4 Devil servants", so the names are counted here, in the
+ * order they were met, and a name met more than once is printed with
+ * its count and the plural the adventure itself prints for it.
+ */
+const tally = (names: readonly string[]): readonly string[] =>
+  names.reduce<readonly string[]>(
+    (out, name) => (out.includes(name) ? out : [...out, name]),
+    [],
+  ).map((name) => {
+    const n = names.filter((x) => x === name).length
+    return n === 1
+      ? name
+      : fill(t('ui.cave.event.met.several'), { n, name: pluralFoe(name) })
+  })
+
+/**
+ * The plural of a foe's printed name.
+ *
+ * The two the adventure ever fields in numbers - Devil servants and
+ * Woodgatherers - are printed in the plural on their own Encounters
+ * lines, and the record carries that printed form. Anything else falls
+ * back to the name as printed: a made-up plural on a printed name would
+ * be the app putting words in the book's mouth.
+ */
+const pluralFoe = (name: string): string =>
+  treasureFoes.find((f) => f.name === name)?.plural ?? name
+
 /** What a turn's Event brought, worded. */
 const brought = (r: Extract<Result, { kind: 'turn' }>): string => {
-  if (r.foes.length > 0) return fill(t('ui.cave.event.met'), { names: r.foes.join(', ') })
+  if (r.foes.length > 0) return fill(t('ui.cave.event.met'), { names: tally(r.foes).join(', ') })
   if (r.hint) return t('ui.cave.event.hint')
   if (r.event === 'safe') return t('ui.cave.event.safe')
   return t('ui.cave.event.nothing')
@@ -70,7 +107,9 @@ const brought = (r: Extract<Result, { kind: 'turn' }>): string => {
  */
 const turnPassage = (r: Extract<Result, { kind: 'turn' }>): string | null => {
   if (r.foes.length > 0) {
-    const lines = r.foes
+    // One description per *kind*, not per body: four Devil servants
+    // share one stat block and one printed description.
+    const lines = [...new Set(r.foes)]
       .map((name) => treasureFoes.find((f) => f.name === name)?.description)
       .filter((d): d is string => d !== undefined && d.length > 0)
     return lines.length === 0 ? null : lines.join('\n')
@@ -123,6 +162,7 @@ const book = (r: Result, sheet: RecordState['sheet']): Omit<ShownResult, 'narrat
               op: r.success ? '<=' : '>',
               threshold: r.threshold,
             }),
+        c: null,
         passage: null,
       }
     }
@@ -134,6 +174,7 @@ const book = (r: Result, sheet: RecordState['sheet']): Omit<ShownResult, 'narrat
         a: null,
         b: null,
         total: `+${r.after - r.before}`,
+        c: null,
         against: fill(t('ui.result.rest.against'), { before: r.before, after: r.after }),
         cite: t('ui.result.rest.cite'),
         passage: null,
@@ -146,6 +187,7 @@ const book = (r: Result, sheet: RecordState['sheet']): Omit<ShownResult, 'narrat
         a: null,
         b: null,
         total: r.treasure,
+        c: null,
         against: fill(t('ui.result.take.against'), { n: r.held }),
         cite: t('ui.result.take.cite'),
         passage: null,
@@ -157,6 +199,7 @@ const book = (r: Result, sheet: RecordState['sheet']): Omit<ShownResult, 'narrat
         pill: t('ui.cave.cite.a1'),
         a: r.eventFace,
         b: r.encounterFace,
+        c: r.countFace,
         total: r.eventText,
         against: brought(r),
         cite: fill(t('ui.cave.event.cite'), { area: r.area }),
@@ -169,6 +212,7 @@ const book = (r: Result, sheet: RecordState['sheet']): Omit<ShownResult, 'narrat
         pill: t('ui.cave.cite.a2'),
         a: r.face,
         b: null,
+        c: null,
         total: r.treasure ?? r.item,
         against: r.hint
           ? t('ui.cave.loot.hint')
@@ -193,6 +237,7 @@ const book = (r: Result, sheet: RecordState['sheet']): Omit<ShownResult, 'narrat
         pill: citeOf('escape.stratagem-and-the-two-is-damage'),
         a: null,
         b: null,
+        c: null,
         total: `-${r.before - r.after}`,
         against: fill(t('ui.result.flee.against'), { after: r.after, dishonor: r.dishonor }),
         cite: t('ui.result.flee.cite'),
@@ -205,6 +250,7 @@ const book = (r: Result, sheet: RecordState['sheet']): Omit<ShownResult, 'narrat
         pill: r.cite,
         a: null,
         b: null,
+        c: null,
         total: r.text,
         against: '',
         cite: r.cite,

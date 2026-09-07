@@ -9,6 +9,37 @@
 
 ## Pending
 
+### [MEDIUM] The Minions rule is not offered anywhere (MH p.28 footnote)
+- pass: agent (commit 2299f57)
+- viewport: unspecified
+- auth_state: anonymous
+- category: content
+- observation: Phase 10e's brief asked for the Minions rule as a toggle on the fight's first screen - "To streamline combat while maintaining the idea of a chaotic scene, you can consider Minions with ENDURANCE=1; if you hit you can remove one minion" (MH p.28, footnote) - default off. The phase shipped everything else in its scope and not this: the rule is optional, it is the only optional rule in the book that changes a printed stat block, and there is nowhere in the app that a rule is switched on or off. Giving it the first such switch is a UI decision worth making deliberately rather than as the tail of a phase about crowds.
+- evidence: plan/phases/phase_10e_many_foes.md, Scope, the fourth bullet; no `minions` flag exists in apps/app/src/state/types.ts after 2299f57
+- suggested fix: A row on the fight's first screen when the band is more than one, cited MH p.28, default off, that reads each body's ENDURANCE as 1 for the length of that fight. It wants a home for optional rules in the record, which is the part worth designing: a second one will follow.
+- source: agent
+
+### [HIGH] scripts/copy-check.test.ts — the copy leg does not see a citation as copy
+- pass: agent (commit 5d25011)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: The copy leg catches JSX text, string props that render, and literals of three or more words, which is what let three hardcoded citations ship green in Phase 10d: `<Source cite="I-30" />`, `cite: 'MH p.6'`, and `<Source cite="MH p.28 · R33 · I-33" />`. The first two are under the word threshold; the third is over it and still passed, so the threshold is not the only hole. A citation is exactly the class of string agents.md rule 7 exists for - it is the thing that says where a rule came from, and a component that invents one is a component asserting the book said something. The three were moved into strings.json in this same commit, but the leg that should have refused them still would not.
+- evidence: scripts/copy-check.test.ts, "three shapes of hardcoded copy"; the three literals passed `npm run test` on commit 2c528b9 and were caught only by reading the diff afterwards
+- suggested fix: Give the leg a fourth shape: any string literal reaching a `cite` prop or a `cite:` field under apps/app/src must be a `t(...)` call or a value read from the engine's registry (`citeOf`). That is a narrow, mechanical rule with no judgement in it, and it is the shape the existing violations all had. Extend `.claude/hooks/guard.mjs` in the same commit if the rule wants teeth outside the test.
+- source: agent
+
+### [LOW] e2e — the ?dice= sequences are long, positional and undocumented
+- pass: agent (commit 5d25011)
+- viewport: unspecified
+- auth_state: anonymous
+- category: maintainability
+- observation: Specs name their rolls with a single flat queue - `?dice=4,4,2,3,6,5,1,1,4,1` - consumed in whatever order the code happens to draw. Adding one roll anywhere upstream shifts every face after it, and a wrong guess fails as a timeout on an unrelated assertion rather than as a bad die. Phase 10c's boss-door test and Phase 10d's ambush test both cost a round of dice archaeology for this reason, and the ambush one is padded with four spare faces whose only job is to stop a tie exhausting the queue.
+- evidence: e2e/prototype.spec.ts, the `?dice=` strings in the 10c and 10d cases; reduce.test.ts pairs each action with its own faces and does not have this problem
+- suggested fix: Let `?dice=` take labelled groups the way reduce.test.ts pairs actions with faces - or, cheaper, require a comment above every queue naming what each face is for, the way the existing "Event 4 (safe) twice, then Event 2 and creature 3" comment does. The reducer tests are the model; the e2e specs drifted from it.
+- source: agent
+
+
 ### [HIGH] skills/ship-a-phase.md — the dispatcher picks by list order, not by dependency
 - pass: user-jot (commit 14d178e)
 - viewport: unspecified
@@ -320,7 +351,10 @@ not from that pass: they are the carry-overs the `/march` loop of
   I-02). R25c's CHANGE OR RECOVER A WEAPON puts it back, which is the
   option the book already prints for exactly this. The jot's third
   option - the brief's flat -2 on Attack Strength - was not taken: it
-  contradicts the shipped reading, as the jot said.
+  contradicts the shipped reading, as the jot said. The same finding was
+  filed twice, once at 5d25011 and again at 412b3f6 ("half of I-30's
+  either/or is unimplemented"); the second copy is drained by this same
+  change and was removed from Pending rather than resolved separately.
 
 
 ### [MED] general — CronCreate loop schedules do not survive the cloud container

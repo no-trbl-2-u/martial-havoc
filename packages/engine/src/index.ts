@@ -91,8 +91,23 @@ export {
 export type { EventReading, Morale, UnexpectedEventRoll } from './combat/unexpected-event'
 
 // Multiple combat: several opponents at once (MH p.30).
-export { areaDamage, attackersThisRound, roundAgainstMany, skillForFight } from './multiple/multiple'
-export type { ManyRound, OpponentExchange } from './multiple/multiple'
+export {
+  areaDamage,
+  attackersThisRound,
+  heldBackInBand,
+  roundAgainstBand,
+  roundAgainstMany,
+  skillForFight,
+} from './multiple/multiple'
+export type {
+  BandExchange,
+  BandMember,
+  BandRound,
+  ManyRound,
+  OpponentExchange,
+} from './multiple/multiple'
+export { attackOf, bandOf, enemyCount } from './multiple/count'
+export type { EnemyType, Headcount } from './multiple/count'
 
 // Escape: leaving a fight, and what it costs (MH p.30).
 export { ESCAPE_DAMAGE, escape } from './escape/escape'
@@ -172,7 +187,7 @@ export {
   withOverride,
   withPassage,
 } from './campaign/record'
-export type { CampaignRecord, Deed, RecordedMaster } from './campaign/record'
+export type { CampaignRecord, Deed, LearnedTechnique, RecordedMaster } from './campaign/record'
 export { MIGRATIONS, applyChain, chainFrom, readingDrift } from './campaign/migrate'
 export type { Migration, MigrationProblem } from './campaign/migrate'
 export {

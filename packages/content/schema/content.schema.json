@@ -806,6 +806,11 @@
           },
           "notes": {
             "type": "string"
+          },
+          "plural": {
+            "description": "The name as a source prints it in the plural, transcribed. Absent where no source prints one; never invented.",
+            "type": "string",
+            "minLength": 1
           }
         }
       },
@@ -1256,6 +1261,14 @@
             "description": "The authored line - what the table reads when the effect fires. Ours, never a paraphrase of the printed effect.",
             "type": "string",
             "minLength": 1
+          },
+          "reach": {
+            "description": "How many opponents an area ability reaches (R36, I-11): a number read from the ability's own prose, or null for \"all opponents surrounding you\". Absent where the ability reaches only the opponent in front.",
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1
           }
         }
       },

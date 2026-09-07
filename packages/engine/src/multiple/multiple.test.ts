@@ -6,7 +6,14 @@
  */
 import { describe, expect, it } from 'vitest'
 import { fromSequence } from '../dice/sources'
-import { areaDamage, attackersThisRound, roundAgainstMany, skillForFight } from './multiple'
+import {
+  areaDamage,
+  attackersThisRound,
+  heldBackInBand,
+  roundAgainstBand,
+  roundAgainstMany,
+  skillForFight,
+} from './multiple'
 
 describe('skillForFight (R35)', () => {
   it('reduces SKILL by the number of opponents faced', () => {
@@ -95,5 +102,86 @@ describe('areaDamage (R36, I-11)', () => {
 
   it('reaches nobody it cannot: fewer enemies than reach is fine', () => {
     expect(areaDamage(4, 2, 1)).toEqual([4])
+  })
+})
+
+describe('heldBackInBand (R37, I-06: the cap is per kind)', () => {
+  const ogre = (n: number) =>
+    Array.from({ length: n }, () => ({ skill: 6, kind: 'foe.ogre', attack: 3 }))
+
+  it('lets ATTACK of a kind swing and holds the rest back', () => {
+    expect(heldBackInBand(ogre(4))).toEqual([false, false, false, true])
+  })
+
+  it('holds nobody back while the kind is within its ATTACK', () => {
+    expect(heldBackInBand(ogre(3))).toEqual([false, false, false])
+  })
+
+  it('counts each kind separately: two caps, not one', () => {
+    const mixed = [
+      { skill: 7, kind: 'foe.skillful-beast', attack: 5 },
+      { skill: 7, kind: 'foe.dexterous-ghost', attack: 1 },
+      { skill: 7, kind: 'foe.dexterous-ghost', attack: 1 },
+    ]
+    expect(heldBackInBand(mixed)).toEqual([false, false, true])
+  })
+
+  it('is inert against a lone opponent, whatever its ATTACK (sealed)', () => {
+    expect(heldBackInBand([{ skill: 5, kind: 'foe.woodgatherer', attack: 5 }])).toEqual([false])
+  })
+})
+
+describe('roundAgainstBand (I-06, R37)', () => {
+  // The brief's own scenario. SKILL 8 reduced by the three faced is 5;
+  // 5 and 4 on the dice plus Non lethal combat 4 is 18. Each servant is
+  // SKILL 5 with Surround 3, so 3+3, 6+6 and 2+2 read 14, 20 and 12.
+  // Only the second beats the Master, and by 2.
+  const master = { skill: 5, proficiencies: [{ name: 'Non lethal combat', value: 4 }] }
+  const devils = Array.from({ length: 3 }, () => ({
+    skill: 5,
+    proficiencies: [{ name: 'Surround', value: 3 }],
+    kind: 'foe.devil-servant',
+    attack: 1,
+  }))
+
+  it('compares one Master roll against each attacker, whoever may reach', () => {
+    const round = roundAgainstBand(master, devils)(fromSequence([5, 4, 3, 3, 6, 6, 2, 2]))
+    expect(round.master.total).toBe(18)
+    expect(round.exchanges.map((e) => e.opponent.total)).toEqual([14, 20, 12])
+    expect(round.exchanges.map((e) => e.outcome.kind)).toEqual([
+      'master-wins',
+      'master-hit',
+      'master-wins',
+    ])
+  })
+
+  it('holds back the servants beyond ATTACK, so a won roll costs nothing', () => {
+    // A Devil servant is ATT 1: three of them face the Master, all
+    // three roll, and one of them may reach. The 20 that beat the
+    // Master is the second, and the second is held back - so the round
+    // costs no ENDURANCE, and SKILL is still reduced by all three
+    // faced (R35). The two quantities are different, which is the
+    // whole reason the module keeps them apart.
+    const round = roundAgainstBand(master, devils)(fromSequence([5, 4, 3, 3, 6, 6, 2, 2]))
+    expect(round.exchanges.map((e) => e.heldBack)).toEqual([false, true, true])
+    expect(round.damageTaken).toBe(0)
+  })
+
+  it('lets a held-back attacker roll but not wound (R37)', () => {
+    // Four Ogres, ATT 3: the fourth is held back. All four beat the
+    // Master, and only three of them cost ENDURANCE.
+    const ogres = Array.from({ length: 4 }, () => ({ skill: 6, kind: 'foe.ogre', attack: 3 }))
+    const round = roundAgainstBand({ skill: 1 }, ogres)(
+      fromSequence([1, 1, 6, 6, 6, 6, 6, 6, 6, 6]),
+    )
+    expect(round.exchanges.map((e) => e.heldBack)).toEqual([false, false, false, true])
+    expect(round.exchanges.every((e) => e.outcome.kind === 'master-hit')).toBe(true)
+    // Each of the three that reached the Master struck for the
+    // difference; the fourth's identical roll is on screen and inert.
+    expect(round.damageTaken).toBe(
+      round.exchanges
+        .filter((e) => !e.heldBack)
+        .reduce((n, e) => n + (e.outcome.kind === 'master-hit' ? e.outcome.damage : 0), 0),
+    )
   })
 })

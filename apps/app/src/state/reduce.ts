@@ -17,6 +17,8 @@
 import {
   actFor,
   ambush,
+  areaDamage,
+  attackOf,
   attackRescue,
   attackStrength,
   behaviours,
@@ -28,18 +30,22 @@ import {
   finalBlow,
   flag,
   fromSilver,
+  heldBackInBand,
   importJson,
   injuryDamage,
   learnFrom,
   lootFrom,
   minions,
   morale,
+  namingRoll,
+  newTechnique,
   nightsRest,
   placeRunning,
   rescue,
   resolveEncounter,
   resolveRound,
   revealHint,
+  skillForFight,
   spendTechnique,
   stayTheNight,
   step,
@@ -60,6 +66,7 @@ import {
   effectFor,
   market,
   rollDeity,
+  rollFinalBlow,
   rollUnexpectedEvent,
   t,
   theFiveTreasures,
@@ -87,6 +94,8 @@ import type {
   Combat,
   CreationState,
   EventShown,
+  FoeInFight,
+  Naming,
   RecordState,
   Sheet,
 } from './types'
@@ -136,12 +145,60 @@ const withoutFirst = (list: readonly string[], value: string): readonly string[]
   return i < 0 ? list : [...list.slice(0, i), ...list.slice(i + 1)]
 }
 
-/** R26 read off the current numbers. */
+// ------------------------------------------------------------ the band
+//
+// A fight is against a list (Phase 10e). These four read that list; no
+// handler below indexes `foes` directly, so "who is the Master aiming
+// at" and "is anyone still standing" have one answer each.
+
+/** The opponent the tapped card names - the winner's option applies here. */
+const aimedAt = (c: Combat): FoeInFight => c.foes[c.target] ?? c.foes[0] ?? EMPTY_FOE
+
+/** Everyone still on their feet. */
+const standing = (c: Combat): readonly FoeInFight[] => c.foes.filter((f) => f.endurance > 0)
+
+/** The band's ENDURANCE together: zero exactly when every body is down. */
+const bandEndurance = (c: Combat): number => c.foes.reduce((n, f) => n + f.endurance, 0)
+
+/** Replace one opponent in the band, by index, leaving the rest alone. */
+const withFoe = (c: Combat, index: number, change: Partial<FoeInFight>): Combat => ({
+  ...c,
+  foes: c.foes.map((f, i) => (i === index ? { ...f, ...change } : f)),
+})
+
+/**
+ * The stand-in for an empty band.
+ *
+ * `Combat.foes` is never empty in practice - the reducer ends a fight
+ * rather than emptying it - but the type cannot say so, and every
+ * caller of {@link aimedAt} would otherwise need a null branch that can
+ * never run. A body with no ENDURANCE and no id reads as already down
+ * everywhere it could be reached.
+ */
+const EMPTY_FOE: FoeInFight = {
+  id: '',
+  endurance: 0,
+  strength: null,
+  outcome: null,
+  difference: 0,
+  heldBack: false,
+  looted: false,
+}
+
+/**
+ * R26 read off the current numbers, for a band rather than one body.
+ *
+ * Two readings fold in here, both of them forced by there being more
+ * than one opponent. The fight is over when the *band* is down, so the
+ * opponent's side of R26 is the band's total ENDURANCE. And a Final
+ * Blow (R30) kills the body it was aimed at, not the encounter: it only
+ * ends the fight when nobody else is left standing.
+ */
 const fightEnd = (state: RecordState, combat: Combat) =>
   endsFight({
     masterEndurance: state.sheet.endurance,
-    opponentEndurance: combat.foeEndurance,
-    finalBlowLanded: combat.blow?.landed === true,
+    opponentEndurance: bandEndurance(combat),
+    finalBlowLanded: combat.blow?.landed === true && bandEndurance(combat) === 0,
     unexpectedEvent: combat.event !== null,
   })
 
@@ -187,6 +244,7 @@ const doTurn = (state: RecordState, to: string, dice: DiceSource): RecordState =
         event: turn.event.kind,
         eventText: turn.event.text,
         encounterFace: turn.encounter?.face ?? null,
+        countFace: turn.encounter?.countFace ?? null,
         foes: foes.map(foeName),
         hint: turn.hintRevealed,
         momentum: turn.momentum,
@@ -341,7 +399,7 @@ const doAttackRescue = (state: RecordState): RecordState => {
   const cave = attackRescue(TABLES, state.cave)
   return startFight(
     withSheet({ ...state, cave, pending: [foe] }, { dishonor: state.sheet.dishonor + (cave.dishonor - state.cave.dishonor) }),
-    opponent,
+    [opponent],
   )
 }
 
@@ -442,18 +500,55 @@ const doGourd = (state: RecordState): RecordState => {
 const doFight = (state: RecordState, foe: string): RecordState => {
   const opponent = treasureFoeById(foe)
   if (opponent === undefined || !state.pending.includes(foe)) return state
-  const ambushed = state.result?.kind === 'turn' && state.result.event === 'ambush'
-  return startFight(state, opponent, ambushed)
+  return startFight(state, [opponent], ambushed(state))
 }
 
-const startFight = (state: RecordState, foe: Opponent, ambush = false): RecordState => ({
+/**
+ * FACE THEM ALL: every foe the Event brought, in one fight (R35;
+ * Phase 10e).
+ *
+ * The Master's SKILL drops by the number faced, so facing four at once
+ * is a decision with a cost, and facing them one at a time is the other
+ * half of the same decision. Both stay on the beat, and neither is the
+ * default.
+ */
+const doFightAll = (state: RecordState): RecordState => {
+  const band = state.pending
+    .map((id) => treasureFoeById(id))
+    .filter((foe): foe is Opponent => foe !== undefined)
+  return band.length === 0 ? state : startFight(state, band, ambushed(state))
+}
+
+/**
+ * Was this fight opened by an Ambush (I-08a)?
+ *
+ * The Event that brought these foes is the last turn result, and it is
+ * the only place the fact lives. A foe faced from any other state - one
+ * left in the room by an environmental change, one re-faced after
+ * walking back - is a normal fight: the ambush was spent the first time.
+ */
+const ambushed = (state: RecordState): boolean =>
+  state.result?.kind === 'turn' && state.result.event === 'ambush'
+
+/** One opponent as a body in a fight: full ENDURANCE, nothing rolled yet. */
+const asFoeInFight = (foe: Opponent): FoeInFight => ({
+  id: foe.id,
+  endurance: foe.endurance,
+  strength: null,
+  outcome: null,
+  difference: 0,
+  heldBack: false,
+  looted: false,
+})
+
+const startFight = (state: RecordState, band: readonly Opponent[], ambush = false): RecordState => ({
   ...state,
   screen: 'combat',
   result: null,
   roll: null,
   combat: {
-    foeId: foe.id,
-    foeEndurance: foe.endurance,
+    foes: band.map(asFoeInFight),
+    target: 0,
     round: 1,
     last: null,
     event: null,
@@ -462,7 +557,8 @@ const startFight = (state: RecordState, foe: Opponent, ambush = false): RecordSt
     blow: null,
     techniqueLine: null,
     ambush,
-    looted: false,
+    naming: null,
+    blowSettled: false,
     over: { ended: false },
   },
 })
@@ -518,18 +614,48 @@ const resolveEvent = (roll: UnexpectedEventRoll, dice: DiceSource): EventShown =
   }
 }
 
+/**
+ * One round of the fight, against however many are standing (I-06, R35,
+ * R37; Phase 10e).
+ *
+ * The Master rolls **once**. That one Attack Strength is compared
+ * against each standing opponent's own roll, and each comparison
+ * resolves as R24/R25 in its own right - which is what makes a round
+ * against three a scene rather than three fights interleaved.
+ *
+ * Two different numbers of opponents are in play and conflating them is
+ * the trap the engine's module is written to avoid: SKILL is reduced by
+ * everyone **faced** (R35), while only ATTACK of each kind may **wound**
+ * (R37). A held-back opponent still rolls and its total still shows;
+ * it simply costs nothing this round.
+ *
+ * An Ambush is one unopposed round: the Master is caught, so their side
+ * of the comparison is SKILL and 2d6 with no Proficiency at all (I-08a).
+ */
 const doRound = (state: RecordState, dice: DiceSource): RecordState => {
   const c = state.combat
-  const foe = c === null ? undefined : treasureFoeById(c.foeId)
-  if (c === null || foe === undefined || c.over.ended || c.last !== null) return state
+  if (c === null || c.over.ended || c.last !== null) return state
+  const alive = standing(c)
+  if (alive.length === 0) return state
   const { source, manual } = masterDice(state, dice)
-  // An Ambush is one unopposed round: the Master is caught, so their
-  // side of the comparison is SKILL and 2d6 with no Proficiency at all
-  // (I-08a). The reading is a modifier to how this one round is set up,
-  // which is exactly the shape the engine hands back.
   const caught = c.ambush
-  const master = attackStrength({
-    skill: state.sheet.skill,
+  const band = alive.map((f) => {
+    const foe = treasureFoeById(f.id)
+    return {
+      skill: foe?.skill ?? 0,
+      proficiencies: foe?.proficiencies ?? [],
+      kind: f.id,
+      attack: attackOf(foe?.attack ?? null),
+    }
+  })
+  // The Master's dice come from their own source (a tapped face reaches
+  // this roll first); every opponent's come from the table's.
+  // R35 belongs to Multiple Combat: it is the price of facing several
+  // at once, and a duel is not multiple combat. Facing one leaves SKILL
+  // where the sheet has it, which is what R23 and R24 have always
+  // assumed; facing three costs three.
+  const mine = attackStrength({
+    skill: alive.length > 1 ? skillForFight(state.sheet.skill, alive.length) : state.sheet.skill,
     // Two things can take a Proficiency out of the Master's sum, and
     // they are different sizes: an ambush takes all of them for one
     // round (I-08a), a lost weapon takes only the armed ones and keeps
@@ -541,23 +667,59 @@ const doRound = (state: RecordState, dice: DiceSource): RecordState => {
           ? withoutArmed(state.sheet.proficiencies)
           : state.sheet.proficiencies,
   })(source)
-  const opponent = attackStrength({ skill: foe.skill, proficiencies: foe.proficiencies })(dice)
-  const outcome = resolveRound(master, opponent)
-  const hit = outcome.kind === 'master-hit' ? outcome.damage : 0
+  // R37 is decided before any opponent rolls, because it is a fact about
+  // the band rather than about the dice: who may reach the Master this
+  // round does not depend on what anyone rolls.
+  const flags = heldBackInBand(band)
+  // Each opponent's dice come from the table's source, in the order the
+  // band is listed, so a scripted round reads left to right.
+  const exchanges = band.map((attacker, i) => {
+    const opponent = attackStrength(attacker)(dice)
+    return { opponent, outcome: resolveRound(mine, opponent), heldBack: flags[i] === true }
+  })
+  const hit = exchanges.reduce(
+    (n, e) => n + (!e.heldBack && e.outcome.kind === 'master-hit' ? e.outcome.damage : 0),
+    0,
+  )
   const afterHit = withSheet(state, { endurance: floor(state.sheet.endurance - hit) })
-  const event = outcome.kind === 'unexpected-event' ? resolveEvent(unexpectedEvent(dice), dice) : null
-  // An injury row's damage is rolled above and waits for the pick; the
-  // round itself takes nothing extra off either side.
+  const drew = exchanges.some((e) => e.outcome.kind === 'unexpected-event')
+  const event = drew ? resolveEvent(unexpectedEvent(dice), dice) : null
+  // I-30 makes rows 3 and 11 the operator's pick between the injury and
+  // the weapon, so the -1d6 is rolled with the row and waits: neither
+  // side loses anything for it until `combat.injury` says which half was
+  // taken. The round itself is only the round.
   const injured = afterHit
+  // Positional: `alive` was filtered out of `c.foes`, so the exchanges
+  // are zipped back onto the bodies they came from by identity, never
+  // by index into the whole band.
+  const byFoe = new Map(alive.map((f, i) => [f, exchanges[i]]))
+  const foes = c.foes.map((f) => {
+    const e = byFoe.get(f)
+    if (e === undefined) return { ...f, strength: null, outcome: null, heldBack: false }
+    return {
+      ...f,
+      strength: e.opponent,
+      outcome: e.outcome.kind,
+      difference: mine.total - e.opponent.total,
+      heldBack: e.heldBack,
+    }
+  })
+  // The tapped card follows the Master's own reading of the round: if
+  // the one they were aimed at has fallen, the aim moves to the first
+  // still standing rather than pointing at a body.
+  const target = foes[c.target]?.endurance === 0
+    ? Math.max(0, foes.findIndex((f) => f.endurance > 0))
+    : c.target
   const combat: Combat = {
     ...c,
     round: c.round + 1,
-    foeEndurance: c.foeEndurance,
+    foes,
+    target,
     last: {
-      master,
-      opponent,
-      outcome: outcome.kind,
-      difference: master.total - opponent.total,
+      master: mine,
+      opponent: aimedAt({ ...c, foes, target }).strength ?? mine,
+      outcome: aimedAt({ ...c, foes, target }).outcome ?? 'master-wins',
+      difference: aimedAt({ ...c, foes, target }).difference,
     },
     event,
     morale: null,
@@ -565,11 +727,20 @@ const doRound = (state: RecordState, dice: DiceSource): RecordState => {
     techniqueLine: null,
     // Spent. Whatever this round was, the next one is a fair one.
     ambush: false,
+    naming: null,
+    blowSettled: false,
   }
   return afterMasterRoll(
     { ...injured, combat: { ...combat, over: fightEnd(injured, combat) } },
     manual,
   )
+}
+
+/** Tap one of several cards: the winner's option applies to that body. */
+const doTarget = (state: RecordState, index: number): RecordState => {
+  const c = state.combat
+  if (c === null || index < 0 || index >= c.foes.length) return state
+  return c.foes[index]?.endurance === 0 ? state : withCombat(state, { target: index })
 }
 
 /**
@@ -587,63 +758,249 @@ const doResume = (state: RecordState): RecordState => {
   return { ...state, combat: { ...combat, over: fightEnd(state, combat) } }
 }
 
-/** The winner's option (a): the difference off the foe's ENDURANCE (R25a). */
+/** The band with the last round's rolls cleared: the next round is fresh. */
+const rolledOff = (c: Combat): readonly FoeInFight[] =>
+  c.foes.map((f) => ({ ...f, strength: null, outcome: null, heldBack: false }))
+
+/**
+ * The winner's option (a): the difference off the ENDURANCE of the body
+ * the Master is aimed at (R25a).
+ *
+ * With several opponents the difference is the one the tapped card
+ * shows - the Master beat *that* opponent by that much - which is why
+ * the target is part of the fight's state rather than a thing the
+ * screen works out as it draws.
+ */
 const doStrike = (state: RecordState): RecordState => {
   const c = state.combat
-  if (c === null || c.last === null || c.last.outcome !== 'master-wins') return state
-  const foe = treasureFoeById(c.foeId)
-  const foeEndurance = floor(c.foeEndurance - c.last.difference)
-  const combat: Combat = { ...c, foeEndurance, last: null, opening: false }
+  const aim = c === null ? null : aimedAt(c)
+  if (c === null || aim === null || aim.outcome !== 'master-wins') return state
+  const foe = treasureFoeById(aim.id)
+  const endurance = floor(aim.endurance - aim.difference)
+  const struck = withFoe(c, c.target, { endurance })
+  const combat: Combat = { ...struck, foes: rolledOff(struck), last: null, opening: false }
   const next = { ...state, combat: { ...combat, over: fightEnd(state, combat) } }
-  return foeEndurance === 0 && foe !== undefined
+  return endurance === 0 && foe !== undefined
     ? addDeed(next, fill(t('ui.deed.killed'), { name: foe.name.toLowerCase() }))
     : next
 }
 
-/** The winner's option (b): a Technique, no roll, its cost in ENDURANCE (R27, I-23). */
+/**
+ * The id prefix of a Technique the Master invented (Phase 10f).
+ *
+ * A learned Technique has no id in any table, because it is in no
+ * table: it exists only on this sheet. So the menu names it by its
+ * position on the sheet behind this prefix, which keeps one action
+ * (`combat.technique`) for both kinds rather than two that must be
+ * kept in step.
+ */
+export const LEARNED = 'learned:'
+
+/** The learned Technique an id names, or undefined for a printed one. */
+const learnedBy = (state: RecordState, id: string) =>
+  id.startsWith(LEARNED) ? state.sheet.learned[Number.parseInt(id.slice(LEARNED.length), 10)] : undefined
+
+/**
+ * The winner's option (b): a Technique, no roll, its cost in ENDURANCE
+ * (R27, R28, I-23).
+ *
+ * Two kinds arrive here and only one of them is in a table. A printed
+ * Technique spends its printed cost and reads its authored line, and an
+ * area one carries its damage to the reach its prose names (R36, I-11).
+ * A Technique the Master invented off a Final Blow (R31) spends its
+ * assigned value and reads the player's own description; what it *does*
+ * beyond that the book never says, and this build's answer - it strikes
+ * the body it was aimed at for its value - is an invention, labelled as
+ * one (`combat.a-learned-technique-strikes-for-its-value`).
+ */
 const doTechnique = (state: RecordState, id: string): RecordState => {
   const c = state.combat
-  const effect = effectFor(id)
+  const own = learnedBy(state, id)
+  const effect = own === undefined ? effectFor(id) : undefined
   if (
     c === null ||
-    c.last === null ||
-    c.last.outcome !== 'master-wins' ||
-    effect === undefined ||
-    !state.sheet.techniques.includes(id)
+    aimedAt(c).outcome !== 'master-wins' ||
+    (own === undefined && (effect === undefined || !state.sheet.techniques.includes(id)))
   )
     return state
-  const endurance = floor(spendTechnique(state.sheet.endurance, effect.cost))
+  const cost = own?.value ?? effect?.cost ?? 0
+  const line = own === undefined ? (effect?.line ?? null) : own.description
+  const endurance = floor(spendTechnique(state.sheet.endurance, cost))
   const next = withSheet(state, { endurance })
-  const combat: Combat = { ...c, last: null, techniqueLine: effect.line }
+  // R36, I-11: an area Technique carries the *same* damage to as many
+  // opponents as its own prose reaches, never a share of it. Absent
+  // means it reaches nobody but the one in front; null means "all
+  // opponents surrounding you", which is every body still standing.
+  // A learned Technique reaches the one it was aimed at, for its value.
+  const reach =
+    own !== undefined ? 1 : effect?.reach === undefined ? 0 : (effect.reach ?? Number.POSITIVE_INFINITY)
+  const amount = own?.value ?? aimedAt(c).difference
+  const order = [c.target, ...c.foes.map((_, i) => i).filter((i) => i !== c.target)]
+  const targets = order.filter((i) => (c.foes[i]?.endurance ?? 0) > 0)
+  const spread = areaDamage(amount, reach, targets.length)
+  const hurt: Combat = targets.reduce(
+    (acc, index, at) =>
+      withFoe(acc, index, {
+        endurance: floor((acc.foes[index]?.endurance ?? 0) - (spread[at] ?? 0)),
+      }),
+    c,
+  )
+  const combat: Combat = {
+    ...hurt,
+    foes: rolledOff(hurt),
+    last: null,
+    techniqueLine: line,
+  }
   return { ...next, combat: { ...combat, over: fightEnd(next, combat) } }
 }
 
 /** The winner's option (d): an Opening, no damage (R29). */
 const doOpening = (state: RecordState): RecordState => {
   const c = state.combat
-  if (c === null || c.last === null || c.last.outcome !== 'master-wins') return state
-  return withCombat(state, { opening: true, last: null })
+  if (c === null || aimedAt(c).outcome !== 'master-wins') return state
+  return withCombat(state, { opening: true, last: null, foes: rolledOff(c) })
 }
 
 /** The Final Blow after an Opening: doubles land it (R30; spec.md sealed). */
 const doBlow = (state: RecordState, dice: DiceSource): RecordState => {
   const c = state.combat
-  const foe = c === null ? undefined : treasureFoeById(c.foeId)
+  const foe = c === null ? undefined : treasureFoeById(aimedAt(c).id)
   if (c === null || foe === undefined || !c.opening || c.over.ended) return state
   const { source, manual } = masterDice(state, dice)
   const blow = finalBlow({})(source)
-  const combat: Combat = {
-    ...c,
-    blow,
-    opening: !blow.landed,
-    foeEndurance: blow.landed ? 0 : c.foeEndurance,
-  }
+  // The Blow kills the body it was aimed at (R30), not the encounter:
+  // with others still standing the fight goes on, which is why the end
+  // of the fight is read off the band rather than off this flag.
+  const landed = blow.landed ? withFoe(c, c.target, { endurance: 0 }) : c
+  const combat: Combat = { ...landed, blow, opening: !blow.landed }
   const next = { ...state, combat: { ...combat, over: fightEnd(state, combat) } }
   return afterMasterRoll(
     blow.landed
       ? addDeed(next, fill(t('ui.deed.final-blow'), { name: foe.name.toLowerCase() }))
       : next,
     manual,
+  )
+}
+
+/**
+ * KEEP IT AS A TECHNIQUE: the LUCK roll after a landed blow (R31, I-12).
+ *
+ * The roll is the Master's, so it comes from the Master's source and a
+ * tapped face reaches it. `newTechnique` applies the sealed reading -
+ * 1 LUCK on failure, nothing on success - and this only writes the
+ * number it hands back. A failure settles the offer and there is no
+ * second asking; a success opens the naming card.
+ */
+const doKeep = (state: RecordState, dice: DiceSource): RecordState => {
+  const c = state.combat
+  if (c === null || c.blow?.landed !== true || c.blowSettled) return state
+  const { source, manual } = masterDice(state, dice)
+  const roll = newTechnique(state.sheet.luck)(source)
+  const next = withSheet(state, { luck: floor(roll.luck) })
+  return afterMasterRoll(
+    withCombat(next, {
+      blowSettled: true,
+      naming: roll.learned
+        ? { roll, words: null, name: '', value: DEFAULT_TECHNIQUE_VALUE, description: '' }
+        : null,
+      // The roll is a result of its own: a player who lost a point of
+      // LUCK for nothing should read why on the slip, not infer it.
+      techniqueLine: roll.learned ? null : t('ui.combat.keep.failed.line'),
+    }),
+    manual,
+  )
+}
+
+/**
+ * The value a naming card opens on.
+ *
+ * R31 says 1-4 and says nothing else, and the book's own worked example
+ * assigns 2 ("Impetuous Slap of the Phoenix (2)"). Opening on the
+ * example's number is a default, not a rule; the player moves it.
+ */
+const DEFAULT_TECHNIQUE_VALUE = 2
+
+/** LET IT GO: the blow was devastating and stays a moment, not a Technique. */
+const doLetGo = (state: RecordState): RecordState => {
+  const c = state.combat
+  if (c === null || c.blow?.landed !== true || c.blowSettled) return state
+  return withCombat(state, { blowSettled: true, naming: null })
+}
+
+/**
+ * ROLL FOR INSPIRATION: the table at MH p.26 (R31).
+ *
+ * "For inspiration" - so it is optional, it may be rolled once, and the
+ * name it suggests is a suggestion. The engine returns the address; the
+ * content package holds the three words; composing them into a name is
+ * this build's, and the book prints three orderings of one roll, so the
+ * first ("Furious Strike of the Dragon") is offered and the field stays
+ * free.
+ */
+const doInspire = (state: RecordState, dice: DiceSource): RecordState => {
+  const c = state.combat
+  if (c === null || c.naming === null || c.naming.words !== null) return state
+  const { source, manual } = masterDice(state, dice)
+  const address = namingRoll(source)
+  const row = rollFinalBlow(address.first, address.second)
+  if (row === undefined) return state
+  const words = {
+    roll: address.roll,
+    action: row.action,
+    attribute: row.attribute,
+    animal: row.animal,
+  }
+  return afterMasterRoll(
+    withCombat(state, {
+      naming: {
+        ...c.naming,
+        words,
+        // Prefilled, never imposed: the player may keep it, reorder it
+        // the way the book's own examples do, or write something else.
+        name:
+          c.naming.name.trim() === ''
+            ? fill(t('ui.combat.naming.suggested'), {
+                action: row.action,
+                attribute: row.attribute,
+                animal: row.animal,
+              })
+            : c.naming.name,
+      },
+    }),
+    manual,
+  )
+}
+
+/** One field of the naming card. A no-op when there is no card. */
+const onNaming = (state: RecordState, change: Partial<Naming>): RecordState => {
+  const c = state.combat
+  return c === null || c.naming === null ? state : withCombat(state, { naming: { ...c.naming, ...change } })
+}
+
+/**
+ * KEEP: the named Technique onto the sheet, and into the ledger (R31).
+ *
+ * A Technique with no name is not a Technique, so the row is disabled
+ * until one is typed and the reducer agrees. The value is clamped to the
+ * book's 1-4 here rather than trusted from the screen: the sheet is what
+ * later fights read.
+ */
+const doKeepTechnique = (state: RecordState): RecordState => {
+  const c = state.combat
+  const naming = c?.naming
+  if (c === null || naming === undefined || naming === null || naming.name.trim() === '') return state
+  const learned = {
+    name: naming.name.trim(),
+    value: Math.min(4, Math.max(1, Math.round(naming.value))),
+    description: naming.description.trim(),
+    words:
+      naming.words === null
+        ? []
+        : [naming.words.action, naming.words.attribute, naming.words.animal],
+  }
+  return addDeed(
+    withCombat(withSheet(state, { learned: [...state.sheet.learned, learned] }), { naming: null }),
+    fill(t('ui.deed.learned'), { name: learned.name }),
   )
 }
 
@@ -656,6 +1013,10 @@ const doBlow = (state: RecordState, dice: DiceSource): RecordState => {
  * fact that outlives this fight, and only the Master carries one this
  * build can suspend (R68, I-02), so a row naming the opponent offers the
  * injury alone. `resolved` closes the pick.
+ *
+ * An opponent's injury lands on the body the Master is aimed at, which
+ * is where the rest of the round's damage lands too (Phase 10e), and it
+ * can end that body on the spot: the reading working, not a bug.
  */
 const doInjury = (state: RecordState, take: 'injury' | 'weapon'): RecordState => {
   const c = state.combat
@@ -664,17 +1025,20 @@ const doInjury = (state: RecordState, take: 'injury' | 'weapon'): RecordState =>
   if (take === 'weapon' && injury.target !== 'master') return state
   const event = { ...c.event, injury: { ...injury, resolved: take } }
   if (take === 'weapon') return { ...state, weaponLost: true, combat: { ...c, event } }
-  // The opponent's injury comes off its ENDURANCE, which can end the
-  // fight on the spot: that is the reading working, not a bug.
   const next =
     injury.target === 'master'
       ? withSheet(state, { endurance: floor(state.sheet.endurance - injury.amount) })
       : state
+  const aimed = aimedAt(c)
   const combat: Combat = {
     ...c,
     event,
-    foeEndurance:
-      injury.target === 'opponent' ? floor(c.foeEndurance - injury.amount) : c.foeEndurance,
+    foes:
+      injury.target === 'opponent'
+        ? c.foes.map((f) =>
+            f === aimed ? { ...f, endurance: floor(f.endurance - injury.amount) } : f,
+          )
+        : c.foes,
   }
   return { ...next, combat: { ...combat, over: fightEnd(next, combat) } }
 }
@@ -686,11 +1050,19 @@ const doMorale = (state: RecordState, dice: DiceSource): RecordState => {
   return withCombat(state, { morale: morale(dice) })
 }
 
-/** After a victory: the foe's LOOT line (5T a2), read once. */
-const doLoot = (state: RecordState, dice: DiceSource): RecordState => {
+/**
+ * After a victory: one fallen body's LOOT line (5T a2), read once each.
+ *
+ * One line per body, in the order they fell, because that is what the
+ * adventure prints: a LOOT line belongs to an opponent, not to a fight.
+ * Two Devil servants down is two rolls on the Devil servant line, and
+ * they may drop different things.
+ */
+const doLoot = (state: RecordState, dice: DiceSource, index: number): RecordState => {
   const c = state.combat
-  if (c === null || c.foeEndurance > 0 || c.looted) return state
-  return withCombat(doLootOf(state, c.foeId, dice), { looted: true })
+  const body = c?.foes[index]
+  if (c === null || body === undefined || body.endurance > 0 || body.looted) return state
+  return { ...doLootOf(state, body.id, dice), combat: withFoe(c, index, { looted: true }) }
 }
 
 /**
@@ -701,48 +1073,62 @@ const doLoot = (state: RecordState, dice: DiceSource): RecordState => {
  */
 const doLeave = (state: RecordState, dice: DiceSource): RecordState => {
   const c = state.combat
-  const foe = c === null ? undefined : treasureFoeById(c.foeId)
-  if (c === null || foe === undefined) return state
+  if (c === null) return state
   if (c.over.ended && c.over.reason === 'master-down') return newRecord(dice)
-  // The foe fought is no longer pending; a named foe beaten is gone
-  // from every table it appears in (I-33b, I-33c). Fleeing leaves the
-  // encounter behind: the rest of it does not follow.
-  const beaten = c.foeEndurance === 0
-  // Who is still in the room when the fight stops (Phase 10d).
+  const bodies = c.foes
+    .map((f) => ({ body: f, foe: treasureFoeById(f.id) }))
+    .filter((x): x is { body: FoeInFight; foe: Opponent } => x.foe !== undefined)
+  const beaten = bodies.filter((x) => x.body.endurance === 0)
+  const alive = bodies.filter((x) => x.body.endurance > 0)
+  // Who is still in the room when the fight stops (Phase 10d, extended
+  // to a band in 10e).
   //
-  // Beaten: this foe is gone and the rest of the encounter stays.
+  // Beaten: those bodies are gone and the rest of the encounter stays.
   // Ended by an Unexpected Event: the fight stopped, the room did not
-  // empty. The foe is still standing there unless the row removed it -
-  // a retreat the Morale roll turned into a flight or a withdrawal is
-  // the one thing that does - and row 7's Minions join it.
+  // empty. Whoever is still standing is still standing there unless the
+  // row removed them - a retreat the Morale roll turned into a flight
+  // or a withdrawal is the one thing that does - and row 7's Minions
+  // join them, of the kind the Master was aimed at.
   // Fled: the encounter is left behind entirely (I-32).
   const left =
     c.event !== null &&
     c.event.retreatRow &&
     (c.morale?.result === 'flee' || c.morale?.result === 'cautious-retreat')
+  const aim = aimedAt(c)
   const joined =
-    c.event?.minions !== null && c.event?.minions !== undefined
-      ? Array.from({ length: c.event.minions.count }, () => foe.id)
+    c.event?.minions != null
+      ? Array.from({ length: c.event.minions.count }, () => aim.id)
       : c.morale?.result === 'rally'
-        ? Array.from({ length: c.morale.reinforcements }, () => foe.id)
+        ? Array.from({ length: c.morale.reinforcements }, () => aim.id)
         : []
-  const remaining = beaten
-    ? withoutFirst(state.pending, foe.id)
-    : c.over.ended && c.over.reason === 'unexpected-event'
-      ? [...(left ? withoutFirst(state.pending, foe.id) : state.pending), ...joined]
-      : []
-  const cave =
-    beaten && !RANK_AND_FILE.includes(foe.id)
-      ? // A named foe beaten is also a source the treasures may name
-        // (I-41): what the Old Vixen knew is on her body either way.
-        learntInto(resolveEncounter(state.cave, [foe.id]), foe.id)
-      : state.cave
+  const stillHere = left ? [] : alive.map((x) => x.body.id)
+  // Every id that walked into this fight leaves `pending`, whatever
+  // became of it; what is still standing goes back on, so a Master who
+  // faced one of three and stopped still has the other two waiting.
+  const untouched = c.foes.reduce((rest, f) => withoutFirst(rest, f.id), state.pending)
+  const remaining =
+    c.over.ended && c.over.reason === 'unexpected-event'
+      ? [...untouched, ...stillHere, ...joined]
+      : bandEndurance(c) === 0
+        ? untouched
+        : []
+  // A named foe beaten is gone from every table it appears in (I-33b,
+  // I-33c), and is also a source the treasures may name (I-41): what
+  // the Old Vixen knew is on her body either way.
+  const named = beaten.map((x) => x.foe.id).filter((id) => !RANK_AND_FILE.includes(id))
+  const cave = named.reduce(
+    (world, id) => learntInto(resolveEncounter(world, [id]), id),
+    state.cave,
+  )
   const back: RecordState = { ...state, screen: 'beat', combat: null, cave, pending: remaining }
   if (c.over.ended) return back
   // Fleeing: the last blow of 2 and a Dishonor Point (R38, R39, I-32).
   // Phase 10d gives it a result slip as well as a deed - running away
   // is a beat of the story, and the ledger is not where a player reads
-  // what just happened to them.
+  // what just happened to them. The name on it is whoever the Master
+  // was aimed at when they turned: the slip says who they ran from.
+  const from = treasureFoeById(aim.id)
+  if (from === undefined) return back
   const fled = escape({ endurance: state.sheet.endurance })
   return addDeed(
     withSheet(
@@ -750,7 +1136,7 @@ const doLeave = (state: RecordState, dice: DiceSource): RecordState => {
         ...back,
         result: {
           kind: 'flee',
-          foe: foe.name,
+          foe: from.name,
           before: state.sheet.endurance,
           after: floor(fled.endurance),
           dishonor: fled.dishonor,
@@ -761,7 +1147,7 @@ const doLeave = (state: RecordState, dice: DiceSource): RecordState => {
         dishonor: state.sheet.dishonor + fled.dishonor,
       },
     ),
-    fill(t('ui.deed.fled'), { name: foe.name.toLowerCase() }),
+    fill(t('ui.deed.fled'), { name: from.name.toLowerCase() }),
   )
 }
 
@@ -982,6 +1368,8 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return doLearn(state)
     case 'cave.fight':
       return doFight(state, action.foe)
+    case 'cave.fight-all':
+      return doFightAll(state)
     case 'cave.rest':
       return state.pending.length > 0 ? state : doRest(state)
     case 'cave.gourd':
@@ -1033,9 +1421,11 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       // R25c is also how a weapon lost to row 3 comes back (I-30): the
       // book already prints the option for exactly this, so the pick
       // needed no row of its own.
-      return state.combat?.last?.outcome === 'master-wins'
-        ? withCombat({ ...state, weaponLost: false }, { last: null })
+      return state.combat !== null && aimedAt(state.combat).outcome === 'master-wins'
+        ? withCombat({ ...state, weaponLost: false }, { last: null, foes: rolledOff(state.combat) })
         : state
+    case 'combat.target':
+      return doTarget(state, action.index)
     case 'combat.opening':
       return doOpening(state)
     case 'combat.blow':
@@ -1047,7 +1437,21 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
     case 'combat.resume':
       return doResume(state)
     case 'combat.loot':
-      return doLoot(state, dice)
+      return doLoot(state, dice, action.index)
+    case 'combat.keep':
+      return doKeep(state, dice)
+    case 'combat.let-go':
+      return doLetGo(state)
+    case 'combat.inspire':
+      return doInspire(state, dice)
+    case 'combat.name':
+      return onNaming(state, { name: action.name })
+    case 'combat.value':
+      return onNaming(state, { value: action.value })
+    case 'combat.describe':
+      return onNaming(state, { description: action.text })
+    case 'combat.learn':
+      return doKeepTechnique(state)
     case 'combat.leave':
       return doLeave(state, dice)
     case 'rules.filter':

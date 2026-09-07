@@ -47,6 +47,12 @@ const masterFrom = (sheet: Sheet): RecordedMaster => ({
   // (`RecordedMaster.techniques`: "Technique and Ritual ids").
   techniques: [...sheet.techniques, ...sheet.rituals],
   overspent: false,
+  // Both optional on the record and both unversioned: nothing about an
+  // older save became wrong when they arrived, and the migration chain
+  // is keyed on estate readings that moved, not on fields that did not
+  // exist (`CampaignRecord.actsSeen` states the rule).
+  age: sheet.age,
+  learned: sheet.learned,
 })
 
 /**
@@ -141,6 +147,11 @@ export const fromCampaign = (record: CampaignRecord, session: RecordState): Reco
       proficiencies: record.master.proficiencies,
       techniques: record.master.techniques.filter((id) => id.startsWith('technique.')),
       rituals: record.master.techniques.filter((id) => id.startsWith('ritual.')),
+      // A record written before Phase 10f carries neither: it is a
+      // Master whose age was never given and who has invented nothing,
+      // which is exactly what such a record says.
+      age: record.master.age ?? null,
+      learned: record.master.learned ?? [],
     },
     deeds: record.deeds.map((deed) => deed.text),
     passages: record.passages,

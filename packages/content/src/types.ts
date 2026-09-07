@@ -89,6 +89,16 @@ export type Deity = BandedRecord & {
 /** One of the 50 opponent stat blocks (MH p.70-79). */
 export type Opponent = BaseRecord & {
   readonly name: string
+  /**
+   * The name as the book prints it in the plural, where it does.
+   *
+   * The roster prints every stat block in the singular; an adventure's
+   * own Encounters line sometimes prints the plural ("Devil servants",
+   * "Woodgatherers"), and that printed form is transcribed here so a
+   * screen counting a crowd never has to invent one. Absent on every
+   * opponent the sources only ever print alone.
+   */
+  readonly plural?: string
   readonly description: string
   readonly skill: number
   readonly endurance: number
@@ -246,6 +256,16 @@ export type Effect = BaseRecord & {
   readonly timing: EffectTiming
   /** The engine call the class implies, or null for a narrative-only effect. */
   readonly operation: string | null
+  /**
+   * How many opponents an area ability reaches (R36, I-11).
+   *
+   * The book never states a number: reading I-11 says to take it from
+   * the ability's own prose, so it is read once, here, at data time.
+   * `2` is "You can hit two opponents"; `null` is "all opponents
+   * surrounding you" and every other phrasing that names no limit.
+   * Absent on every ability that reaches nobody but the one in front.
+   */
+  readonly reach?: number | null
   /** R13's Ritual-timing exception for Wudang, as a flag rather than a branch. */
   readonly wudangException?: boolean
   /** The authored line the table reads when the effect fires. */

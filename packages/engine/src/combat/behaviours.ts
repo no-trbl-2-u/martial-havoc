@@ -39,4 +39,9 @@ export const combatBehaviours: readonly Behaviour[] = Object.freeze([
     cite: 'MH p.53 (R68); I-02',
   },
   { id: 'combat.retreat-rows-roll-morale', label: 'invention', cite: 'spec.md, sealed rules' },
+  {
+    id: 'combat.a-learned-technique-strikes-for-its-value',
+    label: 'invention',
+    cite: 'plan/phases/phase_10f_the_sheet_that_grows.md',
+  },
 ])

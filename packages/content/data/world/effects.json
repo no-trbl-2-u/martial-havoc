@@ -26,6 +26,7 @@
       "cost": 1,
       "timing": "combat-winner-option",
       "operation": "multiple.areaDamage",
+      "reach": 2,
       "line": "Both palms land at once: the round's damage falls on two opponents instead of one."
     },
     {
@@ -86,6 +87,7 @@
       "cost": 2,
       "timing": "combat-winner-option",
       "operation": "multiple.areaDamage",
+      "reach": null,
       "line": "The ring of them is thrown outward at once, and everyone still standing has to close again."
     },
     {
@@ -156,6 +158,7 @@
       "cost": 2,
       "timing": "combat-winner-option",
       "operation": "multiple.areaDamage",
+      "reach": null,
       "line": "You go up, and you come down on every one of the circle that closed around you."
     },
     {

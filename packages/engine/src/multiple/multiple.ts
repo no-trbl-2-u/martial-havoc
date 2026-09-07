@@ -119,3 +119,97 @@ export const areaDamage = (
   enemies: number,
 ): readonly number[] =>
   Array.from({ length: enemies }, (_, index) => (index < reach ? amount : 0))
+
+/** An opponent in a band: what it rolls with, and how many of its kind may swing. */
+export type BandMember = Combatant & {
+  /**
+   * Which kind this opponent is - the id of its stat block.
+   *
+   * R37 caps simultaneous attackers by ATTACK, and ATTACK is an
+   * attribute of a *kind*, not of a crowd. Four Ogres and a Ghost are
+   * two caps, not one, so the cap needs to know which of the attackers
+   * share a stat block. The id is the only thing that says so, and it
+   * is opaque here: the engine never learns what an Ogre is.
+   */
+  readonly kind: string
+  /** The kind's printed ATTACK, already read as a number (`attackOf`). */
+  readonly attack: number
+}
+
+/**
+ * Which members of a band are held back this round (R37, I-09b).
+ *
+ * "The opponent's ATTACK attribute indicates how many enemies can
+ * attack at the same time." Applied per kind, in the order the band is
+ * listed: the first `attack` of each kind swing, the rest are held
+ * back. A held-back opponent is still in the fight and still on screen -
+ * it simply cannot reach the Master this round.
+ *
+ * Returns one flag per member, positionally, so a caller can zip it
+ * against its own list without re-deriving the grouping.
+ */
+export const heldBackInBand = (band: readonly BandMember[]): readonly boolean[] => {
+  const total = band.reduce<Record<string, number>>(
+    (counts, member) => ({ ...counts, [member.kind]: (counts[member.kind] ?? 0) + 1 }),
+    {},
+  )
+  // Folded rather than looped with a counter: the running tally of how
+  // many of each kind have already been given a slot is the fold's
+  // accumulator, so nothing here mutates.
+  return band.reduce<{ readonly seen: Record<string, number>; readonly flags: readonly boolean[] }>(
+    (acc, member) => {
+      const before = acc.seen[member.kind] ?? 0
+      const allowed = attackersThisRound(total[member.kind] ?? 1, member.attack)
+      return {
+        seen: { ...acc.seen, [member.kind]: before + 1 },
+        flags: [...acc.flags, before >= allowed],
+      }
+    },
+    { seen: {}, flags: [] },
+  ).flags
+}
+
+/** One member's roll in a band round, and whether ATTACK let it land. */
+export type BandExchange = OpponentExchange & {
+  /** True where R37's cap kept this one out of reach this round. */
+  readonly heldBack: boolean
+}
+
+/** A whole round against a band: {@link ManyRound} with R37 applied. */
+export type BandRound = Omit<ManyRound, 'exchanges'> & {
+  readonly exchanges: readonly BandExchange[]
+}
+
+/**
+ * Resolve one round against a band, with ATTACK capping who lands
+ * (I-06, R35, R37).
+ *
+ * Everyone rolls. That is deliberate: the Master's one roll is compared
+ * against each opponent's, so a held-back opponent's total is still a
+ * fact of the round - it is what the Master beat, and it is what the
+ * screen shows beside the one who got through. What ATTACK caps is
+ * **damage taken**, not dice thrown; `damageTaken` sums only the
+ * exchanges that were not held back.
+ *
+ * `master.skill` is expected to be {@link skillForFight} already, for
+ * the same reason {@link roundAgainstMany} expects it: the number faced
+ * (R35) and the number attacking (R37) are different quantities.
+ */
+export const roundAgainstBand =
+  (master: Combatant, band: readonly BandMember[]) =>
+  (dice: DiceSource): BandRound => {
+    const flags = heldBackInBand(band)
+    const round = roundAgainstMany(master, band)(dice)
+    const exchanges = round.exchanges.map((exchange, index) => ({
+      ...exchange,
+      heldBack: flags[index] === true,
+    }))
+    return {
+      ...round,
+      exchanges,
+      damageTaken: exchanges.reduce(
+        (total, e) => total + (!e.heldBack && e.outcome.kind === 'master-hit' ? e.outcome.damage : 0),
+        0,
+      ),
+    }
+  }
