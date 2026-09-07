@@ -552,3 +552,49 @@ test('several foes: the Oracle counts them, the band is a column of cards, ATTAC
   // Two are still standing, so the fight is not over.
   await expect(button(page, 'ROLL THE ROUND')).toBeEnabled()
 })
+
+test('a landed Final Blow becomes a Technique of the Master’s own', async ({ page }) => {
+  // Into the Attendants room and the Ghost (4,4,2,3); the round on
+  // 6,5 against 1,1; the blow on 3,3 (doubles, it lands); the LUCK
+  // roll on 2,4 = 6 against San Te's LUCK 9; the inspiration table on
+  // 1,1 - the first band, the first row.
+  await page.goto('/?dice=4,4,2,3,6,5,1,1,3,3,2,4,1,1')
+  await begin(page)
+  await toGhost(page)
+  await button(page, 'ROLL THE ROUND').click()
+  await page.getByTestId('act-opening').click()
+  await page.getByTestId('act-blow').click()
+  await expect(page.getByTestId('blow')).toContainText('THE BLOW LANDS')
+
+  // The offer stands above everything else the fight has to say.
+  await expect(page.getByTestId('act-keep')).toContainText('Roll against LUCK 9')
+  await expect(page.getByTestId('act-let-go')).toBeVisible()
+  await page.getByTestId('act-keep').click()
+
+  await expect(page.getByTestId('naming')).toBeVisible()
+  await expect(page.getByTestId('naming-luck')).toContainText('2d6 = 6 against LUCK 9 · passed')
+  await page.getByTestId('naming-inspire').click()
+  await expect(page.getByTestId('naming-words')).toHaveText('Strike · Furious · Dragon')
+  await expect(page.getByTestId('naming-name')).toHaveValue('Furious Strike of the Dragon')
+
+  // The name is prefilled and free; the value and the description are
+  // the player's, as the book asks (R31).
+  await page.getByTestId('naming-name').fill('Impetuous Slap of the Phoenix')
+  await page.getByTestId('naming-value-2').click()
+  await page.getByTestId('naming-description').fill('I jump and strike the cheek')
+  await page.getByTestId('naming-keep').click()
+  await expect(page.getByTestId('naming')).toHaveCount(0)
+
+  // It is on the record, with its value and its description, and the
+  // ledger says it was learned.
+  await page.getByTestId('act-go-on').click()
+  await button(page, /RECORD/).click()
+  await expect(page.getByTestId('record-techniques')).toContainText(
+    'Impetuous Slap of the Phoenix (2) - I jump and strike the cheek',
+  )
+  await expect(page.getByTestId('record-deeds')).toContainText(
+    'learned Impetuous Slap of the Phoenix',
+  )
+  // The printed sheet's first line: name and age (MH p.5).
+  await expect(page.getByTestId('record-master-name')).toHaveText('San Te, 27')
+})

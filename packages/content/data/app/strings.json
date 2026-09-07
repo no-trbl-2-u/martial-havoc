@@ -1328,6 +1328,11 @@
       "cite": "spec.md, Horizon (the campaign record)"
     },
     {
+      "id": "ui.record.master.named",
+      "text": "{name}, {age}",
+      "cite": "MH p.5"
+    },
+    {
       "id": "ui.record.counts",
       "text": "{deeds} DEEDS · {passages} PASSAGES · {overrides} OVERRIDES",
       "cite": "spec.md, Horizon (the campaign record)"
@@ -1436,6 +1441,156 @@
       "id": "ui.record.import.no-path",
       "text": "No way to migrate a version {version} file.",
       "cite": "spec.md, Horizon (the campaign record)"
+    },
+    {
+      "id": "ui.combat.act.keep",
+      "text": "Keep it as a Technique",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.keep.cite",
+      "text": "MH p.25 - R31",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.keep.line",
+      "text": "Roll against LUCK {luck}. A failure costs 1 LUCK.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.let-go",
+      "text": "Let it go",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.let-go.cite",
+      "text": "MH p.25 - R31",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.let-go.line",
+      "text": "A devastating strike, and nothing you could do twice.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.keep.failed.line",
+      "text": "The strike will not come again. You are one point of LUCK poorer for trying to hold it.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.title",
+      "text": "A TECHNIQUE OF YOUR OWN",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.cite",
+      "text": "MH p.25-26 - R31",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.roll",
+      "text": "ROLL FOR INSPIRATION",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.words",
+      "text": "{action} · {attribute} · {animal}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.words.note",
+      "text": "Three words, for inspiration. The name is yours.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.suggested",
+      "text": "{attribute} {action} of the {animal}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.name",
+      "text": "NAME",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.name.placeholder",
+      "text": "Impetuous Slap of the Phoenix",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.value",
+      "text": "VALUE",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.value.note",
+      "text": "1 to 4. It is also what it costs in ENDURANCE to use.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.description",
+      "text": "DESCRIPTION",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.description.placeholder",
+      "text": "I jump and strike the cheek, leaving a red scar.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.keep",
+      "text": "KEEP IT",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.luck",
+      "text": "2d6 = {total} against LUCK {luck} · {outcome}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.passed",
+      "text": "passed",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.naming.failed",
+      "text": "failed",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.technique.own",
+      "text": "{name} ({value}). Costs {value} ENDURANCE.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.deed.learned",
+      "text": "learned {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.record.master.ageless",
+      "text": "{name}, age not given",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.record.techniques.title",
+      "text": "TECHNIQUES",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.record.techniques.empty",
+      "text": "Nothing learned yet.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.record.techniques.own",
+      "text": "{name} ({value}) - {description}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.record.techniques.own.bare",
+      "text": "{name} ({value})",
+      "cite": "design/roll-modal/README.md"
     },
     {
       "id": "ui.nav.about",

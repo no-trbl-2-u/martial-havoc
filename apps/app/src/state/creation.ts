@@ -312,6 +312,8 @@ export const finishCreation = (c: CreationState): Sheet => {
   return {
     name: c.name.trim() === '' ? DEFAULT_NAME : c.name.trim(),
     age: ageOf(c),
+    // A Master invents Techniques by playing; none is made at creation.
+    learned: [],
     martialArtId: c.martialArtId,
     skill: skill - c.training,
     skillInitial: c.skill?.initial ?? skill,

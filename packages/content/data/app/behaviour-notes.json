@@ -346,6 +346,13 @@
       "title": "When the enemy would retreat, Morale decides whether they can"
     },
     {
+      "id": "note.combat.a-learned-technique-strikes-for-its-value",
+      "cite": "plan/phases/phase_10f_the_sheet_that_grows.md",
+      "ref": "combat.a-learned-technique-strikes-for-its-value",
+      "text": "A Technique invented off a Final Blow strikes for its own value, as well as costing that much ENDURANCE to use. The book gives a learned Technique a value and a description and no effect at all; this is ours.",
+      "title": "A Technique of your own strikes for its value"
+    },
+    {
       "id": "note.multiple.skill-minus-opponents",
       "cite": "MH p.30 (R35)",
       "ref": "multiple.skill-minus-opponents",

@@ -43,6 +43,8 @@ export const sheetFor =
     return {
       name: preset.name,
       age: preset.age,
+      /** Invented in play, never at creation (R31). */
+      learned: [],
       martialArtId: art?.id ?? null,
       skill: preset.skill,
       skillInitial: preset.skill + preset.training,

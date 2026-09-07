@@ -16,8 +16,10 @@ import type {
   FightEnd,
   FinalBlowRoll,
   Label,
+  LearnedTechnique,
   Morale,
   NamedValue,
+  NewTechnique,
   Region,
   RoundOutcome,
   TwoD6Roll,
@@ -146,6 +148,45 @@ export type Sheet = {
   readonly equipment: readonly string[]
   /** R01: Experience points. Zero at creation. */
   readonly xp: number
+  /**
+   * The Techniques this Master invented off landed Final Blows (R31).
+   *
+   * Kept whole rather than as ids, because there is no table for them
+   * to be ids into: the engine's `LearnedTechnique` is the shape, and
+   * the campaign record carries it verbatim.
+   */
+  readonly learned: readonly LearnedTechnique[]
+}
+
+/**
+ * Naming a landed Final Blow (R31, I-12; Phase 10f).
+ *
+ * The book's most delightful rule is a sequence, not a roll: the blow
+ * lands, the Master may try to keep it, the LUCK roll decides whether
+ * they can, the table may be rolled for three words, and then the
+ * player writes down what they just invented. Each step is a field
+ * here, null or empty until it has happened, so the card can be drawn
+ * from the record alone and a half-named Technique is a legible state
+ * rather than a lost one.
+ */
+export type Naming = {
+  /** The LUCK roll: what it was, and what it cost (-1 on failure only). */
+  readonly roll: NewTechnique
+  /** The inspiration table's three words, or null until it is rolled. */
+  readonly words: NamedWords | null
+  /** What the player has typed; prefilled from the words when rolled. */
+  readonly name: string
+  /** 1-4 (R31). Two until the player says otherwise. */
+  readonly value: number
+  readonly description: string
+}
+
+/** The three words the inspiration table gave, and the roll that found them. */
+export type NamedWords = {
+  readonly roll: TwoD6Roll
+  readonly action: string
+  readonly attribute: string
+  readonly animal: string
 }
 
 /** A check resolved on the beat screen (R20, R21). */
@@ -397,6 +438,16 @@ export type Combat = {
    * winner's option, because it was never their round.
    */
   readonly ambush: boolean
+  /**
+   * Naming the Technique a landed blow may become (R31; Phase 10f).
+   *
+   * Null before the offer is taken. The offer itself is drawn from
+   * `blow.landed` and {@link blowSettled}, not from this: a Master who
+   * let the blow go has no naming and must not be asked twice.
+   */
+  readonly naming: Naming | null
+  /** The offer to keep the blow has been answered, either way. */
+  readonly blowSettled: boolean
   readonly over: FightEnd
 }
 
@@ -526,6 +577,18 @@ export type Action =
   | { readonly type: 'cave.fight-all' }
   /** After a victory: one fallen foe's LOOT line (5T a2). */
   | { readonly type: 'combat.loot'; readonly index: number }
+  /** Keep the landed blow as a Technique: the LUCK roll (R31). */
+  | { readonly type: 'combat.keep' }
+  /** Let the landed blow go: no roll, no Technique, no second asking. */
+  | { readonly type: 'combat.let-go' }
+  /** Roll the inspiration table for three words (MH p.26). */
+  | { readonly type: 'combat.inspire' }
+  /** The naming card's three fields. */
+  | { readonly type: 'combat.name'; readonly name: string }
+  | { readonly type: 'combat.value'; readonly value: number }
+  | { readonly type: 'combat.describe'; readonly text: string }
+  /** Write the named Technique onto the sheet. */
+  | { readonly type: 'combat.learn' }
   | { readonly type: 'combat.leave' }
   | { readonly type: 'rules.filter'; readonly filter: Filter }
   | { readonly type: 'rules.open'; readonly id: string | null }

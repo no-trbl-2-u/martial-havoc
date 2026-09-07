@@ -70,7 +70,17 @@ export const RecordScreen = ({ state, dispatch, at }: Props) => {
             <Text style={styles.title}>{t('ui.record.master.title')}</Text>
           </View>
           <View style={styles.body}>
-            <Text style={styles.name}>{state.sheet.name}</Text>
+            {/*
+              Name and age: the first line of the printed sheet (MH p.5).
+              A blank age is said in words rather than shown as a dash,
+              because the book asks for one and a dash reads like a
+              number that failed to load.
+            */}
+            <Text testID="record-master-name" style={styles.name}>
+              {state.sheet.age === null
+                ? fill(t('ui.record.master.ageless'), { name: state.sheet.name })
+                : fill(t('ui.record.master.named'), { name: state.sheet.name, age: state.sheet.age })}
+            </Text>
             <Text testID="record-counts" style={styles.counts}>
               {fill(t('ui.record.counts'), {
                 deeds: state.deeds.length,
@@ -93,6 +103,26 @@ export const RecordScreen = ({ state, dispatch, at }: Props) => {
           title={t('ui.record.passages.title')}
           empty={t('ui.record.passages.empty')}
           lines={state.passages}
+        />
+        {/*
+          The Techniques this Master invented off landed Final Blows
+          (R31; Phase 10f). Only the learned ones are listed: the
+          printed ones are on the sheet, and this section exists to
+          hold the things that are in no table at all.
+        */}
+        <Section
+          testID="record-techniques"
+          title={t('ui.record.techniques.title')}
+          empty={t('ui.record.techniques.empty')}
+          lines={state.sheet.learned.map((own) =>
+            own.description === ''
+              ? fill(t('ui.record.techniques.own.bare'), { name: own.name, value: own.value })
+              : fill(t('ui.record.techniques.own'), {
+                  name: own.name,
+                  value: own.value,
+                  description: own.description,
+                }),
+          )}
         />
         <Section
           testID="record-treasures"

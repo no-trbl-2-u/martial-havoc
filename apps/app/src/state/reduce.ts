@@ -37,6 +37,8 @@ import {
   lootFrom,
   minions,
   morale,
+  namingRoll,
+  newTechnique,
   nightsRest,
   placeRunning,
   rescue,
@@ -63,6 +65,7 @@ import {
   effectFor,
   market,
   rollDeity,
+  rollFinalBlow,
   rollUnexpectedEvent,
   t,
   theFiveTreasures,
@@ -91,6 +94,7 @@ import type {
   CreationState,
   EventShown,
   FoeInFight,
+  Naming,
   RecordState,
   Sheet,
 } from './types'
@@ -552,6 +556,8 @@ const startFight = (state: RecordState, band: readonly Opponent[], ambush = fals
     blow: null,
     techniqueLine: null,
     ambush,
+    naming: null,
+    blowSettled: false,
     over: { ended: false },
   },
 })
@@ -713,6 +719,8 @@ const doRound = (state: RecordState, dice: DiceSource): RecordState => {
     techniqueLine: null,
     // Spent. Whatever this round was, the next one is a fair one.
     ambush: false,
+    naming: null,
+    blowSettled: false,
   }
   return afterMasterRoll(
     { ...injured, combat: { ...combat, over: fightEnd(injured, combat) } },
@@ -769,33 +777,59 @@ const doStrike = (state: RecordState): RecordState => {
     : next
 }
 
-/** The winner's option (b): a Technique, no roll, its cost in ENDURANCE (R27, I-23). */
+/**
+ * The id prefix of a Technique the Master invented (Phase 10f).
+ *
+ * A learned Technique has no id in any table, because it is in no
+ * table: it exists only on this sheet. So the menu names it by its
+ * position on the sheet behind this prefix, which keeps one action
+ * (`combat.technique`) for both kinds rather than two that must be
+ * kept in step.
+ */
+export const LEARNED = 'learned:'
+
+/** The learned Technique an id names, or undefined for a printed one. */
+const learnedBy = (state: RecordState, id: string) =>
+  id.startsWith(LEARNED) ? state.sheet.learned[Number.parseInt(id.slice(LEARNED.length), 10)] : undefined
+
+/**
+ * The winner's option (b): a Technique, no roll, its cost in ENDURANCE
+ * (R27, R28, I-23).
+ *
+ * Two kinds arrive here and only one of them is in a table. A printed
+ * Technique spends its printed cost and reads its authored line, and an
+ * area one carries its damage to the reach its prose names (R36, I-11).
+ * A Technique the Master invented off a Final Blow (R31) spends its
+ * assigned value and reads the player's own description; what it *does*
+ * beyond that the book never says, and this build's answer - it strikes
+ * the body it was aimed at for its value - is an invention, labelled as
+ * one (`combat.a-learned-technique-strikes-for-its-value`).
+ */
 const doTechnique = (state: RecordState, id: string): RecordState => {
   const c = state.combat
-  const effect = effectFor(id)
+  const own = learnedBy(state, id)
+  const effect = own === undefined ? effectFor(id) : undefined
   if (
     c === null ||
-    c.last === null ||
-    c.last.outcome !== 'master-wins' ||
-    effect === undefined ||
-    !state.sheet.techniques.includes(id)
+    aimedAt(c).outcome !== 'master-wins' ||
+    (own === undefined && (effect === undefined || !state.sheet.techniques.includes(id)))
   )
     return state
-  const endurance = floor(spendTechnique(state.sheet.endurance, effect.cost))
+  const cost = own?.value ?? effect?.cost ?? 0
+  const line = own === undefined ? (effect?.line ?? null) : own.description
+  const endurance = floor(spendTechnique(state.sheet.endurance, cost))
   const next = withSheet(state, { endurance })
   // R36, I-11: an area Technique carries the *same* damage to as many
-  // opponents as its own prose reaches, never a share of it. The reach
-  // is the effect's, read at data time; the body the Master is aimed at
-  // is always the first one it lands on, and the rest follow in the
-  // order they are standing.
-  // Absent means it reaches nobody but the one in front; null means
-  // "all opponents surrounding you" (I-11), which is every body still
-  // standing however many that is.
+  // opponents as its own prose reaches, never a share of it. Absent
+  // means it reaches nobody but the one in front; null means "all
+  // opponents surrounding you", which is every body still standing.
+  // A learned Technique reaches the one it was aimed at, for its value.
   const reach =
-    effect.reach === undefined ? 0 : (effect.reach ?? Number.POSITIVE_INFINITY)
+    own !== undefined ? 1 : effect?.reach === undefined ? 0 : (effect.reach ?? Number.POSITIVE_INFINITY)
+  const amount = own?.value ?? aimedAt(c).difference
   const order = [c.target, ...c.foes.map((_, i) => i).filter((i) => i !== c.target)]
   const targets = order.filter((i) => (c.foes[i]?.endurance ?? 0) > 0)
-  const spread = areaDamage(aimedAt(c).difference, reach, targets.length)
+  const spread = areaDamage(amount, reach, targets.length)
   const hurt: Combat = targets.reduce(
     (acc, index, at) =>
       withFoe(acc, index, {
@@ -807,7 +841,7 @@ const doTechnique = (state: RecordState, id: string): RecordState => {
     ...hurt,
     foes: rolledOff(hurt),
     last: null,
-    techniqueLine: effect.line,
+    techniqueLine: line,
   }
   return { ...next, combat: { ...combat, over: fightEnd(next, combat) } }
 }
@@ -837,6 +871,128 @@ const doBlow = (state: RecordState, dice: DiceSource): RecordState => {
       ? addDeed(next, fill(t('ui.deed.final-blow'), { name: foe.name.toLowerCase() }))
       : next,
     manual,
+  )
+}
+
+/**
+ * KEEP IT AS A TECHNIQUE: the LUCK roll after a landed blow (R31, I-12).
+ *
+ * The roll is the Master's, so it comes from the Master's source and a
+ * tapped face reaches it. `newTechnique` applies the sealed reading -
+ * 1 LUCK on failure, nothing on success - and this only writes the
+ * number it hands back. A failure settles the offer and there is no
+ * second asking; a success opens the naming card.
+ */
+const doKeep = (state: RecordState, dice: DiceSource): RecordState => {
+  const c = state.combat
+  if (c === null || c.blow?.landed !== true || c.blowSettled) return state
+  const { source, manual } = masterDice(state, dice)
+  const roll = newTechnique(state.sheet.luck)(source)
+  const next = withSheet(state, { luck: floor(roll.luck) })
+  return afterMasterRoll(
+    withCombat(next, {
+      blowSettled: true,
+      naming: roll.learned
+        ? { roll, words: null, name: '', value: DEFAULT_TECHNIQUE_VALUE, description: '' }
+        : null,
+      // The roll is a result of its own: a player who lost a point of
+      // LUCK for nothing should read why on the slip, not infer it.
+      techniqueLine: roll.learned ? null : t('ui.combat.keep.failed.line'),
+    }),
+    manual,
+  )
+}
+
+/**
+ * The value a naming card opens on.
+ *
+ * R31 says 1-4 and says nothing else, and the book's own worked example
+ * assigns 2 ("Impetuous Slap of the Phoenix (2)"). Opening on the
+ * example's number is a default, not a rule; the player moves it.
+ */
+const DEFAULT_TECHNIQUE_VALUE = 2
+
+/** LET IT GO: the blow was devastating and stays a moment, not a Technique. */
+const doLetGo = (state: RecordState): RecordState => {
+  const c = state.combat
+  if (c === null || c.blow?.landed !== true || c.blowSettled) return state
+  return withCombat(state, { blowSettled: true, naming: null })
+}
+
+/**
+ * ROLL FOR INSPIRATION: the table at MH p.26 (R31).
+ *
+ * "For inspiration" - so it is optional, it may be rolled once, and the
+ * name it suggests is a suggestion. The engine returns the address; the
+ * content package holds the three words; composing them into a name is
+ * this build's, and the book prints three orderings of one roll, so the
+ * first ("Furious Strike of the Dragon") is offered and the field stays
+ * free.
+ */
+const doInspire = (state: RecordState, dice: DiceSource): RecordState => {
+  const c = state.combat
+  if (c === null || c.naming === null || c.naming.words !== null) return state
+  const { source, manual } = masterDice(state, dice)
+  const address = namingRoll(source)
+  const row = rollFinalBlow(address.first, address.second)
+  if (row === undefined) return state
+  const words = {
+    roll: address.roll,
+    action: row.action,
+    attribute: row.attribute,
+    animal: row.animal,
+  }
+  return afterMasterRoll(
+    withCombat(state, {
+      naming: {
+        ...c.naming,
+        words,
+        // Prefilled, never imposed: the player may keep it, reorder it
+        // the way the book's own examples do, or write something else.
+        name:
+          c.naming.name.trim() === ''
+            ? fill(t('ui.combat.naming.suggested'), {
+                action: row.action,
+                attribute: row.attribute,
+                animal: row.animal,
+              })
+            : c.naming.name,
+      },
+    }),
+    manual,
+  )
+}
+
+/** One field of the naming card. A no-op when there is no card. */
+const onNaming = (state: RecordState, change: Partial<Naming>): RecordState => {
+  const c = state.combat
+  return c === null || c.naming === null ? state : withCombat(state, { naming: { ...c.naming, ...change } })
+}
+
+/**
+ * KEEP: the named Technique onto the sheet, and into the ledger (R31).
+ *
+ * A Technique with no name is not a Technique, so the row is disabled
+ * until one is typed and the reducer agrees. The value is clamped to the
+ * book's 1-4 here rather than trusted from the screen: the sheet is what
+ * later fights read.
+ */
+const doKeepTechnique = (state: RecordState): RecordState => {
+  const c = state.combat
+  const naming = c?.naming
+  if (c === null || naming === undefined || naming === null || naming.name.trim() === '') return state
+  const learned = {
+    name: naming.name.trim(),
+    value: Math.min(4, Math.max(1, Math.round(naming.value))),
+    description: naming.description.trim(),
+    words:
+      naming.words === null
+        ? []
+        : [naming.words.action, naming.words.attribute, naming.words.animal],
+  }
+  return addDeed(
+    withCombat(withSheet(state, { learned: [...state.sheet.learned, learned] }), { naming: null }),
+    fill(t('ui.deed.learned'), { name: learned.name }),
   )
 }
 
@@ -1230,6 +1386,20 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return doResume(state)
     case 'combat.loot':
       return doLoot(state, dice, action.index)
+    case 'combat.keep':
+      return doKeep(state, dice)
+    case 'combat.let-go':
+      return doLetGo(state)
+    case 'combat.inspire':
+      return doInspire(state, dice)
+    case 'combat.name':
+      return onNaming(state, { name: action.name })
+    case 'combat.value':
+      return onNaming(state, { value: action.value })
+    case 'combat.describe':
+      return onNaming(state, { description: action.text })
+    case 'combat.learn':
+      return doKeepTechnique(state)
     case 'combat.leave':
       return doLeave(state, dice)
     case 'rules.filter':

@@ -13,6 +13,7 @@ import { actFor, fromSequence, withDefeated, withKey } from '@martial-havoc/engi
 import { theFiveTreasures } from '@martial-havoc/content'
 import type { Die } from '@martial-havoc/engine'
 import { randomSource } from '../dice/random'
+import { fromCampaign, toCampaign } from './campaign'
 import { menuFor } from './menu'
 import { newRecord } from './record'
 import { reduce } from './reduce'
@@ -754,6 +755,8 @@ describe('the Old Vixen teaches the Cord\u2019s spells (I-41)', () => {
         blow: null,
         techniqueLine: null,
         ambush: false,
+        naming: null,
+        blowSettled: false,
         over: { ended: true, reason: 'final-blow' },
       },
     }
@@ -1020,5 +1023,137 @@ describe('many foes at once (Phase 10e)', () => {
     // Fleeing leaves the encounter behind entirely (I-32).
     expect(fled.pending).toEqual([])
     expect(fled.screen).toBe('beat')
+  })
+})
+
+describe('the Final Blow becomes a Technique of your own (Phase 10f)', () => {
+  /** From the mountain to the Ghost, an Opening, and a blow that lands. */
+  const landed = (): RecordState =>
+    play(toGhost(), [
+      [{ type: 'cave.fight', foe: GHOST }, []],
+      [{ type: 'combat.round' }, [6, 5, 1, 1]],
+      [{ type: 'combat.opening' }, []],
+      [{ type: 'combat.blow' }, [3, 3]],
+    ])
+
+  it('offers to keep the blow, and the LUCK roll costs nothing on a success (R31, I-12)', () => {
+    const s = landed()
+    expect(s.combat?.blow?.landed).toBe(true)
+    expect(s.combat?.blowSettled).toBe(false)
+    // San Te's LUCK is 9; 2+4 = 6 passes.
+    const kept = reduce(s, { type: 'combat.keep' }, fromSequence([2, 4]))
+    expect(kept.sheet.luck).toBe(s.sheet.luck)
+    expect(kept.combat?.naming).toMatchObject({ words: null, name: '', value: 2, description: '' })
+    // The offer is answered: it is not made twice.
+    expect(reduce(kept, { type: 'combat.keep' }, fromSequence([2, 4]))).toBe(kept)
+  })
+
+  it('costs 1 LUCK on a failure, and adds nothing (R31, I-12; sealed)', () => {
+    const s = landed()
+    // LUCK 9; 5+6 = 11 fails.
+    const missed = reduce(s, { type: 'combat.keep' }, fromSequence([5, 6]))
+    expect(missed.sheet.luck).toBe(s.sheet.luck - 1)
+    expect(missed.combat?.naming).toBeNull()
+    expect(missed.combat?.blowSettled).toBe(true)
+    expect(missed.sheet.learned).toEqual([])
+  })
+
+  it('fails on a double six whatever LUCK is, and still costs the point', () => {
+    const s = landed()
+    const missed = reduce(s, { type: 'combat.keep' }, fromSequence([6, 6]))
+    expect(missed.combat?.naming).toBeNull()
+    expect(missed.sheet.luck).toBe(s.sheet.luck - 1)
+  })
+
+  it('lets the blow go without a roll, and does not ask again', () => {
+    const s = landed()
+    const gone = reduce(s, { type: 'combat.let-go' }, fromSequence([]))
+    expect(gone.sheet.luck).toBe(s.sheet.luck)
+    expect(gone.combat?.naming).toBeNull()
+    expect(gone.combat?.blowSettled).toBe(true)
+    expect(reduce(gone, { type: 'combat.keep' }, fromSequence([2, 4]))).toBe(gone)
+  })
+
+  it('rolls the inspiration table and prefills the name from its three words (MH p.26)', () => {
+    const kept = reduce(landed(), { type: 'combat.keep' }, fromSequence([2, 4]))
+    // 1 and 1: the first band, the first row - Strike, Furious, Dragon.
+    const words = reduce(kept, { type: 'combat.inspire' }, fromSequence([1, 1]))
+    expect(words.combat?.naming?.words).toMatchObject({
+      action: 'Strike',
+      attribute: 'Furious',
+      animal: 'Dragon',
+    })
+    expect(words.combat?.naming?.name).toBe('Furious Strike of the Dragon')
+    // Rolled once: it is inspiration, not a table the fight keeps asking.
+    expect(reduce(words, { type: 'combat.inspire' }, fromSequence([2, 2]))).toBe(words)
+  })
+
+  it('writes the named Technique onto the sheet and into the ledger', () => {
+    const named = play(reduce(landed(), { type: 'combat.keep' }, fromSequence([2, 4])), [
+      [{ type: 'combat.name', name: 'Impetuous Slap of the Phoenix' }, []],
+      [{ type: 'combat.value', value: 2 }, []],
+      [{ type: 'combat.describe', text: 'I jump and strike the cheek' }, []],
+      [{ type: 'combat.learn' }, []],
+    ])
+    expect(named.sheet.learned).toEqual([
+      {
+        name: 'Impetuous Slap of the Phoenix',
+        value: 2,
+        description: 'I jump and strike the cheek',
+        words: [],
+      },
+    ])
+    expect(named.deeds).toContain('learned Impetuous Slap of the Phoenix')
+    expect(named.combat?.naming).toBeNull()
+  })
+
+  it('refuses a Technique with no name', () => {
+    const kept = reduce(landed(), { type: 'combat.keep' }, fromSequence([2, 4]))
+    expect(reduce(kept, { type: 'combat.learn' }, fromSequence([]))).toBe(kept)
+  })
+
+  it('offers a learned Technique as a winner’s option in a later fight, at its own cost', () => {
+    const own = {
+      name: 'Impetuous Slap of the Phoenix',
+      value: 2,
+      description: 'I jump and strike the cheek',
+      words: [],
+    }
+    const master = play(toGhost(), [[{ type: 'cave.fight', foe: GHOST }, []]])
+    const armed: RecordState = {
+      ...master,
+      sheet: { ...master.sheet, techniques: [], learned: [own] },
+    }
+    const won = reduce(armed, { type: 'combat.round' }, fromSequence([6, 5, 1, 1]))
+    const used = reduce(won, { type: 'combat.technique', id: 'learned:0' }, fromSequence([]))
+    // It costs its value in ENDURANCE (R28) and strikes for the same
+    // (an invention, labelled: the book gives it no effect).
+    expect(used.sheet.endurance).toBe(won.sheet.endurance - 2)
+    expect(used.combat?.foes[0]?.endurance).toBe(8 - 2)
+    expect(used.combat?.techniqueLine).toBe('I jump and strike the cheek')
+  })
+
+  it('carries the age and the learned Technique through an export and back', () => {
+    const own = {
+      name: 'Sweeping Palm of the Turtle',
+      value: 3,
+      description: 'a low sweep',
+      words: ['Sweep', 'Sharp', 'Turtle'],
+    }
+    const before: RecordState = {
+      ...fresh(),
+      sheet: { ...fresh().sheet, age: 27, learned: [own] },
+    }
+    const back = fromCampaign(toCampaign(before), fresh())
+    expect(back.sheet.age).toBe(27)
+    expect(back.sheet.learned).toEqual([own])
+  })
+
+  it('reads a record written before this phase as ageless, with nothing learned', () => {
+    const older = toCampaign(fresh())
+    const { age: _age, learned: _learned, ...master } = older.master
+    const back = fromCampaign({ ...older, master }, fresh())
+    expect(back.sheet.age).toBeNull()
+    expect(back.sheet.learned).toEqual([])
   })
 })

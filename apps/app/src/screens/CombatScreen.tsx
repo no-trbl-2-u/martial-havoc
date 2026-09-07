@@ -4,14 +4,16 @@
  * Unexpected Event; the retreat row that rolls Morale (spec.md, Horizon;
  * design prototype, "COMBAT").
  */
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { effectFor, t, techniqueById, treasureFoeById } from '@martial-havoc/content'
+import { LEARNED } from '../state/reduce'
 import type { AttackStrength } from '@martial-havoc/engine'
 import { skillForFight } from '@martial-havoc/engine'
 import { fill } from '../lib/fill'
 import { momentOfFightEnd, narrate } from '../lib/narrator'
 import type { Action, Combat, FoeInFight, RecordState } from '../state/types'
 import { color, font } from '../theme/tokens'
+import { Button } from '../components/Button'
 import { Die } from '../components/Die'
 import { ManualDice } from '../components/ManualDice'
 import { MenuButton } from '../components/MenuButton'
@@ -113,6 +115,32 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
   const alive = standing(c)
   if (c.over.ended && c.over.reason === 'master-down')
     return [{ id: 'fall', title: t('ui.combat.act.fall'), cite: t('ui.combat.act.fall.cite'), line: t('ui.combat.act.fall.line'), enabled: true, action: { type: 'combat.leave' } }]
+  // A landed Final Blow is offered before anything else the fight has
+  // to say (R31). It stands above the loot and above LEAVE because it
+  // is the one thing on this screen that can only be taken now: the
+  // Technique is invented off *this* blow or not at all.
+  if (c.blow?.landed === true && !c.blowSettled)
+    return [
+      {
+        id: 'keep',
+        title: t('ui.combat.act.keep'),
+        cite: t('ui.combat.act.keep.cite'),
+        line: fill(t('ui.combat.act.keep.line'), { luck: state.sheet.luck }),
+        enabled: true,
+        action: { type: 'combat.keep' },
+      },
+      {
+        id: 'let-go',
+        title: t('ui.combat.act.let-go'),
+        cite: t('ui.combat.act.let-go.cite'),
+        line: t('ui.combat.act.let-go.line'),
+        enabled: true,
+        action: { type: 'combat.let-go' },
+      },
+    ]
+  // While the naming card is open it is the only thing on screen that
+  // matters: a half-named Technique is finished or abandoned there.
+  if (c.naming !== null) return []
   // Every body that has fallen gets its own LOOT row, in the order they
   // fell: a LOOT line belongs to an opponent, not to a fight (5T a2).
   // The rows stand while anyone is still up, too - a Master who has put
@@ -161,10 +189,31 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
       { id: 'blow', title: t('ui.combat.act.blow'), cite: t('ui.combat.act.blow.cite'), line: t('ui.combat.act.blow.line'), enabled: true, action: { type: 'combat.blow' } },
       { id: 'strike-instead', title: t('ui.combat.act.strike-instead'), cite: t('ui.combat.act.strike.cite'), line: t('ui.combat.act.strike-instead.line'), enabled: won, action: { type: 'combat.strike' } },
     ]
-  const usable = state.sheet.techniques
-    .map((id) => ({ id, effect: effectFor(id), name: techniqueById(id)?.name ?? id }))
-    .filter((x) => x.effect?.timing === 'combat-winner-option')
-  const technique = usable[0]
+  // Both kinds of Technique are winner's options and both are offered
+  // from one row: the printed ones the sheet names, and the ones this
+  // Master invented off a Final Blow (R31). A learned one is named by
+  // its place on the sheet, because it is in no table.
+  const printed = state.sheet.techniques
+    .map((id) => ({
+      id,
+      name: techniqueById(id)?.name ?? id,
+      line: (effect: string) => effect,
+      cost: effectFor(id)?.cost ?? 0,
+      timing: effectFor(id)?.timing,
+    }))
+    .filter((x) => x.timing === 'combat-winner-option')
+  const own = state.sheet.learned.map((own, i) => ({
+    id: `${LEARNED}${String(i)}`,
+    name: own.name,
+    cost: own.value,
+  }))
+  const technique = printed[0] ?? own[0]
+  const line =
+    technique === undefined
+      ? t('ui.combat.act.technique.none')
+      : printed.length > 0
+        ? fill(t('ui.combat.act.technique.line'), { name: technique.name, cost: technique.cost })
+        : fill(t('ui.combat.act.technique.own'), { name: technique.name, value: technique.cost })
   return [
     ...loot,
     { id: 'strike', title: t('ui.combat.act.strike'), cite: t('ui.combat.act.strike.cite'), line: won ? fill(t('ui.combat.act.strike.won'), { n: diff }) : t('ui.combat.act.strike.lost'), enabled: won, action: { type: 'combat.strike' } },
@@ -172,7 +221,7 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
       id: 'technique',
       title: t('ui.combat.act.technique'),
       cite: t('ui.combat.act.technique.cite'),
-      line: technique === undefined ? t('ui.combat.act.technique.none') : fill(t('ui.combat.act.technique.line'), { name: technique.name, cost: technique.effect?.cost ?? 0 }),
+      line,
       enabled: won && technique !== undefined,
       action: { type: 'combat.technique', id: technique?.id ?? '' },
     },
@@ -412,6 +461,99 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
             </View>
           </Slip>
         )}
+        {/*
+          The naming card (R31; Phase 10f). The book's most delightful
+          rule is a sequence, so this is a sequence: what the LUCK roll
+          said, three words for inspiration if they are wanted, and then
+          the three things the book asks the player to write down - a
+          name, a value of 1 to 4, and a brief description. Nothing here
+          is rolled for: the Technique is theirs.
+        */}
+        {c.naming === null ? null : (
+          <Slip borderColor={color.vermilion} style={styles.pad} testID="naming">
+            <View style={styles.between}>
+              <Text style={styles.strong}>{t('ui.combat.naming.title')}</Text>
+              <Source cite={t('ui.combat.naming.cite')} />
+            </View>
+            <Text testID="naming-luck" style={styles.small}>
+              {fill(t('ui.combat.naming.luck'), {
+                total: c.naming.roll.outcome.roll.total,
+                luck: state.sheet.luck,
+                outcome: t('ui.combat.naming.passed'),
+              })}
+            </Text>
+
+            {c.naming.words === null ? (
+              <Button
+                testID="naming-inspire"
+                text={t('ui.combat.naming.roll')}
+                onPress={() => dispatch({ type: 'combat.inspire' })}
+                style={styles.field}
+              />
+            ) : (
+              <View style={styles.field}>
+                <Text testID="naming-words" style={styles.words}>
+                  {fill(t('ui.combat.naming.words'), {
+                    action: c.naming.words.action,
+                    attribute: c.naming.words.attribute,
+                    animal: c.naming.words.animal,
+                  })}
+                </Text>
+                <Text style={styles.small}>{t('ui.combat.naming.words.note')}</Text>
+              </View>
+            )}
+
+            <View style={styles.field}>
+              <Text style={styles.label}>{t('ui.combat.naming.name')}</Text>
+              <TextInput
+                testID="naming-name"
+                style={styles.input}
+                value={c.naming.name}
+                placeholder={t('ui.combat.naming.name.placeholder')}
+                placeholderTextColor={color.dim}
+                onChangeText={(name) => dispatch({ type: 'combat.name', name })}
+              />
+            </View>
+
+            <View style={styles.field}>
+              <Text style={styles.label}>{t('ui.combat.naming.value')}</Text>
+              <View style={styles.values}>
+                {[1, 2, 3, 4].map((value) => (
+                  <Button
+                    key={value}
+                    testID={`naming-value-${String(value)}`}
+                    text={String(value)}
+                    primary={c.naming?.value === value}
+                    onPress={() => dispatch({ type: 'combat.value', value })}
+                    style={styles.grow}
+                  />
+                ))}
+              </View>
+              <Text style={styles.small}>{t('ui.combat.naming.value.note')}</Text>
+            </View>
+
+            <View style={styles.field}>
+              <Text style={styles.label}>{t('ui.combat.naming.description')}</Text>
+              <TextInput
+                testID="naming-description"
+                style={[styles.input, styles.describe]}
+                value={c.naming.description}
+                placeholder={t('ui.combat.naming.description.placeholder')}
+                placeholderTextColor={color.dim}
+                onChangeText={(text) => dispatch({ type: 'combat.describe', text })}
+                multiline
+              />
+            </View>
+
+            <Button
+              testID="naming-keep"
+              primary
+              text={t('ui.combat.naming.keep')}
+              disabled={c.naming.name.trim() === ''}
+              onPress={() => dispatch({ type: 'combat.learn' })}
+            />
+          </Slip>
+        )}
         {c.techniqueLine === null ? null : (
           <Slip style={styles.pad} testID="technique-line">
             <Text style={styles.eventText}>{c.techniqueLine}</Text>
@@ -535,6 +677,21 @@ const styles = StyleSheet.create({
   between: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', gap: 8, marginBottom: 5 },
   blow: { flexDirection: 'row', alignItems: 'center', gap: 9 },
   blowText: { marginLeft: 'auto', alignItems: 'flex-end', flexShrink: 1 },
+  /** The naming card's rows: a label, a control, a note under it. */
+  field: { marginTop: 8, gap: 4 },
+  label: { fontFamily: font.sans, fontSize: 9, fontWeight: '800', letterSpacing: 0.9, color: color.ink },
+  input: {
+    borderWidth: 2,
+    borderColor: color.ink,
+    padding: 7,
+    fontFamily: font.serif,
+    fontSize: 14,
+    color: color.ink,
+  },
+  describe: { height: 60 },
+  values: { flexDirection: 'row', gap: 6 },
+  grow: { flex: 1 },
+  words: { fontFamily: font.sans, fontSize: 15, fontWeight: '800', letterSpacing: 0.5, color: color.vermilion },
   foot: { paddingTop: 8, paddingHorizontal: 14, paddingBottom: 14 },
   manual: { marginBottom: 0 },
 })
