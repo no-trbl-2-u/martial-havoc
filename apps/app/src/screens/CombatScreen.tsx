@@ -7,8 +7,9 @@
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { effectFor, t, techniqueById, treasureFoeById } from '@martial-havoc/content'
 import { LEARNED } from '../state/reduce'
+import { CORD, CORD_KNOWN, FAN, FIREPROOF, SWORD } from '../state/menu'
 import type { AttackStrength } from '@martial-havoc/engine'
-import { skillForFight } from '@martial-havoc/engine'
+import { flag, skillForFight } from '@martial-havoc/engine'
 import { fill } from '../lib/fill'
 import { momentOfFightEnd, narrate } from '../lib/narrator'
 import type { Action, Combat, FoeInFight, RecordState } from '../state/types'
@@ -97,6 +98,10 @@ const Side = ({
  * asking it is a rule. Both read the one field that decides it.
  */
 const aimedAt = (c: Combat): FoeInFight | undefined => c.foes[c.target] ?? c.foes[0]
+
+/** Is `treasure` in the Master's hands? (I-60: a held treasure's effect is known.) */
+const holds = (state: RecordState, treasure: string): boolean =>
+  state.cave.treasures.includes(treasure)
 
 /** Every body still on its feet. */
 const standing = (c: Combat): readonly FoeInFight[] => c.foes.filter((f) => f.endurance > 0)
@@ -214,9 +219,42 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
       : printed.length > 0
         ? fill(t('ui.combat.act.technique.line'), { name: technique.name, cost: technique.cost })
         : fill(t('ui.combat.act.technique.own'), { name: technique.name, value: technique.cost })
+  const cordReady = holds(state, CORD) && flag(state.cave, CORD_KNOWN)
+  const fireproof = aim?.id === FIREPROOF
   return [
     ...loot,
-    { id: 'strike', title: t('ui.combat.act.strike'), cite: t('ui.combat.act.strike.cite'), line: won ? fill(t('ui.combat.act.strike.won'), { n: diff }) : t('ui.combat.act.strike.lost'), enabled: won, action: { type: 'combat.strike' } },
+    {
+      id: 'strike',
+      title: t('ui.combat.act.strike'),
+      cite: t('ui.combat.act.strike.cite'),
+      line: won ? fill(t('ui.combat.act.strike.won'), { n: diff }) : t('ui.combat.act.strike.lost'),
+      enabled: won,
+      action: { type: 'combat.strike' },
+    },
+    ...(holds(state, CORD)
+      ? [
+          {
+            id: 'tie',
+            title: t('ui.combat.act.tie'),
+            cite: t('ui.combat.act.tie.cite'),
+            line: cordReady ? t('ui.combat.act.tie.line') : t('ui.combat.act.tie.unknown'),
+            enabled: won && cordReady,
+            action: { type: 'combat.tie' } as Action,
+          },
+        ]
+      : []),
+    ...(holds(state, FAN)
+      ? [
+          {
+            id: 'fan',
+            title: t('ui.combat.act.fan'),
+            cite: t('ui.combat.act.fan.cite'),
+            line: fireproof ? t('ui.combat.act.fan.fireproof') : t('ui.combat.act.fan.line'),
+            enabled: won && !fireproof,
+            action: { type: 'combat.fan' } as Action,
+          },
+        ]
+      : []),
     {
       id: 'technique',
       title: t('ui.combat.act.technique'),
@@ -386,6 +424,8 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
                     : body.heldBack
                       ? t('ui.combat.band.held')
                       : '',
+                  body.endurance > 0 && body.bound ? t('ui.combat.band.bound') : '',
+                  body.endurance > 0 && body.burning ? t('ui.combat.band.burning') : '',
                 ]
                   .filter((word) => word.length > 0)
                   .join(t('ui.combat.band.note.join'))}
@@ -552,6 +592,21 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
               disabled={c.naming.name.trim() === ''}
               onPress={() => dispatch({ type: 'combat.learn' })}
             />
+          </Slip>
+        )}
+        {/*
+          The sword taking a hit is a moment, not a missing number
+          (I-44). Without a line here a Master reads a round they lost
+          and an ENDURANCE that did not move, and concludes the app is
+          broken.
+        */}
+        {!c.warded ? null : (
+          <Slip dashed style={styles.pad} testID="warded">
+            <View style={styles.between}>
+              <Text style={styles.strong}>{t('ui.combat.warded')}</Text>
+              <Source cite={t('ui.combat.warded.cite')} />
+            </View>
+            <Text style={styles.eventText}>{t('ui.combat.warded.line')}</Text>
           </Slip>
         )}
         {c.techniqueLine === null ? null : (

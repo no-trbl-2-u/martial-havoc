@@ -101,6 +101,8 @@ export type {
   OpponentExchange,
 } from './multiple/multiple'
 export { attackOf, bandOf, enemyCount } from './multiple/count'
+export { answersYes, binds, callsOut, magicFire, wards } from './treasures/treasures'
+export type { Binding, CalledOut, MagicFire } from './treasures/treasures'
 export type { EnemyType, Headcount } from './multiple/count'
 
 // Escape: leaving a fight, and what it costs (MH p.30).
@@ -231,6 +233,7 @@ import { creationBehaviours } from './creation/behaviours'
 import { checkBehaviours } from './checks/behaviours'
 import { combatBehaviours } from './combat/behaviours'
 import { multipleBehaviours } from './multiple/behaviours'
+import { treasureBehaviours } from './treasures/behaviours'
 import { escapeBehaviours } from './escape/behaviours'
 import { healingBehaviours } from './healing/behaviours'
 import { progressionBehaviours } from './progression/behaviours'
@@ -254,6 +257,7 @@ export const behaviours: readonly Behaviour[] = Object.freeze([
   ...checkBehaviours,
   ...combatBehaviours,
   ...multipleBehaviours,
+  ...treasureBehaviours,
   ...escapeBehaviours,
   ...healingBehaviours,
   ...progressionBehaviours,

@@ -38,6 +38,8 @@ export type BeatAction =
   | { readonly kind: 'fight-all' }
   | { readonly kind: 'rest' }
   | { readonly kind: 'gourd' }
+  /** Call a named foe's name into the vase (I-38). */
+  | { readonly kind: 'call'; readonly foe: string }
   | { readonly kind: 'leave' }
   | { readonly kind: 'village' }
 
@@ -75,8 +77,35 @@ export const RANK_AND_FILE: readonly string[] = ['foe.devil-servant', 'foe.ogre'
  */
 export const GOURD = 'treasure.the-5-treasures.gold-and-red-gourd'
 
+/**
+ * The other four, and what each is for (Phase 10g).
+ *
+ * The adventure is named for five objects and prints what each one *is*
+ * without printing what to roll for it; the readings that close that gap
+ * are I-38 (the vase), I-49 (the cord), I-50 (the fan) and I-44 (the
+ * sword), and the mechanics they settle live in the engine's
+ * `treasures` folder. Only the ids are here, because only the ids are
+ * this adventure's (agents.md standing rule 7).
+ */
+export const VASE = 'treasure.the-5-treasures.vase-of-muttonfat-jade'
+export const CORD = 'treasure.the-5-treasures.dazzling-golden-cord'
+export const FAN = 'treasure.the-5-treasures.plantain-fan'
+export const SWORD = 'treasure.the-5-treasures.seven-star-sword'
+
+/**
+ * The one foe the fan does nothing to.
+ *
+ * The Senior King's own special skill is "Magic flames (4)": the fire
+ * the fan makes is the fire he is made of, and waving it at him is
+ * waving his own weather back at him. Reading I-50 with I-37.
+ */
+export const FIREPROOF = 'foe.senior-king-golden-horn'
+
 /** The flag the gourd sets (I-45). */
 export const NIGHT = 'night'
+
+/** The flag that says the Cord's spells are known (I-41). */
+export const CORD_KNOWN = 'cord-spells-known'
 
 /** A foe's printed name, or its id where the roster does not know it. */
 export const foeName = (id: string): string => treasureFoeById(id)?.name ?? id
@@ -124,6 +153,25 @@ export const menuFor = (state: RecordState): readonly BeatOption[] => {
       enabled: true,
       action: { kind: 'fight-all' },
     })
+
+  // The vase stands with the foes rather than with the treasures,
+  // because it is a thing done *to* one of them: "call out a person's
+  // name, if they respond they'll be trapped inside" (I-38). Only a
+  // named foe answers to a name - a Devil servant in a crowd of four
+  // has none to call - and only one row is offered per name.
+  if (state.cave.treasures.includes(VASE))
+    [...new Set(state.pending)]
+      .filter((foe) => !RANK_AND_FILE.includes(foe))
+      .forEach((foe) => {
+        rows.push({
+          id: `call-${foe}`,
+          title: fill(t('ui.cave.call'), { name: foeName(foe).toUpperCase() }),
+          note: t('ui.cave.call.note'),
+          line: theFiveTreasuresTreasureById(VASE)?.effect ?? '',
+          enabled: true,
+          action: { kind: 'call', foe },
+        })
+      })
 
   state.pending.forEach((foe, i) => {
     rows.push({

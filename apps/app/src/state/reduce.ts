@@ -22,7 +22,9 @@ import {
   attackRescue,
   attackStrength,
   behaviours,
+  binds,
   buy,
+  callsOut,
   d6,
   endsFight,
   escape,
@@ -35,6 +37,7 @@ import {
   injuryDamage,
   learnFrom,
   lootFrom,
+  magicFire,
   minions,
   morale,
   namingRoll,
@@ -55,6 +58,7 @@ import {
   toggleFlag,
   toSilver,
   unexpectedEvent,
+  wards,
   withArea,
   withFlag,
 } from '@martial-havoc/engine'
@@ -80,7 +84,19 @@ import { queued } from '../dice/random'
 import { fill } from '../lib/fill'
 import { newRecord } from './record'
 import { fromCampaign } from './campaign'
-import { GOURD, NIGHT, RANK_AND_FILE, foeName, treasureName } from './menu'
+import {
+  CORD,
+  CORD_KNOWN,
+  FAN,
+  FIREPROOF,
+  GOURD,
+  NIGHT,
+  RANK_AND_FILE,
+  SWORD,
+  VASE,
+  foeName,
+  treasureName,
+} from './menu'
 import {
     finishCreation,
   rollArt,
@@ -159,6 +175,10 @@ const standing = (c: Combat): readonly FoeInFight[] => c.foes.filter((f) => f.en
 /** The band's ENDURANCE together: zero exactly when every body is down. */
 const bandEndurance = (c: Combat): number => c.foes.reduce((n, f) => n + f.endurance, 0)
 
+/** Is `treasure` in the Master's hands? (I-60: a held treasure's effect is known.) */
+const holds = (state: RecordState, treasure: string): boolean =>
+  state.cave.treasures.includes(treasure)
+
 /** Replace one opponent in the band, by index, leaving the rest alone. */
 const withFoe = (c: Combat, index: number, change: Partial<FoeInFight>): Combat => ({
   ...c,
@@ -181,6 +201,8 @@ const EMPTY_FOE: FoeInFight = {
   outcome: null,
   difference: 0,
   heldBack: false,
+  bound: false,
+  burning: false,
   looted: false,
 }
 
@@ -415,8 +437,6 @@ const doAttackRescue = (state: RecordState): RecordState => {
  * kept in step by hand is the bug the village purse already has; this is
  * one representation and one restatement of it.
  */
-const CORD = 'treasure.the-5-treasures.dazzling-golden-cord'
-const CORD_KNOWN = 'cord-spells-known'
 
 /**
  * Learn what `source` teaches about the treasures, and restate the Cord's
@@ -537,6 +557,8 @@ const asFoeInFight = (foe: Opponent): FoeInFight => ({
   outcome: null,
   difference: 0,
   heldBack: false,
+  bound: false,
+  burning: false,
   looted: false,
 })
 
@@ -558,6 +580,7 @@ const startFight = (state: RecordState, band: readonly Opponent[], ambush = fals
     ambush,
     naming: null,
     blowSettled: false,
+    warded: false,
     over: { ended: false },
   },
 })
@@ -664,10 +687,16 @@ const doRound = (state: RecordState, dice: DiceSource): RecordState => {
     const opponent = attackStrength(attacker)(dice)
     return { opponent, outcome: resolveRound(mine, opponent), heldBack: flags[i] === true }
   })
-  const hit = exchanges.reduce(
+  const struck = exchanges.reduce(
     (n, e) => n + (!e.heldBack && e.outcome.kind === 'master-hit' ? e.outcome.damage : 0),
     0,
   )
+  // The seven-star sword "can block hits from stronger enemies without
+  // any effort from the holder" (I-44): no roll, no cost and no limit,
+  // so a Master holding it takes nothing on a round they were behind
+  // in - and nothing at all changes on a round they won.
+  const warded = struck > 0 && holds(state, SWORD) && wards(true)
+  const hit = warded ? 0 : struck
   const afterHit = withSheet(state, { endurance: floor(state.sheet.endurance - hit) })
   const drew = exchanges.some((e) => e.outcome.kind === 'unexpected-event')
   const event = drew ? resolveEvent(unexpectedEvent(dice), dice) : null
@@ -687,9 +716,13 @@ const doRound = (state: RecordState, dice: DiceSource): RecordState => {
     if (e === undefined) return { ...f, strength: null, outcome: null, heldBack: false }
     const wound =
       event?.injury?.target === 'opponent' && f === aimedAt(c) ? event.injury.amount : 0
+    // The fan's fire is inextinguishable (I-50): it takes its point at
+    // the start of every round after the one it was lit in, and nothing
+    // in the fight removes it.
+    const burn = f.burning ? FIRE_EACH_ROUND : 0
     return {
       ...f,
-      endurance: floor(f.endurance - wound),
+      endurance: floor(f.endurance - wound - burn),
       strength: e.opponent,
       outcome: e.outcome.kind,
       difference: mine.total - e.opponent.total,
@@ -721,6 +754,7 @@ const doRound = (state: RecordState, dice: DiceSource): RecordState => {
     ambush: false,
     naming: null,
     blowSettled: false,
+    warded,
   }
   return afterMasterRoll(
     { ...injured, combat: { ...combat, over: fightEnd(injured, combat) } },
@@ -864,7 +898,14 @@ const doBlow = (state: RecordState, dice: DiceSource): RecordState => {
   // with others still standing the fight goes on, which is why the end
   // of the fight is read off the band rather than off this flag.
   const landed = blow.landed ? withFoe(c, c.target, { endurance: 0 }) : c
-  const combat: Combat = { ...landed, blow, opening: !blow.landed }
+  // A missed blow closes the Opening - unless the Cord is what made it.
+  // "It can't be cut with normal weapons" (5T a2), and a strike that
+  // missed did not cut it either (I-49).
+  const combat: Combat = {
+    ...landed,
+    blow,
+    opening: !blow.landed || aimedAt(c).bound,
+  }
   const next = { ...state, combat: { ...combat, over: fightEnd(state, combat) } }
   return afterMasterRoll(
     blow.landed
@@ -993,6 +1034,121 @@ const doKeepTechnique = (state: RecordState): RecordState => {
   return addDeed(
     withCombat(withSheet(state, { learned: [...state.sheet.learned, learned] }), { naming: null }),
     fill(t('ui.deed.learned'), { name: learned.name }),
+  )
+}
+
+/**
+ * What the fan's fire takes at the start of every later round (I-50).
+ *
+ * A constant rather than a second roll: a fire that rolled every round
+ * would be a second fight running beside the first, and the reading
+ * takes the smallest number that makes "inextinguishable" mean
+ * anything. The engine's `magicFire` is where it is decided; this is
+ * the same number, read where the round applies it.
+ */
+const FIRE_EACH_ROUND = 1
+
+/**
+ * TIE IT WITH THE CORD: the winner's option that binds (I-49, I-41).
+ *
+ * "With a spell it moves to tie a person" - so the spells must be known
+ * (I-41), which is what the Old Vixen or the Chieftain's sheets teach.
+ * Being tied is the state R29 already names, an Opening, and it holds:
+ * `bound` is what makes a missed Final Blow leave the rope where it was.
+ */
+const doTie = (state: RecordState): RecordState => {
+  const c = state.combat
+  if (
+    c === null ||
+    aimedAt(c).outcome !== 'master-wins' ||
+    !holds(state, CORD) ||
+    !flag(state.cave, CORD_KNOWN)
+  )
+    return state
+  const tied = withFoe(c, c.target, { bound: binds().opening })
+  return withCombat(state, {
+    foes: rolledOff(tied),
+    last: null,
+    opening: true,
+    techniqueLine: theFiveTreasuresTreasureById(CORD)?.effect ?? null,
+  })
+}
+
+/**
+ * WAVE THE FAN: magic fire, now and every round after (I-50).
+ *
+ * The one opponent it does nothing to is the Senior King, whose own
+ * special skill is "Magic flames (4)" (I-37): the fire the fan makes is
+ * the fire he is made of. The menu shows that row disabled with the
+ * reason, and the reducer agrees rather than trusting the screen.
+ */
+const doFan = (state: RecordState, dice: DiceSource): RecordState => {
+  const c = state.combat
+  const aim = c === null ? null : aimedAt(c)
+  if (c === null || aim === null || aim.outcome !== 'master-wins' || !holds(state, FAN)) return state
+  if (aim.id === FIREPROOF) return state
+  const fire = magicFire(dice)
+  const lit = withFoe(c, c.target, {
+    endurance: floor(aim.endurance - fire.now),
+    burning: true,
+  })
+  const combat: Combat = {
+    ...lit,
+    foes: rolledOff(lit),
+    last: null,
+    techniqueLine: fill(t('ui.combat.fan.line'), { n: fire.now }),
+  }
+  return { ...state, combat: { ...combat, over: fightEnd(state, combat) } }
+}
+
+/**
+ * CALL OUT ITS NAME: the vase (I-38).
+ *
+ * "Remove the label and call out a person's name, if they respond
+ * they'll be trapped inside." Whether they respond is a closed question,
+ * so it is the Oracle's own Closed Question row: a Yes-class answer
+ * traps them, and a trapped opponent is removed from every table exactly
+ * as a defeated one is (I-33b, I-33c) - with no body, and so no loot.
+ *
+ * A name shouted into a cave that does not answer has still been
+ * shouted: the foe now knows where the Master is standing, and the
+ * fight that follows is theirs to open (I-08a).
+ */
+const doCall = (state: RecordState, foe: string, dice: DiceSource): RecordState => {
+  const opponent = treasureFoeById(foe)
+  if (opponent === undefined || !state.pending.includes(foe) || !holds(state, VASE)) return state
+  if (RANK_AND_FILE.includes(foe)) return state
+  const called = callsOut(dice)
+  if (!called.trapped)
+    return startFight(
+      {
+        ...state,
+        result: {
+          kind: 'note',
+          title: fill(t('ui.cave.call.refused'), { name: opponent.name.toUpperCase() }),
+          text: t('ui.cave.call.refused.text'),
+          label: 'reading',
+          cite: t('ui.cave.call.cite'),
+        },
+      },
+      [opponent],
+      true,
+    )
+  const cave = learntInto(resolveEncounter(state.cave, [foe]), foe)
+  return addDeed(
+    {
+      ...state,
+      cave,
+      pending: withoutFirst(state.pending, foe),
+      result: {
+        kind: 'note',
+        title: fill(t('ui.cave.call.trapped'), { name: opponent.name.toUpperCase() }),
+        text: theFiveTreasuresTreasureById(VASE)?.effect ?? '',
+        label: 'reading',
+        cite: t('ui.cave.call.cite'),
+      },
+    },
+    fill(t('ui.deed.trapped'), { name: opponent.name.toLowerCase() }),
   )
 }
 
@@ -1323,6 +1479,8 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return doFight(state, action.foe)
     case 'cave.fight-all':
       return doFightAll(state)
+    case 'cave.call':
+      return state.pending.length === 0 ? state : doCall(state, action.foe, dice)
     case 'cave.rest':
       return state.pending.length > 0 ? state : doRest(state)
     case 'cave.gourd':
@@ -1378,6 +1536,10 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return doTarget(state, action.index)
     case 'combat.opening':
       return doOpening(state)
+    case 'combat.tie':
+      return doTie(state)
+    case 'combat.fan':
+      return doFan(state, dice)
     case 'combat.blow':
       return doBlow(state, dice)
     case 'combat.morale':

@@ -373,6 +373,10 @@ export type FoeInFight = {
   readonly difference: number
   /** R37 kept it out of reach last round: it rolled, it could not wound. */
   readonly heldBack: boolean
+  /** Tied by the Dazzling Golden Cord (I-49): an Opening that holds. */
+  readonly bound: boolean
+  /** Burning with the Plantain Fan's magic fire (I-50): 1 a round, forever. */
+  readonly burning: boolean
   /** Its LOOT line has been read (once per body). */
   readonly looted: boolean
 }
@@ -448,6 +452,15 @@ export type Combat = {
   readonly naming: Naming | null
   /** The offer to keep the blow has been answered, either way. */
   readonly blowSettled: boolean
+  /**
+   * The seven-star sword took the last round's hit (I-44).
+   *
+   * "It can block hits from stronger enemies without any effort from the
+   * holder": no roll, no cost and no limit, so this is a fact about the
+   * round just rolled rather than a resource. False on every round the
+   * Master won, because the sword does nothing on those.
+   */
+  readonly warded: boolean
   readonly over: FightEnd
 }
 
@@ -575,6 +588,12 @@ export type Action =
   | { readonly type: 'combat.target'; readonly index: number }
   /** Face every foe the Event brought at once (R35; Phase 10e). */
   | { readonly type: 'cave.fight-all' }
+  /** Call a named foe into the vase (I-38; Phase 10g). */
+  | { readonly type: 'cave.call'; readonly foe: string }
+  /** The winner's option: tie the foe with the Cord (I-49). */
+  | { readonly type: 'combat.tie' }
+  /** The winner's option: wave the Plantain Fan (I-50). */
+  | { readonly type: 'combat.fan' }
   /** After a victory: one fallen foe's LOOT line (5T a2). */
   | { readonly type: 'combat.loot'; readonly index: number }
   /** Keep the landed blow as a Technique: the LUCK roll (R31). */

@@ -598,3 +598,30 @@ test('a landed Final Blow becomes a Technique of the Master’s own', async ({ p
   // The printed sheet's first line: name and age (MH p.5).
   await expect(page.getByTestId('record-master-name')).toHaveText('San Te, 27')
 })
+
+test('the sword takes the hits you are behind on', async ({ page }) => {
+  // Into the Cave entrance on an Encounter (2) and the Junior King (5),
+  // whose LOOT is the seven-star sword and rolls no die. Beat him, take
+  // it, then walk into the Dining hall onto the Senior King (2,6) and
+  // lose a round to him: the sword takes it (I-44).
+  await page.goto('/?dice=2,5,6,5,1,1,3,3,2,6,3,1,6,6')
+  await begin(page)
+  await go(page, /TO THE CAVE ENTRANCE/)
+  await button(page, /FACE THE JUNIOR KING SILVER HORN/).click()
+  await button(page, 'ROLL THE ROUND').click()
+  await page.getByTestId('act-opening').click()
+  await page.getByTestId('act-blow').click()
+  // A landed blow is offered as a Technique first (Phase 10f).
+  await page.getByTestId('act-let-go').click()
+  await page.getByTestId('act-loot').click()
+  await page.getByTestId('act-go-on').click()
+  await expect(page.getByTestId('beat')).toBeVisible()
+
+  await go(page, /TO THE DINING HALL/)
+  await button(page, /FACE THE SENIOR KING GOLDEN HORN/).click()
+  await button(page, 'ROLL THE ROUND').click()
+  await expect(page.getByText('IT IS AHEAD BY · END LOST')).toBeVisible()
+  await expect(page.getByTestId('warded')).toContainText('THE SWORD TAKES IT')
+  // The fan is his, not yours: the row is not on this screen at all.
+  await expect(page.getByTestId('act-fan')).toHaveCount(0)
+})

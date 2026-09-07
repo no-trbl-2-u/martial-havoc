@@ -952,6 +952,61 @@
       "ref": "village.nights-rest-is-the-sealed-four",
       "text": "A full night's rest restores SKILL completely and ENDURANCE by 4.",
       "title": "A night at the inn restores SKILL and 4 ENDURANCE"
+    },
+    {
+      "id": "note.treasures.calling-a-name-is-a-closed-question",
+      "cite": "I-38",
+      "ref": "treasures.calling-a-name-is-a-closed-question",
+      "text": "Calling a name into the vase asks the Oracle's Closed Question row: one d6, read as printed.",
+      "title": "Calling a name is a closed question",
+      "says": "\"call out a person's name, if they respond\"",
+      "silent": "what deciding whether they respond is",
+      "source": "estate-inventory.md, I-38 (an Oracle Closed Question)",
+      "reversed": "a SKILL or LUCK check made by the caller"
+    },
+    {
+      "id": "note.treasures.a-yes-class-answer-traps",
+      "cite": "I-38",
+      "ref": "treasures.a-yes-class-answer-traps",
+      "text": "A Yes-class answer - \"Yes, but\", \"Yes\", \"Yes, and\" - traps them inside; the foe is removed from every table, and leaves no body and so no loot.",
+      "title": "A yes traps them, and leaves no body",
+      "says": "\"they'll be trapped inside\"",
+      "silent": "which answers count as responding",
+      "source": "estate-inventory.md, I-38 (Yes-class = trapped)",
+      "reversed": "only a bare \"Yes\", with the hedged answers refusing"
+    },
+    {
+      "id": "note.treasures.binding-is-an-opening-that-holds",
+      "cite": "I-49",
+      "ref": "treasures.binding-is-an-opening-that-holds",
+      "text": "A foe tied by the Cord is in the state R29 names, an Opening, and stays in it: a missed Final Blow does not free them.",
+      "title": "Being tied is an Opening that holds",
+      "says": "\"with a spell it moves to tie a person\"",
+      "silent": "what a tied person is, mechanically",
+      "source": "this build, I-49 (reported to the estate)",
+      "reversed": "a tie that ends the fight outright"
+    },
+    {
+      "id": "note.treasures.magic-fire-burns-now-and-after",
+      "cite": "I-50",
+      "ref": "treasures.magic-fire-burns-now-and-after",
+      "text": "The fan takes 1d6 ENDURANCE at once and 1 at the start of every later round, and nothing in the fight puts it out.",
+      "title": "The fan's fire burns now, and after",
+      "says": "\"magic-fire's waves inextinguishable using conventional methods\"",
+      "silent": "how much, and for how long",
+      "source": "this build, I-50 (reported to the estate)",
+      "reversed": "one burst of damage and no burning"
+    },
+    {
+      "id": "note.treasures.a-ward-takes-the-hits-it-is-behind",
+      "cite": "I-44",
+      "ref": "treasures.a-ward-takes-the-hits-it-is-behind",
+      "text": "The seven-star sword takes any hit from a round the opponent won, without a roll, a cost or a limit; it does nothing on a round the Master won.",
+      "title": "The sword takes the hits you are behind on",
+      "says": "\"block hits from stronger enemies without any effort from the holder\"",
+      "silent": "how often, and at what price",
+      "source": "estate-inventory.md, I-44",
+      "reversed": "one block a fight, or a roll to block"
     }
   ]
 }

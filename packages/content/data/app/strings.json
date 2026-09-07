@@ -2093,6 +2093,111 @@
       "cite": "design/roll-modal/README.md"
     },
     {
+      "id": "ui.cave.call",
+      "text": "CALL OUT THE NAME OF THE {name}",
+      "cite": "MH p.58; 5T a2"
+    },
+    {
+      "id": "ui.cave.call.note",
+      "text": "The vase, unlabelled",
+      "cite": "5T a2"
+    },
+    {
+      "id": "ui.cave.call.cite",
+      "text": "5T a2 · I-38 · MH p.58",
+      "cite": "5T a2"
+    },
+    {
+      "id": "ui.cave.call.trapped",
+      "text": "{name}, TRAPPED",
+      "cite": "5T a2"
+    },
+    {
+      "id": "ui.cave.call.refused",
+      "text": "{name} DOES NOT ANSWER",
+      "cite": "5T a2"
+    },
+    {
+      "id": "ui.cave.call.refused.text",
+      "text": "The name goes out into the dark and nothing comes back but the knowledge of where you are standing. They are on you before the echo is.",
+      "cite": "5T a2"
+    },
+    {
+      "id": "ui.deed.trapped",
+      "text": "trapped the {name} in the vase",
+      "cite": "5T a2"
+    },
+    {
+      "id": "ui.combat.act.tie",
+      "text": "Tie it with the Cord",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.tie.cite",
+      "text": "5T a2 · I-49",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.tie.line",
+      "text": "A spell, and the Cord moves. It cannot be cut with normal weapons.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.tie.unknown",
+      "text": "You hold the Cord and not the spells that move it.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.fan",
+      "text": "Wave the Plantain Fan",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.fan.cite",
+      "text": "5T a2 · I-50",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.fan.line",
+      "text": "1d6 now, and one every round after. Nothing puts it out.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.fan.fireproof",
+      "text": "HIS FLAMES ARE THE FAN’S. It does nothing to him.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.fan.line",
+      "text": "The waves go out and take {n}. The burning does not stop when the waving does.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.band.bound",
+      "text": "BOUND",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.band.burning",
+      "text": "BURNING",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.warded",
+      "text": "THE SWORD TAKES IT",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.warded.cite",
+      "text": "5T a2 · I-44",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.warded.line",
+      "text": "The seven-star sword turns the blow aside, and you do not feel it happen.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
       "id": "ui.intro.heading",
       "text": "THE ADVENTURE, AS PRINTED",
       "cite": "design/roll-modal/README.md"

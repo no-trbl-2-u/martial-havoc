@@ -495,7 +495,17 @@ describe('the fight with the Dexterous Ghost', () => {
     expect(s.screen).toBe('combat')
     expect(s.combat).toMatchObject({ target: 0, round: 1 })
     expect(s.combat?.foes).toEqual([
-      { id: GHOST, endurance: 8, strength: null, outcome: null, difference: 0, heldBack: false, looted: false },
+      {
+        id: GHOST,
+        endurance: 8,
+        strength: null,
+        outcome: null,
+        difference: 0,
+        heldBack: false,
+        bound: false,
+        burning: false,
+        looted: false,
+      },
     ])
     // A foe the Event did not bring cannot be fought.
     const before = toGhost()
@@ -743,6 +753,8 @@ describe('the Old Vixen teaches the Cord\u2019s spells (I-41)', () => {
             outcome: null,
             difference: 0,
             heldBack: false,
+            bound: false,
+            burning: false,
             looted: true,
           },
         ],
@@ -757,6 +769,7 @@ describe('the Old Vixen teaches the Cord\u2019s spells (I-41)', () => {
         ambush: false,
         naming: null,
         blowSettled: false,
+        warded: false,
         over: { ended: true, reason: 'final-blow' },
       },
     }
@@ -1155,5 +1168,136 @@ describe('the Final Blow becomes a Technique of your own (Phase 10f)', () => {
     const back = fromCampaign({ ...older, master }, fresh())
     expect(back.sheet.age).toBeNull()
     expect(back.sheet.learned).toEqual([])
+  })
+})
+
+describe('the five treasures work (Phase 10g)', () => {
+  const KING = 'foe.junior-king-silver-horn'
+  const VASE = 'treasure.the-5-treasures.vase-of-muttonfat-jade'
+  const FAN = 'treasure.the-5-treasures.plantain-fan'
+  const SWORD = 'treasure.the-5-treasures.seven-star-sword'
+  const SENIOR = 'foe.senior-king-golden-horn'
+
+  /** A record holding `treasures`, with `foe` pending at the Cave entrance. */
+  const holding = (treasures: readonly string[], foe = KING): RecordState => {
+    const met = play(fresh(), [
+      // Event 2 into the Cave entrance is an Encounter; creature 5 is
+      // the Junior King (I-33c).
+      [{ type: 'cave.go', to: AREA.entrance }, [2, 5]],
+      [{ type: 'roll.close' }, []],
+    ])
+    return {
+      ...met,
+      pending: [foe],
+      cave: { ...met.cave, treasures: [...met.cave.treasures, ...treasures] },
+    }
+  }
+
+  it('swallows a named foe who answers, and leaves no body to loot (I-38)', () => {
+    const s = holding([VASE])
+    expect(menuFor(s).find((o) => o.id === `call-${KING}`)?.title).toBe(
+      'CALL OUT THE NAME OF THE JUNIOR KING SILVER HORN',
+    )
+    // The Oracle's Closed Question on a 5: "Yes".
+    const trapped = reduce(s, { type: 'cave.call', foe: KING }, fromSequence([5]))
+    expect(trapped.result).toMatchObject({ kind: 'note', label: 'reading' })
+    expect((trapped.result as { title: string }).title).toContain('TRAPPED')
+    expect(trapped.cave.defeated).toContain(KING)
+    expect(trapped.pending).toEqual([])
+    expect(trapped.deeds).toContain('trapped the junior king silver horn in the vase')
+    // No body: no loot was read, and the King's sword did not drop.
+    expect(trapped.cave.items).toEqual(s.cave.items)
+    // And there is nobody left to call to.
+    expect(menuFor(trapped).some((o) => o.id.startsWith('call-'))).toBe(false)
+  })
+
+  it('starts an Ambush when the name goes unanswered (I-38, I-08a)', () => {
+    // A 2 on the Closed Question row reads "No".
+    const refused = reduce(holding([VASE]), { type: 'cave.call', foe: KING }, fromSequence([2]))
+    expect(refused.screen).toBe('combat')
+    expect(refused.combat?.ambush).toBe(true)
+    expect(refused.cave.defeated).not.toContain(KING)
+  })
+
+  it('offers no vase without the vase, and none against rank and file', () => {
+    expect(menuFor(holding([])).some((o) => o.id.startsWith('call-'))).toBe(false)
+    const devils = holding([VASE], 'foe.devil-servant')
+    expect(menuFor(devils).some((o) => o.id.startsWith('call-'))).toBe(false)
+    expect(reduce(devils, { type: 'cave.call', foe: 'foe.devil-servant' }, fromSequence([5]))).toBe(
+      devils,
+    )
+  })
+
+  it('ties a foe with the Cord, and a missed Final Blow leaves it tied (I-49, I-41)', () => {
+    const s = holding([CORD])
+    const known = { ...s, cave: { ...s.cave, effects: [CORD], flags: { ...s.cave.flags, 'cord-spells-known': true } } }
+    const fighting = reduce(known, { type: 'cave.fight', foe: KING }, fromSequence([]))
+    const won = reduce(fighting, { type: 'combat.round' }, fromSequence([6, 6, 1, 1]))
+    const tied = reduce(won, { type: 'combat.tie' }, fromSequence([]))
+    expect(tied.combat?.foes[0]?.bound).toBe(true)
+    // Being tied is an Opening (R29), so the Final Blow is offered.
+    expect(tied.combat?.opening).toBe(true)
+    // A miss does not cut the Cord: the Opening holds.
+    const missed = reduce(tied, { type: 'combat.blow' }, fromSequence([1, 2]))
+    expect(missed.combat?.blow?.landed).toBe(false)
+    expect(missed.combat?.opening).toBe(true)
+  })
+
+  it('refuses the Cord until the spells are known (I-41)', () => {
+    const s = holding([CORD])
+    const fighting = reduce(s, { type: 'cave.fight', foe: KING }, fromSequence([]))
+    const won = reduce(fighting, { type: 'combat.round' }, fromSequence([6, 6, 1, 1]))
+    expect(reduce(won, { type: 'combat.tie' }, fromSequence([]))).toBe(won)
+  })
+
+  it('burns now and one a round after, and nothing puts it out (I-50)', () => {
+    const s = holding([FAN])
+    const fighting = reduce(s, { type: 'cave.fight', foe: KING }, fromSequence([]))
+    const won = reduce(fighting, { type: 'combat.round' }, fromSequence([6, 6, 1, 1]))
+    const before = won.combat?.foes[0]?.endurance ?? 0
+    // A 4 on the fan's die.
+    const lit = reduce(won, { type: 'combat.fan' }, fromSequence([4]))
+    expect(lit.combat?.foes[0]?.endurance).toBe(before - 4)
+    expect(lit.combat?.foes[0]?.burning).toBe(true)
+    // The next round takes one more before anything else happens.
+    const next = reduce(lit, { type: 'combat.round' }, fromSequence([1, 1, 1, 1]))
+    expect(next.combat?.foes[0]?.endurance).toBe(before - 4 - 1)
+    expect(next.combat?.foes[0]?.burning).toBe(true)
+  })
+
+  it('does nothing to the King whose own skill is Magic flames (I-50, I-37)', () => {
+    const s = holding([FAN], SENIOR)
+    const fighting = reduce(s, { type: 'cave.fight', foe: SENIOR }, fromSequence([]))
+    const won = reduce(fighting, { type: 'combat.round' }, fromSequence([6, 6, 1, 1]))
+    expect(reduce(won, { type: 'combat.fan' }, fromSequence([4]))).toBe(won)
+  })
+
+  it('takes the hits the Master is behind on, without a roll or a limit (I-44)', () => {
+    const s = holding([SWORD])
+    const fighting = reduce(s, { type: 'cave.fight', foe: KING }, fromSequence([]))
+    // The King rolls high and the Master low: a round the Master loses.
+    const lost = reduce(fighting, { type: 'combat.round' }, fromSequence([1, 1, 6, 6]))
+    expect(lost.combat?.last?.outcome).toBe('master-hit')
+    expect(lost.combat?.warded).toBe(true)
+    expect(lost.sheet.endurance).toBe(fighting.sheet.endurance)
+    // No limit: the second one is taken too.
+    const again = reduce(lost, { type: 'combat.round' }, fromSequence([1, 1, 6, 6]))
+    expect(again.combat?.warded).toBe(true)
+    expect(again.sheet.endurance).toBe(fighting.sheet.endurance)
+  })
+
+  it('does nothing on a round the Master won (I-44)', () => {
+    const s = holding([SWORD])
+    const fighting = reduce(s, { type: 'cave.fight', foe: KING }, fromSequence([]))
+    const won = reduce(fighting, { type: 'combat.round' }, fromSequence([6, 6, 1, 1]))
+    expect(won.combat?.warded).toBe(false)
+  })
+
+  it('takes the hit without the sword too — that is, it does not (I-44)', () => {
+    const bare = holding([])
+    const fighting = reduce(bare, { type: 'cave.fight', foe: KING }, fromSequence([]))
+    const lost = reduce(fighting, { type: 'combat.round' }, fromSequence([1, 1, 6, 6]))
+    expect(lost.combat?.warded).toBe(false)
+    expect(lost.sheet.endurance).toBeLessThan(fighting.sheet.endurance)
   })
 })
