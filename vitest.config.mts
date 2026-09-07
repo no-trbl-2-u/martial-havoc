@@ -19,6 +19,10 @@ export default defineConfig({
       // The copy leg: no hardcoded player-facing copy under apps/app/src
       // (agents.md rule 7). Reads source as text, so it lives here too.
       { test: { name: 'copy', include: ['scripts/copy-check.test.ts'] } },
+      // The plan leg: the build plan's status block is a topological
+      // order of its own `Waits on` graph, so the dispatcher's pick by
+      // list order is a pick by dependency. Reads plan/ as text.
+      { test: { name: 'plan', include: ['scripts/plan-check.test.ts'] } },
     ],
   },
 })
