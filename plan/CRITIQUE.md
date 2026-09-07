@@ -9,6 +9,57 @@
 
 ## Pending
 
+### [HIGH] skills/ship-a-phase.md — the dispatcher picks by list order, not by dependency
+- pass: user-jot (commit 14d178e)
+- viewport: unspecified
+- auth_state: anonymous
+- category: reliability
+- observation: ship-a-phase §Step 1 takes "the first `[ ]` row" and skips only `[skipped]` and `[blocked: ...]`. It never reads the `Waits on` line that every phase brief and every per-phase scope section carries. The feel-of-play block is a DAG, not a chain - 10c, 10d, 10f and 10h are all unblocked right now, while 10e waits on 10d, 10g waits on 10d, and 10i waits on 10c and 10f - so the plan's own row order is the only thing keeping the loop from picking a phase whose dependency has not shipped. It happens to be correct today; nothing enforces that it stays correct, and a reordering or an /expand insertion would break it silently.
+- evidence: skills/ship-a-phase.md Step 1 and §10; plan/steps/01_build_plan.md "Waits on" at lines 390, 412, 433, 444; observed while answering a direct question about phase dependencies, 2026-09-07T04:34:50Z
+- suggested fix: Have Step 1 read the candidate row's brief for `Waits on` and skip any phase whose named dependencies are not `[x]`, reporting which one it skipped and why. Cheap version: assert in a test that the row order in 01_build_plan.md is a topological order of the Waits on graph, so a bad reordering is red rather than silent.
+- source: user
+
+### [MED] packages/content — the fight prints a second-person line beside the narrator's third-person one
+- pass: user-jot (commit 14d178e)
+- viewport: unspecified
+- auth_state: anonymous
+- category: voice
+- observation: Phase 10a gave the app a narrator who speaks in the third person and names the Master, and put him on the combat screen at the end of a fight. The Unexpected Event lines on the same screen still address the Master directly - "Something above takes an interest in you, and the interest is not friendly" (line.unexpected-event.2) - so a tie followed by a kill prints "you" and then "San Te" in the same column, inches apart. This is the one place the 10a exclusion is visible to a player rather than merely recorded in a commit body.
+- evidence: packages/content/data/rules/unexpected-event-lines.json line.unexpected-event.2; apps/app/src/screens/CombatScreen.tsx renders c.event.line above the fight-end Narrator; plan/VOICE.md "Never the second person for the Master"
+- suggested fix: Decide who speaks the Unexpected Event line. Either it is the table reading itself aloud and stays as printed - in which case say so in VOICE.md so the mixed register is a choice - or it is the narrator, and the eleven rows are rewritten to his guide and brought under voice.test.ts.
+- source: user
+
+### [MED] packages/content — 149 authored lines are held to no style guide at all
+- pass: user-jot (commit 14d178e)
+- viewport: unspecified
+- auth_state: anonymous
+- category: voice
+- observation: Phase 10a deliberately scoped voice.test.ts to the narrator's three homes (result-lines, area lines, act lines) and left the 72 effect lines, 66 Oracle lines and 11 Unexpected Event lines outside it, on the reading that those are a table speaking rather than a storyteller. That reading may well be right, but the consequence is that 149 of the build's 182 authored lines - the large majority - are governed by nothing: no length cap, no register, no test. The number is printed on ABOUT as one figure, which reads as one voice.
+- evidence: packages/content/src/voice.test.ts preamble; contentCounts().authoredLines = 182, of which 33 are held to plan/VOICE.md; commit 139d503 body, third Decision
+- suggested fix: Either write the second guide the exclusion implies (a table-voice section in VOICE.md, with its own test), or fold the three files into the narrator's guide and rewrite them. Until one or the other, the ABOUT count is describing a consistency the content does not have.
+- source: user
+
+### [MED] general — the container has no .env, so the documented triage and mirror paths both fail
+- pass: user-jot (commit 14d178e)
+- viewport: unspecified
+- auth_state: anonymous
+- category: reliability
+- observation: skills/march.md Step 1 loads GH_TOKEN and GH_REPO from .env and shells out to `gh`; scripts/loop-issue.mjs does the same. In this cloud container there is no .env and no `gh` binary, so the triage gate falls through on every tick (the skill says not to fail the march, and it does not) and `loop-issue.mjs phase-open` exits on "GH_REPO missing", then on "gh label create exited null". Both phase mirrors this session were opened through the GitHub MCP by hand instead. The loop therefore runs with its cheapest gate permanently blind, and the blindness is indistinguishable from an empty issue list.
+- evidence: `test -f .env` false and `command -v gh` empty at 2026-09-07T03:05Z; loop-issue.mjs phase-open failed twice; issues #36 and #37 opened via mcp__github__issue_write
+- suggested fix: Give the two scripts a fallback that does not need the gh binary, or make the march's triage step say out loud that it could not check rather than falling through silently. A gate that cannot run should not look like a gate that passed.
+- source: user
+
+### [LOW] e2e — deed assertions are pinned to a running total, so one new deed edits four specs
+- pass: user-jot (commit 14d178e)
+- viewport: unspecified
+- auth_state: anonymous
+- category: maintainability
+- observation: Four e2e assertions check the deeds ledger by its count ("DEEDS 2", "2 DEEDS") rather than by what is in it. Phase 10b added one deed - taking the trail - and every one of them had to be bumped by hand, in three files, none of which is about the trail. The count assertions also pass for the wrong reasons: three deeds of any kind satisfies them.
+- evidence: e2e/creation.spec.ts:154 and :243, e2e/prototype.spec.ts:183 and :216, all edited in commit 3053fc2
+- suggested fix: Assert the deed text the spec is actually about (record-deeds already contains it, and one assertion in creation.spec.ts already does this) and keep at most one count assertion, in the record spec where the count is the subject.
+- source: user
+
+
 ### [MED] packages/content + docs — five rule-file fields carry the docs' gloss, not the book's text
 - pass: user-jot (PR #21 session, verbatim report 2026-09-06)
 - viewport: unspecified
