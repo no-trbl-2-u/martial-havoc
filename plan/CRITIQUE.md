@@ -9,6 +9,16 @@
 
 ## Pending
 
+### [HIGH] R77 has no gate, and cannot have one until a Technique can hurt something
+- pass: agent (commit 07199af)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: R77 says a spirit or ghost is "immune to traditional weapons or blows; to hurt them you need a technique, ritual, or exceptional weapon". The engine has the gate (`ordinaryBlowsPass`), the roster carries I-29's `incorporeal` tag, and the app reads neither: STRIKE is offered against the Dexterous Ghost and the Old Vixen exactly as against an Ogre. Phase 10g built the gate and reverted it before shipping, because turning it on makes the cave unfinishable — the Ghost holds the private quarter's key, and no Technique in this build does damage, so a Master without the seven-star sword has no legal way to hurt a spirit at all. The two problems are one problem: the gate is correct and unusable until the winner's-option Technique path can carry damage.
+- evidence: `packages/engine/src/progression/spoils.ts`, `ordinaryBlowsPass`, exported and read by nothing; `foe.dexterous-ghost` and `foe.old-vixen` carry `incorporeal: true`; the revert is described in 07199af's body
+- suggested fix: One phase, in this order: give the printed Techniques a mechanical effect where the book gives them one (R28 already prices them; `effects.json` already classes them), then turn the gate on, then let the sword and the exceptional weapons of I-29 pass it. Turning the gate on first ships a soft-lock.
+- source: agent
+
 ### [MEDIUM] The Minions rule is not offered anywhere (MH p.28 footnote)
 - pass: agent (commit 2299f57)
 - viewport: unspecified

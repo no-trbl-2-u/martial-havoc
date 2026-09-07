@@ -201,8 +201,27 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       id I-31b does not exist so a learned Technique's damage ships as
       a labelled **invention** cited to the brief, and a learned
       Technique reaches one opponent.
-- [ ] Phase 10g — The five treasures work (brief:
-      `phase_10g_the_five_treasures_work.md`)
+- [x] Phase 10g — The five treasures work (brief:
+      `phase_10g_the_five_treasures_work.md`) — 41e1e26, merged as
+      07199af. The vase calls a named foe's name and reads the Oracle's
+      Closed Question for the answer (I-38): a yes traps them, with no
+      body and so no loot; a no is an Ambush. The Cord ties once the
+      spells are known and a missed Final Blow does not cut it (I-49).
+      The fan burns 1d6 now and one a round after, and nothing puts it
+      out (I-50) — except the Senior King, whose flames are already
+      his. The sword takes any hit from a round the Master was behind
+      in, with no roll and no limit (I-44), and says so on its own slip.
+      **Two calls are in the commit body**: the brief's LUCK check for
+      the vase and its once-a-fight sword both contradict readings that
+      already exist (I-38, I-44), and standing rule 9 puts `docs/` above
+      a phase brief, so both ship as the readings have them. I-49 and
+      I-50 did not exist and are assigned here, written into
+      `docs/rules/readings/the-5-treasures.md` in the same commit and
+      reported to the estate. **Not shipped:** R77's gate on ordinary
+      blows against spirits — it was built and reverted, because with it
+      in place the Dexterous Ghost is unbeatable (no Technique in this
+      build does damage) and he holds the private quarter's key. Filed
+      to `plan/CRITIQUE.md`.
 - [ ] Phase 10h — The cave map and the journal as a story (brief:
       `phase_10h_map_and_journal.md`)
 - [ ] Phase 10i — The ending scores the adventure (brief:
