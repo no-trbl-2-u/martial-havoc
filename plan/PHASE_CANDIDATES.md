@@ -9,41 +9,6 @@
 
 ## Pending
 
-### [ ] [score 7.0] True to the book, second bucket: LUCK seen draining, Escape priced on the surface, equipment as permission
-- proposed: 2026-09-07, expand pass 1
-- source signals:
-  - `determined-intent.md` section 7, items 5, 6 and 11 (2026-09-07):
-    "Show LUCK draining. Every LUCK check must visibly cost a point";
-    "Do not rebalance opponents ... Surface Escape prominently and
-    price it as printed"; "Weapons and armor are permissions, not
-    modifiers. Never add equipment to a roll."
-  - `plan/phases/phase_10k_true_to_the_book.md` consumed sections
-    3.1, 3.6, 3.8, 6 and items 1, 2, 3, 7, 8, 10, 12, 13 of section 7;
-    10f took item 4, 10i item 9. Items 5, 6, 11 and 14 are named by no
-    brief.
-  - engine grep, 2026-09-07: the rules exist and are labelled
-    (`checks.luck-decrement-regardless` R21; `escape.last-blow-of-two`
-    R38, `escape.dishonor-on-damage` R39, I-32;
-    `combat.armed-proficiency-needs-its-weapon` R68). The gap, if
-    any, is the surface: the app shows LUCK on the naming step and the
-    KEEP IT row only (`CombatScreen.tsx`), and FLEE is one row among
-    the fight's options.
-- rationale: the intent reading is the one document that says what
-  the book is for, and three of its fourteen recommendations have no
-  home in the plan. Each is small and each is a fidelity gap a player
-  feels: a LUCK check that costs a point in the engine and shows
-  nothing is the book's "burning fuse" (section 3.3) played silent.
-- proposed scope: 1 phase, app-side. A LUCK strip that decrements on
-  screen at every check with the cost named; the Escape row priced as
-  printed (R38 last blow of 2, R39 Dishonor) before it is chosen, not
-  after; a content test that no roll anywhere adds an equipment
-  modifier, and equipment gates labelled as permissions. Item 14
-  (adventures keyed lightly) is Phase 12's format question and is
-  left there.
-- estimated phases: 1
-- conflicts: none. No sealed rule, no refusal.
-- score: base 4, +1 one strong source type, +2 cheap and impactful.
-
 ### [ ] [score 6.0] Cut the 149 unguided lines to the book's text
 - proposed: 2026-09-07, expand pass 1
 - source signals:
@@ -80,16 +45,56 @@
   Oracle cell, Unexpected Event, Inspiration, Spark and Technique or
   Ritual effect", and the acceptance criterion "437 is the full
   count" (rule 6, sealed). The field report is filed in `RE-SEED.md`
-  (2026-09-07T20:14Z) in the same pass. `[needs-user-call]` remains
-  on one point the operator's answer did not cover: Phase 11's 288
-  Inspiration and Spark lines are the same category as the 149; the
-  source or the operator must say whether Phase 11 survives the cut.
-  This candidate does not ship until that answer and the re-issued
-  spec exist.
+  (2026-09-07T20:14Z) in the same pass. The one point the operator's answer
+  did not cover is now answered: on 2026-09-07 via `/oversight` Phase
+  11 was skipped and its 288 Inspiration and Spark lines cut with the
+  149, being the same category of line. What remains before this ships
+  is the spec itself, which moves only by a re-issue from the source;
+  the fourth field report carrying the Phase 11 answer back is the
+  next `/re-seed`.
 - score: base 4, +3 four source types, +2 operator decision today,
   +2 cheap, -5 spec conflict.
 
-### [ ] [score 5.0] The docs are the book: gloss out, verbatim marked, prose in
+## Promoted
+
+### [x] [score 7.0] True to the book, second bucket: LUCK seen draining, Escape priced on the surface, equipment as permission
+- promoted: 2026-09-07, the operator via /oversight, as **Phase 10m** (`### Phase 10m` in `plan/steps/01_build_plan.md`, row placed after 10l and before the milestone, waiting on 10k). No brief file yet; `/plan-a-phase` writes one from the scope section.
+- proposed: 2026-09-07, expand pass 1
+- source signals:
+  - `determined-intent.md` section 7, items 5, 6 and 11 (2026-09-07):
+    "Show LUCK draining. Every LUCK check must visibly cost a point";
+    "Do not rebalance opponents ... Surface Escape prominently and
+    price it as printed"; "Weapons and armor are permissions, not
+    modifiers. Never add equipment to a roll."
+  - `plan/phases/phase_10k_true_to_the_book.md` consumed sections
+    3.1, 3.6, 3.8, 6 and items 1, 2, 3, 7, 8, 10, 12, 13 of section 7;
+    10f took item 4, 10i item 9. Items 5, 6, 11 and 14 are named by no
+    brief.
+  - engine grep, 2026-09-07: the rules exist and are labelled
+    (`checks.luck-decrement-regardless` R21; `escape.last-blow-of-two`
+    R38, `escape.dishonor-on-damage` R39, I-32;
+    `combat.armed-proficiency-needs-its-weapon` R68). The gap, if
+    any, is the surface: the app shows LUCK on the naming step and the
+    KEEP IT row only (`CombatScreen.tsx`), and FLEE is one row among
+    the fight's options.
+- rationale: the intent reading is the one document that says what
+  the book is for, and three of its fourteen recommendations have no
+  home in the plan. Each is small and each is a fidelity gap a player
+  feels: a LUCK check that costs a point in the engine and shows
+  nothing is the book's "burning fuse" (section 3.3) played silent.
+- proposed scope: 1 phase, app-side. A LUCK strip that decrements on
+  screen at every check with the cost named; the Escape row priced as
+  printed (R38 last blow of 2, R39 Dishonor) before it is chosen, not
+  after; a content test that no roll anywhere adds an equipment
+  modifier, and equipment gates labelled as permissions. Item 14
+  (adventures keyed lightly) is Phase 12's format question and is
+  left there.
+- estimated phases: 1
+- conflicts: none. No sealed rule, no refusal.
+- score: base 4, +1 one strong source type, +2 cheap and impactful.
+
+### [x] [score 5.0] The docs are the book: gloss out, verbatim marked, prose in
+- promoted: 2026-09-07, the operator via /oversight, as **Phases 15 and 16** - 15 is the gloss correction, the verbatim convention and the docs-to-PDF leg; 16 is the absent rulebook prose, waiting on 15. Both rows sit before the milestone in the status block because the loop reaches them by row order and the operator's sitting does not gate them.
 - proposed: 2026-09-07, expand pass 1
 - source signals:
   - `plan/CRITIQUE.md` [MED] "five rule-file fields carry the docs'
@@ -122,36 +127,8 @@
   `spec.md` are untouched.
 - score: base 4, +3 four rows and a standing rule, -2 two phases.
 
-### [ ] [score 6.0] Reconcile VISION.md with the authored lines: where inventions may print
-- proposed: 2026-09-06, operator via oversight (not an expand pass)
-- source signals:
-  - `VISION.md` (operator, 2026-09-06): inventions are "confined to the
-    app's own controls (button titles, headings, citations)".
-  - `plan/CRITIQUE.md` [MED] "no full proofread of the docs against the
-    PDF has been done (VISION.md)".
-  - Measurement, 2026-09-06 (PR #21 session): six invented surfaces
-    print as prose in play - Technique effect lines (72, combat),
-    Unexpected Event lines (11, combat), ending act lines (5, beat),
-    village blurbs (4), behaviour notes (109, rules panel), combat menu
-    lines (strings). Oracle lines (66) are in data but never rendered.
-    The areas' authored lines stopped printing in phase 8c.
-- rationale: two operator-level statements disagree. `spec.md` commits
-  to "an authored line beside every result", "About 440 authored
-  lines" and a done-condition that "the shipped authored-line count is
-  printed by the build; 437 is the full count". `VISION.md` forbids
-  those lines anywhere but controls. The build cannot satisfy both,
-  and every phase that touches a result slip inherits the ambiguity.
-- proposed scope: 1 phase after the reading is settled - either strip
-  the six surfaces to the book's text and cite-only rows, or print
-  each invented line under its INVENTION pill and amend VISION.md.
-- estimated phases: 1 (plus the re-seed)
-- conflicts: `spec.md` (sealed, rule 6) - resolution goes through
-  `/re-seed` before any phase ships; `/oversight` decides which
-  statement wins.
-
-## Promoted
-
 ### [x] Reconcile VISION.md with the authored lines
+- duplicate cleared: 2026-09-07 via /oversight. This candidate was carrying a live `[ ]` row in `## Pending` as well as this one, so `/oversight` was offering an already-resolved phase for promotion. The Pending copy is removed; this row is the record.
 - promoted: 2026-09-06, the operator, in the session that wrote the
   feel-of-play block; resolved as Phase 10a (`phase_10a_the_voice.md`)
 - resolution: the spec wins and is re-issued through `RE-SEED.md`;
