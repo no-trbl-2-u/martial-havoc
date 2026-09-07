@@ -61,6 +61,7 @@ import {
   takeHere,
   templeVisit,
   toggleFlag,
+  ordinaryBlowsPass,
   toSilver,
   treasureBand,
   unexpectedEvent,
@@ -79,6 +80,8 @@ import type {
 } from '@martial-havoc/engine'
 import {
   INCENSE_ID,
+  isExceptionalWeapon,
+  isExceptionalWeaponName,
   isMomentumDoor,
   effectFor,
   market,
@@ -228,6 +231,41 @@ const bandEndurance = (c: Combat): number => c.foes.reduce((n, f) => n + f.endur
 /** Is `treasure` in the Master's hands? (I-60: a held treasure's effect is known.) */
 const holds = (state: RecordState, treasure: string): boolean =>
   state.cave.treasures.includes(treasure)
+
+/**
+ * Is the Master carrying one of R77's "exceptional weapons" (I-29)?
+ *
+ * Two places one can be, and the content package answers for both: a
+ * treasure taken in the cave (the seven-star sword, matched by id) and
+ * a line of printed equipment (Yin's "Magical sword", matched by name,
+ * because a sheet's equipment is strings and not records). The engine
+ * names no weapon and neither does this: both questions are asked of
+ * `packages/content`, which holds the list (standing rule 7).
+ */
+const carriesExceptionalWeapon = (state: RecordState): boolean =>
+  state.cave.treasures.some(isExceptionalWeapon) ||
+  state.sheet.equipment.some(isExceptionalWeaponName)
+
+/**
+ * May this blow hurt the body the Master is aimed at (MH p.66, R77)?
+ *
+ * "Sometimes you will face spirits or ghosts, incorporeal beings immune
+ * to traditional weapons or blows; you will need to use a technique,
+ * ritual, or exceptional weapon to defeat them." The gate is the
+ * engine's `ordinaryBlowsPass` and the two facts it wants are content's:
+ * whether this opponent carries I-29's tag, and whether the Master is
+ * carrying one of I-29's three weapons.
+ *
+ * `techniqueOrRitual` is not passed here, because this is only ever
+ * asked of the two ordinary blows - STRIKE (R25a) and the Final Blow
+ * (R30). The Technique path never asks: a Technique passes the gate by
+ * being one.
+ */
+const blowLands = (state: RecordState, foeId: string): boolean =>
+  ordinaryBlowsPass({
+    incorporeal: treasureFoeById(foeId)?.incorporeal === true,
+    exceptionalWeapon: carriesExceptionalWeapon(state),
+  })
 
 /** Replace one opponent in the band, by index, leaving the rest alone. */
 const withFoe = (c: Combat, index: number, change: Partial<FoeInFight>): Combat => ({
@@ -917,6 +955,10 @@ const doStrike = (state: RecordState): RecordState => {
   const c = state.combat
   const aim = c === null ? null : aimedAt(c)
   if (c === null || aim === null || aim.outcome !== 'master-wins') return state
+  // R77: an ordinary blow does not touch a spirit. The row is disabled
+  // on the screen with the book's own sentence; the reducer refuses it
+  // too, so a fixed-dice script cannot reach past the gate either.
+  if (!blowLands(state, aim.id)) return state
   const foe = treasureFoeById(aim.id)
   // MH p.28's footnote, when the player has switched it on: the body is
   // read at ENDURANCE 1 for damage, so any hit at all removes it
@@ -1003,7 +1045,20 @@ const doTechnique = (state: RecordState, id: string): RecordState => {
     last: null,
     techniqueLine: line,
   }
-  return { ...next, combat: { ...combat, over: fightEnd(next, combat) } }
+  const done = { ...next, combat: { ...combat, over: fightEnd(next, combat) } }
+  // A Technique that is a blow can now put a body down (I-65), so it
+  // writes the same deed a strike does. Before Phase 10l no Technique
+  // did damage and there was no kill here to record; a ledger that
+  // remembers a strike and forgets a Technique would be the ledger
+  // telling half the story.
+  return targets
+    .filter((index) => (c.foes[index]?.endurance ?? 0) > 0 && combat.foes[index]?.endurance === 0)
+    .reduce<RecordState>((acc, index) => {
+      const felled = treasureFoeById(combat.foes[index]?.id ?? '')
+      return felled === undefined
+        ? acc
+        : addDeed(acc, fill(t('ui.deed.killed'), { name: felled.name.toLowerCase() }))
+    }, done)
 }
 
 /** The winner's option (d): an Opening, no damage (R29). */
@@ -1018,6 +1073,10 @@ const doBlow = (state: RecordState, dice: DiceSource): RecordState => {
   const c = state.combat
   const foe = c === null ? undefined : treasureFoeById(aimedAt(c).id)
   if (c === null || foe === undefined || !c.opening || c.over.ended) return state
+  // The Final Blow is a blow (R30), so R77 closes on it as it closes on
+  // STRIKE: an Opening against a spirit is real, and the blow that
+  // follows it still passes through the body.
+  if (!blowLands(state, aimedAt(c).id)) return state
   const { source, manual } = masterDice(state, dice)
   const blow = finalBlow({})(source)
   // The Blow kills the body it was aimed at (R30), not the encounter:

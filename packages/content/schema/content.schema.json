@@ -1263,7 +1263,7 @@
             "minLength": 1
           },
           "reach": {
-            "description": "How many opponents an area ability reaches (R36, I-11): a number read from the ability's own prose, or null for \"all opponents surrounding you\". Absent where the ability reaches only the opponent in front.",
+            "description": "How many opponents an ability's damage reaches (R36, I-11, I-65): a number read from the ability's own prose, or null for \"all opponents surrounding you\". `1` is the opponent in front. Absent means the ability does no damage at all, which is most of them - the field is what tells a blow from a Technique that runs on water.",
             "type": [
               "integer",
               "null"

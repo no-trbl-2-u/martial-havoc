@@ -29,16 +29,6 @@
 - suggested fix: drop `fontStyle: 'italic'` from `styles.question`, or give the question the same upright serif the freeze frame's lines use; then remove the `test.fail`.
 - source: agent
 
-### [HIGH] R77 has no gate, and cannot have one until a Technique can hurt something
-- pass: agent (commit 07199af)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: R77 says a spirit or ghost is "immune to traditional weapons or blows; to hurt them you need a technique, ritual, or exceptional weapon". The engine has the gate (`ordinaryBlowsPass`), the roster carries I-29's `incorporeal` tag, and the app reads neither: STRIKE is offered against the Dexterous Ghost and the Old Vixen exactly as against an Ogre. Phase 10g built the gate and reverted it before shipping, because turning it on makes the cave unfinishable — the Ghost holds the private quarter's key, and no Technique in this build does damage, so a Master without the seven-star sword has no legal way to hurt a spirit at all. The two problems are one problem: the gate is correct and unusable until the winner's-option Technique path can carry damage.
-- evidence: `packages/engine/src/progression/spoils.ts`, `ordinaryBlowsPass`, exported and read by nothing; `foe.dexterous-ghost` and `foe.old-vixen` carry `incorporeal: true`; the revert is described in 07199af's body
-- suggested fix: One phase, in this order: give the printed Techniques a mechanical effect where the book gives them one (R28 already prices them; `effects.json` already classes them), then turn the gate on, then let the sword and the exceptional weapons of I-29 pass it. Turning the gate on first ships a soft-lock.
-- source: agent
-
 ### [HIGH] scripts/copy-check.test.ts — the copy leg does not see a citation as copy
 - pass: agent (commit 5d25011)
 - viewport: unspecified
@@ -299,6 +289,17 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [HIGH] R77 has no gate, and cannot have one until a Technique can hurt something
+- pass: agent (commit 07199af)
+- closed: shipped in the order the row prescribed. Technique damage first (I-65, assigned in this commit): five Techniques whose printed effect is a blow carry `multiple.areaDamage` with `reach: 1` and do the exchange's difference. Then the gate: `doStrike` and `doBlow` refuse an ordinary blow against an I-29 foe, the screen says so in MH p.66's own words, and the seven-star sword or Yin's Magical sword opens it. The cave stays finishable bare-handed - San Te's Rising Wave Strike puts the Ghost down and takes the key - and it was finishable anyway through the Skillful Beast, who drops the same key. (Phase 10l)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: R77 says a spirit or ghost is "immune to traditional weapons or blows; to hurt them you need a technique, ritual, or exceptional weapon". The engine has the gate (`ordinaryBlowsPass`), the roster carries I-29's `incorporeal` tag, and the app reads neither: STRIKE is offered against the Dexterous Ghost and the Old Vixen exactly as against an Ogre. Phase 10g built the gate and reverted it before shipping, because turning it on makes the cave unfinishable — the Ghost holds the private quarter's key, and no Technique in this build does damage, so a Master without the seven-star sword has no legal way to hurt a spirit at all. The two problems are one problem: the gate is correct and unusable until the winner's-option Technique path can carry damage.
+- evidence: `packages/engine/src/progression/spoils.ts`, `ordinaryBlowsPass`, exported and read by nothing; `foe.dexterous-ghost` and `foe.old-vixen` carry `incorporeal: true`; the revert is described in 07199af's body
+- suggested fix: One phase, in this order: give the printed Techniques a mechanical effect where the book gives them one (R28 already prices them; `effects.json` already classes them), then turn the gate on, then let the sword and the exceptional weapons of I-29 pass it. Turning the gate on first ships a soft-lock.
+- source: agent
 
 ### [MED] apps/app — the opponent's ENDURANCE is not shown on its combat card
 - pass: user-jot (commit afb0e68)

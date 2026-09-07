@@ -253,6 +253,24 @@
       "title": "A round you lose is followed by another"
     },
     {
+      "id": "note.combat.spirits-refuse-ordinary-blows",
+      "cite": "MH p.66 (R77)",
+      "ref": "combat.spirits-refuse-ordinary-blows",
+      "text": "A spirit or ghost cannot be struck down by an ordinary blow: strike and Final Blow are refused against one, and a Technique, a Ritual or an exceptional weapon is what defeats it.",
+      "title": "A spirit is not hurt by an ordinary blow"
+    },
+    {
+      "id": "note.combat.technique-blow-strikes-for-the-difference",
+      "cite": "I-65",
+      "ref": "combat.technique-blow-strikes-for-the-difference",
+      "text": "A Technique whose printed effect is a blow takes the exchange's difference off, the same number the strike would have taken; its own value is its cost, not its damage.",
+      "title": "A Technique that is a blow does the difference",
+      "says": "you will need to use a technique, ritual, or exceptional weapon to defeat them",
+      "silent": "how much damage a Technique does",
+      "source": "docs/rules/readings/combat.md, I-65",
+      "reversed": "a Technique doing its own value, or a flat amount, instead"
+    },
+    {
       "id": "note.combat.minions-at-endurance-one",
       "cite": "MH p.28 (R33, footnote)",
       "ref": "combat.minions-at-endurance-one",

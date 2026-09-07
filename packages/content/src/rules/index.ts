@@ -170,3 +170,19 @@ export const exceptionalWeaponById = byId(exceptionalWeapons)
  */
 export const isExceptionalWeapon = (ref: string): boolean =>
   exceptionalWeapons.some((w) => w.ref === ref)
+
+/**
+ * Is this equipment line an exceptional weapon (R77, I-29)?
+ *
+ * The companion to {@link isExceptionalWeapon} for the case where there
+ * is no id to ask with. Yin's sheet prints "Magical sword" as an
+ * equipment string (MH p.92) and a sheet's equipment is a list of
+ * strings, not of records, so the only thing to match on is the printed
+ * name. Compared case- and space-insensitively because the line may
+ * have been typed by a player rather than taken from a preset.
+ *
+ * Total: a line naming nothing is `false`, which is the safe answer -
+ * an ordinary blow lands.
+ */
+export const isExceptionalWeaponName = (name: string): boolean =>
+  exceptionalWeapons.some((w) => w.name.toLowerCase() === name.trim().toLowerCase())

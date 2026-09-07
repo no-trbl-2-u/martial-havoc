@@ -40,6 +40,13 @@ export const combatBehaviours: readonly Behaviour[] = Object.freeze([
   // The book's one optional rule that changes a printed stat block, and
   // so the one behaviour here that is off until the player turns it on.
   { id: 'combat.minions-at-endurance-one', label: 'rule', cite: 'MH p.28 (R33, footnote)' },
+  // R77 read from the fight's side: the gate itself lives in
+  // `progression/spoils.ts` as `ordinaryBlowsPass`; this is the round
+  // refusing the strike and the Final Blow when it closes.
+  { id: 'combat.spirits-refuse-ordinary-blows', label: 'rule', cite: 'MH p.66 (R77)' },
+  // How much a Technique whose printed effect is a blow takes off. The
+  // book prices Techniques and never quantifies them (R27).
+  { id: 'combat.technique-blow-strikes-for-the-difference', label: 'reading', cite: 'I-65' },
   {
     id: 'combat.armed-proficiency-needs-its-weapon',
     label: 'reading',
