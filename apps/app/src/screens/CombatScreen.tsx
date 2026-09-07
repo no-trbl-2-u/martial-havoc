@@ -4,12 +4,13 @@
  * Unexpected Event; the retreat row that rolls Morale (spec.md, Horizon;
  * design prototype, "COMBAT").
  */
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { effectFor, t, techniqueById, treasureFoeById } from '@martial-havoc/content'
 import type { AttackStrength } from '@martial-havoc/engine'
+import { skillForFight } from '@martial-havoc/engine'
 import { fill } from '../lib/fill'
 import { momentOfFightEnd, narrate } from '../lib/narrator'
-import type { Action, Combat, RecordState } from '../state/types'
+import type { Action, Combat, FoeInFight, RecordState } from '../state/types'
 import { color, font } from '../theme/tokens'
 import { Die } from '../components/Die'
 import { ManualDice } from '../components/ManualDice'
@@ -22,9 +23,38 @@ import { Source } from '../components/Source'
 type Props = { readonly state: RecordState; readonly dispatch: (a: Action) => void }
 
 /** One side's card: two dice, the sum and what was added, the total. */
-const Side = ({ title, strength, idle, prefix }: { title: string; strength: AttackStrength | null; idle: string; prefix: string }) => (
-  <Slip style={styles.side}>
+const Side = ({
+  title,
+  strength,
+  idle,
+  prefix,
+  note,
+  dimmed,
+  aimed,
+  onPress,
+}: {
+  title: string
+  strength: AttackStrength | null
+  idle: string
+  prefix: string
+  /** A word over the card: HELD BACK, DOWN, or nothing. */
+  note?: string
+  /** Struck out: this body is down and only its record is left. */
+  dimmed?: boolean
+  /** The winner's option applies here: the card the Master is aimed at. */
+  aimed?: boolean
+  onPress?: () => void
+}) => (
+  <Slip
+    style={[styles.side, dimmed === true && styles.sideDown, aimed === true && styles.sideAimed]}
+    testID={`side-${prefix}`}
+  >
     <Text style={styles.sideTitle}>{title}</Text>
+    {note === undefined || note.length === 0 ? null : (
+      <Text testID={`note-${prefix}`} style={styles.sideNote}>
+        {note}
+      </Text>
+    )}
     <View style={styles.dice}>
       <Die size={30} face={strength?.roll.a ?? null} testID={`die-${prefix}-a`} />
       <Die size={30} face={strength?.roll.b ?? null} testID={`die-${prefix}-b`} />
@@ -40,20 +70,70 @@ const Side = ({ title, strength, idle, prefix }: { title: string; strength: Atta
           })}
     </Text>
     <Text testID={`total-${prefix}`} style={styles.sideTotal}>{strength === null ? '-' : strength.total}</Text>
+    {/*
+      The whole card is the tap target, and it is drawn last so it
+      sits over the text rather than under it. A card with nothing to
+      aim at renders none, so a duel has no invisible button on it.
+    */}
+    {onPress === undefined ? null : (
+      <Pressable
+        accessibilityRole="button"
+        testID={`aim-${prefix}`}
+        onPress={onPress}
+        style={styles.aimHit}
+      />
+    )}
   </Slip>
 )
+
+/**
+ * Reading the band from the screen's side (Phase 10e).
+ *
+ * The reducer owns the same three questions and answers them the same
+ * way; they are repeated here rather than exported because a screen
+ * asking "who am I aimed at" is a rendering question, and a reducer
+ * asking it is a rule. Both read the one field that decides it.
+ */
+const aimedAt = (c: Combat): FoeInFight | undefined => c.foes[c.target] ?? c.foes[0]
+
+/** Every body still on its feet. */
+const standing = (c: Combat): readonly FoeInFight[] => c.foes.filter((f) => f.endurance > 0)
+
+/** Every body down and not yet looted, with the index the reducer wants. */
+const bodies = (c: Combat): readonly { readonly index: number; readonly foe: FoeInFight }[] =>
+  c.foes.map((foe, index) => ({ index, foe })).filter((x) => x.foe.endurance === 0)
 
 type Act = { id: string; title: string; cite: string; line: string; enabled: boolean; action: Action }
 
 /** The menu for the fight's current state: R25's four when ahead, else what the phase allows. */
 const actions = (state: RecordState, c: Combat): readonly Act[] => {
-  const won = c.last?.outcome === 'master-wins'
-  const diff = c.last?.difference ?? 0
+  const aim = aimedAt(c)
+  const won = aim?.outcome === 'master-wins'
+  const diff = aim?.difference ?? 0
+  const alive = standing(c)
   if (c.over.ended && c.over.reason === 'master-down')
     return [{ id: 'fall', title: t('ui.combat.act.fall'), cite: t('ui.combat.act.fall.cite'), line: t('ui.combat.act.fall.line'), enabled: true, action: { type: 'combat.leave' } }]
-  if (c.foeEndurance === 0)
+  // Every body that has fallen gets its own LOOT row, in the order they
+  // fell: a LOOT line belongs to an opponent, not to a fight (5T a2).
+  // The rows stand while anyone is still up, too - a Master who has put
+  // one of three down may stoop, and the other two are still there.
+  const loot = bodies(c).map(({ index, foe }) => ({
+    // One opponent keeps the row's original id: a duel is the common
+    // case and its controls should not be renamed by a phase about
+    // crowds. Several give each body its own.
+    id: c.foes.length === 1 ? 'loot' : `loot-${String(index)}`,
+    title:
+      c.foes.length === 1
+        ? t('ui.combat.act.loot')
+        : fill(t('ui.combat.act.loot.of'), { name: (treasureFoeById(foe.id)?.name ?? '').toUpperCase() }),
+    cite: t('ui.combat.act.loot.cite'),
+    line: t('ui.combat.act.loot.line'),
+    enabled: !foe.looted,
+    action: { type: 'combat.loot', index } as Action,
+  }))
+  if (alive.length === 0)
     return [
-      { id: 'loot', title: t('ui.combat.act.loot'), cite: t('ui.combat.act.loot.cite'), line: t('ui.combat.act.loot.line'), enabled: !c.looted, action: { type: 'combat.loot' } },
+      ...loot,
       { id: 'go-on', title: t('ui.combat.act.go-on'), cite: t('ui.combat.act.go-on.cite'), line: t('ui.combat.act.go-on.line'), enabled: true, action: { type: 'combat.leave' } },
     ]
   if (c.event !== null) {
@@ -86,6 +166,7 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
     .filter((x) => x.effect?.timing === 'combat-winner-option')
   const technique = usable[0]
   return [
+    ...loot,
     { id: 'strike', title: t('ui.combat.act.strike'), cite: t('ui.combat.act.strike.cite'), line: won ? fill(t('ui.combat.act.strike.won'), { n: diff }) : t('ui.combat.act.strike.lost'), enabled: won, action: { type: 'combat.strike' } },
     {
       id: 'technique',
@@ -108,7 +189,10 @@ const banner = (state: RecordState, c: Combat): { label: string; value: string; 
   // rather than leave the missing rows unexplained.
   if (c.ambush) return { label: t('ui.combat.ambush.banner'), value: '-', bg: color.vermilion }
   const r = c.last
-  if (r === null) return { label: t('ui.combat.banner.roll'), value: '-', bg: color.ink }
+  if (r === null)
+    return standing(c).length > 1
+      ? { label: fill(t('ui.combat.banner.band'), { n: standing(c).length }), value: '-', bg: color.ink }
+      : { label: t('ui.combat.banner.roll'), value: '-', bg: color.ink }
   if (r.difference > 0) return { label: t('ui.combat.banner.ahead'), value: String(r.difference), bg: color.vermilion }
   if (r.difference < 0) return { label: t('ui.combat.banner.behind'), value: String(-r.difference), bg: color.ink }
   return { label: t('ui.combat.banner.tie'), value: '0', bg: color.vermilion }
@@ -140,13 +224,16 @@ const fallenSlip = (
       cite: t('ui.combat.fallen.master.cite'),
       line,
     }
-  if (c.foeEndurance > 0) return null
+  // With several opponents the slip is about the one the Master was
+  // aimed at: that is the body that just fell, and the round card has
+  // already scrolled past by the time this is read.
+  if ((aimedAt(c)?.endurance ?? 1) > 0) return null
   return {
     title: fill(t('ui.combat.fallen.foe'), { name: foeName.toUpperCase() }),
     how:
       c.blow?.landed === true
         ? t('ui.combat.fallen.blow')
-        : fill(t('ui.combat.fallen.difference'), { n: c.last?.difference ?? 0 }),
+        : fill(t('ui.combat.fallen.difference'), { n: aimedAt(c)?.difference ?? 0 }),
     cite: t('ui.combat.fallen.cite'),
     line,
   }
@@ -161,12 +248,14 @@ const moraleText = (m: NonNullable<Combat['morale']>): string =>
 
 export const CombatScreen = ({ state, dispatch }: Props) => {
   const c = state.combat
-  const foe = c === null ? undefined : treasureFoeById(c.foeId)
+  const foe = c === null ? undefined : treasureFoeById(aimedAt(c)?.id ?? '')
   if (c === null || foe === undefined) return null
+  /** Several opponents: the band gets its own column of cards. */
+  const many = c.foes.length > 1
   const b = banner(state, c)
   const mine = state.sheet.proficiencies.reduce((best, p) => (p.value > best.value ? p : best), state.sheet.proficiencies[0] ?? { name: '', value: 0 })
   const theirs = foe.proficiencies.reduce((best, p) => (p.value > best.value ? p : best), foe.proficiencies[0] ?? { name: '', value: 0 })
-  const canRoll = !c.over.ended && c.last === null && !c.opening
+  const canRoll = !c.over.ended && c.last === null && !c.opening && standing(c).length > 0
   // Filled here rather than in `banner`: the banner is the rule's word
   // for how the fight ended, this is the narrator's, and they are two
   // different jobs on two different lines (plan/VOICE.md).
@@ -174,11 +263,39 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
   const fallen = fallenSlip(state, c, foe.name, end)
   return (
     <View style={styles.screen} testID="combat">
+      {/*
+        The Master's card and a column of theirs (Phase 10e). One
+        opponent renders exactly as it always did - the same two cards
+        side by side - because a fight against one is the common case
+        and it should not pay for the crowd. Several put the Master's
+        card above and the band below it, one card each, each with its
+        own dice and its own total against the Master's one roll (I-06).
+      */}
       <View style={styles.sides}>
-        <Side title={t('ui.combat.you')} strength={c.last?.master ?? null} prefix="mine" idle={fill(t('ui.combat.mine.idle'), { skill: state.sheet.skill, name: mine.name.toUpperCase(), value: mine.value })} />
-        <Side title={foe.name.toUpperCase()} strength={c.last?.opponent ?? null} prefix="theirs" idle={fill(t('ui.combat.theirs.idle'), { end: c.foeEndurance, name: theirs.name.toUpperCase(), value: theirs.value })} />
+        <Side
+          title={t('ui.combat.you')}
+          strength={c.last?.master ?? null}
+          prefix="mine"
+          note={
+            many
+              ? fill(t('ui.combat.band.skill'), {
+                  skill: skillForFight(state.sheet.skill, standing(c).length),
+                  n: standing(c).length,
+                })
+              : ''
+          }
+          idle={fill(t('ui.combat.mine.idle'), { skill: state.sheet.skill, name: mine.name.toUpperCase(), value: mine.value })}
+        />
+        {many ? null : (
+          <Side
+            title={foe.name.toUpperCase()}
+            strength={aimedAt(c)?.strength ?? null}
+            prefix="theirs"
+            idle={fill(t('ui.combat.theirs.idle'), { end: aimedAt(c)?.endurance ?? 0, name: theirs.name.toUpperCase(), value: theirs.value })}
+          />
+        )}
       </View>
-      {foe.description.length === 0 ? null : (
+      {many || foe.description.length === 0 ? null : (
         <Text testID="foe-description" style={styles.foeLine}>
           {foe.description}
         </Text>
@@ -190,6 +307,60 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
       </View>
 
       <ScrollView style={styles.body} contentContainerStyle={styles.bodyContent}>
+      {many ? (
+        <View style={styles.band} testID="band">
+          {c.foes.map((body, index) => {
+            const block = treasureFoeById(body.id)
+            const best = (block?.proficiencies ?? []).reduce(
+              (top, p) => (p.value > top.value ? p : top),
+              (block?.proficiencies ?? [])[0] ?? { name: '', value: 0 },
+            )
+            return (
+              <Side
+                key={`${body.id}-${String(index)}`}
+                title={(block?.name ?? body.id).toUpperCase()}
+                strength={body.strength}
+                prefix={`foe-${String(index)}`}
+                dimmed={body.endurance === 0}
+                aimed={index === c.target && body.endurance > 0}
+                /*
+                  Two different facts can be true of the same card, and
+                  both matter: this is the one the winner's option
+                  applies to, and this is the one R37 kept out of reach.
+                  So they are printed together rather than one hiding
+                  the other.
+                */
+                note={[
+                  index === c.target && body.endurance > 0 ? t('ui.combat.band.aim') : '',
+                  body.endurance === 0
+                    ? t('ui.combat.band.down')
+                    : body.heldBack
+                      ? t('ui.combat.band.held')
+                      : '',
+                ]
+                  .filter((word) => word.length > 0)
+                  .join(t('ui.combat.band.note.join'))}
+                onPress={
+                  body.endurance === 0
+                    ? undefined
+                    : () => dispatch({ type: 'combat.target', index })
+                }
+                idle={fill(t('ui.combat.theirs.idle'), {
+                  end: body.endurance,
+                  name: best.name.toUpperCase(),
+                  value: best.value,
+                })}
+              />
+            )
+          })}
+        </View>
+      ) : null}
+        {many ? (
+          <Text testID="band-tap" style={styles.bandTap}>
+            {t('ui.combat.band.tap')}
+          </Text>
+        ) : null}
+
         {/*
           Whoever fell, said as a moment rather than as a number going
           to zero (Phase 10d). It stands above the loot row for a beaten
@@ -307,12 +478,12 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
           </View>
         ) : null}
         <RollBar
-          primaryText={c.over.ended || c.foeEndurance === 0 ? t('ui.combat.primary.over') : state.manual.length === 2 ? t('ui.roll.manual') : t('ui.combat.primary.roll')}
+          primaryText={c.over.ended || standing(c).length === 0 ? t('ui.combat.primary.over') : state.manual.length === 2 ? t('ui.roll.manual') : t('ui.combat.primary.roll')}
           onPrimary={() => dispatch({ type: 'combat.round' })}
           primaryDisabled={!canRoll}
           onManual={() => dispatch({ type: 'manual.toggle' })}
           overrides={state.overrides}
-          right={c.over.ended || c.foeEndurance === 0 ? t('ui.combat.leave.go') : t('ui.combat.leave.flee')}
+          right={c.over.ended || standing(c).length === 0 ? t('ui.combat.leave.go') : t('ui.combat.leave.flee')}
           onRight={() => dispatch({ type: 'combat.leave' })}
         />
       </View>
@@ -324,6 +495,22 @@ const styles = StyleSheet.create({
   screen: { flex: 1 },
   sides: { flexDirection: 'row', gap: 8, marginTop: 10, marginHorizontal: 14 },
   side: { flex: 1, padding: 8 },
+  /** A body that has fallen: still listed, visibly out of the fight. */
+  sideDown: { opacity: 0.45 },
+  /** The card the winner's option applies to. */
+  sideAimed: { borderColor: color.vermilion },
+  /** The whole card is the tap target; it sits under the text. */
+  aimHit: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0 },
+  sideNote: { fontFamily: font.mono, fontSize: 9, letterSpacing: 0.6, marginTop: 2, color: color.vermilion },
+  /**
+   * The band: one card per opponent, inside the scrolling body.
+   *
+   * It scrolls with the menu rather than sitting above it in the fixed
+   * frame, because five Woodgatherers would otherwise leave a phone no
+   * room for the rows that act on them.
+   */
+  band: { gap: 6 },
+  bandTap: { fontFamily: font.mono, fontSize: 10, lineHeight: 15, color: color.ink },
   sideTitle: { fontFamily: font.sans, fontSize: 9, fontWeight: '800', letterSpacing: 0.9, color: color.ink },
   dice: { flexDirection: 'row', gap: 5, marginVertical: 6 },
   sideLine: { fontFamily: font.mono, fontSize: 10, lineHeight: 16, color: color.ink },

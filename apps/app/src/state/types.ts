@@ -191,7 +191,16 @@ export type TurnResult = {
   readonly eventText: string
   /** The face rolled on the area's creature table, or null where none was drawn. */
   readonly encounterFace: Die | null
-  /** The printed names of the foes met; empty where nothing was. */
+  /**
+   * The face the headcount was read from, or null (MH p.58, I-34;
+   * Phase 10e).
+   *
+   * Only the Oracle's Minion cell is a roll, so most turns leave this
+   * null even where several foes were met: a band is counted from its
+   * ATTACK and a printed pair is counted by reading the row.
+   */
+  readonly countFace: Die | null
+  /** The printed names of the foes met, one entry each; empty where nothing was. */
   readonly foes: readonly string[]
   /** True where the Event revealed this area's Hint. */
   readonly hint: boolean
@@ -298,6 +307,36 @@ export type RoundShown = {
 }
 
 /**
+ * One opponent standing in a fight (Phase 10e).
+ *
+ * A fight has always been against a list; until this phase the list was
+ * always one long, and the shape said so. It no longer does: the
+ * Attendants room fields both attendants, a band of Woodgatherers is
+ * five, and the Oracle counts the devils. Each entry carries its own
+ * ENDURANCE, its own roll from the last round and its own LOOT, because
+ * all three differ between two opponents of the same kind.
+ *
+ * `id` is the stat block's id, and several entries may share it: four
+ * Ogres are four entries, not one with a multiplier. That is what lets
+ * the screen tap one card, the reducer strike one body, and R37 count
+ * the kind ({@link Combat.foes} is passed to `heldBackInBand` in order).
+ */
+export type FoeInFight = {
+  readonly id: string
+  readonly endurance: number
+  /** Its roll in the last round, or null before one has been rolled. */
+  readonly strength: AttackStrength | null
+  /** How the last round's comparison against the Master went. */
+  readonly outcome: RoundOutcome['kind'] | null
+  /** Master minus this opponent; negative where this one was ahead. */
+  readonly difference: number
+  /** R37 kept it out of reach last round: it rolled, it could not wound. */
+  readonly heldBack: boolean
+  /** Its LOOT line has been read (once per body). */
+  readonly looted: boolean
+}
+
+/**
  * The Unexpected Event a tie produced (R32), with its row, its line and
  * what reading I-30 made of it.
  *
@@ -325,8 +364,22 @@ export type EventShown = {
 
 /** A fight in progress or just finished. */
 export type Combat = {
-  readonly foeId: string
-  readonly foeEndurance: number
+  /**
+   * Everyone the Master is fighting, in the order they were met.
+   *
+   * Never empty: a fight with nobody in it is not a fight, and the
+   * reducer ends one rather than shrinking this list to nothing.
+   */
+  readonly foes: readonly FoeInFight[]
+  /**
+   * Which card is tapped - the index into {@link foes} a winner's
+   * option applies to.
+   *
+   * A single opponent is index 0 and the screen shows no picker. With
+   * several, the Master chose, and the choice survives the round so
+   * STRIKE knows whose ENDURANCE to take the difference off.
+   */
+  readonly target: number
   readonly round: number
   readonly last: RoundShown | null
   readonly event: EventShown | null
@@ -344,8 +397,6 @@ export type Combat = {
    * winner's option, because it was never their round.
    */
   readonly ambush: boolean
-  /** The LOOT line has been read (once per victory). */
-  readonly looted: boolean
   readonly over: FightEnd
 }
 
@@ -469,8 +520,12 @@ export type Action =
   | { readonly type: 'combat.morale' }
   /** Rows 6 and 8 say the fight resumes: back into the round loop (R32). */
   | { readonly type: 'combat.resume' }
-  /** After a victory: the foe's LOOT line (5T a2). */
-  | { readonly type: 'combat.loot' }
+  /** Tap one of several opponents: the winner's option applies to it. */
+  | { readonly type: 'combat.target'; readonly index: number }
+  /** Face every foe the Event brought at once (R35; Phase 10e). */
+  | { readonly type: 'cave.fight-all' }
+  /** After a victory: one fallen foe's LOOT line (5T a2). */
+  | { readonly type: 'combat.loot'; readonly index: number }
   | { readonly type: 'combat.leave' }
   | { readonly type: 'rules.filter'; readonly filter: Filter }
   | { readonly type: 'rules.open'; readonly id: string | null }

@@ -407,6 +407,46 @@
       "reversed": "every area Technique would reach the same count"
     },
     {
+      "id": "note.multiple.oracle-counts-the-enemies",
+      "cite": "MH p.58 (R70)",
+      "ref": "multiple.oracle-counts-the-enemies",
+      "text": "Where a room's Encounters line names no dice, the Oracle's No. of enemies row gives the count: a Minion 1d6, a Subordinate 3, a Warrior 2, a Boss 1.",
+      "title": "The Oracle says how many enemies there are"
+    },
+    {
+      "id": "note.multiple.a-band-is-as-many-as-its-attack",
+      "cite": "I-05b",
+      "ref": "multiple.a-band-is-as-many-as-its-attack",
+      "text": "A plural entry printed with an ATTACK of n is n of them - the Woodgatherers with ATT 5 are five.",
+      "title": "A band is as many as its ATTACK",
+      "says": "\"Woodgatherers\" in the plural, with ATT 5 and no count",
+      "silent": "how many of them there are",
+      "source": "estate-inventory.md, I-05b (a band of five)",
+      "reversed": "a single Woodgatherer, and the plural read as flavour"
+    },
+    {
+      "id": "note.multiple.printed-attack-range-reads-at-its-low-end",
+      "cite": "I-09",
+      "ref": "multiple.printed-attack-range-reads-at-its-low-end",
+      "text": "ATTACK printed as a range is read at its low end, and a blank ATTACK is read as 1.",
+      "title": "A printed ATTACK range is read at its low end",
+      "says": "ATTACK as an integer, as the range \"2-4\", or blank",
+      "silent": "which end of a range to use, and what a blank means",
+      "source": "estate-inventory.md, I-09 (the roster’s mode)",
+      "reversed": "the high end, and a blank read as 2"
+    },
+    {
+      "id": "note.multiple.attack-caps-per-kind-not-per-crowd",
+      "cite": "I-06",
+      "ref": "multiple.attack-caps-per-kind-not-per-crowd",
+      "text": "ATTACK belongs to a stat block, so the cap on simultaneous attackers is counted per kind: four Ogres and a Ghost are two caps, not one.",
+      "title": "ATTACK caps each kind, not the whole crowd",
+      "says": "ATTACK is \"how many enemies can attack at the same time\"",
+      "silent": "whose ATTACK, when the crowd is of more than one kind",
+      "source": "estate-inventory.md, I-06 (each attacker up to ATTACK)",
+      "reversed": "one cap for the whole crowd, taken from the highest"
+    },
+    {
       "id": "note.escape.last-blow-of-two",
       "cite": "MH p.30 (R38)",
       "ref": "escape.last-blow-of-two",

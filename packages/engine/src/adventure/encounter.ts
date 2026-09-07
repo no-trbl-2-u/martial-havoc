@@ -26,6 +26,7 @@ import type {
 } from '@martial-havoc/content'
 import type { Die, DiceSource } from '../dice/types'
 import { d6 } from '../dice/rolls'
+import { bandOf, enemyCount } from '../multiple/count'
 import type { AdventureState } from './state'
 import { flag } from './state'
 
@@ -73,8 +74,17 @@ export type Encounter = {
   readonly face: Die | undefined
   /** The foes actually met, after removals and absences. */
   readonly foes: readonly Opponent[]
-  /** How many of each, per the row's `count`; `oracle` leaves it to the caller. */
+  /** How many of each, as the row prints it. */
   readonly count: AdventureEncounter['count']
+  /**
+   * The die the headcount was read from, or undefined where none was
+   * drawn (I-34, MH p.58).
+   *
+   * Only the Oracle's Minion cell is a roll. A `one` row and a `band`
+   * row are both counted without dice, so a scripted sequence stays
+   * exactly as long as the printed procedure asks for.
+   */
+  readonly countFace: Die | undefined
   /** True where nothing is met and the event degrades to safe (I-36). */
   readonly empty: boolean
 }
@@ -85,6 +95,7 @@ const nothing = (row: AdventureEncounter | undefined, face: Die | undefined): En
   face,
   foes: Object.freeze([]),
   count: 'none',
+  countFace: undefined,
   empty: true,
 })
 
@@ -122,8 +133,55 @@ export const encounterFor = (
   if (row.empty) return nothing(row, rolled)
   const foes = foesOf(tables, state, area, row)
   if (foes.length === 0) return nothing(row, rolled)
-  return { row, face: rolled, foes, count: row.count, empty: false }
+  return { row, face: rolled, foes, count: row.count, countFace: undefined, empty: false }
 }
+
+/**
+ * The Enemy Type an adventure's dice-less rows are counted as (I-34).
+ *
+ * The 5 Treasures is the only adventure that uses `count: 'oracle'`, and
+ * the rows that do are its Devil servants, whom the book calls minions
+ * ("Sneaky minion", 5T a2). The type is an argument rather than a lookup
+ * because the engine never learns what a Devil servant is: an adventure
+ * that counts Subordinates says so at the call site.
+ */
+const ORACLE_TYPE = 'Minion'
+
+/**
+ * Turn a row's printed `count` into the opponents actually present.
+ *
+ * `one` is the row as it stands: one of each name it lists, which is how
+ * the Attendants room's "Both" fields a Beast and a Ghost. `band` repeats
+ * each name to the size reading I-05b gives it. `oracle` draws the one
+ * die the Oracle's Minion cell asks for and repeats each name that many
+ * times.
+ *
+ * The expansion is deliberate: downstream, a crowd is a list of stat
+ * blocks in the order they were met, so nothing after this point has to
+ * carry a multiplier beside a name and remember to apply it.
+ */
+export const counted =
+  (encounter: Encounter) =>
+  (dice: DiceSource): Encounter => {
+    if (encounter.empty || encounter.foes.length === 0) return encounter
+    if (encounter.count === 'one') return encounter
+    if (encounter.count === 'band')
+      return {
+        ...encounter,
+        foes: encounter.foes.flatMap((foe) =>
+          Array.from({ length: bandOf(foe.attack) }, () => foe),
+        ),
+      }
+    if (encounter.count === 'oracle') {
+      const head = enemyCount(ORACLE_TYPE)(dice)
+      return {
+        ...encounter,
+        countFace: head.face ?? undefined,
+        foes: encounter.foes.flatMap((foe) => Array.from({ length: head.count }, () => foe)),
+      }
+    }
+    return encounter
+  }
 
 /**
  * Roll an area's encounter table (5T a1: "roll for the creature
@@ -138,5 +196,5 @@ export const encounterIn =
   (dice: DiceSource): Encounter => {
     const rows = rowsForArea(tables, area)
     const fixed = rows.length > 0 && rows.every((row) => row.faces.length === 0)
-    return encounterFor(tables, state, area, fixed ? 0 : d6(dice))
+    return counted(encounterFor(tables, state, area, fixed ? 0 : d6(dice)))(dice)
   }

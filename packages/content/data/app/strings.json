@@ -1115,12 +1115,12 @@
     {
       "id": "ui.result.flee.against",
       "cite": "MH p.30 (R38, R39)",
-      "text": "ENDURANCE {after} \u00b7 DISHONOR +{dishonor}"
+      "text": "ENDURANCE {after} · DISHONOR +{dishonor}"
     },
     {
       "id": "ui.result.flee.cite",
       "cite": "MH p.30; I-32",
-      "text": "MH p.30 \u00b7 a last blow of 2 on the way out (R38) \u00b7 a Dishonor Point for not getting away clean (I-32)"
+      "text": "MH p.30 · a last blow of 2 on the way out (R38) · a Dishonor Point for not getting away clean (I-32)"
     },
     {
       "id": "ui.combat.fallen.foe",
@@ -1140,7 +1140,7 @@
     {
       "id": "ui.combat.fallen.cite",
       "cite": "MH p.23 (R26)",
-      "text": "MH p.23 \u00b7 the combat continues until an ENDURANCE reaches zero"
+      "text": "MH p.23 · the combat continues until an ENDURANCE reaches zero"
     },
     {
       "id": "ui.combat.fallen.blow",
@@ -1170,7 +1170,7 @@
     {
       "id": "ui.combat.resume.cite",
       "cite": "MH p.28 (R32)",
-      "text": "MH p.28 \u00b7 the row says so"
+      "text": "MH p.28 · the row says so"
     },
     {
       "id": "ui.combat.resume.line",
@@ -1195,27 +1195,27 @@
     {
       "id": "ui.combat.event.deity",
       "cite": "MH p.29 (R34)",
-      "text": "{name} \u00b7 {action} \u00b7 {object}"
+      "text": "{name} · {action} · {object}"
     },
     {
       "id": "ui.combat.event.injury.cite",
       "cite": "I-30",
-      "text": "I-30 \u00b7 the row prints no effect; this is the reading's floor"
+      "text": "I-30 · the row prints no effect; this is the reading's floor"
     },
     {
       "id": "ui.combat.event.minions.cite",
       "cite": "MH p.28 (R33); I-33",
-      "text": "MH p.28 \u00b7 R33 \u00b7 1-4 Minions on a d6 (I-33)"
+      "text": "MH p.28 · R33 · 1-4 Minions on a d6 (I-33)"
     },
     {
       "id": "ui.combat.fallen.master.cite",
       "cite": "MH p.6",
-      "text": "MH p.6 \u00b7 if ENDURANCE reaches zero, the Master dies or becomes unconscious"
+      "text": "MH p.6 · if ENDURANCE reaches zero, the Master dies or becomes unconscious"
     },
     {
       "id": "ui.combat.event.deity.cite",
       "cite": "MH p.29 (R34)",
-      "text": "MH p.29 \u00b7 R34 \u00b7 the three words are the book's; what they mean here is the player's"
+      "text": "MH p.29 · R34 · the three words are the book's; what they mean here is the player's"
     },
     {
       "id": "ui.combat.event.minions",
@@ -1235,12 +1235,12 @@
     {
       "id": "ui.act.mark",
       "cite": "MH p.85",
-      "text": "ACT {n} OF {of} \u00b7 {name}"
+      "text": "ACT {n} OF {of} · {name}"
     },
     {
       "id": "ui.act.cite",
       "cite": "MH p.82",
-      "text": "MH p.82 \u00b7 each act ends with a climax, a point of no return to a new act"
+      "text": "MH p.82 · each act ends with a climax, a point of no return to a new act"
     },
     {
       "id": "ui.momentum.title",
@@ -1255,12 +1255,12 @@
     {
       "id": "ui.momentum.rolled",
       "cite": "plan/phases/phase_10c_three_acts.md",
-      "text": "ROLLED {face} \u00b7 {was} \u00b7 READ AS ENCOUNTER"
+      "text": "ROLLED {face} · {was} · READ AS ENCOUNTER"
     },
     {
       "id": "ui.momentum.cite",
       "cite": "MH p.84 (R82)",
-      "text": "MH p.84 \u00b7 R82 \u00b7 the book's own example is this door"
+      "text": "MH p.84 · R82 · the book's own example is this door"
     },
     {
       "id": "ui.village.call.title",
@@ -1870,6 +1870,71 @@
     {
       "id": "ui.combat.act.loot.line",
       "text": "What it carried, as printed. Some lines roll 1d6.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.face-all",
+      "text": "FACE THEM ALL ({n})",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.face-all.line",
+      "text": "All {n} at once: your SKILL drops by {n} for as long as you face them.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.cave.event.met.several",
+      "text": "{n} {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.band.skill",
+      "text": "SKILL {skill} against {n}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.band.held",
+      "text": "HELD BACK",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.band.held.cite",
+      "text": "MH p.30 - R37",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.band.down",
+      "text": "DOWN",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.band.aim",
+      "text": "AIMED AT",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.band.tap",
+      "text": "Tap a card to aim at it.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.banner.band",
+      "text": "AGAINST {n}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.loot.of",
+      "text": "Take the loot of the {name}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.act.go-on.band",
+      "text": "Leave the rest of them",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.combat.band.note.join",
+      "text": " · ",
       "cite": "design/roll-modal/README.md"
     },
     {

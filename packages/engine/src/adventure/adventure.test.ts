@@ -38,7 +38,7 @@ import { attackRescue, rescue, resolveEncounter, step, takeHere } from './run'
 
 // ------------------------------------------------------------ the fixture
 
-const foe = (id: string, name: string): Opponent => ({
+const foe = (id: string, name: string, extra: Partial<Opponent> = {}): Opponent => ({
   id,
   cite: 'test',
   name,
@@ -51,6 +51,7 @@ const foe = (id: string, name: string): Opponent => ({
   incorporeal: false,
   page: 'test',
   notes: '',
+  ...extra,
 })
 
 const area = (
@@ -355,6 +356,52 @@ describe('the encounter tables', () => {
   it('meets nothing in an area with no rows at all', () => {
     const bare = tables({ encounters: [] })
     expect(encounterFor(bare, beginAdventure(bare), 1, 3).empty).toBe(true)
+  })
+})
+
+describe('how many are met (MH p.58; I-05b, I-34)', () => {
+  const t = tables()
+
+  it('counts an oracle row from the Oracle, and reports the die it read', () => {
+    const state = beginAdventure(t)
+    // Face 4 lands on the oracle row; the second die is the Oracle's
+    // No. of enemies for a Minion, and it reads 3.
+    const met = encounterIn(t, state, 1)(fromSequence([4, 3]))
+    expect(met.countFace).toBe(3)
+    expect(met.foes.map((f) => f.id)).toEqual(['foe.test.rat', 'foe.test.rat', 'foe.test.rat'])
+  })
+
+  it('leaves a `one` row exactly as printed, drawing no count die', () => {
+    const state = beginAdventure(t)
+    const met = encounterIn(t, state, 1)(fromSequence([2]))
+    expect(met.foes.map((f) => f.id)).toEqual(['foe.test.guard'])
+    expect(met.countFace).toBeUndefined()
+  })
+
+  it('fields a band as many as its ATTACK, with no die (I-05b)', () => {
+    const banded = tables({
+      encounters: [
+        encounter('enc.band', 1, { faces: [], foes: ['foe.test.gang'], count: 'band' }),
+      ],
+      foes: [foe('foe.test.gang', 'Gang', { attack: 5 })],
+    })
+    const met = encounterIn(banded, beginAdventure(banded), 1)(fromSequence([]))
+    expect(met.foes).toHaveLength(5)
+    expect(met.countFace).toBeUndefined()
+  })
+
+  it('fields one of each name a `one` row lists - the room that holds both', () => {
+    const both = tables({
+      encounters: [
+        encounter('enc.both', 1, {
+          faces: [],
+          foes: ['foe.test.guard', 'foe.test.rat'],
+          count: 'one',
+        }),
+      ],
+    })
+    const met = encounterIn(both, beginAdventure(both), 1)(fromSequence([]))
+    expect(met.foes.map((f) => f.id)).toEqual(['foe.test.guard', 'foe.test.rat'])
   })
 })
 

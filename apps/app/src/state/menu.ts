@@ -34,6 +34,8 @@ export type BeatAction =
   | { readonly kind: 'attack' }
   | { readonly kind: 'learn' }
   | { readonly kind: 'fight'; readonly foe: string }
+  /** Face every foe the Event brought at once (R35; Phase 10e). */
+  | { readonly kind: 'fight-all' }
   | { readonly kind: 'rest' }
   | { readonly kind: 'gourd' }
   | { readonly kind: 'leave' }
@@ -107,6 +109,22 @@ export const menuFor = (state: RecordState): readonly BeatOption[] => {
 
   // The foes the Event brought come first: an Ambush or an Encounter is
   // the room's business before anything else in it.
+  //
+  // Where there are several, FACE THEM ALL stands above the single
+  // rows. It is not the default and the single rows are not hidden:
+  // R35 makes facing four at once a decision with a price (SKILL down
+  // by four), and taking them one at a time is the other half of the
+  // same decision. Both are the player's, so both are on screen.
+  if (state.pending.length > 1)
+    rows.push({
+      id: 'fight-all',
+      title: fill(t('ui.cave.face-all'), { n: state.pending.length }),
+      note: last,
+      line: fill(t('ui.cave.face-all.line'), { n: state.pending.length }),
+      enabled: true,
+      action: { kind: 'fight-all' },
+    })
+
   state.pending.forEach((foe, i) => {
     rows.push({
       id: `fight-${foe}-${i}`,

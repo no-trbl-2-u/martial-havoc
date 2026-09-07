@@ -508,3 +508,47 @@ test('an ambush is their round first, and says so', async ({ page }) => {
   await expect(page.getByTestId('banner-value')).toBeVisible()
   await expect(page.getByText('AMBUSH, THEIR ROUND')).toBeVisible()
 })
+
+test('several foes: the Oracle counts them, the band is a column of cards, ATTACK says who reaches', async ({
+  page,
+}) => {
+  // Into the cave entrance on a safe 4; into the Storage room on Event
+  // 2 (Encounter). The Storage room prints no dice for its creature
+  // (I-34), so the next face is the Oracle's No. of enemies for a
+  // Minion: 3 Devil servants. Then the round: the Master's 5 and 4,
+  // and two per servant - 3+3, 6+6, 2+2.
+  await page.goto('/?dice=4,2,3,5,4,3,3,6,6,2,2')
+  await begin(page)
+  await go(page, /TO THE CAVE ENTRANCE/)
+  await button(page, /TO THE STORAGE ROOM/).click()
+  // The third die on the card is the headcount.
+  await expect(page.getByTestId('die-card-c')).toHaveAttribute('aria-label', '3')
+  await page.getByTestId('roll-card-continue').click()
+  // The beat tallies them rather than listing the same name three times.
+  await expect(page.getByText('MET: 3 Devil servants')).toBeVisible()
+
+  await button(page, /FACE THEM ALL \(3\)/).click()
+  await expect(page.getByTestId('combat')).toBeVisible()
+  await expect(page.getByTestId('band')).toBeVisible()
+  // R35 on the Master's own card: SKILL 8 less the three faced.
+  await expect(page.getByText('SKILL 5 against 3')).toBeVisible()
+
+  await button(page, 'ROLL THE ROUND').click()
+  // One Master roll, three opponent rolls against it (I-06).
+  await expect(page.getByTestId('total-foe-0')).toHaveText('14')
+  await expect(page.getByTestId('total-foe-1')).toHaveText('20')
+  await expect(page.getByTestId('total-foe-2')).toHaveText('12')
+  // A Devil servant is ATT 1: one of the three may reach the Master,
+  // and the one that rolled 20 is not it, so the round costs nothing.
+  await expect(page.getByTestId('note-foe-1')).toHaveText('HELD BACK')
+  await expect(page.getByTestId('note-foe-2')).toHaveText('HELD BACK')
+  await expect(page.getByTestId('note-foe-0')).toHaveText('AIMED AT')
+
+  // The winner's option applies to the card that is tapped, and a card
+  // can be both aimed at and out of reach.
+  await page.getByTestId('aim-foe-2').click()
+  await expect(page.getByTestId('note-foe-2')).toHaveText('AIMED AT · HELD BACK')
+  await page.getByTestId('act-strike').click()
+  // Two are still standing, so the fight is not over.
+  await expect(button(page, 'ROLL THE ROUND')).toBeEnabled()
+})

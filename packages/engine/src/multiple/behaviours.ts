@@ -14,4 +14,8 @@ export const multipleBehaviours: readonly Behaviour[] = Object.freeze([
   { id: 'multiple.one-master-roll-per-round', label: 'reading', cite: 'I-06' },
   { id: 'multiple.area-damage-is-repeated-not-divided', label: 'rule', cite: 'MH p.30 (R36)' },
   { id: 'multiple.area-reach-is-read-from-the-prose', label: 'reading', cite: 'I-11' },
+  { id: 'multiple.oracle-counts-the-enemies', label: 'rule', cite: 'MH p.58 (R70)' },
+  { id: 'multiple.a-band-is-as-many-as-its-attack', label: 'reading', cite: 'I-05b' },
+  { id: 'multiple.printed-attack-range-reads-at-its-low-end', label: 'reading', cite: 'I-09' },
+  { id: 'multiple.attack-caps-per-kind-not-per-crowd', label: 'reading', cite: 'I-06' },
 ])

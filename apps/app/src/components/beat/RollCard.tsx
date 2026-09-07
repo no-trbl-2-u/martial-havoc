@@ -109,6 +109,16 @@ export const RollCard = ({ state, card, reason, result, dispatch }: Props) => {
                 {result.b === null ? null : (
                   <CardDie face={result.b} step={step} settled={settled} offset={3} testID="die-card-b" />
                 )}
+                {/*
+                  The third die: the headcount, where the Oracle was
+                  asked for one (Phase 10e). It sits beside the two the
+                  printed procedure always draws because it is drawn in
+                  the same breath - enter, roll the Event, roll who is
+                  here, roll how many.
+                */}
+                {result.c === null ? null : (
+                  <CardDie face={result.c} step={step} settled={settled} offset={5} testID="die-card-c" />
+                )}
                 {shown ? (
                   <View style={styles.numbers}>
                     <Text
