@@ -26,11 +26,13 @@ went through `/re-seed` because the spec is sealed.
 - **Where:** `plan/VOICE.md` (the guide and ten samples), `VISION.md`
   (the two voices), `RE-SEED.md` (the field report). PR #33.
 - **Unblocks:** Phase 10a's wiring, and every line 10b–10j writes.
-- **Still open inside it:** the ten samples were written to the call
-  and not yet read back by the operator. One line of "this one is
-  wrong, because" moves the guide before any line ships.
+- **Read back 2026-09-07:** the operator read the ten. Sample 7 was
+  wrong because "rolled" puts the listener at the table, not in the
+  story ("maximize immersion"). The sample is rewritten and the guide
+  gains a line: no word of the table (roll, dice, check, result). The
+  other nine stand. Row fully closed.
 
-## 2. Who the Master is — OPEN
+## 2. Who the Master is — CLOSED 2026-09-07
 
 The book gives tools for this: status (MH p.5), the style's prose
 (MH p.7–10), the pre-generated sheets' film origins (MH p.92), and the
@@ -50,11 +52,15 @@ premise stand alone is a design choice with three defensible answers.
   with a migration; (c) adds a field nobody fills; (b) is free and is
   what the verdict said does not play. A wrong pick is a migration to
   undo.
+- **Decided:** option (a). A hook from the Adventures table (MH
+  p.36–39), rolled or chosen at creation, printed as the Master's own
+  story; the cave is an episode on the way to it. Creation step, sheet
+  field and migration are in scope. Phase 12 picks the thread up.
 - **Brief:** `plan/phases/phase_10j_who_the_master_is.md`.
 - **Unblocks:** 10j's creation step and sheet field. 10j's prompts
   (row 3) do not wait on this.
 
-## 3. Where the player's imagination goes — OPEN
+## 3. Where the player's imagination goes — CLOSED 2026-09-07
 
 The book says the story comes from you (MH p.3). The passage field is
 that, and nobody uses it because nothing invites it. Prompting at the
@@ -74,11 +80,17 @@ it is exactly the kind of thing that fails if guessed.
   and the tables do not read it).
 - **Cost of guessing:** small in code, large in feel. A prompt at the
   wrong moment reads as homework.
+- **Decided:** the proposal as written. Four moments (after an
+  Unexpected Event, a kill, a rescue, a treasure taken), one question
+  each, none required. The narrator asks; the field opens with the
+  question as placeholder; KEEP IT stores the passage with the
+  moment's id; the chronicle shows it in place. A passage never
+  changes anything: the tables do not read it.
 - **Brief:** `plan/phases/phase_10j_who_the_master_is.md`, second
   half.
 - **Unblocks:** 10j's prompts.
 
-## 4. Whether the rules panel is for players at all — OPEN
+## 4. Whether the rules panel is for players at all — CLOSED 2026-09-07
 
 It is a provenance ledger. The 2026-09-06 fixes gave every row a
 plain-sentence title and moved the engine id behind the tap, and the
@@ -98,9 +110,16 @@ audience.
 - **Cost of guessing:** one screen's layout. Low. This row is here
   because the operator asked for it, not because a wrong pick is
   expensive.
+- **Decided:** option (a), against the recommendation. A player's
+  glossary: stays in the header, keeps the plain sentences, moves the
+  four estate questions (says / silent on / source / if reversed) to
+  a second tap, and a result slip's SOURCE deep-links to its row. No
+  separate ledger under ABOUT. The spec's "lists every behaviour with
+  one of three labels and its citation" is still met: the label and
+  citation are on the second tap, one data source.
 - **Unblocks:** a small `/iterate` row; no phase waits on it.
 
-## 5. The sandbox's place — OPEN
+## 5. The sandbox's place — CLOSED 2026-09-07
 
 The MAP tab shows a region that has nothing to do with the cave. The
 spec's Horizon says the sandbox is the real game and adventures are
@@ -122,6 +141,14 @@ re-cut (10b) and the map (10h).
   without change.
 - **Cost of guessing:** 10b and 10h would be built against the wrong
   frame. Medium.
+- **Decided:** (a) for the shape, (c) for the order of work. The
+  region is thrown once at campaign start around Fen Pass, the
+  mountain is one of its points, and the cave is entered from the
+  region the way the book enters a monastery (MH p.42, steps 2–6).
+  Order: 10h draws the cave alone on MAP now and hides the region
+  until Phase 12 places the mountain on it; throwing the region is
+  Phase 12's first scene; 10b's village is written so it becomes a
+  region point later without change.
 - **Briefs:** `phase_10b_the_opening.md`, `phase_10h_map_and_journal.md`,
   and Phase 12 in `steps/01_build_plan.md`.
 - **Unblocks:** 10h's MAP mode rule and 10b's exit from the village.
