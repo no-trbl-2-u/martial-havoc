@@ -222,8 +222,20 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       in place the Dexterous Ghost is unbeatable (no Technique in this
       build does damage) and he holds the private quarter's key. Filed
       to `plan/CRITIQUE.md`.
-- [ ] Phase 10h — The cave map and the journal as a story (brief:
-      `phase_10h_map_and_journal.md`)
+- [x] Phase 10h — The cave map and the journal as a story (brief:
+      `phase_10h_map_and_journal.md`) — a906b74. MAP is two maps and
+      the app picks from where the Master stands: the cave while they
+      are on the mountain, the region once they have left it
+      (`left-the-mountain`, a new adventure flag). The cave is the
+      adjacency graph drawn as ours from hand-set `pos` in
+      `areas.json`; an unentered room is a nameless dashed outline
+      (I-60's spirit), a keyless door is a bar across its passage, and
+      a tapped room says what last happened there. RECORD gains THE
+      ADVENTURE SO FAR: a line per room entered, every deed folded in
+      where it was done, the player's passages where they wrote them.
+      `addDeed` writes both halves, so a deed cannot reach the ledger
+      and miss the story. No record version bump — `chronicle` is
+      optional and an older save's is rebuilt from its deeds.
 - [ ] Phase 10i — The ending scores the adventure (brief:
       `phase_10i_the_ending_scores.md`)
 - [ ] Phase 10j — Who the Master is, and the player's own words
