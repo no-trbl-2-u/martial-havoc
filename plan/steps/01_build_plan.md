@@ -270,7 +270,7 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
 - [x] Phase 10k — True to the book: the fight as the book runs it
       (brief: `phase_10k_true_to_the_book.md`; from the merged
       `determined-intent.md` of 2026-09-07 and the fidelity rows
-      `plan/CRITIQUE.md` carries) — COMMIT_10K. A lost exchange is
+      `plan/CRITIQUE.md` carries) — d588b21. A lost exchange is
       followed by another and `readyToRoll` is the one answer both the
       reducer and the screen ask (MH p.23, R26); the Technique row
       opens a chooser over every Technique of the sheet that works
