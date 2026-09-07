@@ -50,14 +50,23 @@ ticks. One HIGH row stands alone at the top; the rest are MED.
 
 ## Durable rows
 
-### [needs-user-call] The open design questions live in `plan/NEEDS_HUMAN_ATTENTION.md`
+### [x] The open design questions live in `plan/NEEDS_HUMAN_ATTENTION.md` — all closed 2026-09-07
 
-Five rows from the verdict of 2026-09-06 (the voice, closed; who the
-Master is; where the player's imagination goes; the rules panel's
-audience; the sandbox's place). An open row there is a wall for the
-loop: build up to it and stop. `/oversight` reads that file first.
+Five rows from the verdict of 2026-09-06. Every row is closed by the
+operator, in writing, in that file (PR #35). No wall stands; the loop
+runs. `/oversight` still reads that file first.
 
-### [needs-user-call] Bai Gu Jing and Jiangshi: incorporeal or not? (I-29)
+### [x] Bai Gu Jing and Jiangshi: incorporeal or not? (I-29) — CLOSED 2026-09-07
+
+Operator's call: "refer to the PDF; if no answer is found, tag both."
+The rulebook was read (pypdf, every page). R77 (p.66) names only
+"spirits or ghosts"; the two entries (p.70, p.74) say "Demon" and
+"undead"; the matrix (p.67) seats both in the Supernatural column
+beside untagged Feng Huang and Niu Mowang; the adventure never names
+them. No answer, so both are tagged: `incorporeal: true`,
+`reading: "I-29"`, and `I29_NAMES` carries ten.
+
+Original row, kept for the record:
 
 Reading I-29 names eight opponents outright and two more with a
 question mark of its own: Bai Gu Jing ("demon - doubtful") and

@@ -33,6 +33,7 @@
     {
       "id": "opponent.bai-gu-jing",
       "cite": "MH p.70",
+      "reading": "I-29",
       "name": "Bai Gu Jing",
       "description": "White Bone Demon who deceives humans.",
       "skill": 8,
@@ -49,9 +50,9 @@
         }
       ],
       "martialArtsValue": null,
-      "incorporeal": false,
+      "incorporeal": true,
       "page": "MH p.70",
-      "notes": ""
+      "notes": "Tagged incorporeal by the operator's call of 2026-09-07 (I-29): the book gives no answer, so the doubtful pair is tagged"
     },
     {
       "id": "opponent.bandit",
@@ -539,6 +540,7 @@
     {
       "id": "opponent.jiangshi",
       "cite": "MH p.74",
+      "reading": "I-29",
       "name": "Jiangshi",
       "description": "One-legged undead that absorbs Qi.",
       "skill": 8,
@@ -555,9 +557,9 @@
         }
       ],
       "martialArtsValue": null,
-      "incorporeal": false,
+      "incorporeal": true,
       "page": "MH p.74",
-      "notes": ""
+      "notes": "Tagged incorporeal by the operator's call of 2026-09-07 (I-29): the book gives no answer, so the doubtful pair is tagged"
     },
     {
       "id": "opponent.kobukson",
