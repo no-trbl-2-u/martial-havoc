@@ -236,8 +236,21 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       `addDeed` writes both halves, so a deed cannot reach the ledger
       and miss the story. No record version bump — `chronicle` is
       optional and an older save's is rebuilt from its deeds.
-- [ ] Phase 10i — The ending scores the adventure (brief:
-      `phase_10i_the_ending_scores.md`)
+- [x] Phase 10i — The ending scores the adventure (brief:
+      `phase_10i_the_ending_scores.md`) — 0eea854. THE ENDING stands on
+      the beat where LEAVE FOR THE REGION did and opens a screen: the
+      freeze frame; the four scores of 1-3, blank until given, summed
+      as arithmetic and not as a verdict; BANK, once, because R47
+      carries the remainder forward; the advancement table at the
+      Master's own SKILL band with R45's caps **flagged, never
+      refused**; a Training point's four resource points spent on a
+      Technique or a Ritual; the book's closing question verbatim.
+      ENDURANCE and LUCK raise their initial values with them (R05).
+      XP, resource points and the banked flag survive an export; no
+      record version bump. **Not shipped:** the e2e — the ending act is
+      `treasures 5`, so reaching the screen in a browser is a walk of
+      the whole cave, which belongs to Phase 14's sitting. Filed to
+      `plan/CRITIQUE.md`; every mechanic has a reducer case.
 - [ ] Phase 10j — Who the Master is, and the player's own words
       (brief: `phase_10j_who_the_master_is.md`; the call was made
       2026-09-07: a motive is a hook from the Adventures table,
