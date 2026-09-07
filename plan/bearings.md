@@ -140,6 +140,12 @@ is Playwright against the export. Each leg is a hard gate. The garden's
 done-condition is that this gate is green on an empty project before any
 feature exists.
 
+Two ways onto a screen in e2e: walk (tap through creation and the
+cave, proving the path) or seed (fold the app's own reducer over a
+list of actions and write the record into `localStorage` before the
+page loads, proving the screen). `e2e/fixtures/README.md` is the
+design; the app carries no test hook for it.
+
 ### Post-push: `npm run deploy:check`
 
 Polls Cloudflare for the deploy at HEAD. Exits 0 ready, 1 error, 2

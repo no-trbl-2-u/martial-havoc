@@ -22,6 +22,10 @@ const button = (page: Page, name: RegExp | string) => page.getByRole('button', {
  * It spends no `?dice=` faces. Creation rolls on the table's source,
  * not the queue, and taking the trail rolls nothing at all, so a spec's
  * named rolls still reach the rolls it named.
+ *
+ * These walks stay because they prove the path. A spec that only needs
+ * the screen seeds the record instead: `open(page, scene)` from
+ * `e2e/fixtures` (see its README).
  */
 const madeAMaster = async (page: Page) => {
   await page.getByTestId('title-start').click()
