@@ -27,7 +27,7 @@
       "name": "Inside the Lotus Flower",
       "condition": "enter",
       "threshold": "area.the-5-treasures.cave-entrance",
-      "line": "The gate is behind you now, and the stream that went in ahead of you has stopped talking.",
+      "line": "The gate is behind {name} now, and the stream that went in ahead has stopped talking.",
       "ending": false
     },
     {
@@ -60,7 +60,7 @@
       "name": "The 5 Treasures",
       "condition": "treasures",
       "threshold": 5,
-      "line": "Gourd, cord, vase, fan and sword. You walk out under whichever sky you left in the gourd, and the travellers on the Flat-top mountain go unthreatened.",
+      "line": "Gourd, cord, vase, fan and sword. {name} walks out under whichever sky was left in the gourd, and the travellers on the Flat-top mountain go unthreatened.",
       "ending": true
     }
   ]

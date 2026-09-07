@@ -58,7 +58,7 @@ test('the beat opens on the Flat-top mountain, the book’s text word for word',
   // The printed name over the printed description; the Encounters line
   // folded behind SOURCE with its folio; the Hint hidden (I-60).
   await expect(page.getByTestId('area-name')).toHaveText('FLAT-TOP MOUNTAIN')
-  await expect(page.getByTestId('authored-line')).toHaveText(
+  await expect(page.getByTestId('area-description')).toHaveText(
     'A wild and vast territory covered with pines and willow trees, deep valleys and steep rocks, difficult paths for horses. In the distance an axe at work and the animals running on craggy ridges.',
   )
   await expect(page.getByText('Encounters: 1-3 Woodgatherer')).toHaveCount(0)
@@ -102,7 +102,7 @@ test('an exit rolls the Event table onto the card: the reason, the die, the prin
   await expect(page.getByText('EVENT · SAFE EXPLORATION')).toBeVisible()
   await expect(page.getByTestId('die-result-a')).toHaveAttribute('aria-label', '4')
   await expect(page.getByTestId('result-total')).toHaveText('Safe exploration')
-  await expect(page.getByTestId('authored-line')).toContainText('A shut wooden gate hidden by a willow tree')
+  await expect(page.getByTestId('area-description')).toContainText('A shut wooden gate hidden by a willow tree')
   // Past the first beat, the opening has gone to ABOUT.
   await expect(page.getByTestId('premise')).toHaveCount(0)
 })
@@ -284,6 +284,44 @@ test('the unchosen layouts are gone: ?layout= serves the same beat', async ({ pa
   await page.goto('/?layout=c')
   await begin(page)
   await expect(page.getByTestId('beat')).toBeVisible()
-  await expect(page.getByTestId('authored-line')).toBeVisible()
+  await expect(page.getByTestId('area-description')).toBeVisible()
   await expect(page.getByTestId('ledger')).toHaveCount(0)
+})
+
+/**
+ * Phase 10a, the voice. The brief's first scenario, with the Master
+ * these specs actually make: San Te's printed sheet rather than a
+ * hand-made Lin Shu, since the name is filled from the record either
+ * way and taking a preset is two taps.
+ *
+ * What it proves is the one thing the phase exists for: a reader can
+ * tell the book from the app without reading either. The book's text is
+ * upright; Old Ping's line is italic, under a dashed rule with his name
+ * at it; and the two are different sentences about the same moment.
+ */
+test('the voice: the book upright, Old Ping italic under his own rule, told apart at a glance', async ({
+  page,
+}) => {
+  await page.goto('/?dice=4')
+  await begin(page)
+
+  // On the mountain: the book describes the place, he says what it is
+  // like to stand in it. Neither restates the other.
+  const description = page.getByTestId('area-description')
+  const line = page.getByTestId('area-narrator-line')
+  await expect(description).toContainText('A wild and vast territory covered with pines')
+  await expect(page.getByTestId('area-narrator-name')).toHaveText('OLD PING')
+  await expect(line).toContainText('Somewhere out of sight an axe keeps time')
+  await expect(line).toHaveCSS('font-style', 'italic')
+  await expect(description).toHaveCSS('font-style', 'normal')
+
+  // Walking in on a 4: the book's own row for the Event, and his line
+  // for it, with the Master named.
+  await go(page, /TO THE CAVE ENTRANCE/)
+  await expect(page.getByTestId('result-total')).toHaveText('Safe exploration')
+  const spoken = page.getByTestId('result-narrator-line')
+  await expect(page.getByTestId('result-narrator-name')).toHaveText('OLD PING')
+  await expect(spoken).toContainText('San Te')
+  await expect(spoken).toContainText('Nothing is waiting in here')
+  await expect(spoken).toHaveCSS('font-style', 'italic')
 })

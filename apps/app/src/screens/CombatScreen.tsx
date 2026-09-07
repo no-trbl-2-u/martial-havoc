@@ -8,12 +8,14 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { effectFor, t, techniqueById, treasureFoeById } from '@martial-havoc/content'
 import type { AttackStrength } from '@martial-havoc/engine'
 import { fill } from '../lib/fill'
+import { momentOfFightEnd, narrate } from '../lib/narrator'
 import type { Action, Combat, RecordState } from '../state/types'
 import { color, font } from '../theme/tokens'
 import { Die } from '../components/Die'
 import { ManualDice } from '../components/ManualDice'
 import { MenuButton } from '../components/MenuButton'
 import { RollBar } from '../components/RollBar'
+import { Narrator } from '../components/Narrator'
 import { Slip } from '../components/Slip'
 import { Source } from '../components/Source'
 
@@ -109,6 +111,10 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
   const mine = state.sheet.proficiencies.reduce((best, p) => (p.value > best.value ? p : best), state.sheet.proficiencies[0] ?? { name: '', value: 0 })
   const theirs = foe.proficiencies.reduce((best, p) => (p.value > best.value ? p : best), foe.proficiencies[0] ?? { name: '', value: 0 })
   const canRoll = !c.over.ended && c.last === null && !c.opening
+  // Filled here rather than in `banner`: the banner is the rule's word
+  // for how the fight ended, this is the narrator's, and they are two
+  // different jobs on two different lines (plan/VOICE.md).
+  const end = c.over.ended ? narrate(momentOfFightEnd(c.over.reason), state.sheet.name) : null
   return (
     <View style={styles.screen} testID="combat">
       <View style={styles.sides}>
@@ -164,6 +170,20 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
             <Text style={styles.eventText}>{c.techniqueLine}</Text>
           </Slip>
         )}
+        {/*
+          The narrator speaks once a fight is over, and only then: mid-fight
+          the screen is already dense with the book's own rows, and VOICE.md
+          keeps him off anything that is still a live choice ("A choice the
+          menu still offers, foreclosed or recommended"). A tie resolved by
+          an Unexpected Event prints the table's own line above, so
+          `momentOfFightEnd` returns silence for it rather than talking over
+          it (Phase 10a).
+        */}
+        {end === null ? null : (
+          <Slip dashed style={styles.pad} testID="fight-end">
+            <Narrator testID="combat-narrator" line={end} style={styles.narrator} />
+          </Slip>
+        )}
         {actions(state, c).map((a) => (
           <MenuButton key={a.id} testID={`act-${a.id}`} title={a.title} note="" line={a.line} source={a.cite} enabled={a.enabled} onPress={() => dispatch(a.action)} />
         ))}
@@ -211,6 +231,8 @@ const styles = StyleSheet.create({
   small: { fontFamily: font.mono, fontSize: 10, lineHeight: 15, color: color.ink },
   mono: { fontFamily: font.mono, fontSize: 11, color: color.ink },
   strong: { flexShrink: 1, fontFamily: font.sans, fontSize: 13, fontWeight: '800', letterSpacing: 0.5, color: color.ink },
+  /** Inside a dashed slip already: his own rule needs no top margin. */
+  narrator: { marginTop: 0, paddingTop: 0, borderTopWidth: 0 },
   pad: { padding: 9 },
   between: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', gap: 8, marginBottom: 5 },
   blow: { flexDirection: 'row', alignItems: 'center', gap: 9 },

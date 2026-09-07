@@ -262,6 +262,27 @@ export type AuthoredLine = BaseRecord & {
   readonly line: string
 }
 
+/**
+ * One line the narrator speaks at a moment of play (plan/VOICE.md).
+ *
+ * Distinct from {@link AuthoredLine}: that one belongs to a transcribed
+ * record and its `ref` is a record id, while this one belongs to a
+ * *moment* the app resolves and its key is `moment`, a result-kind key
+ * (`turn.ambush`, `check.luck.failed`, `kill`). The book prints no row
+ * for "the Master rested", so there is nothing for a record id to name.
+ * The two shapes are kept disjoint by that field name alone, which is
+ * what lets the file schema's `oneOf` tell them apart.
+ *
+ * `line` may carry the `{name}` placeholder; the app fills it with the
+ * Master's name before printing (agents.md rule 7: the copy stays here,
+ * the substitution happens at the screen).
+ */
+export type NarratorLine = BaseRecord & {
+  /** The moment this line belongs to, dotted lower-case. Unique in its file. */
+  readonly moment: string
+  readonly line: string
+}
+
 /** One row of the healing summary (MH p.31, R40-R42). */
 export type Healing = BaseRecord & {
   readonly attribute: 'SKILL' | 'ENDURANCE' | 'LUCK'

@@ -27,6 +27,7 @@ import { Button } from '../Button'
 import { Die } from '../Die'
 import { ManualDice } from '../ManualDice'
 import { Pill } from '../Pill'
+import { Narrator } from '../Narrator'
 import { Plate } from '../Plate'
 import { Source } from '../Source'
 import type { PlateKey } from '../Plate'
@@ -139,6 +140,10 @@ export const RollCard = ({ state, card, reason, result, dispatch }: Props) => {
             </View>
           )}
 
+          {shown && result.narrator !== null ? (
+            <Narrator testID="roll-card-narrator" line={result.narrator} style={styles.narrator} />
+          ) : null}
+
           {shown ? (
             <View style={styles.cite}>
               <Source testID="roll-card-source" cite={result.cite} />
@@ -197,6 +202,8 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: color.ink,
   },
+  /** His rule inset to the card's text column, clear of the plate above. */
+  narrator: { marginHorizontal: 12, marginBottom: 4 },
   cite: { borderTopWidth: 2, borderTopColor: color.ink, paddingVertical: 5, paddingHorizontal: 9 },
   foot: { flexDirection: 'row', gap: 8, padding: 9 },
   grow: { flex: 1 },

@@ -38,7 +38,8 @@ export type { ContentCounts } from './counts'
 
 import strings from '../data/app/strings.json'
 import notesFile from '../data/app/behaviour-notes.json'
-import type { BehaviourNote } from './types'
+import resultLinesFile from '../data/app/result-lines.json'
+import type { BehaviourNote, NarratorLine } from './types'
 
 /** One UI string record: what it says and where it comes from. */
 export type StringRecord = {
@@ -77,3 +78,25 @@ export const behaviourNotes: readonly BehaviourNote[] = Object.freeze(
 /** The note for one behaviour id, or undefined for one that has none. */
 export const behaviourNoteFor = (ref: string): BehaviourNote | undefined =>
   behaviourNotes.find((n) => n.ref === ref)
+
+/**
+ * The narrator's lines, one per moment of play (Phase 10a, plan/VOICE.md).
+ *
+ * Keyed by `moment` — a result-kind key such as `turn.ambush` or `kill`
+ * — because the moments the app narrates are not rows the book prints.
+ * `packages/content/src/voice.test.ts` holds every line to the guide.
+ */
+export const resultLines: readonly NarratorLine[] = Object.freeze(
+  resultLinesFile.records as readonly NarratorLine[],
+)
+
+/**
+ * The narrator's line for one moment, or undefined where he keeps quiet.
+ *
+ * Total: an unknown ref is silence, not a crash and not a placeholder.
+ * Silence is a legitimate answer — VOICE.md says he does not speak on
+ * the title page, on ABOUT, on RULES, on RECORD, or in creation — so a
+ * caller that gets `undefined` renders nothing at all.
+ */
+export const narratorLineFor = (moment: string): NarratorLine | undefined =>
+  resultLines.find((r) => r.moment === moment)

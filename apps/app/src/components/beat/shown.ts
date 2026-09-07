@@ -19,10 +19,19 @@
  * it has any: the Hint an Event revealed, or the printed description
  * of whoever was met. It stands where the plate would, so the moment
  * a foe appears the player reads who it is, not a drawing of a door.
+ *
+ * `narrator` is the one field on this type that is not the book's:
+ * Old Ping's line for the moment (Phase 10a, `plan/VOICE.md`), already
+ * filled with the Master's name. It is resolved here, beside the
+ * book's own words for the same result, precisely so the two can be
+ * seen to agree — `lib/narrator.ts` picks the moment from the same
+ * fields `brought()` reads. It renders under a dashed rule and never
+ * inside the book's text (`components/Narrator`).
  */
 import { t, theFiveTreasuresAreas, treasureFoes } from '@martial-havoc/content'
 import type { Die as DieFace, Label } from '@martial-havoc/engine'
 import { fill } from '../../lib/fill'
+import { narrateResult } from '../../lib/narrator'
 import { citeOf } from '../../state/reduce'
 import type { RecordState, Result } from '../../state/types'
 
@@ -42,6 +51,8 @@ export type ShownResult = {
   readonly cite: string
   /** The book's words for what was brought, or null where it printed none. */
   readonly passage: string | null
+  /** The narrator's line for this moment, filled; null where he keeps quiet. */
+  readonly narrator: string | null
 }
 
 /** What a turn's Event brought, worded. */
@@ -68,8 +79,21 @@ const turnPassage = (r: Extract<Result, { kind: 'turn' }>): string | null => {
   return null
 }
 
-/** Map one result and the sheet it happened to onto what a slip shows. */
-export const shown = (r: Result, sheet: RecordState['sheet']): ShownResult => {
+/**
+ * Map one result and the sheet it happened to onto what a slip shows.
+ *
+ * The narrator's line is added once, at the end, rather than in each
+ * branch: it depends on the result and the Master's name alone, and
+ * putting it in six places would be six places for the slip and the
+ * line to drift apart.
+ */
+export const shown = (r: Result, sheet: RecordState['sheet']): ShownResult => ({
+  ...book(r, sheet),
+  narrator: narrateResult(r, sheet.name),
+})
+
+/** Everything on a slip that comes from the book. Ours is added by {@link shown}. */
+const book = (r: Result, sheet: RecordState['sheet']): Omit<ShownResult, 'narrator'> => {
   switch (r.kind) {
     case 'check': {
       const id = r.check === 'skill' ? 'checks.skill-check' : 'checks.luck-check'

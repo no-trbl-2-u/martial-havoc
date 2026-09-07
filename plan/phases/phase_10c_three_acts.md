@@ -83,7 +83,7 @@ Feature: The acts are visible and the boss's door does not slow down
     Given a fresh Master on the mountain
     When I walk to the Cave entrance on a die of 4
     Then a slip headed INSIDE THE LOTUS FLOWER shows once
-    And its line is "The gate is behind you now, and the stream that went in ahead of you has stopped talking."
+    And its line is "The gate is behind Lin Shu now, and the stream that went in ahead has stopped talking." (the `{name}` filled)
     And the progress mark shows two of five filled
     When I walk back to the mountain and into the cave again
     Then no act slip appears

@@ -71,9 +71,9 @@ export const SheetBeat = ({
 }: SheetBeatProps) => (
   <View style={styles.screen} testID="beat">
     <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
-      {ending === null ? null : <EndingSlip ending={ending} />}
+      {ending === null ? null : <EndingSlip ending={ending} master={state.sheet.name} />}
       {premise === null ? null : <PremiseSlip premise={premise} />}
-      <AreaSlip area={area} hint={hint} />
+      <AreaSlip area={area} hint={hint} master={state.sheet.name} />
     </ScrollView>
 
     <View style={styles.sheet}>

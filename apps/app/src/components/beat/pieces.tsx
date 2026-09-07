@@ -30,6 +30,7 @@ import { FreeText } from '../FreeText'
 import { MenuButton } from '../MenuButton'
 import { Pill } from '../Pill'
 import { RollBar } from '../RollBar'
+import { Narrator } from '../Narrator'
 import { Slip } from '../Slip'
 import { Source } from '../Source'
 import type { ShownResult } from './shown'
@@ -51,18 +52,33 @@ export const PremiseSlip = ({ premise, style }: { readonly premise: string; read
 
 /**
  * The area the Master is standing in: its printed name over its printed
- * description, and the Hint once it is earned (I-60). The Encounters
- * line is the book's table for the Event roll, not a thing the player
- * needs in front of them; it is folded with the folio behind SOURCE.
+ * description, the narrator's line under it, and the Hint once it is
+ * earned (I-60). The Encounters line is the book's table for the Event
+ * roll, not a thing the player needs in front of them; it is folded
+ * with the folio behind SOURCE.
+ *
+ * Phase 10a hung the area's own `line` here. It has been in
+ * `areas.json` since Phase 8 and was never rendered, which is exactly
+ * the gap the phase was written to close: the book describes the room,
+ * and Old Ping says what it is like to stand in it. The description
+ * stays upright and his line goes italic under a dashed rule, so the
+ * two are told apart without reading either (`plan/VOICE.md`).
+ *
+ * The `master` name is passed in rather than read from a store: this is
+ * a piece, and a piece that could reach the record could grow a
+ * behaviour behind a layout's back.
  */
 export const AreaSlip = ({
   area,
   hint,
+  master,
   style,
 }: {
   readonly area: AdventureArea
   /** The Hint, or null while it is still hidden. */
   readonly hint: string | null
+  /** The Master's name, filled into the area's authored line. */
+  readonly master: string
   readonly style?: object
 }) => (
   <Slip style={[styles.lineSlip, style]}>
@@ -70,9 +86,10 @@ export const AreaSlip = ({
     <Text testID="area-name" style={styles.areaName}>
       {area.name.toUpperCase()}
     </Text>
-    <Text testID="authored-line" style={styles.line}>
+    <Text testID="area-description" style={styles.line}>
       {area.description}
     </Text>
+    <Narrator testID="area-narrator" line={fill(area.line, { name: master })} />
     <View style={styles.areaFoot}>
       <Source
         key={area.id}
@@ -89,14 +106,31 @@ export const AreaSlip = ({
   </Slip>
 )
 
-/** The ending screen, when the ending act is satisfied (Phase 5's acts; ours). */
-export const EndingSlip = ({ ending, style }: { readonly ending: Ending; readonly style?: object }) => (
+/**
+ * The ending screen, when the ending act is satisfied (Phase 5's acts; ours).
+ *
+ * The act's line is the narrator's, so Phase 10a fills its `{name}` the
+ * way every other line of his is filled. It keeps its own place at the
+ * top of the slip rather than moving under a dashed rule: the whole
+ * slip is already dashed and already labelled `invention`, so a second
+ * mark inside it would say the same thing twice.
+ */
+export const EndingSlip = ({
+  ending,
+  master,
+  style,
+}: {
+  readonly ending: Ending
+  /** The Master's name, filled into the ending act's line. */
+  readonly master: string
+  readonly style?: object
+}) => (
   <Slip dashed style={[styles.lineSlip, style]} testID="ending">
     <View style={styles.resultHead}>
       <Text style={styles.resultTitle}>{t('ui.cave.ending.title')}</Text>
       <Pill label="invention" />
     </View>
-    <Text style={[styles.line, styles.endingLine]}>{ending.line}</Text>
+    <Text style={[styles.line, styles.endingLine]}>{fill(ending.line, { name: master })}</Text>
     <Text style={styles.encounters}>
       {fill(t('ui.cave.ending.line'), {
         n: ending.treasures.length,
@@ -110,7 +144,16 @@ export const EndingSlip = ({ ending, style }: { readonly ending: Ending; readonl
   </Slip>
 )
 
-/** The last result: its label pill, its dice, its number, the book's words for it, and its folded citation. */
+/**
+ * The last result: its label pill, its dice, its number, the book's
+ * words for it, the narrator's line, and its folded citation.
+ *
+ * The order is the argument. The book's own words come first and stand
+ * upright; Old Ping comes after them, italic, under his dashed rule
+ * (Phase 10a); the folio comes last, folded. A reader going down the
+ * slip meets the source, then the storyteller, then the receipt —
+ * never the storyteller first, and never inside the book's text.
+ */
 export const ResultSlip = ({
   result,
   style,
@@ -140,6 +183,9 @@ export const ResultSlip = ({
       <Text testID="result-passage" style={styles.passage}>
         {result.passage}
       </Text>
+    )}
+    {result.narrator === null ? null : (
+      <Narrator testID="result-narrator" line={result.narrator} style={styles.resultNarrator} />
     )}
     <View style={styles.cite}>
       <Source testID="result-source" cite={result.cite} />
@@ -254,6 +300,8 @@ const styles = StyleSheet.create({
   total: { fontFamily: font.sans, fontSize: 34, fontWeight: '800', lineHeight: 36, color: color.ink },
   totalText: { fontSize: 16, lineHeight: 20, textAlign: 'right' },
   against: { fontFamily: font.mono, fontSize: 10, color: color.ink, textAlign: 'right' },
+  /** His rule spans the slip's text column, inset like the passage above it. */
+  resultNarrator: { marginHorizontal: 9, marginBottom: 8, marginTop: 0 },
   passage: {
     paddingHorizontal: 9,
     paddingBottom: 8,

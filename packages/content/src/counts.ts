@@ -54,6 +54,7 @@ import caveAbsences from '../data/campaigns/the-5-treasures/absences.json'
 import caveActs from '../data/campaigns/the-5-treasures/acts.json'
 import strings from '../data/app/strings.json'
 import behaviourNotes from '../data/app/behaviour-notes.json'
+import resultLines from '../data/app/result-lines.json'
 
 /** The minimum every content file exposes for counting. */
 type CountedFile = {
@@ -105,6 +106,7 @@ const registry: readonly CountedFile[] = Object.freeze([
   caveActs,
   strings,
   behaviourNotes,
+  resultLines,
 ])
 
 /** The files whose every record carries a line authored for this build. */
@@ -114,6 +116,7 @@ const authored: readonly CountedFile[] = Object.freeze([
   unexpectedEventLines,
   caveAreas,
   caveActs,
+  resultLines,
 ])
 
 /** What {@link contentCounts} reports. */
@@ -128,8 +131,9 @@ export type ContentCounts = {
    * Phase 4: 72 effect records, 66 Oracle lines, 11 Unexpected Event
    * lines. Phase 5: the 8 areas of the cave (whose `description` and
    * `hint` are transcriptions but whose `line` is ours) and its 5 act
-   * markers. Counted from the same files, so the number in a report is
-   * the number on disk.
+   * markers. Phase 10a: the narrator's 19 lines, one per moment of play.
+   * Counted from the same files, so the number in a report is the number
+   * on disk.
    */
   readonly authoredLines: number
 }

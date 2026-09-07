@@ -1290,6 +1290,38 @@
           }
         }
       },
+      "narratorLine": {
+        "description": "One line the narrator speaks at a moment of play (plan/VOICE.md, Old Ping). Its key is `moment`, not the `ref` of an authoredLine, and the difference is the point: an authoredLine belongs to a transcribed record and its `ref` must resolve to one, while this belongs to a moment the app resolves - `turn.ambush`, `check.luck.failed`, `kill` - for which the book prints no record at all. Naming the field differently also keeps the two shapes disjoint, so the file schema's oneOf stays unambiguous. `line` may carry the `{name}` placeholder, filled with the Master's name at render.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "moment",
+          "line"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "$ref": "#/$defs/atoms/reading"
+          },
+          "moment": {
+            "description": "The moment this line belongs to: a result-kind key, dotted lower-case (`check.luck.failed`, `turn.encounter`, `kill`). Unique within the file. Resolves in the app, not in this package.",
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)*$"
+          },
+          "line": {
+            "description": "The narrator's line. Held to plan/VOICE.md by voice.test.ts: two sentences, forty words, no exclamation mark, no digit, no second person, no word of the table.",
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
       "beat": {
         "description": "One area of an adventure as the beat screen shows it: the printed area name and an authored line of ours read when the Master stands there (spec.md, Horizon: an authored line beside every menu). The area's printed description stays in docs/ until Phase 5's adventure format transcribes it; this record is the prototype slice.",
         "type": "object",
@@ -2453,6 +2485,9 @@
                 },
                 {
                   "$ref": "#/$defs/records/authoredLine"
+                },
+                {
+                  "$ref": "#/$defs/records/narratorLine"
                 },
                 {
                   "$ref": "#/$defs/records/beat"

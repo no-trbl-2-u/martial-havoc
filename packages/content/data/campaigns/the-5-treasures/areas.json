@@ -31,7 +31,7 @@
       "name": "Cave entrance",
       "description": "A shut wooden gate hidden by a willow tree; painted in red : 蓮花洞 A stream falls slowly silent, swallowed by the mountain. Shrill voices come from the inside.",
       "hint": "Ogres go out hunting for travellers once a day",
-      "line": "A gate shut under a willow, and three red characters nobody painted for you. The stream goes in and stops talking.",
+      "line": "A gate shut under a willow, and three red characters nobody painted for a guest. The stream goes in and stops talking.",
       "exits": [
         "area.the-5-treasures.flat-top-mountain",
         "area.the-5-treasures.storage-room",
@@ -105,7 +105,7 @@
       "name": "Women quarter",
       "description": "The door is decorated with ivory bas-reliefs: a rich sedan chair followed by a troop of marching she-devils. A protruding hand with a golden decoration. Inside: an old woman is sitting on a chair, a white silk scarf wrapped around her head and jewels studded her golden earrings. A she-devil servant is combing her hair.",
       "hint": "The old lady is the demons' adoptive mother. She knows the spells to control the Dazzling Golden Cord",
-      "line": "Ivory on the door, a comb going through white hair, and nobody in the room in any hurry about you.",
+      "line": "Ivory on the door, a comb going through white hair, and nobody in the room in any hurry about the visitor.",
       "exits": ["area.the-5-treasures.chieftain-quarter"],
       "gate": {
         "key": "key.the-5-treasures.private-quarter",

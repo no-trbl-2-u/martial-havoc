@@ -1293,6 +1293,11 @@
       "cite": "spec.md, Routine calls"
     },
     {
+      "id": "ui.narrator.name",
+      "cite": "plan/VOICE.md",
+      "text": "OLD PING"
+    },
+    {
       "id": "ui.about.authored",
       "text": "{n} carry a line authored for this build",
       "cite": "plan/phases/phase_4_effects_and_oracle_lines.md"

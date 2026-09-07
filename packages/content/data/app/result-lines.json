@@ -1,0 +1,126 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "$comment": "The narrator's lines, one per moment of play (Phase 10a; plan/VOICE.md). Old Ping, the shuoshu of Fen Pass, speaks beside the book's own text and never inside it: the result slip prints what the book prints, and this line under a dashed rule headed with his name. `moment` names the moment the app resolves, not a transcribed record - the book prints no row for `the Master rested` - which is why these are narratorLine records and not authoredLine ones. `{name}` is filled with the Master's name at render. There is no separate `rescue` moment: freeing the Kitchen's Monk (I-39) resolves as a LOOT row read as a gift, so `loot.gift` is the rescue's line and a second record would be one the app could never reach. voice.test.ts holds every line here to the guide: two sentences, forty words, no exclamation mark, no digit, no second person, no word of the table.",
+  "id": "app.result-lines",
+  "kind": "list",
+  "title": "The narrator's lines, by moment",
+  "cite": "plan/VOICE.md",
+  "label": "invention",
+  "docs": "docs/index.md",
+  "records": [
+    {
+      "id": "narrator.check.skill.passed",
+      "cite": "plan/VOICE.md",
+      "moment": "check.skill.passed",
+      "line": "{name} does the thing that needed doing, and does it once."
+    },
+    {
+      "id": "narrator.check.skill.failed",
+      "cite": "plan/VOICE.md",
+      "moment": "check.skill.failed",
+      "line": "{name} tries it, and the thing does not go. There is always another way in."
+    },
+    {
+      "id": "narrator.check.luck.passed",
+      "cite": "plan/VOICE.md",
+      "moment": "check.luck.passed",
+      "line": "The world leans {name}'s way this time. It does not do that twice for free."
+    },
+    {
+      "id": "narrator.check.luck.failed",
+      "cite": "plan/VOICE.md",
+      "moment": "check.luck.failed",
+      "line": "The world does not lean {name}'s way. Old Ping has watched better people than this run out of favour."
+    },
+    {
+      "id": "narrator.turn.safe",
+      "cite": "plan/VOICE.md",
+      "moment": "turn.safe",
+      "line": "Nothing is waiting in here, which {name} will not believe for long. Listen anyway."
+    },
+    {
+      "id": "narrator.turn.nothing",
+      "cite": "plan/VOICE.md",
+      "moment": "turn.nothing",
+      "line": "The room holds its breath and lets {name} pass. Nothing comes out of it."
+    },
+    {
+      "id": "narrator.turn.hint",
+      "cite": "plan/VOICE.md",
+      "moment": "turn.hint",
+      "line": "Something in here has been saying the same thing for years, and {name} finally hears it."
+    },
+    {
+      "id": "narrator.turn.encounter",
+      "cite": "plan/VOICE.md",
+      "moment": "turn.encounter",
+      "line": "{name} is not alone in this room any more. Mark how the shadows stand."
+    },
+    {
+      "id": "narrator.turn.ambush",
+      "cite": "plan/VOICE.md",
+      "moment": "turn.ambush",
+      "line": "The first blow is theirs. {name} learns this the way everyone does."
+    },
+    {
+      "id": "narrator.take",
+      "cite": "plan/VOICE.md",
+      "moment": "take",
+      "line": "{name} lifts it, and it is lighter than it should be. Nobody says a name near it."
+    },
+    {
+      "id": "narrator.rest",
+      "cite": "plan/VOICE.md",
+      "moment": "rest",
+      "line": "{name} sleeps where the stone is warmest, and wakes with most of the ache gone."
+    },
+    {
+      "id": "narrator.loot.item",
+      "cite": "plan/VOICE.md",
+      "moment": "loot.item",
+      "line": "{name} takes what the body was carrying. It weighed more on the living."
+    },
+    {
+      "id": "narrator.loot.treasure",
+      "cite": "plan/VOICE.md",
+      "moment": "loot.treasure",
+      "line": "One of the five, and {name} has it now. The cave will want it back."
+    },
+    {
+      "id": "narrator.loot.key",
+      "cite": "plan/VOICE.md",
+      "moment": "loot.key",
+      "line": "Iron, cold, and cut for one lock in this mountain. {name} knows which."
+    },
+    {
+      "id": "narrator.loot.hint",
+      "cite": "plan/VOICE.md",
+      "moment": "loot.hint",
+      "line": "The body gives up a thing it knew. {name} keeps it, the way a traveller keeps a road."
+    },
+    {
+      "id": "narrator.loot.gift",
+      "cite": "plan/VOICE.md",
+      "moment": "loot.gift",
+      "line": "It is put into {name}'s hands, not taken off a body. That is a different weight."
+    },
+    {
+      "id": "narrator.kill",
+      "cite": "plan/VOICE.md",
+      "moment": "kill",
+      "line": "It goes down and stays down. The mountain does not stop for it."
+    },
+    {
+      "id": "narrator.flee",
+      "cite": "plan/VOICE.md",
+      "moment": "flee",
+      "line": "{name} leaves with the marks of that fight, and one more on their own name. The cave remembers both."
+    },
+    {
+      "id": "narrator.down",
+      "cite": "plan/VOICE.md",
+      "moment": "down",
+      "line": "{name} does not get up from this one. Old Ping has told this ending before and never liked telling it."
+    }
+  ]
+}
