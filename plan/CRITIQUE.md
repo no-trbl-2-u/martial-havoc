@@ -9,6 +9,16 @@
 
 ## Pending
 
+### [MED] apps/app — the opponent's ENDURANCE is not shown on its combat card
+- pass: user-jot (commit afb0e68)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: the opponent's ENDURANCE is not shown on its combat card: the Devil servant's card prints dice, SKILL +5 and SURROUND +3 but not END 7 or what is left of it, so STRIKE "Take 6 from its ENDURANCE" cannot be read against a total. The book prints every opponent's ENDURANCE (5T a2 "DEVIL SERVANT SKILL:5 END:7 ATT:1"; MH p.70-79) and has the player subtract from it (MH p.23) and compare against it for treasure (MH p.68).
+- evidence: user-spotted at 2026-09-07T18:46:02Z, on the combat screen against a Devil servant (Master ahead by 6, STRIKE offered)
+- suggested fix: print current over printed ENDURANCE on the opponent card, e.g. "END 7 / 7", cited MH p.23 and 5T a2, updated after each strike; Phase 10k scope, app only.
+- source: user
+
 ### [HIGH] apps/app — a lost round cannot be followed by another: the fight offers nothing but FLEE
 - pass: agent (commit pending, the played-not-recited e2e)
 - viewport: 390x844
