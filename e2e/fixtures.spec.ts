@@ -16,7 +16,8 @@ import { expect, test } from '@playwright/test'
 import type { Page } from '@playwright/test'
 import { SESSION_KEY } from '../apps/app/src/state/persist'
 import type { RecordState } from '../apps/app/src/state/types'
-import { atTheRules, facingTheGhost, fold, madeAMaster, onTheMountain, open } from './fixtures'
+import { menuFor } from '../apps/app/src/state/menu'
+import { atTheEndingsDoor, atTheRules, facingTheGhost, fold, madeAMaster, onTheMountain, open, struckDown } from './fixtures'
 
 const button = (page: Page, name: RegExp | string) => page.getByRole('button', { name })
 
@@ -88,4 +89,25 @@ test('the fold and the walk agree on the record', async ({ page }) => {
   const { gold: _walkedGold, ...walkedSheet } = walked.sheet
   const { gold: _builtGold, ...builtSheet } = built.sheet
   expect(walkedSheet).toEqual(builtSheet)
+})
+
+/**
+ * The two scenes that carry the most faces are checked against what
+ * they claim before any spec seeds them, so a wrong face fails here as
+ * a wrong record and not in a browser as a missing button.
+ */
+test('the long scenes fold to the records they name', () => {
+  const door = fold(atTheEndingsDoor)
+  expect(door.screen).toBe('beat')
+  expect(door.cave.treasures).toHaveLength(5)
+  expect(door.cave.rescued).toEqual(['foe.monk'])
+  expect(door.pending).toEqual([])
+  expect(menuFor(door).some((o) => o.action.kind === 'ending')).toBe(true)
+
+  const down = fold(struckDown)
+  expect(down.screen).toBe('combat')
+  expect(down.sheet.endurance).toBe(0)
+  // The flight on the way: the book's last blow and the Dishonor Point.
+  expect(down.sheet.dishonor).toBe(1)
+  expect(down.combat?.over).toMatchObject({ ended: true, reason: 'master-down' })
 })

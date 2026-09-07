@@ -9,14 +9,34 @@
 
 ## Pending
 
-### [MEDIUM] The ending has no e2e, because reaching it is a whole sitting
-- pass: agent (commit pending, phase 10i)
-- viewport: unspecified
+### [HIGH] apps/app — a lost round cannot be followed by another: the fight offers nothing but FLEE
+- pass: agent (commit pending, the played-not-recited e2e)
+- viewport: 390x844
 - auth_state: anonymous
-- category: test-coverage
-- observation: Phase 10i asked for "one e2e case to the freeze frame and one spend" and shipped without one. The ending act is `treasures 5`: the screen cannot be reached in the browser without walking the whole cave and taking all five treasures, which is a twenty-five-step scripted playthrough with a roll card to dismiss at every move. The mechanics are covered per scenario in `reduce.test.ts` (scoring, banking once, the band, the cap flag, Training's resource points, the export), and the reducer already has a full playthrough test that reaches the ending; what is missing is the same walk through the real export, with the screen actually rendered.
-- evidence: `packages/content/data/campaigns/the-5-treasures/acts.json`, act 5 `treasures: 5`; `apps/app/src/state/reduce.test.ts`, "the cave, played to its ending on the reducer"
-- suggested fix: This is Phase 14's row ("the whole sitting"): one scripted `?dice=` walk of the cave end to end in Playwright, asserting the freeze frame and one spend at the end of it. Doing it as a 10i afterthought would produce a long brittle script nobody maintains; doing it as the sitting's own spec gives it a reason to exist.
+- category: correctness
+- observation: MH p.23: "The combat continues until: you succeed in landing a Final Blow; your opponent's or your ENDURANCE points reach zero; an Unexpected Event occurs." In the app a round the Master loses is the last round they may roll. `doRound` returns the state unchanged while `c.last !== null`, and only the winner's options (`doStrike`, `doOpening`, `doTechnique`, `combat.weapon`), a tie or the fan clear `last`; none of them is enabled on a lost round. On the screen `canRoll` is false for the same reason and every row is disabled, so the one enabled control is FLEE with its Dishonor Point. Two consequences: a Master who loses one exchange must flee it, and no duel from full ENDURANCE can end with the Master down (the largest single difference in the cave is 11). The reducer test "takes the hits the Master is behind on, without a roll or a limit (I-44)" rolls a second round after a lost one and passes only because the second `reduce` is a no-op.
+- evidence: `apps/app/src/state/reduce.ts`, `doRound`, the guard `c.last !== null`; `apps/app/src/screens/CombatScreen.tsx`, `canRoll` and `actions()` (`enabled: won` on every winner's row); `reduce.test.ts`, "takes the hits the Master is behind on", `again` equals `lost`; `e2e/fixtures/record.ts`, `struckDown`, which has to flee one fight to fall in the next
+- suggested fix: a lost round is settled by the hit it already applied: clear `last` (and `rolledOff`) at the end of `doRound` when the outcome is `master-hit`, or let `doRound` accept a `last` whose outcome is `master-hit`. Label it (rule, MH p.23), give it a reducer test that rolls twice and loses twice, and make the I-44 test assert the second round actually rolled.
+- source: agent
+
+### [MED] packages/content — the narrator's Ambush line is spoken only for an ambush by nobody
+- pass: agent (commit pending, the played-not-recited e2e)
+- viewport: 390x844
+- auth_state: anonymous
+- category: voice
+- observation: `narrator.turn.ambush` ("The first blow is theirs. {name} learns this the way everyone does.") is VOICE.md's sample 4 for an Ambush. `momentOf` in `lib/narrator.ts` reads who was met before the Event's own name, so an Ambush that brought a foe is spoken as `turn.encounter` ("{name} is not alone in this room any more") and the Ambush line prints only when Event 1 rolls a named foe already dead (I-36). The mirror in `components/beat/shown.ts` is deliberate for the slip's headline; for the narrator it silences the one line written for the moment the book marks with an exclamation.
+- evidence: `apps/app/src/lib/narrator.ts`, `momentOf`, the `turn` branch; `e2e/played.spec.ts`, "every result prints the book upright", the Ambush step asserts `turn.encounter`
+- suggested fix: in `momentOf`, read `result.event === 'ambush'` before `foes.length > 0`; keep the slip's headline as it is. One line moves and the e2e assertion flips back to `turn.ambush`.
+- source: agent
+
+### [LOW] apps/app — the ending sets the book's closing question in italic, the narrator's mark
+- pass: agent (commit pending, the played-not-recited e2e)
+- viewport: 390x844
+- auth_state: anonymous
+- category: voice
+- observation: VISION.md: the book's text is upright, the narrator's italic, "and a reader can always tell them apart". `EndingScreen` prints MH p.88's "Which figure in the shadows was pulling the strings of the boss you just defeated?" in `styles.question`, which is italic serif under a dashed slip, the narrator's typography without his name. `e2e/played.spec.ts` carries the assertion as `test.fail` until the style changes.
+- evidence: `apps/app/src/screens/EndingScreen.tsx`, `styles.question` (`fontStyle: 'italic'`); `e2e/played.spec.ts`, "the book's closing question is set upright"
+- suggested fix: drop `fontStyle: 'italic'` from `styles.question`, or give the question the same upright serif the freeze frame's lines use; then remove the `test.fail`.
 - source: agent
 
 ### [HIGH] R77 has no gate, and cannot have one until a Technique can hurt something
@@ -349,6 +369,17 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [MEDIUM] The ending has no e2e, because reaching it is a whole sitting
+- pass: agent (commit pending, phase 10i)
+- closed: `e2e/played.spec.ts` reaches the ending from a seeded record (`atTheEndingsDoor`, the reducer's whole-cave script folded by `e2e/fixtures`) and scores, banks and asks the book's question on the real export; the fixture made the sitting cheap.
+- viewport: unspecified
+- auth_state: anonymous
+- category: test-coverage
+- observation: Phase 10i asked for "one e2e case to the freeze frame and one spend" and shipped without one. The ending act is `treasures 5`: the screen cannot be reached in the browser without walking the whole cave and taking all five treasures, which is a twenty-five-step scripted playthrough with a roll card to dismiss at every move. The mechanics are covered per scenario in `reduce.test.ts` (scoring, banking once, the band, the cap flag, Training's resource points, the export), and the reducer already has a full playthrough test that reaches the ending; what is missing is the same walk through the real export, with the screen actually rendered.
+- evidence: `packages/content/data/campaigns/the-5-treasures/acts.json`, act 5 `treasures: 5`; `apps/app/src/state/reduce.test.ts`, "the cave, played to its ending on the reducer"
+- suggested fix: This is Phase 14's row ("the whole sitting"): one scripted `?dice=` walk of the cave end to end in Playwright, asserting the freeze frame and one spend at the end of it. Doing it as a 10i afterthought would produce a long brittle script nobody maintains; doing it as the sitting's own spec gives it a reason to exist.
+- source: agent
 
 ### [MED] apps/app + packages/engine — half of I-30's either/or is unimplemented
 - pass: agent (commit 412b3f6)

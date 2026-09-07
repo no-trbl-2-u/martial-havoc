@@ -35,6 +35,24 @@ const state = await open(page, facingTheGhost, '?dice=6,5,1,1')
 await expect(page.getByTestId('combat')).toBeVisible()
 ```
 
+## The named scenes
+
+| Scene | Stands | Spends |
+|---|---|---|
+| `madeAMaster` | Fen Pass, the Call read, San Te's sheet taken | nothing |
+| `readingTheCall` | the same record, named for the opening's stop | nothing |
+| `withAMotive` | Fen Pass, the first Adventures-table hook taken at creation | nothing |
+| `onTheMountain` | the Flat-top mountain, the beat open | nothing |
+| `atTheRules`, `atTheRecord` | the panel open from the mountain | nothing |
+| `inTheStorageRoom` | the Storage room, the gourd still on its shelf | `4,4` |
+| `facingTheGhost` | the Attendants room, the Dexterous Ghost faced | `4,4,2,3` |
+| `atThePaperDoor` | the Attendants room, the Ghost beaten, the key held | `4,4,2,3,6,5,1,1` |
+| `struckDown` | the Attendants room, the Master at ENDURANCE 0: a round lost to the Senior King, the flight, a round lost to the Ghost | `4,2,6,1,1,6,6,2,3,1,1,6,6` |
+| `atTheEndingsDoor` | the beat with five treasures held and THE ENDING offered | the reducer's whole-cave script, see `record.ts` |
+
+`fixtures.spec.ts` proves the last two reach what they say, and
+`played.spec.ts` is what they were built for.
+
 ## Why storage, not a hook
 
 Nothing in the app knows a test is running: no query flag, no window

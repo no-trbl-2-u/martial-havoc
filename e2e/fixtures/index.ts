@@ -18,6 +18,21 @@
  * See `README.md` in this directory for the design and its limits.
  */
 export { cycling, named } from './dice'
-export { atTheRecord, atTheRules, extend, facingTheGhost, fold, madeAMaster, onTheMountain } from './record'
+export {
+  HOOK,
+  atThePaperDoor,
+  atTheEndingsDoor,
+  atTheRecord,
+  atTheRules,
+  extend,
+  facingTheGhost,
+  fold,
+  inTheStorageRoom,
+  madeAMaster,
+  onTheMountain,
+  readingTheCall,
+  struckDown,
+  withAMotive,
+} from './record'
 export type { Scene } from './record'
 export { SEEDED_AT, open, seed } from './seed'
