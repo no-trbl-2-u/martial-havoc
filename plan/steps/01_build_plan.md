@@ -153,8 +153,24 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       an absent field is filled from the acts the saved state already
       satisfies. Act lines are now rendered on an act change, which was
       the carry-over 10a left.
-- [ ] Phase 10d — The fight as a scene (brief:
-      `phase_10d_the_fight_as_a_scene.md`)
+- [x] Phase 10d — The fight as a scene (brief:
+      `phase_10d_the_fight_as_a_scene.md`) — bd751bd. A kill, a fall,
+      a flight and a tie each land as a moment: the fallen slip on the
+      combat screen with the difference that did it (or THE BLOW
+      LANDS), the Master's own fall carrying MH p.6's sentence, and a
+      flight as a beat result of its own with the last blow and the
+      Dishonor Point. An Ambush is one unopposed opening round
+      (I-08a): SKILL and the dice, no Proficiency. The tie's second
+      half is the engine's new `aftermath` (reading, I-30): R32 ends
+      the phase, not the encounter, so a foe the row did not remove
+      stays in the room on a new `standing` list that does not hold
+      the exits shut. Rows 6 and 8 resume the fight; 4 and 10 remove
+      the foe or keep it with company on a rally; 7 brings Minions on
+      a d6; 2 and 12 print the Deities table; 3 and 11 mark the
+      injured side 2 lower for one round, and 3 takes the Master's
+      weapon until R25c's option puts it back. The injury penalty
+      disagrees with the engine's older I-30 note (-1d6 ENDURANCE);
+      the commit body records it for a later docs pass.
 - [ ] Phase 10e — Many foes (brief: `phase_10e_many_foes.md`)
 - [ ] Phase 10f — The sheet that grows: the Final Blow's Technique,
       and age (brief: `phase_10f_the_sheet_that_grows.md`)
