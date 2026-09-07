@@ -153,8 +153,21 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       an absent field is filled from the acts the saved state already
       satisfies. Act lines are now rendered on an act change, which was
       the carry-over 10a left.
-- [ ] Phase 10d — The fight as a scene (brief:
-      `phase_10d_the_fight_as_a_scene.md`)
+- [x] Phase 10d — The fight as a scene (brief:
+      `phase_10d_the_fight_as_a_scene.md`) — 2c528b9. A fall gets its
+      own slip on the combat screen, either side's, with the narrator's
+      line and (for the Master) the book's own sentence about reaching
+      zero; fleeing writes a result slip on the beat carrying R38's
+      last blow and I-32's Dishonor Point; an Ambush is one unopposed
+      round with no Proficiency (I-08a) and a banner that says so. The
+      Unexpected Event has its second half: I-30's floor applied for
+      the nine rows that print none (injury rolled and taken, a Deity's
+      three words, Minions counted on a d6), RESUME THE FIGHT on rows 6
+      and 8, and the foe left standing in the room unless Morale
+      removed it. **Carry-over:** the weapon-loss half of I-30's
+      either/or is not implemented — it needs lingering state and the
+      sheet does not say which Proficiency is the weapon's. Filed to
+      `plan/CRITIQUE.md`; the injury half ships.
 - [ ] Phase 10e — Many foes (brief: `phase_10e_many_foes.md`)
 - [ ] Phase 10f — The sheet that grows: the Final Blow's Technique,
       and age (brief: `phase_10f_the_sheet_that_grows.md`)
