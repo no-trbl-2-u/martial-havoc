@@ -131,6 +131,8 @@ export const fromCampaign = (record: CampaignRecord, session: RecordState): Reco
         : session.screen,
     cave,
     pending: [],
+    // The weapon is in hand until an Unexpected Event takes it (I-30).
+    weaponLost: false,
     roll: null,
     sheet: {
       ...session.sheet,

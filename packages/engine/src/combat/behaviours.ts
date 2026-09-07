@@ -33,6 +33,11 @@ export const combatBehaviours: readonly Behaviour[] = Object.freeze([
   { id: 'combat.unexpected-event-ends-the-phase', label: 'rule', cite: 'MH p.27 (R32)' },
   { id: 'combat.unexpected-event-minimum-readings', label: 'reading', cite: 'I-30' },
   { id: 'combat.minions-on-a-d6', label: 'reading', cite: 'I-33' },
+  {
+    id: 'combat.armed-proficiency-needs-its-weapon',
+    label: 'reading',
+    cite: 'MH p.53 (R68); I-02',
+  },
   { id: 'combat.retreat-rows-roll-morale', label: 'invention', cite: 'spec.md, sealed rules' },
   {
     id: 'combat.a-learned-technique-strikes-for-its-value',

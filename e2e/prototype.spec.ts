@@ -206,6 +206,28 @@ test('a tie is an Unexpected Event and the retreat row rolls Morale', async ({ p
   await expect(page.getByTestId('beat')).toBeVisible()
 })
 
+test('rows 3 and 11 are a pick: the injury, or the weapon (I-30)', async ({ page }) => {
+  // The same tie, then an Unexpected Event of 1+2 = 3 - injury or loss
+  // of weapon for the Master - and the -1d6 the row rolls with it.
+  await page.goto('/?dice=4,4,2,3,3,4,4,4,1,2,4')
+  await begin(page)
+  await toGhost(page)
+  await button(page, 'ROLL THE ROUND').click()
+  await expect(page.getByText('UNEXPECTED EVENT · 2d6 = 3')).toBeVisible()
+  // Nothing has been taken yet: the pick is still open, and so is the
+  // Master's ENDURANCE.
+  await expect(page.getByTestId('event-injury')).toContainText('THE PICK IS YOURS')
+  await expect(page.getByTestId('attr-endurance')).toHaveText('20')
+  await expect(page.getByTestId('act-injury')).toBeEnabled()
+  await page.getByTestId('act-weapon-loss').click()
+  // The weapon half costs no ENDURANCE and says so on the screen until
+  // it is recovered.
+  await expect(page.getByTestId('attr-endurance')).toHaveText('20')
+  await expect(page.getByTestId('event-injury')).toContainText('THE WEAPON IS GONE')
+  await expect(page.getByTestId('weapon-lost')).toBeVisible()
+  await expect(page.getByTestId('act-injury')).toHaveCount(0)
+})
+
 test('a lost round costs the difference; fleeing costs the last blow and Dishonor', async ({ page }) => {
   // Master 1+1+12 = 14; Ghost 6+6+11 = 23: nine off ENDURANCE, then two more for the escape.
   await page.goto('/?dice=4,4,2,3,1,1,6,6')
