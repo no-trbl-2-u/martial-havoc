@@ -4,99 +4,54 @@
 > pass. Durable rows (`[needs-user-call]`, `[user-issue #N]`, a
 > `> Bias:` line) survive the rewrite.
 
-# Site audit — 2026-09-06 (second pass)
+# Site audit — 2026-09-07 (third pass)
 
-The pass ran against `plan/CRITIQUE.md`'s Pending block, which is the
-only populated finding source: `/critique` proper has never run
-(`Last pass: never`), so every row scored below is an
-`external-critique` row carried in from `/jot` and earlier `/march`
-ticks. One HIGH row stands alone at the top; the rest are MED.
+The first `/iterate` tick since the feel-of-play block closed: 10a-10l
+are all shipped and merged, the milestone row (Phase 10) is the
+operator's own sitting, and Phase 11 waits on it in time only. So this
+pass ran where the work actually is - `plan/CRITIQUE.md`'s Pending
+block, 27 rows deep and never drained, `/critique` proper still never
+having run.
 
-**Every scored row is closed as of 2026-09-07.** Two of them (4.0, 4.2)
-were shipped by phase 10e the tick after this pass was written and are
-marked here rather than re-scored; 3.6 was fixed directly. The next
-`/iterate` audit rewrites this file from a fresh pass.
+Two rows score as HIGH. The copy leg wins on ease: its fix is
+mechanical, has no judgement in it, and defends the invariant the whole
+project rests on (a citation is data, never code). The dispatcher row
+is real but its risk has fallen since it was filed - the remaining
+phases are a chain, not a DAG - so it keeps its score and waits.
 
 ## Top 5 findings (scored)
 
-### [x] [5.3] packages/content — opponent roster carries no incorporeal tag (I-29)
+### [x] [7.2] scripts/copy-check.test.ts — the copy leg does not see a citation as copy
 - category: external-critique
-- impact: 8 (R77 is a sealed rule with a live engine gate that no data could ever open)
-- ease: 6 (schema field, two rosters, one new reading-labelled file, tests)
-- source bump: +0.5 (user-filed via /jot)
+- impact: 9 (standing rule 7's mechanical half; three hardcoded citations shipped green under it, and two more were still live in `reduce.ts` when this pass ran)
+- ease: 8 (a fourth shape in a file built for shapes; no new machinery)
+- source: agent
 - next: shipped this tick — see `plan/CRITIQUE.md` Done
 
-### [x] [5.4] apps/app — the adventure's flags are saved but nothing on the beat sets them (I-45, I-40, I-41)
+### [ ] [5.4] skills/ship-a-phase.md — the dispatcher picks by list order, not by dependency
 - category: external-critique
-- impact: 7 (the gourd's night, the sleeping Junior King and the Cord's spells are all unreachable)
-- ease: 7 (menu rows over machinery that already exists)
+- impact: 7 (latent: the row order happens to be a topological order today, and nothing holds it there)
+- ease: 7 (a test asserting the row order is a topological order of the `Waits on` graph)
 - source bump: +0.5 (user-filed via /jot)
-- issue: #25
-- next: shipped 2edf072 — the gourd's night and the Vixen's spells; the
-  Junior King's nap waits on the sandbox's market
+- next: the cheap version — one test over `01_build_plan.md`, red on a bad reordering. Risk is lower now than when filed: 11-14 are a chain, so a mis-pick needs an `/expand` insertion first.
 
-### [x] [4.2] apps/app — the Oracle is not asked how many Devil servants there are (I-34)
+### [ ] [4.5] packages/content — 149 authored lines are held to no style guide at all
 - category: external-critique
-- impact: 6 (four encounter rows fight one foe where the book asks for a number)
-- ease: 7 (roll in `doTurn`, push n ids onto `pending`, third die on the card)
-- next: shipped 2299f57 (phase 10e), the tick after this audit was written.
-  `doTurn` reads the count from the turn, pushes one id per body onto
-  `pending`, and the card shows the die it read (`countFace`).
+- impact: 6 (the oracle, Unexpected Event and effect lines are the bulk of what a player reads and `voice.test.ts` deliberately exempts them)
+- ease: 7 (a guide, then a test leg shaped like the narrator's)
+- source bump: +0.5 (user-filed via /jot)
+- next: needs a written guide before a test can exist; a `/plan-a-phase` or an `/oversight` call on what the non-narrator voice is
 
-### [x] [4.0] apps/app — "Both" and the Woodgatherer band are fought one after another, not as multiple combat (R35)
+### [ ] [4.5] packages/content — effects.json operation strings are unverified
 - category: external-critique
-- impact: 8 (a sealed rule the engine implements and the UI bypasses)
-- ease: 5 (CombatScreen gains a mode; `packages/engine/src/multiple` is ready)
-- next: shipped 2299f57 (phase 10e), the tick after this audit was written.
-  FACE THEM ALL puts the whole of `pending` into one fight, SKILL drops
-  by the number faced (R35), and CombatScreen draws the band with R37's
-  held-back bodies marked.
+- impact: 6 (72 records name engine operations as dotted strings; nothing checks the name resolves, and Phase 10l leaned on one)
+- ease: 7 (a test mapping every non-null `operation` to an engine export)
+- source bump: +0.5 (user-filed via /jot)
+- next: one test in `packages/content`; the engine's `index.ts` is the list to resolve against
 
-### [x] [3.6] packages/content — effects.json operation strings are unverified
+### [ ] [4.0] general — CLOUDFLARE_API_TOKEN cannot read Workers Builds
 - category: external-critique
-- impact: 6 (a rename in the engine leaves 72 records pointing at nothing, silently)
-- ease: 6 (one engine-side test importing the effects table)
-- next: shipped. `packages/engine/src/operations.test.ts` resolves every
-  `operation` against the engine's public surface — the export exists, it
-  comes from the folder the string names, and it is a function. It was
-  red on arrival: 10 of the 25 records named nothing. `combat.opening`
-  (3) is now `combat.finalBlow` — R29's Opening is a state flag, and the
-  machinery it unlocks is R30's roll — and `oracle.consult` (7) is now
-  null, because the Oracle's 66 cells are content and the engine exports
-  no consult. Operator's call, 2026-09-07.
-
-## Durable rows
-
-### [x] The open design questions live in `plan/NEEDS_HUMAN_ATTENTION.md` — all closed 2026-09-07
-
-Five rows from the verdict of 2026-09-06. Every row is closed by the
-operator, in writing, in that file (PR #35). No wall stands; the loop
-runs. `/oversight` still reads that file first.
-
-### [x] Bai Gu Jing and Jiangshi: incorporeal or not? (I-29) — CLOSED 2026-09-07
-
-Operator's call: "refer to the PDF; if no answer is found, tag both."
-The rulebook was read (pypdf, every page). R77 (p.66) names only
-"spirits or ghosts"; the two entries (p.70, p.74) say "Demon" and
-"undead"; the matrix (p.67) seats both in the Supernatural column
-beside untagged Feng Huang and Niu Mowang; the adventure never names
-them. No answer, so both are tagged: `incorporeal: true`,
-`reading: "I-29"`, and `I29_NAMES` carries ten.
-
-Original row, kept for the record:
-
-Reading I-29 names eight opponents outright and two more with a
-question mark of its own: Bai Gu Jing ("demon - doubtful") and
-Jiangshi ("undead - doubtful"). This tick tagged the eight and left
-the two `false`, because `false` is the status quo — an ordinary blow
-lands — and tagging a creature incorporeal makes it harder to fight,
-which is a rule change no loop tick should make on a doubt the
-estate itself recorded.
-
-The call is the operator's. If either should be tagged, it is a
-one-line change in `packages/content/data/world/opponents.json`
-(`incorporeal: true` plus `reading: "I-29"`), and the count in
-`content.test.ts`'s `I29_NAMES` moves with it.
-
-- raised: 2026-09-06, while shipping the HIGH row above
-- resolve via: `/oversight`
+- impact: 7 (it blocks `/march` step 2 outright: the critique gate wants a green `deploy:check`, which wants a `/builds/**` read this token does not have, so `/critique` can never fire from a cloud tick and the queue this pass drained never refills)
+- ease: 5 (the row's own fix is the operator widening the token; the agent-side alternative is teaching `deploy:check` to read the deployed version off the Workers Scripts API instead, which is a rewrite on an unproven assumption)
+- source bump: +0.5 (user-filed via /jot)
+- next: `[needs-user-call]` — widen the token with Workers Builds read, and say so in `.env.example`. Until then the gate is dead rather than not-due, and no agent tick can revive it cheaply.
