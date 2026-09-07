@@ -218,6 +218,7 @@ invoke a skill that does the right thing end-to-end.
 | `seed-check` | `skills/seed-check.md` | Read-only check of a change against `spec.md`'s refusals and Horizon. |
 | `re-seed` | `skills/re-seed.md` | Field report back to the estate when the build drifts from `spec.md`. |
 | `jot` | `skills/jot.md` | Catch a stray thought; no code. |
+| `expert` | `skills/expert.md` | Read both PDFs end to end, text and image, and derive the designer's intent by procedure. Read-only; scratchpad only. |
 
 There is no `ship-data` skill: this project has no separate data
 layer (`nexus.adopt.json` `data: false`); content ships inside
