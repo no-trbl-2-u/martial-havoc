@@ -186,8 +186,21 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       labelled against I-06. **Carry-over:** the Minions-at-ENDURANCE-1
       toggle (MH p.28 footnote) is unimplemented; filed to
       `plan/CRITIQUE.md`.
-- [ ] Phase 10f — The sheet that grows: the Final Blow's Technique,
-      and age (brief: `phase_10f_the_sheet_that_grows.md`)
+- [x] Phase 10f — The sheet that grows: the Final Blow's Technique,
+      and age (brief: `phase_10f_the_sheet_that_grows.md`) — 2b3b852.
+      A landed blow is offered as a Technique before anything else the
+      fight has to say; the LUCK roll costs a point on failure only
+      (I-12, sealed); the naming card rolls MH p.26 for three words,
+      prefills a name and takes a value of 1-4 and a description. The
+      Technique reaches the sheet, the ledger, a TECHNIQUES section on
+      RECORD and the combat menu. RECORD's first line is the printed
+      sheet's first line, name and age. Age and the learned Techniques
+      now survive an export; neither did before. **Three calls are in
+      the commit body**: no record version bump (the module's own
+      doctrine, `actsSeen`, over the brief's ask), the brief's reading
+      id I-31b does not exist so a learned Technique's damage ships as
+      a labelled **invention** cited to the brief, and a learned
+      Technique reaches one opponent.
 - [ ] Phase 10g — The five treasures work (brief:
       `phase_10g_the_five_treasures_work.md`)
 - [ ] Phase 10h — The cave map and the journal as a story (brief:
