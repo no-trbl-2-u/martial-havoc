@@ -32,6 +32,7 @@ const Side = ({
   strength,
   idle,
   prefix,
+  endurance,
   note,
   dimmed,
   aimed,
@@ -47,6 +48,17 @@ const Side = ({
   dimmed?: boolean
   /** The winner's option applies here: the card the Master is aimed at. */
   aimed?: boolean
+  /**
+   * What is left of this opponent's ENDURANCE over what it prints.
+   *
+   * It stands on its own line rather than inside `idle`, because `idle`
+   * is replaced the moment a round is rolled and this is the one number
+   * on the card that must survive the roll: STRIKE offers to take the
+   * difference off *this*, and R78's Treasures roll is read against the
+   * printed half of it. Absent on the Master's card, whose ENDURANCE is
+   * already the attribute strip's job.
+   */
+  endurance?: { readonly now: number; readonly printed: number }
   onPress?: () => void
 }) => (
   <Slip
@@ -73,6 +85,11 @@ const Side = ({
             value: strength.proficiency?.value ?? 0,
           })}
     </Text>
+    {endurance === undefined ? null : (
+      <Text testID={`endurance-${prefix}`} style={styles.sideEndurance}>
+        {fill(t('ui.combat.theirs.endurance'), { now: endurance.now, printed: endurance.printed })}
+      </Text>
+    )}
     <Text testID={`total-${prefix}`} style={styles.sideTotal}>{strength === null ? '-' : strength.total}</Text>
     {/*
       The whole card is the tap target, and it is drawn last so it
@@ -525,6 +542,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
             title={foe.name.toUpperCase()}
             strength={aimedAt(c)?.strength ?? null}
             prefix="theirs"
+            endurance={{ now: aimedAt(c)?.endurance ?? 0, printed: foe.endurance }}
             idle={fill(t('ui.combat.theirs.idle'), { end: aimedAt(c)?.endurance ?? 0, name: theirs.name.toUpperCase(), value: theirs.value })}
           />
         )}
@@ -557,6 +575,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
                 prefix={`foe-${String(index)}`}
                 dimmed={body.endurance === 0}
                 aimed={index === c.target && body.endurance > 0}
+                endurance={{ now: body.endurance, printed: block?.endurance ?? body.endurance }}
                 /*
                   Two different facts can be true of the same card, and
                   both matter: this is the one the winner's option
@@ -907,6 +926,8 @@ const styles = StyleSheet.create({
   sideTitle: { fontFamily: font.sans, fontSize: 9, fontWeight: '800', letterSpacing: 0.9, color: color.ink },
   dice: { flexDirection: 'row', gap: 5, marginVertical: 6 },
   sideLine: { fontFamily: font.mono, fontSize: 10, lineHeight: 16, color: color.ink },
+  /** What is left of an opponent, over what it prints. Never hidden by a roll. */
+  sideEndurance: { fontFamily: font.sans, fontSize: 10, fontWeight: '800', letterSpacing: 0.6, marginTop: 3, color: color.ink },
   sideTotal: { fontFamily: font.sans, fontSize: 32, fontWeight: '800', lineHeight: 34, marginTop: 4, color: color.ink },
   foeLine: { marginTop: 6, marginHorizontal: 14, fontFamily: font.serif, fontSize: 13, lineHeight: 18, fontStyle: 'italic', color: color.ink },
   banner: { marginTop: 8, marginHorizontal: 14, borderWidth: 3, borderColor: color.ink, paddingVertical: 8, paddingHorizontal: 11, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 },

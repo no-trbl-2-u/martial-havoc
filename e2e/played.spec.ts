@@ -650,3 +650,34 @@ test('MINIONS AT 1 is not offered in a duel', async ({ page }) => {
   await expect(page.getByTestId('combat')).toBeVisible()
   await expect(page.getByTestId('act-minions')).toHaveCount(0)
 })
+
+/**
+ * MH p.23 has the player subtract the difference from the opponent's
+ * ENDURANCE, and MH p.68 (R78) compares a d6 against it; 5T a2 and
+ * MH p.70-79 print it on every block. So the number has to be on the
+ * card while the round is being read, not only before it is rolled -
+ * before this it lived in the card's idle line and the first roll
+ * replaced it.
+ */
+test('an opponent’s card keeps its ENDURANCE through the round, over what it prints', async ({
+  page,
+}) => {
+  const state = await open(page, facingTheGhost, '?dice=6,5,1,1')
+  const printed = state.combat?.foes[0]?.endurance
+  if (printed === undefined) throw new Error('no body in the seeded fight')
+  const card = page.getByTestId('endurance-theirs')
+  await expect(card).toHaveText(
+    fill(t('ui.combat.theirs.endurance'), { now: printed, printed }),
+  )
+  // Rolled: the idle line is gone and the number is not.
+  await button(page, t('ui.combat.primary.roll')).click()
+  await expect(card).toHaveText(
+    fill(t('ui.combat.theirs.endurance'), { now: printed, printed }),
+  )
+  // Struck: what is left moves, what it prints does not.
+  await page.getByTestId('act-strike').click()
+  await expect(card).not.toHaveText(
+    fill(t('ui.combat.theirs.endurance'), { now: printed, printed }),
+  )
+  await expect(card).toContainText(String(printed))
+})

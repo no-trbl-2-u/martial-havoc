@@ -433,6 +433,11 @@
       "cite": "MH p.28 (R33, footnote)"
     },
     {
+      "id": "ui.combat.theirs.endurance",
+      "text": "END {now} / {printed}",
+      "cite": "MH p.23 (R24); 5T a2"
+    },
+    {
       "id": "ui.combat.band.minion",
       "text": "AT 1",
       "cite": "MH p.28 (R33, footnote)"
