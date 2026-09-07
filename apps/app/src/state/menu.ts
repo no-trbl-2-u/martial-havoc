@@ -37,6 +37,7 @@ export type BeatAction =
   | { readonly kind: 'rest' }
   | { readonly kind: 'gourd' }
   | { readonly kind: 'leave' }
+  | { readonly kind: 'village' }
 
 /** One row of the beat's menu. */
 export type BeatOption = {
@@ -206,7 +207,27 @@ export const menuFor = (state: RecordState): readonly BeatOption[] => {
     action: { kind: 'rest' },
   })
 
-  if (here.id === TABLES.meta.startArea || ending(TABLES, state.cave) !== null) {
+  // The way back to the doorstep. Phase 10b made the trail the only way
+  // onto the mountain, so it is also the only way off it: from the start
+  // area, and from nowhere else, the Master can walk back down to Fen
+  // Pass. Nothing is spent and nothing is reset - the cave remembers.
+  if (here.id === TABLES.meta.startArea) {
+    rows.push({
+      id: 'village',
+      title: t('ui.cave.village'),
+      note: t('ui.cave.village.note'),
+      line: '',
+      enabled: !engaged,
+      action: { kind: 'village' },
+    })
+  }
+
+  // The sandbox opens at the ending and not before (Phase 10b). It used
+  // to sit on the start area too, which offered a Master who had not
+  // yet walked into the cave a way out of the adventure they had not
+  // yet begun - the region as an escape from the first act rather than
+  // the thing the first act is for.
+  if (ending(TABLES, state.cave) !== null) {
     rows.push({
       id: 'leave',
       title: t('ui.cave.leave'),

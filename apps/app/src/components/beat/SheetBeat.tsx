@@ -26,7 +26,7 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
 import type { AdventureArea } from '@martial-havoc/content'
 import type { Ending } from '@martial-havoc/engine'
-import { AreaSlip, BeatFoot, EndingSlip, MenuList, PremiseSlip, ResultSlip } from './pieces'
+import { AreaSlip, BeatFoot, EndingSlip, MenuList, ResultSlip } from './pieces'
 import { RollCard } from './RollCard'
 import type { RollCardReason } from './RollCard'
 import type { ShownResult } from './shown'
@@ -37,8 +37,6 @@ import type { Action, RecordState } from '../../state/types'
 export type SheetBeatProps = {
   readonly state: RecordState
   readonly dispatch: (a: Action) => void
-  /** The book's opening paragraph, on the first beat only; else null. */
-  readonly premise: string | null
   /** The area the Master stands in. */
   readonly area: AdventureArea
   /** The area's Hint once earned, else null. */
@@ -59,7 +57,6 @@ export type SheetBeatProps = {
 export const SheetBeat = ({
   state,
   dispatch,
-  premise,
   area,
   hint,
   ending,
@@ -72,7 +69,6 @@ export const SheetBeat = ({
   <View style={styles.screen} testID="beat">
     <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
       {ending === null ? null : <EndingSlip ending={ending} master={state.sheet.name} />}
-      {premise === null ? null : <PremiseSlip premise={premise} />}
       <AreaSlip area={area} hint={hint} master={state.sheet.name} />
     </ScrollView>
 

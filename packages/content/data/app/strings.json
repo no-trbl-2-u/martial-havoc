@@ -1108,6 +1108,31 @@
       "cite": "spec.md, Horizon (the village)"
     },
     {
+      "id": "ui.village.call.title",
+      "cite": "MH p.84 (Act I, Call/Incident); 5T a1",
+      "text": "THE CALL"
+    },
+    {
+      "id": "ui.village.call.note",
+      "cite": "MH p.84",
+      "text": "The first act: the world as it is, and the thing that changes it."
+    },
+    {
+      "id": "ui.cave.village",
+      "cite": "plan/phases/phase_10b_the_opening.md",
+      "text": "BACK DOWN TO FEN PASS"
+    },
+    {
+      "id": "ui.cave.village.note",
+      "cite": "plan/phases/phase_10b_the_opening.md",
+      "text": "THE TRAIL HEAD"
+    },
+    {
+      "id": "ui.deed.trail",
+      "cite": "MH p.84 (Act I, Climax)",
+      "text": "took the trail"
+    },
+    {
       "id": "ui.village.trail.title",
       "text": "THE TRAIL",
       "cite": "spec.md, Horizon (the village)"

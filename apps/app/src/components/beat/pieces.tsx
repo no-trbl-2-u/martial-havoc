@@ -10,10 +10,14 @@
  * Phase 8c made the beat the book's: the area slip prints the area's
  * description and, once earned, its Hint, verbatim (5T a1); the menu is
  * derived from the adventure graph. The 2026-09-06 pass put the area's
- * name over its text, folded the Encounters line and every citation
- * behind a tap (`../Source`), and gave the book's opening paragraph a
- * slip of its own on the first beat, so a player knows where they are
- * and why before the first roll.
+ * name over its text and folded the Encounters line and every citation
+ * behind a tap (`../Source`).
+ *
+ * The premise slip that used to open the first beat is gone (Phase
+ * 10b). A player now reads the book's opening in Fen Pass, as the Call,
+ * before taking the trail — which means by the time this screen is
+ * reached the question it answered has already been answered, and a
+ * slip that can never show is worse than no slip at all.
  *
  * Each piece takes what it draws and a callback, never the reducer's
  * `dispatch` in full: a piece that cannot dispatch an arbitrary action
@@ -36,19 +40,6 @@ import { Source } from '../Source'
 import type { ShownResult } from './shown'
 import type { BeatOption } from '../../state/menu'
 import type { Action, RecordState } from '../../state/types'
-
-/**
- * The book's opening, on the first beat: the title block and the
- * premise paragraph as page a1 prints them (5T a1). Shown until the
- * Master has done or seen anything; after that it lives under ABOUT.
- */
-export const PremiseSlip = ({ premise, style }: { readonly premise: string; readonly style?: object }) => (
-  <Slip style={[styles.lineSlip, style]} testID="premise">
-    <Text style={styles.premiseTitle}>{t('ui.intro.title')}</Text>
-    <Text style={styles.premiseSub}>{t('ui.intro.subtitle')}</Text>
-    <Text style={styles.line}>{premise}</Text>
-  </Slip>
-)
 
 /**
  * The area the Master is standing in: its printed name over its printed
@@ -260,8 +251,6 @@ export const BeatFoot = ({
 
 const styles = StyleSheet.create({
   lineSlip: { marginTop: 10, marginHorizontal: 14, padding: 11 },
-  premiseTitle: { fontFamily: font.sans, fontSize: 15, fontWeight: '800', letterSpacing: 1.2, color: color.ink },
-  premiseSub: { fontFamily: font.serif, fontSize: 13, fontStyle: 'italic', marginBottom: 8, color: color.dim },
   areaNumber: { fontFamily: font.mono, fontSize: 9, letterSpacing: 0.8, color: color.dim },
   areaName: { fontFamily: font.sans, fontSize: 15, fontWeight: '800', letterSpacing: 1, marginTop: 1, marginBottom: 6, color: color.ink },
   line: { fontFamily: font.serif, fontSize: 17, lineHeight: 25, color: color.ink },

@@ -20,12 +20,19 @@ const button = (page: Page, name: RegExp | string) => page.getByRole('button', {
  * creation existed: the same Master, now actually chosen.
  *
  * It spends no `?dice=` faces. Creation rolls on the table's source,
- * not the queue, so a spec's named rolls still reach the rolls it named.
+ * not the queue, and taking the trail rolls nothing at all, so a spec's
+ * named rolls still reach the rolls it named.
  */
 const begin = async (page: Page) => {
   await page.getByTestId('title-start').click()
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
+  // Phase 10b: a made Master wakes in Fen Pass and reads the Call. The
+  // trail out of the village is the point of no return and the only way
+  // onto the mountain, so every spec about the beat takes it first. It
+  // spends no `?dice=` faces.
+  await expect(page.getByTestId('village')).toBeVisible()
+  await page.getByTestId('village-go').click()
   await expect(page.getByTestId('beat')).toBeVisible()
 }
 
@@ -65,11 +72,15 @@ test('the beat opens on the Flat-top mountain, the book’s text word for word',
   await page.getByTestId('area-source').click()
   await expect(page.getByTestId('area-source')).toHaveText('Encounters: 1-3 Woodgatherer; 4-5 Ogre; 6 Junior King · 5T a1')
   await expect(page.getByTestId('hint')).toHaveCount(0)
-  // The book's opening is on the first beat, and only there.
-  await expect(page.getByTestId('premise')).toContainText('On the Flat-top mountain two fiends threaten the travellers')
+  // The book's opening is no longer on the beat at all: it is the
+  // village's Call, read before the trail was taken (Phase 10b).
+  await expect(page.getByTestId('premise')).toHaveCount(0)
   await expect(button(page, /TO THE CAVE ENTRANCE/)).toBeVisible()
   await expect(button(page, /REST HERE/)).toBeVisible()
-  await expect(button(page, /LEAVE FOR THE REGION/)).toBeVisible()
+  // The mountain's own way off the adventure is the trail it was reached
+  // by; the region opens at the ending and not before (Phase 10b).
+  await expect(button(page, /BACK DOWN TO FEN PASS/)).toBeVisible()
+  await expect(button(page, /LEAVE FOR THE REGION/)).toHaveCount(0)
   await expect(page.getByPlaceholder("Write it down, or don't.")).toBeVisible()
   await expect(page.getByText('OPTIONAL')).toBeVisible()
   await expect(page.getByText('OVERRIDES 0')).toBeVisible()
@@ -103,7 +114,7 @@ test('an exit rolls the Event table onto the card: the reason, the die, the prin
   await expect(page.getByTestId('die-result-a')).toHaveAttribute('aria-label', '4')
   await expect(page.getByTestId('result-total')).toHaveText('Safe exploration')
   await expect(page.getByTestId('area-description')).toContainText('A shut wooden gate hidden by a willow tree')
-  // Past the first beat, the opening has gone to ABOUT.
+  // The opening lives in the village and under ABOUT, never here.
   await expect(page.getByTestId('premise')).toHaveCount(0)
 })
 
@@ -173,7 +184,8 @@ test('combat shows both rolls, both Proficiencies, both totals and the differenc
   await expect(page.getByTestId('beat')).toBeVisible()
   await expect(page.getByText('LOOT · DEXTEROUS GHOST')).toBeVisible()
   await expect(page.getByTestId('result-total')).toHaveText("private quarter's key")
-  await expect(page.getByText('DEEDS 2')).toBeVisible()
+  // The trail is a deed of its own now (Phase 10b), so each count is one higher.
+  await expect(page.getByText('DEEDS 3')).toBeVisible()
   // The key opens the paper door.
   await expect(button(page, /TO THE CHIEFTAIN QUARTER/)).toBeEnabled()
 })
@@ -206,7 +218,7 @@ test('a lost round costs the difference; fleeing costs the last blow and Dishono
   await expect(page.getByTestId('act-strike')).toBeDisabled()
   await button(page, 'FLEE · DISHONOR +1').click()
   await expect(page.getByTestId('attr-endurance')).toHaveText('9')
-  await expect(page.getByText('DEEDS 1')).toBeVisible()
+  await expect(page.getByText('DEEDS 2')).toBeVisible()
 })
 
 test('the rules panel lists every behaviour with its label and opens one', async ({ page }) => {
@@ -324,4 +336,56 @@ test('the voice: the book upright, Old Ping italic under his own rule, told apar
   await expect(spoken).toContainText('San Te')
   await expect(spoken).toContainText('Nothing is waiting in here')
   await expect(spoken).toHaveCSS('font-style', 'italic')
+})
+
+/**
+ * Phase 10b, the opening. The brief's first two scenarios: a made
+ * Master wakes in Fen Pass with the Call in front of them, and the
+ * trail is the point of no return — the only way onto the mountain,
+ * and the only way back off it.
+ *
+ * The header check is the one that matters most. Before the trail there
+ * is no beat to return to, so a panel button pressed twice has to come
+ * back to the village; if it came back to the beat, the first act would
+ * be a thing a player could step over by opening RULES and closing it.
+ */
+test('the opening: a made Master wakes in Fen Pass, and the trail is the point of no return', async ({
+  page,
+}) => {
+  await page.goto('/?dice=4')
+  await page.getByTestId('title-start').click()
+  await page.getByTestId('preset-preset.san-te').click()
+  await page.getByTestId('creation-begin').click()
+
+  // The Call: the book's premise under a heading of ours, with the
+  // narrator naming the Goal, and no beat anywhere.
+  await expect(page.getByTestId('village')).toBeVisible()
+  const call = page.getByTestId('call')
+  await expect(call).toContainText('THE CALL')
+  await expect(call).toContainText('On the Flat-top mountain two fiends threaten the travellers')
+  await expect(page.getByTestId('call-narrator-name')).toHaveText('OLD PING')
+  await expect(page.getByTestId('call-narrator-line')).toContainText('San Te')
+  await expect(page.getByTestId('beat')).toHaveCount(0)
+
+  // The header cannot reach the beat before the trail is taken.
+  await button(page, 'RULES').click()
+  await expect(page.getByTestId('chip-all')).toBeVisible()
+  await button(page, 'RULES').click()
+  await expect(page.getByTestId('village')).toBeVisible()
+  await expect(page.getByTestId('beat')).toHaveCount(0)
+
+  // Taking it is the climax of the first act, and the ledger says so.
+  await page.getByTestId('village-go').click()
+  await expect(page.getByTestId('beat')).toBeVisible()
+  await expect(page.getByTestId('area-name')).toHaveText('FLAT-TOP MOUNTAIN')
+  await expect(page.getByText('DEEDS 1')).toBeVisible()
+
+  // The Call has been answered and does not call again; the way back is
+  // the trail, and it does not un-begin the adventure.
+  await button(page, /BACK DOWN TO FEN PASS/).click()
+  await expect(page.getByTestId('village')).toBeVisible()
+  await expect(page.getByTestId('call')).toHaveCount(0)
+  await button(page, 'RULES').click()
+  await button(page, 'RULES').click()
+  await expect(page.getByTestId('beat')).toBeVisible()
 })

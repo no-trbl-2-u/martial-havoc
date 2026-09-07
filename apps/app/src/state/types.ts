@@ -375,6 +375,8 @@ export type Action =
   | { readonly type: 'cave.gourd' }
   /** Out of the adventure and into the region (spec.md, Horizon). */
   | { readonly type: 'cave.leave' }
+  /** Back off the mountain to the trail-head village (Phase 10b). */
+  | { readonly type: 'cave.village' }
   /** MY DICE on the beat: toggle entering the next move's die by hand. */
   | { readonly type: 'roll.manual' }
   /** CONTINUE on a picker card: resolve the move on the tapped face. */

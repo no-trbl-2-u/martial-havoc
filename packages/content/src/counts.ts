@@ -131,7 +131,7 @@ export type ContentCounts = {
    * Phase 4: 72 effect records, 66 Oracle lines, 11 Unexpected Event
    * lines. Phase 5: the 8 areas of the cave (whose `description` and
    * `hint` are transcriptions but whose `line` is ours) and its 5 act
-   * markers. Phase 10a: the narrator's 19 lines, one per moment of play.
+   * markers. Phase 10a: the narrator's 20 lines, one per moment of play.
    * Counted from the same files, so the number in a report is the number
    * on disk.
    */

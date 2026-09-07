@@ -153,11 +153,58 @@ describe('walking the cave (5T a1)', () => {
     expect(s.result).toMatchObject({ kind: 'take', treasure: 'Vase of muttonfat jade', held: 1 })
   })
 
-  it('leaves for the region from the mountain', () => {
-    const s = reduce(fresh(), { type: 'cave.leave' }, fromSequence([]))
-    expect(s.screen).toBe('region')
-    expect(menuFor(fresh()).some((o) => o.action.kind === 'leave')).toBe(true)
-    expect(menuFor(play(fresh(), walk(AREA.entrance))).some((o) => o.action.kind === 'leave')).toBe(false)
+  it('walks back down to Fen Pass from the mountain, and from nowhere else', () => {
+    // Phase 10b: the trail is the only way onto the mountain, so it is
+    // the only way off it. The region is the ending's business now.
+    const s = reduce(fresh(), { type: 'cave.village' }, fromSequence([]))
+    expect(s.screen).toBe('village')
+    expect(menuFor(fresh()).some((o) => o.action.kind === 'village')).toBe(true)
+    expect(
+      menuFor(play(fresh(), walk(AREA.entrance))).some((o) => o.action.kind === 'village'),
+    ).toBe(false)
+  })
+
+  it('does not offer the region before the adventure is over', () => {
+    // It used to sit on the start area, which offered a way out of an
+    // adventure the Master had not yet walked into (Phase 10b).
+    expect(menuFor(fresh()).some((o) => o.action.kind === 'leave')).toBe(false)
+    expect(
+      menuFor(play(fresh(), walk(AREA.entrance))).some((o) => o.action.kind === 'leave'),
+    ).toBe(false)
+  })
+})
+
+describe('the opening: the village as the Call (Phase 10b)', () => {
+  it('leaves a fresh record standing on the mountain but not having entered it', () => {
+    const r = fresh()
+    expect(r.cave.area).toBe(AREA.mountain)
+    expect(r.cave.visited).toEqual([])
+    expect(r.deeds).toEqual([])
+  })
+
+  it('records the arrival and the point of no return when the trail is taken', () => {
+    const climbed = reduce(fresh(), { type: 'village.trail' }, fromSequence([]))
+    expect(climbed.screen).toBe('beat')
+    expect(climbed.cave.visited).toEqual([AREA.mountain])
+    expect(climbed.deeds).toEqual(['took the trail'])
+  })
+
+  it('keeps the visited list in the order the areas were entered', () => {
+    // The brief's scripted first act: trail, cave entrance, dining hall.
+    const walked = play(reduce(fresh(), { type: 'village.trail' }, fromSequence([])), [
+      ...walk(AREA.entrance),
+      ...walk(AREA.hall),
+    ])
+    expect(walked.cave.visited).toEqual([AREA.mountain, AREA.entrance, AREA.hall])
+  })
+
+  it('does not record the trail twice when the Master walks back down and up again', () => {
+    const there = reduce(fresh(), { type: 'village.trail' }, fromSequence([]))
+    const back = reduce(there, { type: 'cave.village' }, fromSequence([]))
+    const again = reduce(back, { type: 'village.trail' }, fromSequence([]))
+    expect(back.screen).toBe('village')
+    expect(again.cave.visited).toEqual([AREA.mountain])
+    expect(again.deeds).toEqual(['took the trail'])
   })
 })
 

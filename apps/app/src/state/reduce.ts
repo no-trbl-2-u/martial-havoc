@@ -43,6 +43,7 @@ import {
   toggleFlag,
   toSilver,
   unexpectedEvent,
+  withArea,
   withFlag,
 } from '@martial-havoc/engine'
 import type { DiceSource } from '@martial-havoc/engine'
@@ -266,6 +267,31 @@ const doLootOf = (state: RecordState, foeId: string, dice: DiceSource, gift = fa
   if (row === undefined || hint) return next
   const took = row.treasure !== null ? treasureName(row.treasure) : row.item
   return addDeed(next, fill(t('ui.deed.took'), { name: took }))
+}
+
+/**
+ * Take the trail out of Fen Pass: the climax of the first act.
+ *
+ * This is the one move that turns a made Master into a Master in an
+ * adventure, and it does exactly two things. It records the arrival —
+ * `withArea` on the start area, which is the first entry in `visited`
+ * and the reason `beginAdventure` leaves that list empty (Phase 10b) —
+ * and it writes the deed, so the ledger carries the point of no return
+ * the way it carries every other thing worth being sorry about.
+ *
+ * Idempotent on the arrival: `withArea` includes rather than appends, so
+ * walking back down to the village and up again does not record the
+ * mountain twice or reset anything about the cave.
+ */
+const doTrail = (state: RecordState): RecordState => {
+  const already = state.cave.visited.includes(TABLES.meta.startArea)
+  const climbed = {
+    ...state,
+    screen: 'beat' as const,
+    villageNote: null,
+    cave: withArea(state.cave, TABLES.meta.startArea),
+  }
+  return already ? climbed : addDeed(climbed, t('ui.deed.trail'))
 }
 
 /** Free the rescue here (I-39): recorded, then rewarded with their LOOT line. */
@@ -787,6 +813,11 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return doGourd(state)
     case 'cave.leave':
       return state.pending.length > 0 ? state : { ...state, screen: 'region', result: null, roll: null }
+    // The way back down. The mountain's only exit off the adventure is
+    // the trail it was reached by (Phase 10b): the region is the
+    // ending's business, the village is the doorstep's.
+    case 'cave.village':
+      return state.pending.length > 0 ? state : { ...state, screen: 'village', result: null, roll: null }
     case 'roll.manual':
       return { ...state, byHand: !state.byHand, manual: [] }
     case 'roll':
@@ -892,7 +923,7 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
     case 'village.inn':
       return doInn(state)
     case 'village.trail':
-      return { ...state, screen: 'beat', villageNote: null }
+      return doTrail(state)
 
     case 'creation.begin':
       return state.creation === null
@@ -900,7 +931,10 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
         : {
             ...state,
             creation: null,
-            screen: 'beat',
+            // A made Master wakes in Fen Pass, not on the mountain
+            // (Phase 10b): the premise is read as the Call before the
+            // first roll, and the trail is the point of no return.
+            screen: 'village',
             sheet: finishCreation(state.creation),
             // R03's gold, in the silver prices are compared at.
             silver: toSilver({ gp: finishCreation(state.creation).gold }),

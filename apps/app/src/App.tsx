@@ -25,6 +25,7 @@ import { skillAfterTraining } from './state/creation'
 import type { RecordState } from './state/types'
 import { Binding } from './components/Binding'
 import { Header } from './components/Header'
+import { home } from './lib/opening'
 import { Leaf } from './components/Leaf'
 import { BeatScreen } from './screens/BeatScreen'
 import { CreationScreen } from './screens/CreationScreen'
@@ -80,7 +81,12 @@ export const App = () => {
         <Leaf page={opened ? state.screen : 'title'}>
           {opened ? (
           <View style={styles.page}>
-          <Header screen={state.screen} nav={!making} onNav={(screen) => dispatch({ type: 'nav', screen })} />
+          <Header
+            screen={state.screen}
+            nav={!making}
+            home={home(state)}
+            onNav={(screen) => dispatch({ type: 'nav', screen })}
+          />
           {/* No header while making a Master: the strip starts the page. */}
           <View style={[styles.strip, making && styles.stripFirst]}>
             <AttributeStrip values={stripValues(state)} />

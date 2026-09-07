@@ -27,15 +27,20 @@ import type { Result } from '../state/types'
 
 /**
  * Every moment the app can narrate, in the order a playthrough meets
- * them: the two checks, the Event on entering an area, what a body or a
- * rescue gave, a treasure lifted, a night's rest, and the three ways a
- * fight ends.
+ * them: the Call in the village (Phase 10b), the two checks, the Event
+ * on entering an area, what a body or a rescue gave, a treasure lifted,
+ * a night's rest, and the three ways a fight ends.
+ *
+ * `call` is the one moment that is not a `Result`. It belongs to a
+ * screen rather than to something that happened, so `momentOf` never
+ * returns it and the village screen names it directly.
  *
  * This constant is the contract between the screens and the content
  * package. Adding a moment means adding it here *and* writing its line;
  * the test refuses either one alone.
  */
 export const NARRATOR_MOMENTS: readonly string[] = Object.freeze([
+  'call',
   'check.skill.passed',
   'check.skill.failed',
   'check.luck.passed',

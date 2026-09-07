@@ -78,10 +78,25 @@ const including = (list: readonly string[], value: string): readonly string[] =>
 /**
  * The state an adventure begins in.
  *
- * The Master stands in the `startArea` and has visited it; every flag is
- * at the `initial` its record declares; nothing else has happened yet.
- * Throws {@link UnsupportedAdventure} on a format version this engine
- * does not read.
+ * The Master stands in the `startArea` and has **not** visited it; every
+ * flag is at the `initial` its record declares; nothing else has
+ * happened yet. Throws {@link UnsupportedAdventure} on a format version
+ * this engine does not read.
+ *
+ * The empty `visited` is Phase 10b's, and it is a distinction the
+ * adventure format did not previously draw: *standing where a scene
+ * starts* is not the same as *having entered it*. A Master who has made
+ * their Master but not yet taken the trail out of Fen Pass is at the
+ * foot of the Flat-top mountain in the sense that it is where they will
+ * arrive, and nowhere near it in the sense that matters. Recording the
+ * start area at creation collapsed the two and left the app with no way
+ * to ask "has this begun?" — which is exactly what an opening act needs
+ * to know.
+ *
+ * A caller marks the arrival with {@link withArea} on the start area, at
+ * the moment the Master actually walks in. Everything that reads
+ * `visited` — the `enter` act condition, an opening slip that shows
+ * until the first move — reads the truthful answer either way.
  */
 export const beginAdventure = (tables: AdventureTables): AdventureState => {
   if (!SUPPORTED_FORMAT_VERSIONS.includes(tables.meta.version))
@@ -89,7 +104,7 @@ export const beginAdventure = (tables: AdventureTables): AdventureState => {
   return Object.freeze({
     adventure: tables.meta.id,
     area: tables.meta.startArea,
-    visited: Object.freeze([tables.meta.startArea]),
+    visited: Object.freeze([]),
     flags: Object.freeze(
       Object.fromEntries(tables.flags.map((flag) => [flag.flag, flag.initial])),
     ),

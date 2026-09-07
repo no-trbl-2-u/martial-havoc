@@ -41,20 +41,10 @@ const actionOf = (option: BeatOption): Action => {
       return { type: 'cave.gourd' }
     case 'leave':
       return { type: 'cave.leave' }
+    case 'village':
+      return { type: 'cave.village' }
   }
 }
-
-/**
- * The book's opening stays on the page until the Master has done or
- * seen anything: still on the start area, nothing visited past it, no
- * deed recorded. After that it lives under ABOUT.
- */
-const premiseFor = (state: RecordState): string | null =>
-  state.cave.area === theFiveTreasures.meta.startArea &&
-  state.cave.visited.length <= 1 &&
-  state.deeds.length === 0
-    ? theFiveTreasuresMeta.premise
-    : null
 
 export const BeatScreen = ({ state, dispatch }: Props) => {
   const area = theFiveTreasuresAreaById(state.cave.area)
@@ -74,7 +64,6 @@ export const BeatScreen = ({ state, dispatch }: Props) => {
     <SheetBeat
       state={state}
       dispatch={dispatch}
-      premise={premiseFor(state)}
       area={area}
       hint={hintFor(theFiveTreasures, state.cave, area.id)}
       ending={ending(theFiveTreasures, state.cave)}

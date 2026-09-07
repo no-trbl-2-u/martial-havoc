@@ -202,10 +202,12 @@ const tables = (over: Partial<AdventureTables> = {}): AdventureTables => ({
 // ------------------------------------------------------------------ state
 
 describe('beginAdventure', () => {
-  it('stands the Master in the start area with every flag at its initial', () => {
+  it('stands the Master in the start area, not yet having entered it, with every flag at its initial', () => {
     const state = beginAdventure(tables())
     expect(state.area).toBe('area.test.hall')
-    expect(state.visited).toEqual(['area.test.hall'])
+    // Standing where a scene starts is not having entered it: the
+    // arrival is recorded by whoever walks the Master in (Phase 10b).
+    expect(state.visited).toEqual([])
     expect(state.flags).toEqual({ dark: false })
     expect(state.treasures).toEqual([])
     expect(state.dishonor).toBe(0)
@@ -301,7 +303,9 @@ describe('the area graph and its locks', () => {
     const opened = enterArea(t, withKey(state, 'key.test'), 'area.test.vault')
     expect(opened.passage.ok).toBe(true)
     expect(opened.state.area).toBe('area.test.vault')
-    expect(opened.state.visited).toEqual(['area.test.hall', 'area.test.vault'])
+    // The hall is absent because this Master was never walked into it:
+    // `beginAdventure` places, `withArea` records (Phase 10b).
+    expect(opened.state.visited).toEqual(['area.test.vault'])
   })
 })
 

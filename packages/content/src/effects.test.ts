@@ -33,10 +33,10 @@ const CLASSES = ['mechanical', 'combat-narrative', 'exploration', 'oracle-like',
 const TECHNIQUE_TIMINGS = ['immediate', 'combat-winner-option', 'scene']
 
 describe('the count (spec.md: readable from the build)', () => {
-  it('ships exactly 181 authored lines', () => {
+  it('ships exactly 182 authored lines', () => {
     // Phase 4's 149, Phase 5's 8 area lines and 5 act markers, and
-    // Phase 10a's 19 narrator lines, one per moment of play.
-    expect(contentCounts().authoredLines).toBe(181)
+    // Phase 10a's 19 narrator lines, and Phase 10b's Call, one per moment of play.
+    expect(contentCounts().authoredLines).toBe(182)
   })
 
   it('is 72 effects, 66 Oracle lines and 11 Unexpected Event lines', () => {
@@ -53,8 +53,8 @@ describe('the count (spec.md: readable from the build)', () => {
   })
 
   it("adds the narrator: one line per moment of play he speaks at", () => {
-    expect(resultLines).toHaveLength(19)
-    expect(contentCounts().byFile['app.result-lines']).toBe(19)
+    expect(resultLines).toHaveLength(20)
+    expect(contentCounts().byFile['app.result-lines']).toBe(20)
   })
 })
 

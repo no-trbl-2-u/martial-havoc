@@ -26,6 +26,10 @@ const begin = async (page: Page) => {
   await page.getByTestId('title-start').click()
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
+  // Phase 10b: BEGIN lands in Fen Pass; the trail is the way onto the
+  // mountain and spends no `?dice=` faces either.
+  await expect(page.getByTestId('village')).toBeVisible()
+  await page.getByTestId('village-go').click()
   await expect(page.getByTestId('beat')).toBeVisible()
 }
 

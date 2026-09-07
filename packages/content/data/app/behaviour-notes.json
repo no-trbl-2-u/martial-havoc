@@ -634,6 +634,13 @@
       "title": "An adventure written for a newer build is refused, not guessed at"
     },
     {
+      "id": "note.adventure.the-start-area-is-not-visited-until-entered",
+      "cite": "plan/phases/phase_10b_the_opening.md",
+      "ref": "adventure.the-start-area-is-not-visited-until-entered",
+      "title": "Standing where an adventure starts is not the same as having entered it",
+      "text": "A Master who has just been made stands at the adventure's start area but has not visited it. The visit is recorded when they actually walk in - out of Fen Pass and up the trail - which is what lets the app tell an adventure that has not begun from one that has. The book draws no such line; this one is ours."
+    },
+    {
       "id": "note.adventure.event-on-entering-an-area",
       "cite": "5T a1",
       "ref": "adventure.event-on-entering-an-area",

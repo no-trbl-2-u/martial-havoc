@@ -14,16 +14,34 @@
  * Every blurb and every price on this screen is data. The village is
  * `invention`, its procedures are `rule`, and the rules panel says so
  * for each — this file only arranges them.
+ *
+ * Phase 10b made this the screen a made Master opens on, and gave it a
+ * first act. THE CALL is the book's own premise (5T a1) under a heading
+ * of ours, with the narrator's line under that: who the Master is,
+ * where they are going and why, read before the first roll rather than
+ * discovered after it (MH p.84, Act I). It shows until the trail is
+ * taken and never again — a Call that keeps calling after the Master
+ * has answered is a notice board, not an opening.
  */
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import { INCENSE_ID, market, t, villageLocations, villageTrail } from '@martial-havoc/content'
+import {
+  INCENSE_ID,
+  market,
+  t,
+  theFiveTreasuresMeta,
+  villageLocations,
+  villageTrail,
+} from '@martial-havoc/content'
 import { fromSilver } from '@martial-havoc/engine'
 import { fill } from '../lib/fill'
+import { narrate } from '../lib/narrator'
+import { hasBegun } from '../lib/opening'
 import type { Action, RecordState } from '../state/types'
 import { color, font } from '../theme/tokens'
 import { Button } from '../components/Button'
 import { Die } from '../components/Die'
 import { MenuButton } from '../components/MenuButton'
+import { Narrator } from '../components/Narrator'
 import { Slip } from '../components/Slip'
 import { Source } from '../components/Source'
 
@@ -42,9 +60,26 @@ const priceOf = (gp: number | null, sp: number | null): string =>
 
 export const VillageScreen = ({ state, dispatch }: Props) => {
   const purse = fromSilver(state.silver)
+  const call = hasBegun(state) ? null : narrate('call', state.sheet.name)
   return (
     <View style={styles.screen} testID="village">
       <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
+        {call === null ? null : (
+          <Slip style={styles.place} testID="call">
+            <View style={styles.head}>
+              <Text style={styles.name}>{t('ui.village.call.title')}</Text>
+            </View>
+            <Text style={styles.blurb}>{theFiveTreasuresMeta.premise}</Text>
+            <View style={styles.callFoot}>
+              <Narrator testID="call-narrator" line={call} style={styles.callNarrator} />
+              <View style={styles.noteRow}>
+                <Text style={styles.note2}>{t('ui.village.call.note')}</Text>
+                <Source cite={theFiveTreasuresMeta.cite} />
+              </View>
+            </View>
+          </Slip>
+        )}
+
         <Slip style={styles.purse}>
           <Text testID="village-purse" style={styles.purseText}>
             {fill(t('ui.village.purse'), { gp: purse.gp, sp: purse.sp })}
@@ -159,6 +194,9 @@ const styles = StyleSheet.create({
   cite: { borderTopWidth: 2, borderTopColor: color.ink, paddingVertical: 5, paddingHorizontal: 9 },
   noteRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 },
   place: { marginTop: 10, marginHorizontal: 14 },
+  /** The Call's foot: his line, then the act note and the folio. */
+  callFoot: { paddingHorizontal: 9, paddingBottom: 9, gap: 7 },
+  callNarrator: { marginTop: 0, paddingTop: 0, borderTopWidth: 0 },
   head: { paddingVertical: 6, paddingHorizontal: 9, backgroundColor: color.ink },
   name: { fontFamily: font.sans, fontSize: 11, fontWeight: '800', letterSpacing: 0.9, color: color.paper },
   blurb: { fontFamily: font.serif, fontSize: 14, lineHeight: 20, padding: 9 },

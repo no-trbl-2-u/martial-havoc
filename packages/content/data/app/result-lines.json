@@ -9,6 +9,12 @@
   "docs": "docs/index.md",
   "records": [
     {
+      "id": "narrator.call",
+      "cite": "plan/VOICE.md",
+      "moment": "call",
+      "line": "Fen Pass is the last place with a roof between here and the fiends. {name} has heard what is up there and is going anyway."
+    },
+    {
       "id": "narrator.check.skill.passed",
       "cite": "plan/VOICE.md",
       "moment": "check.skill.passed",

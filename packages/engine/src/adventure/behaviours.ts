@@ -18,6 +18,11 @@ export const adventureBehaviours: readonly Behaviour[] = Object.freeze([
     cite: 'packages/content/schema/adventure-format.md',
   },
   {
+    id: 'adventure.the-start-area-is-not-visited-until-entered',
+    label: 'invention',
+    cite: 'plan/phases/phase_10b_the_opening.md',
+  },
+  {
     id: 'adventure.event-on-entering-an-area',
     label: 'rule',
     cite: '5T a1',

@@ -88,7 +88,13 @@ test('a Master is made by walking the book’s order', async ({ page }) => {
   await expect(page.getByTestId('ready-learned')).toHaveText('Acupuncture')
   await page.getByTestId('creation-begin').click()
 
-  // The made Master is the one now playing.
+  // The made Master is the one now playing, and they wake in Fen Pass
+  // with the Call in front of them (Phase 10b), not on the mountain.
+  await expect(page.getByTestId('village')).toBeVisible()
+  await expect(page.getByTestId('call')).toContainText(
+    'On the Flat-top mountain two fiends threaten the travellers',
+  )
+  await page.getByTestId('village-go').click()
   await expect(page.getByTestId('beat')).toBeVisible()
   await expect(page.getByTestId('attr-skill')).toHaveText(String(skill - 1))
   await expect(page.getByTestId('attr-endurance')).toHaveText(String(endurance))
@@ -113,7 +119,7 @@ test('creation reports an overspend and still lets the Master begin', async ({ p
   await page.getByTestId('creation-next').click()
   await page.getByTestId('creation-begin').click()
   // Reported, not blocked.
-  await expect(page.getByTestId('beat')).toBeVisible()
+  await expect(page.getByTestId('village')).toBeVisible()
 })
 
 test('a made Master wins a fight', async ({ page }) => {
@@ -125,6 +131,7 @@ test('a made Master wins a fight', async ({ page }) => {
   await page.getByTestId('preset-preset.san-te').click()
   await expect(page.getByTestId('step-ready')).toBeVisible()
   await page.getByTestId('creation-begin').click()
+  await page.getByTestId('village-go').click()
   await expect(page.getByTestId('beat')).toBeVisible()
 
   for (const exit of [/TO THE CAVE ENTRANCE/, /TO THE DINING HALL/, /TO THE ATTENDANTS ROOM/]) {
@@ -144,7 +151,8 @@ test('a made Master wins a fight', async ({ page }) => {
   await expect(button(page, 'FIGHT IS OVER')).toBeVisible()
   await page.getByTestId('act-loot').click()
   await page.getByTestId('act-go-on').click()
-  await expect(page.getByText('DEEDS 2')).toBeVisible()
+  // Three: the trail, the kill and the key (Phase 10b added the first).
+  await expect(page.getByText('DEEDS 3')).toBeVisible()
 })
 
 /**
@@ -204,6 +212,7 @@ test('the record shows what was played, and reads its own export back', async ({
   await page.getByTestId('title-start').click()
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
+  await page.getByTestId('village-go').click()
 
   // Do something worth recording: walk to the Ghost and win the fight.
   for (const exit of [/TO THE CAVE ENTRANCE/, /TO THE DINING HALL/, /TO THE ATTENDANTS ROOM/]) {
@@ -219,7 +228,10 @@ test('the record shows what was played, and reads its own export back', async ({
 
   await button(page, 'RECORD').click()
   await expect(page.getByTestId('record')).toBeVisible()
-  await expect(page.getByTestId('record-counts')).toContainText('2 DEEDS')
+  // Three now: taking the trail is the first act's climax and the
+  // ledger carries it (Phase 10b).
+  await expect(page.getByTestId('record-counts')).toContainText('3 DEEDS')
+  await expect(page.getByTestId('record-deeds')).toContainText('took the trail')
   await expect(page.getByTestId('record-deeds')).toContainText('dexterous ghost')
   await expect(page.getByTestId('record-deeds')).toContainText("private quarter's key")
 
@@ -229,7 +241,7 @@ test('the record shows what was played, and reads its own export back', async ({
   await page.getByTestId('record-paste').fill(json)
   await page.getByTestId('record-read').click()
   await expect(page.getByTestId('record-import-note')).toHaveText('Campaign read.')
-  await expect(page.getByTestId('record-counts')).toContainText('2 DEEDS')
+  await expect(page.getByTestId('record-counts')).toContainText('3 DEEDS')
 })
 
 test('an unreadable import says which kind of unreadable it was', async ({ page }) => {
