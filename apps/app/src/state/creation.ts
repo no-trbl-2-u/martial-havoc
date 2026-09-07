@@ -40,6 +40,8 @@ import {
   martialArts,
   presetById,
   presetNameResolution,
+  adventureHookById,
+  presets,
   ritualById,
   ritualByName,
   rituals,
@@ -61,6 +63,7 @@ export const emptyCreation = (): CreationState => ({
   step: 'who',
   name: '',
   age: '',
+  motiveId: null,
   presetId: null,
   status: null,
   skill: null,
@@ -78,6 +81,29 @@ export const emptyCreation = (): CreationState => ({
 /** The martial art chosen or rolled so far, if any. */
 export const artOf = (c: CreationState): MartialArt | undefined =>
   c.martialArtId === null ? undefined : martialArtById(c.martialArtId)
+
+/**
+ * The motive as it goes onto the sheet, or null (MH p.36-39; Phase 10j).
+ *
+ * The creation carries the hook's id; the sheet carries its printed
+ * sentence, because the sheet is what RECORD and the export read and an
+ * id there would make a Master's own story a lookup into a table this
+ * build happens to ship.
+ */
+export const motiveOf = (c: CreationState): Sheet['motive'] => {
+  const hook = c.motiveId === null ? undefined : adventureHookById(c.motiveId)
+  return hook === undefined ? null : { id: hook.id, text: hook.text }
+}
+
+/**
+ * The film a printed sheet came from, or null (MH p.92; Phase 10j).
+ *
+ * "Beggar So ... from Drunken master (1978)": the book's own Masters
+ * have pasts, printed beside them, and a Master made from one of the
+ * eight sheets carries that line rather than an Adventures-table hook.
+ */
+export const presetFrom = (c: CreationState): string | null =>
+  (c.presetId === null ? undefined : presets.find((p) => p.id === c.presetId)?.from) ?? null
 
 /** R01: the typed age as a number, or null when it is blank or not one. */
 export const ageOf = (c: CreationState): number | null => {
@@ -317,6 +343,9 @@ export const finishCreation = (c: CreationState): Sheet => {
     // Creation spends its own resource pool; this is the one that opens
     // afterwards, when a Training point is bought with XP (R16).
     resources: 0,
+    // Why this Master is on the road (MH p.36-39): rolled or chosen at
+    // creation, or left null by a player who would rather not say.
+    motive: motiveOf(c),
     martialArtId: c.martialArtId,
     skill: skill - c.training,
     skillInitial: c.skill?.initial ?? skill,

@@ -20,6 +20,7 @@
  */
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import {
+  adventureHooks,
   marketItemByName,
   martialArts,
   presets,
@@ -35,6 +36,8 @@ import { fill } from '../lib/fill'
 import {
   artOf,
   equipmentOf,
+  motiveOf,
+  presetFrom,
   flagsOf,
   pool,
   resourcePool,
@@ -118,6 +121,38 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
                 text={t('ui.creation.who.roll')}
                 onPress={() => dispatch({ type: 'creation.roll' })}
               />
+            </Step>
+            {/*
+              Why this Master is on the road (MH p.36-39, R50; Phase
+              10j). The book's own table of thirty-six, rolled or
+              chosen. It changes no table of its own: it is the Master's
+              story, and a thread the sandbox may pick up (MH p.88).
+            */}
+            <Step
+              title={t('ui.creation.motive.title')}
+              note={t('ui.creation.motive.note')}
+              source={t('ui.creation.motive.source')}
+              testID="step-motive"
+            >
+              <Text testID="creation-motive" style={styles.reading}>
+                {motiveOf(c)?.text ?? t('ui.creation.motive.none')}
+              </Text>
+              <Button
+                testID="creation-roll-motive"
+                primary
+                text={t('ui.creation.motive.roll')}
+                onPress={() => dispatch({ type: 'creation.motive.roll' })}
+              />
+              {adventureHooks.map((hook) => (
+                <MenuButton
+                  key={hook.id}
+                  testID={`motive-${hook.id}`}
+                  title={String(hook.d66)}
+                  note=""
+                  line={hook.text}
+                  onPress={() => dispatch({ type: 'creation.motive', id: hook.id })}
+                />
+              ))}
             </Step>
             <Step
               title={t('ui.creation.presets.title')}
@@ -329,6 +364,17 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
               <Value label={t('ui.attr.luck')} value={c.luck?.current ?? 0} />
               <Value label={t('ui.attr.gold')} value={c.status?.gold ?? 0} />
             </View>
+            {/* The Master's own story, and the film a printed sheet came from. */}
+            {motiveOf(c) === null ? null : (
+              <Text testID="ready-motive" style={styles.reading}>
+                {motiveOf(c)?.text ?? ''}
+              </Text>
+            )}
+            {presetFrom(c) === null ? null : (
+              <Text testID="ready-from" style={styles.reading}>
+                {fill(t('ui.creation.ready.from'), { from: presetFrom(c) ?? '' })}
+              </Text>
+            )}
             <Text style={styles.label}>{t('ui.creation.ready.learned')}</Text>
             <Text testID="ready-learned" style={styles.reading}>
               {[

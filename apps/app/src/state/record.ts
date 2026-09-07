@@ -47,6 +47,9 @@ export const sheetFor =
       /** Invented in play, never at creation (R31). */
       learned: [],
       resources: 0,
+      // A printed sheet is a Master from a film, and the film is their
+      // story; the Adventures table is for one a player made.
+      motive: null,
       martialArtId: art?.id ?? null,
       skill: preset.skill,
       skillInitial: preset.skill + preset.training,
@@ -100,6 +103,7 @@ export const newRecord = (dice: DiceSource): RecordState => ({
   // table into a component (agents.md rule 7).
   scores: blankScores(),
   scoresBanked: false,
+  prompt: null,
   overrides: 0,
   deeds: [],
   actsSeen: [],

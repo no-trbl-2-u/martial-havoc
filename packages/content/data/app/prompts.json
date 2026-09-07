@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schema/content.schema.json",
+  "id": "app.prompts",
+  "kind": "list",
+  "title": "Prompts",
+  "cite": "plan/VOICE.md",
+  "label": "invention",
+  "docs": "docs/index.md",
+  "records": [
+    {
+      "id": "prompt.unexpected-event",
+      "cite": "plan/VOICE.md",
+      "moment": "unexpected-event",
+      "text": "What happened while the weapons were crossed?"
+    },
+    {
+      "id": "prompt.kill",
+      "cite": "plan/VOICE.md",
+      "moment": "kill",
+      "text": "What did it cost?"
+    },
+    {
+      "id": "prompt.rescue",
+      "cite": "plan/VOICE.md",
+      "moment": "rescue",
+      "text": "What did they say?"
+    },
+    {
+      "id": "prompt.treasure",
+      "cite": "plan/VOICE.md",
+      "moment": "treasure",
+      "text": "What does it feel like in your hand?"
+    }
+  ]
+}

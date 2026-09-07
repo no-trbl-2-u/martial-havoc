@@ -125,6 +125,15 @@ export type RecordedMaster = {
    * phase that brings a second will need the set, and will say so.
    */
   readonly adventureScored?: boolean
+  /**
+   * Why this Master is on the road (MH p.36-39, R50; Phase 10j).
+   *
+   * The hook's id and its printed sentence, both, because the sentence
+   * is what a reader of the export wants and the id is what a later
+   * build would match against the table. Optional and unversioned, for
+   * the reason {@link CampaignRecord.actsSeen} gives.
+   */
+  readonly motive?: { readonly id: string; readonly text: string } | null
 }
 
 /**

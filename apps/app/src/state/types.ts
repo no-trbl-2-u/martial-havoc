@@ -29,6 +29,7 @@ import type {
   UnexpectedEventRoll,
 } from '@martial-havoc/engine'
 import { XP_CATEGORIES } from '@martial-havoc/engine'
+import type { PromptMoment } from '@martial-havoc/content'
 
 /**
  * One line of the chronicle, re-exported from the engine (Phase 10h).
@@ -116,6 +117,14 @@ export type CreationState = {
   /** R01: name and age. Age is typed as text and read as a number when it is one. */
   readonly name: string
   readonly age: string
+  /**
+   * The Adventures-table hook the player rolled or chose, or null
+   * (MH p.36-39, R50; Phase 10j).
+   *
+   * An id rather than the text: the table is content and a creation
+   * that carried a sentence would be a creation carrying a copy of it.
+   */
+  readonly motiveId: string | null
   /** Set when the player took one of the eight printed sheets (R83). */
   readonly presetId: string | null
   /** R02, R03: the social band and the gold its dice gave. */
@@ -194,6 +203,17 @@ export type Sheet = {
    * the pool that opens afterwards.
    */
   readonly resources: number
+  /**
+   * Why this Master is on the road (MH p.36-39, R50; Phase 10j).
+   *
+   * A hook from the book's own Adventures table, rolled or chosen at
+   * creation and printed as the Master's own story. It never changes a
+   * table: it is text on the sheet and a thread for the sandbox to pick
+   * up (MH p.88, "pick up one of the narrative threads left
+   * unresolved"). Null for a Master made before this phase, or one who
+   * declined to have one.
+   */
+  readonly motive: { readonly id: string; readonly text: string } | null
   /**
    * The Techniques this Master invented off landed Final Blows (R31).
    *
@@ -634,6 +654,15 @@ export type RecordState = {
    * reason.
    */
   readonly scoresBanked: boolean
+  /**
+   * The prompt the passage field is open with, or null (Phase 10j).
+   *
+   * The book asks the player to imagine and prints no question; these
+   * are the questions, and they arrive at the moment rather than as a
+   * permanently open box. Nothing is ever required: the field can be
+   * walked away from, and the prompt goes with it.
+   */
+  readonly prompt: PromptMoment | null
   /** What has been pasted into the import field, unread. */
   readonly importDraft: string
   /** What the last import attempt said, or null. Already worded. */
@@ -735,6 +764,12 @@ export type Action =
   | { readonly type: 'village.trail' }
   | { readonly type: 'record.draft'; readonly text: string }
   | { readonly type: 'record.import' }
+  /** Roll the Adventures table for a motive (MH p.36-39, R50). */
+  | { readonly type: 'creation.motive.roll' }
+  /** Take one hook of the thirty-six as the motive. */
+  | { readonly type: 'creation.motive'; readonly id: string }
+  /** Dismiss the prompt without writing: nothing is required. */
+  | { readonly type: 'prompt.dismiss' }
   /** One of R43's four scores, 1-3. */
   | { readonly type: 'ending.score'; readonly category: XpCategoryName; readonly value: number }
   /** Bank the four scores as XP, once (R43). */

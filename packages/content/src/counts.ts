@@ -56,6 +56,7 @@ import caveMomentum from '../data/campaigns/the-5-treasures/momentum.json'
 import strings from '../data/app/strings.json'
 import behaviourNotes from '../data/app/behaviour-notes.json'
 import resultLines from '../data/app/result-lines.json'
+import prompts from '../data/app/prompts.json'
 
 /** The minimum every content file exposes for counting. */
 type CountedFile = {
@@ -109,6 +110,7 @@ const registry: readonly CountedFile[] = Object.freeze([
   strings,
   behaviourNotes,
   resultLines,
+  prompts,
 ])
 
 /** The files whose every record carries a line authored for this build. */
@@ -119,6 +121,7 @@ const authored: readonly CountedFile[] = Object.freeze([
   caveAreas,
   caveActs,
   resultLines,
+  prompts,
 ])
 
 /** What {@link contentCounts} reports. */

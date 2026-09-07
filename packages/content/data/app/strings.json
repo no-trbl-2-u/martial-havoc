@@ -1783,6 +1783,46 @@
       "cite": "design/roll-modal/README.md"
     },
     {
+      "id": "ui.passage.dismiss",
+      "text": "NOT NOW",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.creation.motive.title",
+      "text": "WHY ARE YOU ON THE ROAD",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.creation.motive.note",
+      "text": "Rolled or chosen. It changes no table; it is your story.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.creation.motive.source",
+      "text": "MH p.36-39 - R50",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.creation.motive.roll",
+      "text": "ROLL THE ADVENTURES TABLE",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.creation.motive.none",
+      "text": "No reason given. The road is reason enough.",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.creation.ready.from",
+      "text": "from {from}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.record.master.motive",
+      "text": "{text}",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
       "id": "ui.map.cave.title",
       "text": "THE LOTUS FLOWER CAVE",
       "cite": "design/roll-modal/README.md"

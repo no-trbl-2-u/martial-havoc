@@ -10,10 +10,11 @@
  */
 import { describe, expect, it } from 'vitest'
 import { XP_CATEGORIES, actFor, fromSequence, skillBand, withDefeated, withKey } from '@martial-havoc/engine'
-import { theFiveTreasures } from '@martial-havoc/content'
+import { promptFor, rollAdventureHook, theFiveTreasures } from '@martial-havoc/content'
 import type { Die } from '@martial-havoc/engine'
 import { randomSource } from '../dice/random'
 import { fromCampaign, toCampaign } from './campaign'
+import { motiveOf } from './creation'
 import { menuFor } from './menu'
 import { newRecord } from './record'
 import { awardFor, fullyScored, reduce } from './reduce'
@@ -1550,5 +1551,95 @@ describe('the ending scores the adventure (Phase 10i)', () => {
     expect(back.sheet.xp).toBe(0)
     expect(back.sheet.resources).toBe(0)
     expect(back.scoresBanked).toBe(false)
+  })
+})
+
+describe('who the Master is, and the player’s own words (Phase 10j)', () => {
+  it('rolls a motive off the Adventures table, at the book’s own address', () => {
+    const started = reduce(newRecord(randomSource(() => 0.5)), { type: 'nav', screen: 'creation' }, fromSequence([]))
+    // 3 then 5: the d66 address 35 (MH p.36-39, R50).
+    const rolled = reduce(started, { type: 'creation.motive.roll' }, fromSequence([3, 5]))
+    expect(rolled.creation?.motiveId).toBe('hook.35')
+    expect(motiveOf(rolled.creation as NonNullable<RecordState['creation']>)?.text).toBe(
+      rollAdventureHook(3, 5)?.text,
+    )
+  })
+
+  it('takes a chosen hook, and refuses one the table does not print', () => {
+    const started = newRecord(randomSource(() => 0.5))
+    const chosen = reduce(started, { type: 'creation.motive', id: 'hook.11' }, fromSequence([]))
+    expect(chosen.creation?.motiveId).toBe('hook.11')
+    expect(reduce(chosen, { type: 'creation.motive', id: 'hook.99' }, fromSequence([]))).toBe(chosen)
+  })
+
+  it('carries the motive onto the sheet, and through an export', () => {
+    const hook = rollAdventureHook(1, 1)
+    const base = fresh()
+    const withMotive: RecordState = {
+      ...base,
+      sheet: { ...base.sheet, motive: { id: hook?.id ?? '', text: hook?.text ?? '' } },
+    }
+    const back = fromCampaign(toCampaign(withMotive), fresh())
+    expect(back.sheet.motive?.text).toBe(hook?.text)
+  })
+
+  it('reads a record written before this phase as a Master who never said', () => {
+    const older = toCampaign(fresh())
+    const { motive: _m, ...master } = older.master
+    expect(fromCampaign({ ...older, master }, fresh()).sheet.motive).toBeNull()
+  })
+
+  it('asks after a treasure is taken, and the question is not required', () => {
+    const s = play(fresh(), [
+      ...walk(AREA.entrance),
+      ...walk(AREA.storage),
+      [{ type: 'cave.take', treasure: GOURD }, []],
+    ])
+    expect(s.prompt).toBe('treasure')
+    expect(promptFor('treasure')?.text).toBe('What does it feel like in your hand?')
+    // Walking on without writing is allowed, and clears it.
+    expect(reduce(s, { type: 'prompt.dismiss' }, fromSequence([])).prompt).toBeNull()
+  })
+
+  it('asks after a rescue', () => {
+    const s = play(fresh(), [
+      ...walk(AREA.entrance),
+      ...walk(AREA.storage),
+      ...walk(AREA.kitchen),
+      [{ type: 'cave.rescue' }, [1]],
+    ])
+    expect(s.prompt).toBe('rescue')
+  })
+
+  it('asks after a kill, and after an Unexpected Event instead where both land', () => {
+    const killed = play(toGhost(), [
+      [{ type: 'cave.fight', foe: GHOST }, []],
+      ...finish(),
+      [{ type: 'combat.leave' }, []],
+    ])
+    expect(killed.prompt).toBe('kill')
+
+    // A tie ends the phase on an Unexpected Event, and that is the
+    // moment the book itself tells the player to imagine (MH p.27-28).
+    const tied = play(toGhost(), [
+      [{ type: 'cave.fight', foe: GHOST }, []],
+      [{ type: 'combat.round' }, [3, 4, 4, 4, 2, 3]],
+      [{ type: 'combat.leave' }, []],
+    ])
+    expect(tied.prompt).toBe('unexpected-event')
+  })
+
+  it('keeps a passage written under a prompt, and closes the prompt with it', () => {
+    const s = play(fresh(), [
+      ...walk(AREA.entrance),
+      ...walk(AREA.storage),
+      [{ type: 'cave.take', treasure: GOURD }, []],
+      [{ type: 'draft', text: 'He looked at the door, not at me.' }, []],
+      [{ type: 'passage.keep' }, []],
+    ])
+    expect(s.prompt).toBeNull()
+    expect(s.passages).toEqual(['He looked at the door, not at me.'])
+    // The chronicle carries it where it was written (Phase 10h).
+    expect(s.chronicle.at(-1)).toMatchObject({ kind: 'passage', area: 'Storage room' })
   })
 })

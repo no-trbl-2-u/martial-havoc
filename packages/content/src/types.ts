@@ -122,6 +122,24 @@ export type Opponent = BaseRecord & {
   readonly notes: string
 }
 
+/** A moment the book asks the player to imagine, and the app asks too. */
+export type PromptMoment = 'unexpected-event' | 'kill' | 'rescue' | 'treasure'
+
+/**
+ * One question the app puts to the player (Phase 10j).
+ *
+ * Ours, not the book's - "the rulebook gives you the tools, the story
+ * comes from your imagination" (MH p.3), and the book asks the player to
+ * imagine at the tie (MH p.27-28) without printing a question. These
+ * are the questions, one per moment. They are not the narrator's - he
+ * speaks about the Master and never to the player - so they are the one
+ * authored line in the build that uses the second person, on purpose.
+ */
+export type Prompt = BaseRecord & {
+  readonly moment: PromptMoment
+  readonly text: string
+}
+
 /** Which Market list an item is printed on. */
 export type MarketList = 'common' | 'weapons' | 'expedition' | 'armor'
 

@@ -39,7 +39,8 @@ export type { ContentCounts } from './counts'
 import strings from '../data/app/strings.json'
 import notesFile from '../data/app/behaviour-notes.json'
 import resultLinesFile from '../data/app/result-lines.json'
-import type { BehaviourNote, NarratorLine } from './types'
+import promptsFile from '../data/app/prompts.json'
+import type { BehaviourNote, NarratorLine, Prompt, PromptMoment } from './types'
 
 /** One UI string record: what it says and where it comes from. */
 export type StringRecord = {
@@ -74,6 +75,23 @@ export const t = stringById(appStrings)
 export const behaviourNotes: readonly BehaviourNote[] = Object.freeze(
   notesFile.records as readonly BehaviourNote[],
 )
+
+/**
+ * The questions the app puts to the player (Phase 10j).
+ *
+ * One per moment the book asks them to imagine. Ours, and deliberately
+ * **not** the narrator's: Old Ping speaks about the Master and never to
+ * the player, and `plan/VOICE.md` bans the second person for exactly
+ * that reason. A prompt is the app asking a question of the person
+ * holding the phone, so the second person is the whole point of it.
+ * `voice.test.ts` holds them to their own shape instead: one question,
+ * ending in a question mark, with no numbers in it.
+ */
+export const prompts: readonly Prompt[] = Object.freeze(promptsFile.records as readonly Prompt[])
+
+/** The question for one moment, or undefined where the app keeps quiet. */
+export const promptFor = (moment: PromptMoment): Prompt | undefined =>
+  prompts.find((p) => p.moment === moment)
 
 /** The note for one behaviour id, or undefined for one that has none. */
 export const behaviourNoteFor = (ref: string): BehaviourNote | undefined =>

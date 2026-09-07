@@ -2140,6 +2140,40 @@
             ]
           }
         }
+      },
+      "prompt": {
+        "description": "One question the app asks the player at a moment the book asks them to imagine (MH p.3, p.27-28). Ours, not the book's: `label: invention`, held to plan/VOICE.md by voice.test.ts.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "cite",
+          "moment",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/atoms/id"
+          },
+          "cite": {
+            "$ref": "#/$defs/atoms/cite"
+          },
+          "reading": {
+            "type": "string"
+          },
+          "moment": {
+            "enum": [
+              "unexpected-event",
+              "kill",
+              "rescue",
+              "treasure"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     },
     "files": {
@@ -2600,6 +2634,9 @@
                 },
                 {
                   "$ref": "#/$defs/records/exceptionalWeapon"
+                },
+                {
+                  "$ref": "#/$defs/records/prompt"
                 }
               ]
             }

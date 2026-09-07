@@ -88,6 +88,12 @@ export const RecordScreen = ({ state, dispatch, at }: Props) => {
                 overrides: state.overrides,
               })}
             </Text>
+            {/* Why this Master is on the road (MH p.36-39; Phase 10j). */}
+            {state.sheet.motive === null ? null : (
+              <Text testID="record-motive" style={styles.motive}>
+                {state.sheet.motive.text}
+              </Text>
+            )}
             <Text testID="record-xp" style={styles.counts}>
               {fill(t('ui.record.xp'), { n: state.sheet.xp, r: state.sheet.resources })}
             </Text>
@@ -231,6 +237,8 @@ const styles = StyleSheet.create({
   body: { padding: 9, gap: 6 },
   name: { fontFamily: font.sans, fontSize: 16, fontWeight: '800', letterSpacing: 0.4, color: color.ink },
   counts: { fontFamily: font.mono, fontSize: 11, color: color.ink },
+  /** The Master's own story, in the book's own second person. */
+  motive: { fontFamily: font.serif, fontSize: 14, lineHeight: 19, fontStyle: 'italic', color: color.ink },
   note: { fontFamily: font.mono, fontSize: 10, lineHeight: 14, color: color.dim },
   line: { fontFamily: font.serif, fontSize: 14, lineHeight: 19, color: color.ink },
   /** The running head: which room the lines under it happened in. */

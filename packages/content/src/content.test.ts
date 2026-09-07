@@ -44,7 +44,7 @@ const repoRoot = join(packageDir, '..', '..')
  * half-transcribed table impossible to ship.
  */
 const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
-  'app.strings': 505,
+  'app.strings': 513,
   // The rules panel's notes: one per engine behaviour (the label leg
   // checks the pairing; this only pins the count).
   'app.behaviour-notes': 122,
@@ -52,6 +52,9 @@ const EXPECTED_RECORD_COUNTS: Readonly<Record<string, number>> = {
   // (Phase 10a). `voice.test.ts` holds each to plan/VOICE.md; this pins
   // the set, so a moment that loses its line is red rather than silent.
   'app.result-lines': 20,
+  // The questions the app puts to the player (Phase 10j): one per
+  // moment the book asks them to imagine. Ours, held to plan/VOICE.md.
+  'app.prompts': 4,
 
   // The 5 Treasures: the nine foes as printed.
   'campaigns.the-5-treasures-foes': 9,

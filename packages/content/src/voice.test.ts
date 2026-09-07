@@ -29,7 +29,7 @@
  * `it` names the clause it enforces so a failure points at the guide.
  */
 import { describe, expect, it } from 'vitest'
-import { resultLines } from './index'
+import { prompts, resultLines } from './index'
 import { theFiveTreasuresAreas, theFiveTreasuresActs } from './campaigns/index'
 
 /** One line under test, with enough context to name it in a failure. */
@@ -124,5 +124,41 @@ describe('the narrator speaks to the guide (plan/VOICE.md)', () => {
   it('leaves nothing blank: a moment with no line is silence by omission, not an empty string', () => {
     const empty = lines.filter((l) => l.line.trim().length === 0).map((l) => l.id)
     expect(empty, `empty lines: ${empty.join(', ')}`).toEqual([])
+  })
+})
+
+/**
+ * The prompts are the app's own questions, not the narrator's
+ * (Phase 10j).
+ *
+ * Old Ping speaks about the Master and never to the player, which is
+ * why `plan/VOICE.md` bans the second person outright. A prompt is the
+ * other thing: the app asking the person holding the phone to imagine,
+ * at the moments the book asks them to (MH p.3, p.27-28). So it is held
+ * to its own shape rather than to his, and the shape is the point - one
+ * question, short, with no arithmetic in it, because a prompt that
+ * mentioned a number would be asking about the dice instead of about
+ * the story.
+ */
+describe('the prompts ask, and do not narrate (Phase 10j)', () => {
+  it('asks exactly one question, and ends by asking it', () => {
+    for (const prompt of prompts) {
+      expect(prompt.text.endsWith('?'), prompt.id).toBe(true)
+      expect(prompt.text.split('?').filter((s) => s.trim().length > 0), prompt.id).toHaveLength(1)
+    }
+  })
+
+  it('carries no digits: a prompt asks about the story, never the dice', () => {
+    for (const prompt of prompts) expect(/\d/u.test(prompt.text), prompt.id).toBe(false)
+  })
+
+  it('is short enough to read at a glance', () => {
+    for (const prompt of prompts) expect(words(prompt.text).length, prompt.id).toBeLessThanOrEqual(12)
+  })
+
+  it('has one for every moment, and no moment twice', () => {
+    const moments = prompts.map((p) => p.moment)
+    expect(new Set(moments).size, moments.join(', ')).toBe(moments.length)
+    expect(moments.length).toBe(4)
   })
 })

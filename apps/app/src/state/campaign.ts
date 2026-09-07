@@ -60,6 +60,7 @@ const masterFrom = (sheet: Sheet): RecordedMaster => ({
   learned: sheet.learned,
   xp: sheet.xp,
   resources: sheet.resources,
+  motive: sheet.motive,
 })
 
 /**
@@ -178,6 +179,7 @@ export const fromCampaign = (record: CampaignRecord, session: RecordState): Reco
       learned: record.master.learned ?? [],
       xp: record.master.xp ?? 0,
       resources: record.master.resources ?? 0,
+      motive: record.master.motive ?? null,
     },
     deeds: record.deeds.map((deed) => deed.text),
     passages: record.passages,

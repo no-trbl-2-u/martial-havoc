@@ -695,3 +695,25 @@ test('the record tells the adventure so far, in order', async ({ page }) => {
   await expect(chronicle).toContainText('DINING HALL')
   await expect(chronicle).toContainText('Encounter · Senior King Golden Horn')
 })
+
+test('a treasure in the hand is a question, and the answer is optional', async ({ page }) => {
+  // Safe walks (4) to the Cave entrance and the Storage room, where the
+  // gourd lies on the shelves.
+  await page.goto('/?dice=4,4')
+  await begin(page)
+  await go(page, /TO THE CAVE ENTRANCE/)
+  await go(page, /TO THE STORAGE ROOM/)
+  await button(page, /TAKE THE GOLD AND RED GOURD/).click()
+  // The app asks at the moment, in its own voice, and never requires it.
+  await expect(page.getByTestId('passage-prompt')).toHaveText(
+    'What does it feel like in your hand?',
+  )
+  await page.getByTestId('passage').fill('It is heavier than a gourd should be.')
+  await page.getByText('KEEP IT').click()
+  await expect(page.getByTestId('passage-prompt')).toHaveCount(0)
+  // And it stands in the chronicle where it was written (Phase 10h).
+  await button(page, 'RECORD').click()
+  await expect(page.getByTestId('record-chronicle')).toContainText(
+    'It is heavier than a gourd should be.',
+  )
+})

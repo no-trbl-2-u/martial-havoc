@@ -68,6 +68,7 @@ import {
   withArea,
   withFlag,
 } from '@martial-havoc/engine'
+import type { PromptMoment } from '@martial-havoc/content'
 import type {
   DiceSource,
   Increase,
@@ -80,7 +81,9 @@ import {
   isMomentumDoor,
   effectFor,
   market,
+  adventureHookById,
   ritualById,
+  rollAdventureHook,
   rollDeity,
   rollFinalBlow,
   rollUnexpectedEvent,
@@ -394,6 +397,12 @@ const doTake = (state: RecordState, treasure: string): RecordState => {
   )
 }
 
+/** A treasure in the hand is a moment the app asks about (Phase 10j). */
+const doTakeAsked = (state: RecordState, treasure: string): RecordState => {
+  const took = doTake(state, treasure)
+  return took === state ? state : asks(took, 'treasure')
+}
+
 /**
  * Read a foe's LOOT line (5T a2) and put the drop where it belongs:
  * a treasure, a key, an item. The result slip shows the printed item.
@@ -461,11 +470,9 @@ const doRescue = (state: RecordState, dice: DiceSource): RecordState => {
   // teaches the Cord's spells to a Master who does not simply kill her
   // (I-41), and `knownFrom` is where the adventure says so.
   const freed = { ...state, cave: learntInto(rescue(TABLES, state.cave), foe) }
-  return doLootOf(
-    addDeed(freed, fill(t('ui.deed.freed'), { name: foeName(foe) })),
-    foe,
-    dice,
-    true,
+  return asks(
+    doLootOf(addDeed(freed, fill(t('ui.deed.freed'), { name: foeName(foe) })), foe, dice, true),
+    'rescue',
   )
 }
 
@@ -1335,7 +1342,19 @@ const doLeave = (state: RecordState, dice: DiceSource): RecordState => {
     (world, id) => learntInto(resolveEncounter(world, [id]), id),
     state.cave,
   )
-  const back: RecordState = { ...state, screen: 'beat', combat: null, cave, pending: remaining }
+  // Two of the four moments the app asks about land here, because both
+  // are read on leaving the fight: a body on the floor, and a tie whose
+  // row the book itself tells the player to imagine (MH p.27-28).
+  const asked =
+    c.event !== null
+      ? 'unexpected-event'
+      : beaten.length > 0
+        ? 'kill'
+        : null
+  const back: RecordState = asks2(
+    { ...state, screen: 'beat', combat: null, cave, pending: remaining },
+    asked,
+  )
   if (c.over.ended) return back
   // Fleeing: the last blow of 2 and a Dishonor Point (R38, R39, I-32).
   // Phase 10d gives it a result slip as well as a deed - running away
@@ -1401,6 +1420,24 @@ export const awardFor = (state: RecordState): XpAward =>
 /** Every score given: the ending is scored and the XP is real. */
 export const fullyScored = (state: RecordState): boolean =>
   XP_CATEGORIES.every((name) => state.scores[name] !== null)
+
+/**
+ * Open the passage field with a question (Phase 10j).
+ *
+ * "The rulebook gives you the tools, the story comes from your
+ * imagination" (MH p.3), and at the tie the book asks the player to
+ * imagine outright (MH p.27-28) without printing a question. These are
+ * the questions, and they arrive at the moment rather than as a
+ * permanently open box that goes unfilled. Nothing is required: the
+ * field can be walked away from, and a moment that already has a prompt
+ * open is not interrupted by a second one.
+ */
+const asks = (state: RecordState, moment: PromptMoment): RecordState =>
+  state.prompt === null ? { ...state, prompt: moment } : state
+
+/** {@link asks}, where the caller may have no moment to ask about. */
+const asks2 = (state: RecordState, moment: PromptMoment | null): RecordState =>
+  moment === null ? state : asks(state, moment)
 
 /**
  * Bank the four scores as XP, once (R43, R47).
@@ -1711,7 +1748,7 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
     case 'cave.go':
       return doGo(state, action.to, dice)
     case 'cave.take':
-      return state.pending.length > 0 ? state : doTake(state, action.treasure)
+      return state.pending.length > 0 ? state : doTakeAsked(state, action.treasure)
     case 'cave.rescue':
       return doRescue(state, dice)
     case 'cave.attack':
@@ -1778,7 +1815,11 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       // them, which is the whole point of writing them there.
       return text.length === 0
         ? state
-        : chronicled({ ...state, passages: [...state.passages, text], draft: '' }, 'passage', text)
+        : chronicled(
+            { ...state, passages: [...state.passages, text], draft: '', prompt: null },
+            'passage',
+            text,
+          )
     }
     case 'combat.round':
       return doRound(state, dice)
@@ -1843,6 +1884,20 @@ export const reduce = (state: RecordState, action: Action, dice: DiceSource): Re
       return doAdvance(state, action.increase)
     case 'ending.learn':
       return doLearnAbility(state, action.id)
+    case 'creation.motive.roll': {
+      // The book's own address for its own table: d66, tens then ones
+      // (MH p.36-39, R50).
+      const rolled = rollAdventureHook(d6(dice), d6(dice))
+      return rolled === undefined
+        ? state
+        : onCreation(state, (c) => ({ ...c, motiveId: rolled.id }))
+    }
+    case 'creation.motive':
+      return adventureHookById(action.id) === undefined
+        ? state
+        : onCreation(state, (c) => ({ ...c, motiveId: action.id }))
+    case 'prompt.dismiss':
+      return { ...state, prompt: null }
     case 'record.import':
       return doImport(state)
     case 'record.new':

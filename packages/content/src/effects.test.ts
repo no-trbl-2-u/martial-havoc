@@ -22,6 +22,7 @@ import {
   theFiveTreasuresActs,
   theFiveTreasuresAreas,
   unexpectedEventLineFor,
+  prompts,
   unexpectedEventLines,
   unexpectedEvents,
 } from './index'
@@ -33,10 +34,11 @@ const CLASSES = ['mechanical', 'combat-narrative', 'exploration', 'oracle-like',
 const TECHNIQUE_TIMINGS = ['immediate', 'combat-winner-option', 'scene']
 
 describe('the count (spec.md: readable from the build)', () => {
-  it('ships exactly 182 authored lines', () => {
-    // Phase 4's 149, Phase 5's 8 area lines and 5 act markers, and
-    // Phase 10a's 19 narrator lines, and Phase 10b's Call, one per moment of play.
-    expect(contentCounts().authoredLines).toBe(182)
+  it('ships exactly 186 authored lines', () => {
+    // Phase 4's 149, Phase 5's 8 area lines and 5 act markers, Phase
+    // 10a's narrator lines with Phase 10b's Call (20), and Phase 10j's
+    // four prompts - the questions the app puts to the player.
+    expect(contentCounts().authoredLines).toBe(186)
   })
 
   it('is 72 effects, 66 Oracle lines and 11 Unexpected Event lines', () => {
@@ -49,7 +51,7 @@ describe('the count (spec.md: readable from the build)', () => {
   it('adds the cave: one line per area and one per act marker', () => {
     expect(theFiveTreasuresAreas).toHaveLength(8)
     expect(theFiveTreasuresActs).toHaveLength(5)
-    expect(contentCounts().authoredLines).toBe(149 + 8 + 5 + resultLines.length)
+    expect(contentCounts().authoredLines).toBe(149 + 8 + 5 + resultLines.length + prompts.length)
   })
 
   it("adds the narrator: one line per moment of play he speaks at", () => {

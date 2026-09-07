@@ -237,8 +237,10 @@ export const BeatFoot = ({
     <FreeText
       draft={state.draft}
       written={state.passages.length}
+      prompt={state.prompt}
       onDraft={(text) => dispatch({ type: 'draft', text })}
       onKeep={() => dispatch({ type: 'passage.keep' })}
+      onDismiss={() => dispatch({ type: 'prompt.dismiss' })}
     />
     <RollBar
       onManual={() => dispatch({ type: 'roll.manual' })}
