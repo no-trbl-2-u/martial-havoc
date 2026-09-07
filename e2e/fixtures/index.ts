@@ -26,6 +26,7 @@ export {
   atTheRules,
   extend,
   facingTheGhost,
+  facingThreeServants,
   fold,
   inTheStorageRoom,
   madeAMaster,

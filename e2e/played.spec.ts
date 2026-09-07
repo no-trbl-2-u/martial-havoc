@@ -49,6 +49,7 @@ import {
   atTheRecord,
   atTheRules,
   facingTheGhost,
+  facingThreeServants,
   inTheStorageRoom,
   onTheMountain,
   open,
@@ -561,4 +562,122 @@ test('the narrator is silent on the title page and in creation', async ({ page }
   await page.getByTestId('title-start').click()
   await expect(page.getByTestId('title-start')).toHaveCount(0)
   await expect(narratorNames(page)).toHaveCount(0)
+})
+
+// ------------------------------------------------- the fight as the book runs it
+
+/**
+ * MH p.23 (R26): "The combat continues until: You succeed in landing a
+ * Final Blow; Your opponent's or your ENDURANCE points reach zero; An
+ * Unexpected Event occurs." A lost exchange is none of the three, and
+ * until Phase 10k the app answered a lost exchange with FLEE alone.
+ */
+test('a lost exchange is followed by another, not by FLEE alone', async ({ page }) => {
+  const state = await open(page, facingTheGhost, '?dice=1,1,6,6,6,6,1,1')
+  await button(page, t('ui.combat.primary.roll')).click()
+  // The round was lost: the ENDURANCE moved and the banner says behind.
+  await expect(page.getByTestId('attr-endurance')).not.toHaveText(String(state.sheet.endurance))
+  await expect(page.getByTestId('combat')).toContainText(t('ui.combat.banner.behind'))
+  // The two controls the critique row said were the whole menu.
+  await expect(button(page, t('ui.combat.leave.flee'))).toBeEnabled()
+  await expect(button(page, t('ui.combat.primary.roll'))).toBeEnabled()
+  // And the next exchange is rolled, and won.
+  await button(page, t('ui.combat.primary.roll')).click()
+  await expect(page.getByTestId('combat')).toContainText(t('ui.combat.banner.ahead'))
+  await expect(page.getByTestId('act-strike')).toBeEnabled()
+})
+
+/**
+ * MH p.23: "you can do one of the following: ... Use one of the
+ * Techniques you know". One of them, chosen; not the first the sheet
+ * happens to list. MH p.24's advice prints under the row, upright,
+ * because it is the designer's and not the narrator's (VISION.md).
+ */
+test('a Master who knows more than one Technique chooses, with the book’s warning beside it', async ({
+  page,
+}) => {
+  await open(page, facingTheGhost, '?dice=6,5,1,1')
+  await button(page, t('ui.combat.primary.roll')).click()
+  const row = page.getByTestId('act-technique')
+  await expect(row).toBeEnabled()
+  // MH p.24, transcribed, on the fight's own screen.
+  await expect(page.getByTestId('technique-warning')).toHaveText(t('ui.combat.act.technique.warning'))
+  // Closed, the row counts what is on offer; opened, it lists them.
+  await expect(page.getByTestId('act-technique-0')).toHaveCount(0)
+  await row.click()
+  const first = page.getByTestId('act-technique-0')
+  const second = page.getByTestId('act-technique-1')
+  await expect(first).toBeVisible()
+  await expect(second).toBeVisible()
+  // Each row carries its own cost, so the choice is a priced one.
+  await expect(first).not.toHaveText(await second.innerText())
+  // Taking one spends its ENDURANCE and closes the round.
+  await first.click()
+  await expect(page.getByTestId('technique-line')).toBeVisible()
+})
+
+/**
+ * MH p.28, footnote: "To streamline combat while maintaining the idea
+ * of a chaotic scene, you can consider Minions with ENDURANCE=1; if you
+ * hit you can remove one minion." The book's one optional rule, and the
+ * build's first switch of any kind: offered on a crowd, off until it is
+ * taken, and remembered in the ledger once it is.
+ */
+test('MINIONS AT 1 is offered on a band, off, and the ledger remembers it', async ({ page }) => {
+  await open(page, facingThreeServants, '?dice=5,5,2,2,2,2,2,2')
+  await expect(page.getByTestId('band')).toBeVisible()
+  const row = page.getByTestId('act-minions')
+  await expect(row).toContainText(t('ui.combat.act.minions.off'))
+  await row.click()
+  await expect(row).toContainText(t('ui.combat.act.minions.on'))
+  // The cards keep their printed ENDURANCE and say they are read at 1.
+  await expect(page.getByTestId('band')).toContainText(t('ui.combat.band.minion'))
+  // A won exchange by two removes a body that prints more than two.
+  await button(page, t('ui.combat.primary.roll')).click()
+  await page.getByTestId('act-strike').click()
+  await expect(page.getByTestId('band')).toContainText(t('ui.combat.band.down'))
+  await button(page, /RECORD/).click()
+  await expect(page.getByTestId('record-deeds')).toContainText(t('ui.deed.minions'))
+})
+
+/**
+ * A duel offers no such row: the footnote is about crowds, and a rule
+ * that appears where it cannot apply is a rule the player has to learn
+ * to ignore.
+ */
+test('MINIONS AT 1 is not offered in a duel', async ({ page }) => {
+  await open(page, facingTheGhost)
+  await expect(page.getByTestId('combat')).toBeVisible()
+  await expect(page.getByTestId('act-minions')).toHaveCount(0)
+})
+
+/**
+ * MH p.23 has the player subtract the difference from the opponent's
+ * ENDURANCE, and MH p.68 (R78) compares a d6 against it; 5T a2 and
+ * MH p.70-79 print it on every block. So the number has to be on the
+ * card while the round is being read, not only before it is rolled -
+ * before this it lived in the card's idle line and the first roll
+ * replaced it.
+ */
+test('an opponent’s card keeps its ENDURANCE through the round, over what it prints', async ({
+  page,
+}) => {
+  const state = await open(page, facingTheGhost, '?dice=6,5,1,1')
+  const printed = state.combat?.foes[0]?.endurance
+  if (printed === undefined) throw new Error('no body in the seeded fight')
+  const card = page.getByTestId('endurance-theirs')
+  await expect(card).toHaveText(
+    fill(t('ui.combat.theirs.endurance'), { now: printed, printed }),
+  )
+  // Rolled: the idle line is gone and the number is not.
+  await button(page, t('ui.combat.primary.roll')).click()
+  await expect(card).toHaveText(
+    fill(t('ui.combat.theirs.endurance'), { now: printed, printed }),
+  )
+  // Struck: what is left moves, what it prints does not.
+  await page.getByTestId('act-strike').click()
+  await expect(card).not.toHaveText(
+    fill(t('ui.combat.theirs.endurance'), { now: printed, printed }),
+  )
+  await expect(card).toContainText(String(printed))
 })

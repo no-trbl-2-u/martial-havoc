@@ -173,6 +173,23 @@ export const inTheStorageRoom: Scene = extend(
 )
 
 /**
+ * Three Devil servants in the Storage room, faced together.
+ *
+ * The Storage room's Encounters line names Devil servants and leaves
+ * the count to the Oracle's No. of enemies row (I-34), so the Event 2
+ * is followed by a 3 - the row's "3" on a 2-3 - and FACE THEM ALL puts
+ * all three in one fight (R35). The scene a spec needs when the
+ * question is about a crowd: MINIONS AT 1 (MH p.28 footnote) is offered
+ * only where there is one. Spends `4` reaching the entrance and `2,3`
+ * on the Storage room's Event and count.
+ */
+export const facingThreeServants: Scene = extend(
+  onTheMountain,
+  [...go(AREA.entrance), { type: 'cave.go', to: AREA.storage }, { type: 'roll.close' }, { type: 'cave.fight-all' }],
+  [4, 2, 3],
+)
+
+/**
  * A fight won on one round: the Master ahead on `6,5` against `1,1`,
  * the difference struck off, the one body looted, the fight left. The
  * loot lines of every foe in this file print a named thing and roll no
@@ -196,11 +213,13 @@ export const atThePaperDoor: Scene = extend(facingTheGhost, struckDownAndLooted,
 /**
  * The Master on the floor.
  *
- * Not in one fight: after a lost round the reducer refuses another
- * (`reduce.ts`, `doRound`, `c.last !== null`) and the screen enables
- * nothing but FLEE, so no duel from full ENDURANCE can end with the
- * Master down (filed in `plan/CRITIQUE.md`). So the fall is reached the
- * way the app allows it: into the Dining Hall on an Encounter (2) and
+ * Reached across two fights rather than one, which is how it had to be
+ * built before Phase 10k: until then the reducer refused a second round
+ * after a lost one, so no duel from full ENDURANCE could end with the
+ * Master down. It stays as it is because the walk it describes is still
+ * a true one and the specs that read it are about the fall, not about
+ * how many rooms it took. The fall is reached this way: into the Dining
+ * Hall on an Encounter (2) and
  * the Senior King (6); one round lost to him by eleven (San Te's `1,1`
  * on SKILL 8 with NON LETHAL COMBAT 4 makes 14, the King's `6,6` on
  * SKILL 9 with Magic flames 4 makes 25; ENDURANCE 20 to 9); the flight,

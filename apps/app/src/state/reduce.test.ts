@@ -551,6 +551,7 @@ describe('the fight with the Dexterous Ghost', () => {
         bound: false,
         burning: false,
         looted: false,
+        searched: false,
       },
     ])
     // A foe the Event did not bring cannot be fought.
@@ -802,6 +803,7 @@ describe('the Old Vixen teaches the Cord\u2019s spells (I-41)', () => {
             bound: false,
             burning: false,
             looted: true,
+            searched: false,
           },
         ],
         target: 0,
@@ -816,6 +818,7 @@ describe('the Old Vixen teaches the Cord\u2019s spells (I-41)', () => {
         naming: null,
         blowSettled: false,
         warded: false,
+        minionsAtOne: false,
         over: { ended: true, reason: 'final-blow' },
       },
     }
@@ -1329,8 +1332,12 @@ describe('the five treasures work (Phase 10g)', () => {
     expect(lost.combat?.last?.outcome).toBe('master-hit')
     expect(lost.combat?.warded).toBe(true)
     expect(lost.sheet.endurance).toBe(fighting.sheet.endurance)
-    // No limit: the second one is taken too.
+    // No limit: the second one is taken too. The round counter is the
+    // proof that a second round was actually rolled - before Phase 10k
+    // this `reduce` was a no-op and the test passed on the first
+    // round's state (MH p.23, R26).
     const again = reduce(lost, { type: 'combat.round' }, fromSequence([1, 1, 6, 6]))
+    expect(again.combat?.round).toBe((lost.combat?.round ?? 0) + 1)
     expect(again.combat?.warded).toBe(true)
     expect(again.sheet.endurance).toBe(fighting.sheet.endurance)
   })
@@ -1641,5 +1648,195 @@ describe('who the Master is, and the player’s own words (Phase 10j)', () => {
     expect(s.passages).toEqual(['He looked at the door, not at me.'])
     // The chronicle carries it where it was written (Phase 10h).
     expect(s.chronicle.at(-1)).toMatchObject({ kind: 'passage', area: 'Storage room' })
+  })
+})
+
+describe('the fight runs as the book runs it (Phase 10k)', () => {
+  const KING = 'foe.junior-king-silver-horn'
+
+  /** The Junior King met at the Cave entrance (Event 2, creature 5), fought. */
+  const facing = (): RecordState => {
+    const met = play(fresh(), [
+      [{ type: 'cave.go', to: AREA.entrance }, [2, 5]],
+      [{ type: 'roll.close' }, []],
+    ])
+    return reduce(met, { type: 'cave.fight', foe: KING }, fromSequence([]))
+  }
+
+  // MH p.23 (R26): "The combat continues until: you succeed in landing
+  // a Final Blow; your opponent's or your ENDURANCE points reach zero;
+  // an Unexpected Event occurs." A lost exchange is none of the three.
+  it('follows a lost exchange with another (MH p.23, R26)', () => {
+    const fighting = facing()
+    const lost = reduce(fighting, { type: 'combat.round' }, fromSequence([1, 1, 6, 6]))
+    expect(lost.combat?.last?.outcome).toBe('master-hit')
+    expect(lost.sheet.endurance).toBeLessThan(fighting.sheet.endurance)
+    // The round the app used to refuse.
+    const again = reduce(lost, { type: 'combat.round' }, fromSequence([6, 6, 1, 1]))
+    // `round` counts from 1 and moves on every roll: two rolled.
+    expect(again.combat?.round).toBe(3)
+    expect(again.combat?.last?.outcome).toBe('master-wins')
+    // And the winner's option is spendable on it, as on any won round.
+    const struck = reduce(again, { type: 'combat.strike' }, fromSequence([]))
+    expect(struck.combat?.foes[0]?.endurance).toBeLessThan(fighting.combat?.foes[0]?.endurance ?? 0)
+  })
+
+  it('refuses a roll while a winner’s option is still open (R25)', () => {
+    const won = reduce(facing(), { type: 'combat.round' }, fromSequence([6, 6, 1, 1]))
+    expect(won.combat?.last?.outcome).toBe('master-wins')
+    expect(reduce(won, { type: 'combat.round' }, fromSequence([3, 3, 2, 2]))).toBe(won)
+  })
+
+  // The consequence the critique row named: before this, no duel from
+  // full ENDURANCE could end with the Master down, because the largest
+  // single difference in the cave is smaller than a made Master.
+  it('lets the Master fall from full ENDURANCE inside one fight (MH p.6, R26)', () => {
+    const fighting = facing()
+    const fallen = [1, 2, 3, 4, 5, 6, 7, 8].reduce(
+      (s: RecordState) =>
+        s.combat?.over.ended === true ? s : reduce(s, { type: 'combat.round' }, fromSequence([1, 1, 6, 6])),
+      fighting,
+    )
+    expect(fallen.sheet.endurance).toBe(0)
+    expect(fallen.combat?.over).toMatchObject({ ended: true, reason: 'master-down' })
+    // And once down, no further round is rolled.
+    expect(reduce(fallen, { type: 'combat.round' }, fromSequence([6, 6, 1, 1]))).toBe(fallen)
+  })
+
+  // MH p.28, footnote: "you can consider Minions with ENDURANCE=1; if
+  // you hit you can remove one minion."
+  describe('MINIONS AT 1, the book’s one optional rule (MH p.28, R33)', () => {
+    /** Three Devil servants in the Storage room (Event 2, Oracle count 3). */
+    const band = (): RecordState => {
+      const met = play(fresh(), [
+        ...walk(AREA.entrance),
+        [{ type: 'cave.go', to: AREA.storage }, [2, 3]],
+        [{ type: 'roll.close' }, []],
+      ])
+      return reduce(met, { type: 'cave.fight-all' }, fromSequence([]))
+    }
+
+    it('is off until it is switched on, and switching it on is a deed', () => {
+      const fight = band()
+      expect(fight.combat?.minionsAtOne).toBe(false)
+      const on = reduce(fight, { type: 'combat.minions' }, fromSequence([]))
+      expect(on.combat?.minionsAtOne).toBe(true)
+      expect(on.deeds).toContain('Minions at 1, MH p.28')
+      // Switching it off changes the fight and writes nothing more.
+      const off = reduce(on, { type: 'combat.minions' }, fromSequence([]))
+      expect(off.combat?.minionsAtOne).toBe(false)
+      expect(off.deeds).toEqual(on.deeds)
+    })
+
+    it('is not offered against one body', () => {
+      const duel = facing()
+      expect(reduce(duel, { type: 'combat.minions' }, fromSequence([]))).toBe(duel)
+    })
+
+    it('removes a body on any hit while it is on', () => {
+      const on = reduce(band(), { type: 'combat.minions' }, fromSequence([]))
+      const printed = on.combat?.foes[0]?.endurance ?? 0
+      expect(printed).toBeGreaterThan(1)
+      // The Master ahead by two of the three; a difference of 2 would
+      // leave a Devil servant standing at its printed ENDURANCE.
+      const round = reduce(on, { type: 'combat.round' }, fromSequence([5, 5, 2, 2, 2, 2, 2, 2]))
+      expect(round.combat?.last?.outcome).toBe('master-wins')
+      const struck = reduce(round, { type: 'combat.strike' }, fromSequence([]))
+      expect(struck.combat?.foes[0]?.endurance).toBe(0)
+      // And the printed value is untouched on the bodies still up.
+      expect(struck.combat?.foes[1]?.endurance).toBe(printed)
+    })
+
+    it('leaves the arithmetic alone while it is off', () => {
+      const fight = band()
+      const round = reduce(fight, { type: 'combat.round' }, fromSequence([5, 5, 2, 2, 2, 2, 2, 2]))
+      const struck = reduce(round, { type: 'combat.strike' }, fromSequence([]))
+      const printed = fight.combat?.foes[0]?.endurance ?? 0
+      expect(struck.combat?.foes[0]?.endurance).toBe(printed - (round.combat?.last?.difference ?? 0))
+    })
+  })
+
+  // 5T a2: the Devil servant's LOOT reads "1-3 junk, 4-5 simple weapon,
+  // 6" followed by a warning-triangle glyph and no text; I-08 reads the
+  // 6 as the servant's knowledge of the room it was met in.
+  it('records the Devil servant’s secret as a deed, not as nothing (I-08)', () => {
+    const met = play(fresh(), [
+      ...walk(AREA.entrance),
+      [{ type: 'cave.go', to: AREA.storage }, [2, 1]],
+      [{ type: 'roll.close' }, []],
+    ])
+    const fight = reduce(met, { type: 'cave.fight', foe: 'foe.devil-servant' }, fromSequence([]))
+    const round = reduce(fight, { type: 'combat.round' }, fromSequence([6, 6, 1, 1]))
+    const down = [0, 1, 2, 3].reduce(
+      (s: RecordState) =>
+        (s.combat?.foes[0]?.endurance ?? 0) === 0
+          ? s
+          : reduce(reduce(s, { type: 'combat.round' }, fromSequence([6, 6, 1, 1])), { type: 'combat.strike' }, fromSequence([])),
+      reduce(round, { type: 'combat.strike' }, fromSequence([])),
+    )
+    expect(down.combat?.foes[0]?.endurance).toBe(0)
+    const looted = reduce(down, { type: 'combat.loot', index: 0 }, fromSequence([6]))
+    expect(looted.result).toMatchObject({ kind: 'loot', hint: true, face: 6 })
+    expect(looted.deeds.at(-1)).toBe("learned the servant's secret of the Storage room")
+    // The Hint itself is revealed, which is what the deed is about.
+    expect(looted.cave.hints).toContain(AREA.storage)
+  })
+
+  // MH p.68 (R78) and reading I-30b: offered after every victory, never
+  // taken for the player, one d6 against the printed ENDURANCE.
+  describe('R78’s Treasures roll over a fallen body', () => {
+    /** The Junior King beaten down to nothing, ready to be searched. */
+    const overTheBody = (): RecordState => {
+      const fighting = facing()
+      return [0, 1, 2, 3, 4, 5, 6, 7].reduce(
+        (s: RecordState) =>
+          (s.combat?.foes[0]?.endurance ?? 0) === 0
+            ? s
+            : reduce(
+                reduce(s, { type: 'combat.round' }, fromSequence([6, 6, 1, 1])),
+                { type: 'combat.strike' },
+                fromSequence([]),
+              ),
+        fighting,
+      )
+    }
+
+    it('reads the printed cell on the band the opponent’s ENDURANCE names', () => {
+      const body = overTheBody()
+      expect(body.combat?.foes[0]?.endurance).toBe(0)
+      const searched = reduce(body, { type: 'combat.treasure', index: 0 }, fromSequence([5]))
+      // The Junior King is ENDURANCE 14 as printed: the "Up to 16" row.
+      expect(searched.result).toMatchObject({
+        kind: 'treasure',
+        face: 5,
+        band: 'Up to 16',
+        text: '1d6 GP + Common Item',
+      })
+      expect(searched.deeds.at(-1)).toContain('1d6 GP + Common Item')
+      // Once per body: the offer does not come round again.
+      expect(searched.combat?.foes[0]?.searched).toBe(true)
+      expect(reduce(searched, { type: 'combat.treasure', index: 0 }, fromSequence([2]))).toBe(searched)
+    })
+
+    it('is never made for the player: an unsearched body stays unsearched (I-30b)', () => {
+      const body = overTheBody()
+      expect(body.combat?.foes[0]?.searched).toBe(false)
+      expect(body.result?.kind).not.toBe('treasure')
+    })
+
+    it('takes one tapped face and counts it as an override', () => {
+      const body = overTheBody()
+      const tapped = reduce(body, { type: 'manual.face', face: 5 }, fromSequence([]))
+      // The table's own d6 would read 2; the tapped 5 reaches it first.
+      const searched = reduce(tapped, { type: 'combat.treasure', index: 0 }, fromSequence([2]))
+      expect(searched.result).toMatchObject({ kind: 'treasure', face: 5 })
+      expect(searched.overrides).toBe(body.overrides + 1)
+      expect(searched.manual).toEqual([])
+    })
+
+    it('refuses a body still standing', () => {
+      const fighting = facing()
+      expect(reduce(fighting, { type: 'combat.treasure', index: 0 }, fromSequence([5]))).toBe(fighting)
+    })
   })
 })

@@ -29,7 +29,7 @@
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { join, relative } from 'node:path'
+import { join, relative, sep } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 const here = fileURLToPath(new URL('.', import.meta.url))
@@ -191,5 +191,128 @@ describe('fidelity: the two categories', () => {
     console.log(
       `fidelity - ${transcribed.length} transcribed field(s) round-trip; ${authored.length} authored field(s) are ours`,
     )
+  })
+})
+
+/**
+ * The printed spans and the printed spelling (Phase 10k).
+ *
+ * The round trip above proves a cell's *words* are the book's. It
+ * cannot prove a cell is under the right die face, because a merged
+ * cell in the PDF flattens to one word in every extraction: "Normal"
+ * appears in `docs/world/oracle.md` whether the app reads it on a 3 or
+ * on a 4. Nor can it prove that a defect the book actually prints has
+ * survived a well-meaning tidy: "Giada" round-trips against the doc,
+ * and so would "Giada" corrected to "Jade" if someone corrected both.
+ *
+ * So these two cases pin the two things the round trip is blind to,
+ * face by face and character by character. A normalised cell goes red
+ * here, which is the point: standing rule 9.1 is "transcribe, don't
+ * paraphrase", and a transcription that has been improved is no longer
+ * one.
+ */
+
+/** The eleven rows of MH p.58, one word per die face, spans expanded. */
+const ORACLE_SPANS: Readonly<Record<string, readonly [string, string, string, string, string, string]>> = {
+  'Closed Question': ['No, and', 'No', 'No, but', 'Yes, but', 'Yes', 'Yes, and'],
+  Outcome: ['Disaster', 'Negative', 'Negative', 'Positive', 'Positive', 'Excellent'],
+  'NPC reaction': ['Hostile', 'Wary', 'Unaware', 'Kind', 'Helpful', 'Flee'],
+  'Creature Reaction': ['Hostile', 'Territorial', 'Unaware', 'Curious', 'Docile', 'Flee'],
+  'Encounter Outcome': [
+    'Ambush',
+    'Attack',
+    'Attack',
+    'Attack',
+    'NPC/Creature Reaction',
+    'NPC/Creature Reaction',
+  ],
+  'Enemy Type': ['Minion', 'Subordinate', 'Subordinate', 'Warrior', 'Warrior', 'Boss'],
+  'No. of enemies': ['1d6', '3', '3', '2', '2', '1'],
+  // Normal is merged across 1-4 and Special across 5-6, read off the
+  // rendered page rather than off the flattened extraction; see the
+  // commit that corrected docs/world/oracle.md.
+  'Enemy attack': ['Normal', 'Normal', 'Normal', 'Normal', 'Special', 'Special'],
+  Door: ['Open', 'Open', 'Open', 'Trapped', 'Locked', 'Closed'],
+  'Object amount': [
+    'Finished',
+    'One more',
+    'One more',
+    'Many remaining',
+    'Many remaining',
+    'Many remaining',
+  ],
+  Value: ['5 GP', '10 GP', '25 GP', '50 GP', '100 GP', '250 GP'],
+}
+
+/**
+ * What the book prints that a proofreader would want to change, and
+ * where the data has to keep printing it. Each entry names the file,
+ * the record and the field, so a red case says which cell was tidied.
+ */
+const PRINTED_DEFECTS: readonly {
+  readonly why: string
+  readonly file: string
+  readonly recordId: string
+  readonly field: string
+  readonly value: unknown
+}[] = [
+  // MH p.67 spells the wandering swordsman "Yauxia"; p.79 spells the
+  // same word "Youxia". The encounter matrix carries p.67's spelling.
+  { why: 'MH p.67 "Yauxia" (p.79 spells it "Youxia")', file: 'data/rules/encounters.json', recordId: 'encounter.non-urban.11', field: 'printed', value: 'Yauxia' },
+  // MH p.74 prints no ATTACK for Huang Feng Guai. Null is the blank;
+  // a 1 invented to fill the column would be the build's number.
+  { why: 'MH p.74 prints no ATTACK for Huang Feng Guai', file: 'data/world/opponents.json', recordId: 'opponent.huang-feng-guai', field: 'attack', value: null },
+  // MH p.71 prints the Brawler's ATTACK as a range where every other
+  // block prints one number.
+  { why: 'MH p.71 prints the Brawler\'s ATTACK as "2-4"', file: 'data/world/opponents.json', recordId: 'opponent.brawler', field: 'attack', value: '2-4' },
+  // MH p.68, Treasures, row 5 of the 17-19 band: "2d6" with no unit,
+  // where every neighbouring cell says "GP".
+  { why: 'MH p.68 Treasures 17-19 row 5 prints "2d6 + Common Item", no unit', file: 'data/rules/treasures.json', recordId: 'treasure.17-19.5', field: 'text', value: '2d6 + Common Item' },
+]
+
+describe('fidelity: the printed spans and the printed spelling', () => {
+  const oracle = files.find((f) => f.rel.endsWith(join('world', 'oracle.json')))
+
+  it('reads every Oracle row on the face the page prints it under', () => {
+    expect(oracle, 'data/world/oracle.json is missing').toBeDefined()
+    const cells = new Map(
+      (oracle?.records ?? []).map((r) => [`${String(r['row'])}/${String(r['face'])}`, String(r['text'])]),
+    )
+    const wrong = Object.entries(ORACLE_SPANS).flatMap(([row, faces]) =>
+      faces.flatMap((want, i) => {
+        const got = cells.get(`${row}/${String(i + 1)}`)
+        return got === want ? [] : [`${row} on a ${String(i + 1)}: expected ${want}, data has ${String(got)}`]
+      }),
+    )
+    expect(wrong, `Oracle cells under the wrong face:\n${wrong.join('\n')}`).toEqual([])
+    expect(cells.size).toBe(Object.keys(ORACLE_SPANS).length * 6)
+  })
+
+  it.each(PRINTED_DEFECTS.map((d) => [d.why, d] as const))('keeps what the book prints: %s', (_why, defect) => {
+    const file = files.find((f) => f.rel === defect.file.split('/').join(sep))
+    expect(file, `${defect.file} is missing`).toBeDefined()
+    const record = (file?.records ?? []).find((r) => String(r['id']) === defect.recordId)
+    expect(record, `${defect.file} has no record ${defect.recordId}`).toBeDefined()
+    expect(record?.[defect.field]).toStrictEqual(defect.value)
+  })
+
+  // "SKILLS 9" is a heading defect of the printed opponent block, not
+  // a value any record carries: the data holds `skill: 9` like every
+  // other block. So it is pinned where it lives, in the concept.
+  it('keeps MH p.74\'s "SKILLS 9" in the opponents concept', () => {
+    const concept = readFileSync(join(repoRoot, 'docs', 'world', 'opponents.md'), 'utf-8')
+    expect(concept).toContain('SKILLS 9')
+  })
+
+  // "CHamber" (MH p.92) and "Giada" (MH p.62) are printed inside word
+  // tables the player reads a cell of at a time; both are pinned by
+  // presence in the file that carries them.
+  it.each([
+    ['CHamber', 'MH p.92', 'data/world/presets.json'],
+    ['Giada', 'MH p.62', 'data/world/sparks.json'],
+  ])('keeps %s (%s) in %s', (word, _folio, rel) => {
+    const file = files.find((f) => f.rel === rel.split('/').join(sep))
+    expect(file, `${rel} is missing`).toBeDefined()
+    expect(JSON.stringify(file?.records)).toContain(word)
   })
 })

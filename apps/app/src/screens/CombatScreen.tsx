@@ -4,9 +4,10 @@
  * Unexpected Event; the retreat row that rolls Morale (spec.md, Horizon;
  * design prototype, "COMBAT").
  */
+import { useState } from 'react'
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import { effectFor, t, techniqueById, treasureFoeById } from '@martial-havoc/content'
-import { LEARNED } from '../state/reduce'
+import { LEARNED, readyToRoll } from '../state/reduce'
 import { CORD, CORD_KNOWN, FAN, FIREPROOF, SWORD } from '../state/menu'
 import type { AttackStrength } from '@martial-havoc/engine'
 import { flag, skillForFight } from '@martial-havoc/engine'
@@ -31,6 +32,7 @@ const Side = ({
   strength,
   idle,
   prefix,
+  endurance,
   note,
   dimmed,
   aimed,
@@ -46,6 +48,17 @@ const Side = ({
   dimmed?: boolean
   /** The winner's option applies here: the card the Master is aimed at. */
   aimed?: boolean
+  /**
+   * What is left of this opponent's ENDURANCE over what it prints.
+   *
+   * It stands on its own line rather than inside `idle`, because `idle`
+   * is replaced the moment a round is rolled and this is the one number
+   * on the card that must survive the roll: STRIKE offers to take the
+   * difference off *this*, and R78's Treasures roll is read against the
+   * printed half of it. Absent on the Master's card, whose ENDURANCE is
+   * already the attribute strip's job.
+   */
+  endurance?: { readonly now: number; readonly printed: number }
   onPress?: () => void
 }) => (
   <Slip
@@ -72,6 +85,11 @@ const Side = ({
             value: strength.proficiency?.value ?? 0,
           })}
     </Text>
+    {endurance === undefined ? null : (
+      <Text testID={`endurance-${prefix}`} style={styles.sideEndurance}>
+        {fill(t('ui.combat.theirs.endurance'), { now: endurance.now, printed: endurance.printed })}
+      </Text>
+    )}
     <Text testID={`total-${prefix}`} style={styles.sideTotal}>{strength === null ? '-' : strength.total}</Text>
     {/*
       The whole card is the tap target, and it is drawn last so it
@@ -110,10 +128,38 @@ const standing = (c: Combat): readonly FoeInFight[] => c.foes.filter((f) => f.en
 const bodies = (c: Combat): readonly { readonly index: number; readonly foe: FoeInFight }[] =>
   c.foes.map((foe, index) => ({ index, foe })).filter((x) => x.foe.endurance === 0)
 
-type Act = { id: string; title: string; cite: string; line: string; enabled: boolean; action: Action }
+type Act = {
+  id: string
+  title: string
+  cite: string
+  line: string
+  enabled: boolean
+  action: Action
+  /**
+   * A row that changes what this screen shows rather than what the
+   * fight is (the Technique chooser opening and closing). It is not a
+   * dispatch, so it carries its own handler and `action` is ignored.
+   */
+  press?: () => void
+  /**
+   * The book's own words printed under the row, upright (Phase 10k).
+   * Only R25's Technique row uses it, and only for MH p.24.
+   */
+  warning?: { text: string; cite: string }
+}
+
+/**
+ * How the fight's menu is drawn, beyond what the state already says.
+ *
+ * One flag today: whether the Technique chooser is open. It is the
+ * screen's own business rather than the record's - a half-opened menu
+ * is not a thing a saved game should remember - so it is passed in
+ * rather than kept in `Combat`.
+ */
+type Menu = { readonly techniquesOpen: boolean; readonly toggleTechniques: () => void }
 
 /** The menu for the fight's current state: R25's four when ahead, else what the phase allows. */
-const actions = (state: RecordState, c: Combat): readonly Act[] => {
+const actions = (state: RecordState, c: Combat, menu: Menu): readonly Act[] => {
   const aim = aimedAt(c)
   const won = aim?.outcome === 'master-wins'
   const diff = aim?.difference ?? 0
@@ -164,9 +210,31 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
     enabled: !foe.looted,
     action: { type: 'combat.loot', index } as Action,
   }))
+  /*
+    R78's Treasures roll, one row per fallen body beside its LOOT row
+    (MH p.68). The book's trigger is the player's belief - "if you
+    believe that your defeated opponents may be in possession of, or
+    guarding, something of valor" - so reading I-30b makes it a row that
+    is always offered and never taken for them. Declining is not
+    pressing it.
+  */
+  const searches = bodies(c).map(({ index, foe }) => ({
+    id: c.foes.length === 1 ? 'treasure' : `treasure-${String(index)}`,
+    title:
+      c.foes.length === 1
+        ? t('ui.combat.act.treasure')
+        : fill(t('ui.combat.act.treasure.of'), {
+            name: (treasureFoeById(foe.id)?.name ?? '').toUpperCase(),
+          }),
+    cite: t('ui.combat.act.treasure.cite'),
+    line: t('ui.combat.act.treasure.line'),
+    enabled: !foe.searched,
+    action: { type: 'combat.treasure', index } as Action,
+  }))
+  const spoils = [...loot, ...searches]
   if (alive.length === 0)
     return [
-      ...loot,
+      ...spoils,
       { id: 'go-on', title: t('ui.combat.act.go-on'), cite: t('ui.combat.act.go-on.cite'), line: t('ui.combat.act.go-on.line'), enabled: true, action: { type: 'combat.leave' } },
     ]
   if (c.event !== null) {
@@ -240,17 +308,41 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
     name: own.name,
     cost: own.value,
   }))
-  const technique = printed[0] ?? own[0]
+  /*
+    Every Technique the Master knows is a winner's option, not the first
+    one the sheet happens to list (MH p.23: "use one of the Techniques
+    you know"). Printed ones first and learned ones second, each in
+    sheet order, because that is the order the player wrote them down
+    in; nothing here sorts by cost.
+  */
+  const usable: readonly { id: string; name: string; cost: number; printed: boolean }[] = [
+    ...printed.map((x) => ({ id: x.id, name: x.name, cost: x.cost, printed: true })),
+    ...own.map((x) => ({ id: x.id, name: x.name, cost: x.cost, printed: false })),
+  ]
+  const oneOf = (x: (typeof usable)[number]): string =>
+    x.printed
+      ? fill(t('ui.combat.act.technique.line'), { name: x.name, cost: x.cost })
+      : fill(t('ui.combat.act.technique.own'), { name: x.name, value: x.cost })
+  const technique = usable[0]
+  const many = usable.length > 1
   const line =
     technique === undefined
       ? t('ui.combat.act.technique.none')
-      : printed.length > 0
-        ? fill(t('ui.combat.act.technique.line'), { name: technique.name, cost: technique.cost })
-        : fill(t('ui.combat.act.technique.own'), { name: technique.name, value: technique.cost })
+      : many
+        ? menu.techniquesOpen
+          ? t('ui.combat.act.technique.close')
+          : fill(t('ui.combat.act.technique.choose'), { n: usable.length })
+        : oneOf(technique)
+  // MH p.24's sentence prints on every fight rather than only where a
+  // Technique could end one: the engine does not know what "end a
+  // fight" means for a Technique whose effect is narrative, and a
+  // warning that appears only sometimes reads as a rule rather than as
+  // the designer's advice it is.
+  const warning = { text: t('ui.combat.act.technique.warning'), cite: t('ui.combat.act.technique.warning.cite') }
   const cordReady = holds(state, CORD) && flag(state.cave, CORD_KNOWN)
   const fireproof = aim?.id === FIREPROOF
   return [
-    ...loot,
+    ...spoils,
     {
       id: 'strike',
       title: t('ui.combat.act.strike'),
@@ -290,7 +382,37 @@ const actions = (state: RecordState, c: Combat): readonly Act[] => {
       line,
       enabled: won && technique !== undefined,
       action: { type: 'combat.technique', id: technique?.id ?? '' },
+      ...(many ? { press: menu.toggleTechniques } : {}),
+      warning,
     },
+    // The chooser's rows, under the row that opened it. One Technique
+    // is no choice at all and keeps the single row above.
+    ...(many && menu.techniquesOpen
+      ? usable.map((x, i) => ({
+          id: `technique-${String(i)}`,
+          title: x.name.toUpperCase(),
+          cite: t('ui.combat.act.technique.cite'),
+          line: oneOf(x),
+          enabled: won,
+          action: { type: 'combat.technique', id: x.id } as Action,
+        }))
+      : []),
+    // The book's one optional rule, offered only where there is a crowd
+    // to streamline (MH p.28 footnote, R33). It stands with the other
+    // rows rather than in a settings screen: it is a call about this
+    // fight, made while looking at the bodies it applies to.
+    ...(c.foes.length > 1
+      ? [
+          {
+            id: 'minions',
+            title: t('ui.combat.act.minions'),
+            cite: t('ui.combat.act.minions.cite'),
+            line: c.minionsAtOne ? t('ui.combat.act.minions.on') : t('ui.combat.act.minions.off'),
+            enabled: true,
+            action: { type: 'combat.minions' } as Action,
+          },
+        ]
+      : []),
     { id: 'weapon', title: t('ui.combat.act.weapon'), cite: t('ui.combat.act.weapon.cite'), line: t('ui.combat.act.weapon.line'), enabled: won, action: { type: 'combat.weapon' } },
     { id: 'opening', title: t('ui.combat.act.opening'), cite: t('ui.combat.act.opening.cite'), line: t('ui.combat.act.opening.line'), enabled: won, action: { type: 'combat.opening' } },
   ]
@@ -362,6 +484,12 @@ const moraleText = (m: NonNullable<Combat['morale']>): string =>
       : fill(t('ui.combat.morale.rally'), { n: m.reinforcements })
 
 export const CombatScreen = ({ state, dispatch }: Props) => {
+  /*
+    Whether the Technique chooser is open. The screen's own business,
+    not the fight's: a half-opened menu is not a thing a saved game
+    should remember, and `Combat` is the record's shape.
+  */
+  const [techniquesOpen, setTechniquesOpen] = useState(false)
   const c = state.combat
   const foe = c === null ? undefined : treasureFoeById(aimedAt(c)?.id ?? '')
   if (c === null || foe === undefined) return null
@@ -370,7 +498,15 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
   const b = banner(state, c)
   const mine = state.sheet.proficiencies.reduce((best, p) => (p.value > best.value ? p : best), state.sheet.proficiencies[0] ?? { name: '', value: 0 })
   const theirs = foe.proficiencies.reduce((best, p) => (p.value > best.value ? p : best), foe.proficiencies[0] ?? { name: '', value: 0 })
-  const canRoll = !c.over.ended && c.last === null && !c.opening && standing(c).length > 0
+  /*
+    MH p.23 (R26): a round the Master won nothing on is followed by
+    another. `readyToRoll` is the reducer's own answer to the same
+    question, imported rather than restated so the button and the
+    reducer cannot drift apart.
+  */
+  const canRoll = !c.over.ended && readyToRoll(c) && !c.opening && standing(c).length > 0
+  /** A body is down and its Treasures roll has not been made (R78). */
+  const searchable = c.foes.some((f) => f.endurance === 0 && !f.searched)
   // Filled here rather than in `banner`: the banner is the rule's word
   // for how the fight ended, this is the narrator's, and they are two
   // different jobs on two different lines (plan/VOICE.md).
@@ -406,6 +542,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
             title={foe.name.toUpperCase()}
             strength={aimedAt(c)?.strength ?? null}
             prefix="theirs"
+            endurance={{ now: aimedAt(c)?.endurance ?? 0, printed: foe.endurance }}
             idle={fill(t('ui.combat.theirs.idle'), { end: aimedAt(c)?.endurance ?? 0, name: theirs.name.toUpperCase(), value: theirs.value })}
           />
         )}
@@ -438,6 +575,7 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
                 prefix={`foe-${String(index)}`}
                 dimmed={body.endurance === 0}
                 aimed={index === c.target && body.endurance > 0}
+                endurance={{ now: body.endurance, printed: block?.endurance ?? body.endurance }}
                 /*
                   Two different facts can be true of the same card, and
                   both matter: this is the one the winner's option
@@ -454,6 +592,9 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
                       : '',
                   body.endurance > 0 && body.bound ? t('ui.combat.band.bound') : '',
                   body.endurance > 0 && body.burning ? t('ui.combat.band.burning') : '',
+                  // The printed ENDURANCE stays on the card; this says
+                  // the fight is reading it as 1 (MH p.28 footnote).
+                  body.endurance > 0 && c.minionsAtOne ? t('ui.combat.band.minion') : '',
                 ]
                   .filter((word) => word.length > 0)
                   .join(t('ui.combat.band.note.join'))}
@@ -701,15 +842,51 @@ export const CombatScreen = ({ state, dispatch }: Props) => {
           </Slip>
         )}
 
-        {actions(state, c).map((a) => (
-          <MenuButton key={a.id} testID={`act-${a.id}`} title={a.title} note="" line={a.line} source={a.cite} enabled={a.enabled} onPress={() => dispatch(a.action)} />
+        {actions(state, c, {
+          techniquesOpen,
+          toggleTechniques: () => setTechniquesOpen((open) => !open),
+        }).map((a) => (
+          <View key={a.id}>
+            <MenuButton
+              testID={`act-${a.id}`}
+              title={a.title}
+              note=""
+              line={a.line}
+              source={a.cite}
+              enabled={a.enabled}
+              onPress={() => (a.press === undefined ? dispatch(a.action) : a.press())}
+            />
+            {/*
+              The book's advice under the row it is about, upright:
+              MH p.24's sentence is the designer's, not the narrator's,
+              and VISION.md keeps the two typographically apart.
+            */}
+            {a.warning === undefined ? null : (
+              <View style={styles.warning}>
+                <Text testID="technique-warning" style={styles.warningText}>
+                  {a.warning.text}
+                </Text>
+                <Source cite={a.warning.cite} />
+              </View>
+            )}
+          </View>
         ))}
       </ScrollView>
 
       <View style={styles.foot}>
-        {state.manualOpen && canRoll ? (
+        {/*
+          The dice on the table. Two faces while a round is there to
+          roll; one while the only roll left on this screen is R78's
+          treasure d6 over a body, which reads a single face the same
+          way the beat's Event roll does (I-30b; Phase 10k).
+        */}
+        {state.manualOpen && (canRoll || searchable) ? (
           <View style={styles.manual}>
-            <ManualDice manual={state.manual} onFace={(face) => dispatch({ type: 'manual.face', face })} />
+            <ManualDice
+              manual={state.manual}
+              need={canRoll ? 2 : 1}
+              onFace={(face) => dispatch({ type: 'manual.face', face })}
+            />
           </View>
         ) : null}
         <RollBar
@@ -749,6 +926,8 @@ const styles = StyleSheet.create({
   sideTitle: { fontFamily: font.sans, fontSize: 9, fontWeight: '800', letterSpacing: 0.9, color: color.ink },
   dice: { flexDirection: 'row', gap: 5, marginVertical: 6 },
   sideLine: { fontFamily: font.mono, fontSize: 10, lineHeight: 16, color: color.ink },
+  /** What is left of an opponent, over what it prints. Never hidden by a roll. */
+  sideEndurance: { fontFamily: font.sans, fontSize: 10, fontWeight: '800', letterSpacing: 0.6, marginTop: 3, color: color.ink },
   sideTotal: { fontFamily: font.sans, fontSize: 32, fontWeight: '800', lineHeight: 34, marginTop: 4, color: color.ink },
   foeLine: { marginTop: 6, marginHorizontal: 14, fontFamily: font.serif, fontSize: 13, lineHeight: 18, fontStyle: 'italic', color: color.ink },
   banner: { marginTop: 8, marginHorizontal: 14, borderWidth: 3, borderColor: color.ink, paddingVertical: 8, paddingHorizontal: 11, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
@@ -767,6 +946,9 @@ const styles = StyleSheet.create({
   /** Inside a dashed slip already: his own rule needs no top margin. */
   narrator: { marginTop: 0, paddingTop: 0, borderTopWidth: 0 },
   pad: { padding: 9 },
+  /** MH p.24's sentence under the Technique row: the book's, upright. */
+  warning: { paddingHorizontal: 9, paddingBottom: 4, gap: 3 },
+  warningText: { fontFamily: font.serif, fontSize: 12, lineHeight: 17, color: color.ink },
   between: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', gap: 8, marginBottom: 5 },
   blow: { flexDirection: 'row', alignItems: 'center', gap: 9 },
   blowText: { marginLeft: 'auto', alignItems: 'flex-end', flexShrink: 1 },

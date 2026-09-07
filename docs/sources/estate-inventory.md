@@ -725,7 +725,7 @@ read from column alignment (the table has no vertical rules).
 | Encounter Outcome | Ambush | Attack | Attack | Attack | NPC/Creature Reaction | NPC/Creature Reaction |
 | Enemy Type | Minion | Subordinate | Subordinate | Warrior | Warrior | Boss |
 | No. of enemies | 1d6 | 3 | 3 | 2 | 2 | 1 |
-| Enemy attack | Normal | Normal | Normal | Special | Special | Special |
+| Enemy attack | Normal | Normal | Normal | Normal | Special | Special |
 | Door | Open | Open | Open | Trapped | Locked | Closed |
 | Object amount | Finished | One more | One more | Many remaining | Many remaining | Many remaining |
 | Value | 5 GP | 10 GP | 25 GP | 50 GP | 100 GP | 250 GP |
@@ -734,7 +734,7 @@ Spans: Outcome 2-3 / 4-5 (span inferred); Encounter Outcome 2-4 / 5-6 (span
 inferred; "Attack" is centred under 3, "NPC/Creature Reaction" under
 5-6); Enemy Type 2-3 / 4-5 (span inferred); No. of enemies 2-3 / 4-5 (span
 inferred, aligned with Enemy Type so that Subordinate = 3, Warrior = 2, Boss
-= 1, Minion = 1d6); Enemy attack 1-3 / 4-6 (span inferred); Door 1-3 (span
+= 1, Minion = 1d6); Enemy attack 1-4 / 5-6 (span read from the rendered page); Door 1-3 (span
 inferred); Object amount 2-3 / 4-6 (span inferred).
 
 ### 3.17 Inspirations: Action (p. 59), d66

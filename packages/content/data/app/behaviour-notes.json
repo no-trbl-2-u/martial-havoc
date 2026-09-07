@@ -246,6 +246,20 @@
       "title": "An Opening does no damage but sets up the Final Blow"
     },
     {
+      "id": "note.combat.lost-round-is-followed-by-another",
+      "cite": "MH p.23 (R26)",
+      "ref": "combat.lost-round-is-followed-by-another",
+      "text": "Losing an exchange is not one of the three things that end a fight, so the next exchange is rolled: only a Final Blow, an ENDURANCE of zero or an Unexpected Event stops it.",
+      "title": "A round you lose is followed by another"
+    },
+    {
+      "id": "note.combat.minions-at-endurance-one",
+      "cite": "MH p.28 (R33, footnote)",
+      "ref": "combat.minions-at-endurance-one",
+      "text": "An optional rule, off unless you switch it on: Minions are read at ENDURANCE 1, and any hit removes one.",
+      "title": "Minions at ENDURANCE 1, if you want the scene to move"
+    },
+    {
       "id": "note.combat.ends-fight",
       "cite": "MH p.23 (R26)",
       "ref": "combat.ends-fight",

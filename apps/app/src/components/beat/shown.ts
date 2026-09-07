@@ -223,7 +223,27 @@ const book = (r: Result, sheet: RecordState['sheet']): Omit<ShownResult, 'narrat
                 ? t('ui.cave.loot.key')
                 : t('ui.cave.loot.item')
               : t('ui.cave.loot.treasure'),
-        cite: t('ui.cave.loot.cite'),
+        // The Devil servant's 6 is the one row whose drop is knowledge
+        // rather than a thing, and it is a reading of a glyph with no
+        // text beside it, so the slip names the reading it stands on
+        // (I-08) rather than the adventure's line alone.
+        cite: r.hint ? t('ui.cave.loot.hint.cite') : t('ui.cave.loot.cite'),
+        passage: null,
+      }
+    case 'treasure':
+      return {
+        title: fill(t('ui.result.treasure.title'), { name: r.foe.toUpperCase() }),
+        // R78 is the book's; that the roll is offered at all after every
+        // victory, and always declinable, is I-30b's - so the slip is
+        // labelled for the half a player could be surprised by.
+        label: 'reading',
+        pill: t('ui.result.treasure.cite'),
+        a: r.face,
+        b: null,
+        c: null,
+        total: r.text,
+        against: fill(t('ui.result.treasure.against'), { band: r.band }),
+        cite: t('ui.result.treasure.cite'),
         passage: null,
       }
     case 'flee':

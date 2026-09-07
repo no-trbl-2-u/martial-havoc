@@ -357,6 +357,27 @@ export type FleeResult = {
   readonly dishonor: number
 }
 
+/**
+ * R78's Treasures roll over a fallen body (MH p.68).
+ *
+ * "If you believe that your defeated opponents may be in possession of,
+ * or guarding, something of valor, roll 1d6 and compare it with their
+ * ENDURANCE." The band is read off the opponent's *printed* ENDURANCE -
+ * the table is about what the creature is worth, not how badly it was
+ * beaten - and the row is the printed cell, unpriced and uninterpreted.
+ */
+export type TreasureRollResult = {
+  readonly kind: 'treasure'
+  /** The printed name of the body searched. */
+  readonly foe: string
+  /** The one face rolled. */
+  readonly face: Die
+  /** The ENDURANCE band the row was read on ("Up to 16", "17-19", ...). */
+  readonly band: string
+  /** The printed cell, verbatim. */
+  readonly text: string
+}
+
 /** A line of feedback that is not a roll: a rescue, what the sheets taught. */
 export type NoteResult = {
   readonly kind: 'note'
@@ -388,6 +409,7 @@ export type Result =
   | TakeResult
   | TurnResult
   | LootResult
+  | TreasureRollResult
   | FleeResult
   | NoteResult
 
@@ -445,6 +467,17 @@ export type FoeInFight = {
   readonly burning: boolean
   /** Its LOOT line has been read (once per body). */
   readonly looted: boolean
+  /**
+   * R78's Treasures roll has been made over this body (once per body).
+   *
+   * The roll is offered after every victory and always declinable
+   * (I-30b): the book's trigger is "if you believe that your defeated
+   * opponents may be in possession of ... something of valor", which is
+   * the player's belief and not a thing the app can hold an opinion
+   * about. So this records only that the offer was taken, never that it
+   * should have been.
+   */
+  readonly searched: boolean
 }
 
 /**
@@ -543,6 +576,24 @@ export type Combat = {
    * Master won, because the sword does nothing on those.
    */
   readonly warded: boolean
+  /**
+   * The book's one optional rule, switched on for this fight (MH p.28,
+   * footnote; R33).
+   *
+   * "To streamline combat while maintaining the idea of a chaotic
+   * scene, you can consider Minions with ENDURANCE=1; if you hit you
+   * can remove one minion." It applies to the whole band for the whole
+   * fight, because the footnote speaks of Minions as a class rather
+   * than of one body; it is offered only where there is a crowd to
+   * streamline, and it is off until the player says otherwise.
+   *
+   * It lives here rather than on the sheet: the footnote's reason is
+   * "to streamline combat" and nothing else, so it is a fact about a
+   * fight. The record carries the choice as a deed, which is why
+   * nothing in `campaign.ts` reads this field and no record version
+   * moves for it.
+   */
+  readonly minionsAtOne: boolean
   readonly over: FightEnd
 }
 
@@ -728,6 +779,10 @@ export type Action =
   | { readonly type: 'combat.fan' }
   /** After a victory: one fallen foe's LOOT line (5T a2). */
   | { readonly type: 'combat.loot'; readonly index: number }
+  /** After a victory: R78's Treasures roll over one fallen foe (I-30b). */
+  | { readonly type: 'combat.treasure'; readonly index: number }
+  /** Switch the MH p.28 footnote on or off for this fight (R33). */
+  | { readonly type: 'combat.minions' }
   /** Keep the landed blow as a Technique: the LUCK roll (R31). */
   | { readonly type: 'combat.keep' }
   /** Let the landed blow go: no roll, no Technique, no second asking. */

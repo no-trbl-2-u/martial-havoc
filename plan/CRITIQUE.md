@@ -9,26 +9,6 @@
 
 ## Pending
 
-### [MED] apps/app — the opponent's ENDURANCE is not shown on its combat card
-- pass: user-jot (commit afb0e68)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: the opponent's ENDURANCE is not shown on its combat card: the Devil servant's card prints dice, SKILL +5 and SURROUND +3 but not END 7 or what is left of it, so STRIKE "Take 6 from its ENDURANCE" cannot be read against a total. The book prints every opponent's ENDURANCE (5T a2 "DEVIL SERVANT SKILL:5 END:7 ATT:1"; MH p.70-79) and has the player subtract from it (MH p.23) and compare against it for treasure (MH p.68).
-- evidence: user-spotted at 2026-09-07T18:46:02Z, on the combat screen against a Devil servant (Master ahead by 6, STRIKE offered)
-- suggested fix: print current over printed ENDURANCE on the opponent card, e.g. "END 7 / 7", cited MH p.23 and 5T a2, updated after each strike; Phase 10k scope, app only.
-- source: user
-
-### [HIGH] apps/app — a lost round cannot be followed by another: the fight offers nothing but FLEE
-- pass: agent (commit pending, the played-not-recited e2e)
-- viewport: 390x844
-- auth_state: anonymous
-- category: correctness
-- observation: MH p.23: "The combat continues until: you succeed in landing a Final Blow; your opponent's or your ENDURANCE points reach zero; an Unexpected Event occurs." In the app a round the Master loses is the last round they may roll. `doRound` returns the state unchanged while `c.last !== null`, and only the winner's options (`doStrike`, `doOpening`, `doTechnique`, `combat.weapon`), a tie or the fan clear `last`; none of them is enabled on a lost round. On the screen `canRoll` is false for the same reason and every row is disabled, so the one enabled control is FLEE with its Dishonor Point. Two consequences: a Master who loses one exchange must flee it, and no duel from full ENDURANCE can end with the Master down (the largest single difference in the cave is 11). The reducer test "takes the hits the Master is behind on, without a roll or a limit (I-44)" rolls a second round after a lost one and passes only because the second `reduce` is a no-op.
-- evidence: `apps/app/src/state/reduce.ts`, `doRound`, the guard `c.last !== null`; `apps/app/src/screens/CombatScreen.tsx`, `canRoll` and `actions()` (`enabled: won` on every winner's row); `reduce.test.ts`, "takes the hits the Master is behind on", `again` equals `lost`; `e2e/fixtures/record.ts`, `struckDown`, which has to flee one fight to fall in the next
-- suggested fix: a lost round is settled by the hit it already applied: clear `last` (and `rolledOff`) at the end of `doRound` when the outcome is `master-hit`, or let `doRound` accept a `last` whose outcome is `master-hit`. Label it (rule, MH p.23), give it a reducer test that rolls twice and loses twice, and make the I-44 test assert the second round actually rolled.
-- source: agent
-
 ### [MED] packages/content — the narrator's Ambush line is spoken only for an ambush by nobody
 - pass: agent (commit pending, the played-not-recited e2e)
 - viewport: 390x844
@@ -57,16 +37,6 @@
 - observation: R77 says a spirit or ghost is "immune to traditional weapons or blows; to hurt them you need a technique, ritual, or exceptional weapon". The engine has the gate (`ordinaryBlowsPass`), the roster carries I-29's `incorporeal` tag, and the app reads neither: STRIKE is offered against the Dexterous Ghost and the Old Vixen exactly as against an Ogre. Phase 10g built the gate and reverted it before shipping, because turning it on makes the cave unfinishable — the Ghost holds the private quarter's key, and no Technique in this build does damage, so a Master without the seven-star sword has no legal way to hurt a spirit at all. The two problems are one problem: the gate is correct and unusable until the winner's-option Technique path can carry damage.
 - evidence: `packages/engine/src/progression/spoils.ts`, `ordinaryBlowsPass`, exported and read by nothing; `foe.dexterous-ghost` and `foe.old-vixen` carry `incorporeal: true`; the revert is described in 07199af's body
 - suggested fix: One phase, in this order: give the printed Techniques a mechanical effect where the book gives them one (R28 already prices them; `effects.json` already classes them), then turn the gate on, then let the sword and the exceptional weapons of I-29 pass it. Turning the gate on first ships a soft-lock.
-- source: agent
-
-### [MEDIUM] The Minions rule is not offered anywhere (MH p.28 footnote)
-- pass: agent (commit 2299f57)
-- viewport: unspecified
-- auth_state: anonymous
-- category: content
-- observation: Phase 10e's brief asked for the Minions rule as a toggle on the fight's first screen - "To streamline combat while maintaining the idea of a chaotic scene, you can consider Minions with ENDURANCE=1; if you hit you can remove one minion" (MH p.28, footnote) - default off. The phase shipped everything else in its scope and not this: the rule is optional, it is the only optional rule in the book that changes a printed stat block, and there is nowhere in the app that a rule is switched on or off. Giving it the first such switch is a UI decision worth making deliberately rather than as the tail of a phase about crowds.
-- evidence: plan/phases/phase_10e_many_foes.md, Scope, the fourth bullet; no `minions` flag exists in apps/app/src/state/types.ts after 2299f57
-- suggested fix: A row on the fight's first screen when the band is more than one, cited MH p.28, default off, that reads each body's ENDURANCE as 1 for the length of that fight. It wants a home for optional rules in the record, which is the part worth designing: a second one will follow.
 - source: agent
 
 ### [HIGH] scripts/copy-check.test.ts — the copy leg does not see a citation as copy
@@ -228,16 +198,6 @@ not from that pass: they are the carry-overs the `/march` loop of
 - suggested fix: Phase 8: a dark token set behind useColorScheme, and a Playwright pass at 130 percent font scale on the beat and combat screens.
 - source: user
 
-### [MED] apps/app — combat offers only the first usable Technique
-- pass: user-jot (commit 40b3dd5)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: CombatScreen picks the first Technique whose effect timing is combat-winner-option (San Te: Iron head). A Master who knows several gets no chooser, and the Technique does nothing mechanical beyond its ENDURANCE cost and its authored line.
-- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
-- suggested fix: A sub-menu of usable Techniques when more than one qualifies, and the effect operation (effects.json) wired to the engine call it names.
-- source: user
-
 ### [MED] design/prototype — the Claude Design file disagrees with docs in four places
 - pass: user-jot (commit 40b3dd5)
 - viewport: unspecified
@@ -256,16 +216,6 @@ not from that pass: they are the carry-overs the `/march` loop of
 - observation: apps/app/src/lib/spread.ts keeps glyphs 58 units apart, but the mile boxes at link midpoints and the YOU ARE HERE label can still sit on a neighbour when three points line up (design/screenshots/16-region.png).
 - evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
 - suggested fix: Place mile labels off the midpoint along the link normal, and skip a label whose box would overlap a glyph.
-- source: user
-
-### [LOW] apps/app — manual dice not offered for the treasure d6
-- pass: user-jot (commit 40b3dd5)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: The dice on the table cover the Master 2d6 rolls (checks, Attack Strength, the Final Blow). The R78 treasure roll is one d6 and always reads the table source, so a player who rolled it at the table cannot enter it.
-- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
-- suggested fix: Let the manual panel accept one face when the pending roll is 1d6.
 - source: user
 
 ### [LOW] general — commit attribution policy conflicts with the cloud harness
@@ -297,36 +247,6 @@ not from that pass: they are the carry-overs the `/march` loop of
 - evidence: found while transcribing treasures.json for Phase 5, at 2026-09-06T05:30:00Z
 - suggested fix: Settle it in docs/rules/readings/discrepancies.md - either widen I-38b to name three, or note that I-41's second route is superseded - then bring treasures.json's knownFrom into line. Rule 6 keeps the correction its own change, never a side effect of a phase.
 - source: agent
-
-### [MED] apps/app — "Both" and the Woodgatherer band are fought one after another, not as multiple combat (R35)
-- pass: user-jot (phase 8c residue, 2026-09-06)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: The Attendants room's 5-6 row brings the Skillful Beast and the Dexterous Ghost together, and the mountain's 1-3 row brings a band of Woodgatherers (I-05b). The engine has multiple combat (roundAgainstMany, skillForFight, attackersThisRound) but the CombatScreen fights one foe at a time; the reducer queues the second foe as pending and the Master fights them in sequence at full SKILL.
-- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
-- suggested fix: Give CombatScreen a many-foes mode over packages/engine/src/multiple: SKILL reduced by headcount, one Master roll against each attacker up to ATTACK, and start it from cave.fight when pending holds more than one foe.
-- source: user
-
-### [MED] apps/app — the Oracle is not asked how many Devil servants there are (I-34)
-- pass: user-jot (phase 8c residue, 2026-09-06)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: Rows with count 'oracle' (Cave entrance 1, Dining Hall 1-4, Storage room, Kitchen) leave the number to the caller; the reducer fights exactly one Devil servant. The book says use the Oracle's No. of enemies row.
-- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
-- suggested fix: Roll the Oracle's No. of enemies row in doTurn when the encounter's count is 'oracle', push that many servant ids onto pending, and show the roll on the card as a third die.
-- source: user
-
-### [LOW] apps/app — the Devil servant’s LOOT on a 6 is recorded as nothing (I-08)
-- pass: user-jot (phase 8c residue, 2026-09-06)
-- viewport: unspecified
-- auth_state: anonymous
-- category: correctness
-- observation: The printed row is a warning-triangle icon with no text; the loot record carries hint: true and the reducer takes nothing and writes no deed. The reading says the 6 reveals a Hint, but which area's is unstated.
-- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
-- suggested fix: Reveal the Hint of the area the servant was met in (revealHint on cave.area) and say so on the result slip with cite I-08.
-- source: user
 
 ### [LOW] apps/app — the region diagram’s labels overlap
 - pass: user-jot (phase 8c residue, 2026-09-06)
@@ -379,6 +299,94 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [MED] apps/app — the opponent's ENDURANCE is not shown on its combat card
+- pass: user-jot (commit afb0e68)
+- closed: the opponent's ENDURANCE is its own line on the card now (`END now / printed`), outside the idle line the first roll replaces, on the duel card and on every card of a band. It moves as the body is struck and the printed half never does, which is what R78's roll is read against. (Phase 10k)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: the opponent's ENDURANCE is not shown on its combat card: the Devil servant's card prints dice, SKILL +5 and SURROUND +3 but not END 7 or what is left of it, so STRIKE "Take 6 from its ENDURANCE" cannot be read against a total. The book prints every opponent's ENDURANCE (5T a2 "DEVIL SERVANT SKILL:5 END:7 ATT:1"; MH p.70-79) and has the player subtract from it (MH p.23) and compare against it for treasure (MH p.68).
+- evidence: user-spotted at 2026-09-07T18:46:02Z, on the combat screen against a Devil servant (Master ahead by 6, STRIKE offered)
+- suggested fix: print current over printed ENDURANCE on the opponent card, e.g. "END 7 / 7", cited MH p.23 and 5T a2, updated after each strike; Phase 10k scope, app only.
+- source: user
+
+### [HIGH] apps/app — a lost round cannot be followed by another: the fight offers nothing but FLEE
+- pass: agent (commit pending, the played-not-recited e2e)
+- closed: `doRound` no longer refuses a roll while a round is on the table; `readyToRoll` asks whether a winner's option is still open instead, and the screen's `canRoll` imports the same function so the two cannot drift. Labelled `combat.lost-round-is-followed-by-another`, rule, MH p.23 (R26). The I-44 test now asserts the second round actually rolled, and `e2e/played.spec.ts` loses an exchange and rolls the next one on the real export. (Phase 10k)
+- viewport: 390x844
+- auth_state: anonymous
+- category: correctness
+- observation: MH p.23: "The combat continues until: you succeed in landing a Final Blow; your opponent's or your ENDURANCE points reach zero; an Unexpected Event occurs." In the app a round the Master loses is the last round they may roll. `doRound` returns the state unchanged while `c.last !== null`, and only the winner's options (`doStrike`, `doOpening`, `doTechnique`, `combat.weapon`), a tie or the fan clear `last`; none of them is enabled on a lost round. On the screen `canRoll` is false for the same reason and every row is disabled, so the one enabled control is FLEE with its Dishonor Point. Two consequences: a Master who loses one exchange must flee it, and no duel from full ENDURANCE can end with the Master down (the largest single difference in the cave is 11). The reducer test "takes the hits the Master is behind on, without a roll or a limit (I-44)" rolls a second round after a lost one and passes only because the second `reduce` is a no-op.
+- evidence: `apps/app/src/state/reduce.ts`, `doRound`, the guard `c.last !== null`; `apps/app/src/screens/CombatScreen.tsx`, `canRoll` and `actions()` (`enabled: won` on every winner's row); `reduce.test.ts`, "takes the hits the Master is behind on", `again` equals `lost`; `e2e/fixtures/record.ts`, `struckDown`, which has to flee one fight to fall in the next
+- suggested fix: a lost round is settled by the hit it already applied: clear `last` (and `rolledOff`) at the end of `doRound` when the outcome is `master-hit`, or let `doRound` accept a `last` whose outcome is `master-hit`. Label it (rule, MH p.23), give it a reducer test that rolls twice and loses twice, and make the I-44 test assert the second round actually rolled.
+- source: agent
+
+### [MEDIUM] The Minions rule is not offered anywhere (MH p.28 footnote)
+- pass: agent (commit 2299f57)
+- closed: MINIONS AT 1 stands with the other rows on a fight of more than one body, default off, cited MH p.28. While on, any hit removes a body and the printed ENDURANCE stays on the card, marked AT 1. Labelled `combat.minions-at-endurance-one`, rule. The switch lives on `Combat` and the choice is written as a deed, so the record carries it with no version bump - the home for optional rules the row asked to have designed. (Phase 10k)
+- viewport: unspecified
+- auth_state: anonymous
+- category: content
+- observation: Phase 10e's brief asked for the Minions rule as a toggle on the fight's first screen - "To streamline combat while maintaining the idea of a chaotic scene, you can consider Minions with ENDURANCE=1; if you hit you can remove one minion" (MH p.28, footnote) - default off. The phase shipped everything else in its scope and not this: the rule is optional, it is the only optional rule in the book that changes a printed stat block, and there is nowhere in the app that a rule is switched on or off. Giving it the first such switch is a UI decision worth making deliberately rather than as the tail of a phase about crowds.
+- evidence: plan/phases/phase_10e_many_foes.md, Scope, the fourth bullet; no `minions` flag exists in apps/app/src/state/types.ts after 2299f57
+- suggested fix: A row on the fight's first screen when the band is more than one, cited MH p.28, default off, that reads each body's ENDURANCE as 1 for the length of that fight. It wants a home for optional rules in the record, which is the part worth designing: a second one will follow.
+- source: agent
+
+### [MED] apps/app — combat offers only the first usable Technique
+- pass: user-jot (commit 40b3dd5)
+- closed: the row opens a chooser when more than one Technique of the sheet works inside a round - printed ones first, learned ones second, each with its own cost - and MH p.24's sentence against ending a fight with one prints under it, upright. What a Technique *does* is unchanged; that half is Phase 10l's. (Phase 10k)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: CombatScreen picks the first Technique whose effect timing is combat-winner-option (San Te: Iron head). A Master who knows several gets no chooser, and the Technique does nothing mechanical beyond its ENDURANCE cost and its authored line.
+- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
+- suggested fix: A sub-menu of usable Techniques when more than one qualifies, and the effect operation (effects.json) wired to the engine call it names.
+- source: user
+
+### [LOW] apps/app — manual dice not offered for the treasure d6
+- pass: user-jot (commit 40b3dd5)
+- closed: R78's Treasures roll is a row over each fallen body (offered, never taken for the player, I-30b) and reads a single tapped face through the same path the beat's Event roll takes, counted as an override. `ManualDice` is opened with `need: 1` while the only roll left on the screen is that d6. (Phase 10k)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: The dice on the table cover the Master 2d6 rolls (checks, Attack Strength, the Final Blow). The R78 treasure roll is one d6 and always reads the table source, so a player who rolled it at the table cannot enter it.
+- evidence: user-spotted at 2026-09-06T03:16:00Z (PR #10, the design prototype landing)
+- suggested fix: Let the manual panel accept one face when the pending roll is 1d6.
+- source: user
+
+### [LOW] apps/app — the Devil servant’s LOOT on a 6 is recorded as nothing (I-08)
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- closed: the reveal now writes a deed ("learned the servant's secret of the <area>") and the result slip carries I-08's own citation rather than the adventure's line alone. (Phase 10k)
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: The printed row is a warning-triangle icon with no text; the loot record carries hint: true and the reducer takes nothing and writes no deed. The reading says the 6 reveals a Hint, but which area's is unstated.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Reveal the Hint of the area the servant was met in (revealHint on cave.area) and say so on the result slip with cite I-08.
+- source: user
+
+### [MED] apps/app — "Both" and the Woodgatherer band are fought one after another, not as multiple combat (R35)
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- closed: shipped in Phase 10e (2299f57). FACE THEM ALL (n) puts the whole band in one fight, SKILL reduced by the number faced and ATTACK saying who may wound per kind.
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: The Attendants room's 5-6 row brings the Skillful Beast and the Dexterous Ghost together, and the mountain's 1-3 row brings a band of Woodgatherers (I-05b). The engine has multiple combat (roundAgainstMany, skillForFight, attackersThisRound) but the CombatScreen fights one foe at a time; the reducer queues the second foe as pending and the Master fights them in sequence at full SKILL.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Give CombatScreen a many-foes mode over packages/engine/src/multiple: SKILL reduced by headcount, one Master roll against each attacker up to ATTACK, and start it from cave.fight when pending holds more than one foe.
+- source: user
+
+### [MED] apps/app — the Oracle is not asked how many Devil servants there are (I-34)
+- pass: user-jot (phase 8c residue, 2026-09-06)
+- closed: shipped in Phase 10e (2299f57). A dice-less room reads the Oracle's No. of enemies row for the count and the roll card shows the third die.
+- viewport: unspecified
+- auth_state: anonymous
+- category: correctness
+- observation: Rows with count 'oracle' (Cave entrance 1, Dining Hall 1-4, Storage room, Kitchen) leave the number to the caller; the reducer fights exactly one Devil servant. The book says use the Oracle's No. of enemies row.
+- evidence: carried over from Phase 8c (the cave, verbatim; PR #20) and the Playwright walkthrough of 2026-09-06, user-filed
+- suggested fix: Roll the Oracle's No. of enemies row in doTurn when the encounter's count is 'oracle', push that many servant ids onto pending, and show the roll on the card as a third die.
+- source: user
 
 ### [MEDIUM] The ending has no e2e, because reaching it is a whole sitting
 - pass: agent (commit pending, phase 10i)
