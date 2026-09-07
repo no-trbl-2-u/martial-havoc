@@ -251,11 +251,21 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       `treasures 5`, so reaching the screen in a browser is a walk of
       the whole cave, which belongs to Phase 14's sitting. Filed to
       `plan/CRITIQUE.md`; every mechanic has a reducer case.
-- [ ] Phase 10j — Who the Master is, and the player's own words
+- [x] Phase 10j — Who the Master is, and the player's own words
       (brief: `phase_10j_who_the_master_is.md`; the call was made
       2026-09-07: a motive is a hook from the Adventures table,
       MH p.36-39, rolled or chosen at creation — option 1 in the
-      brief. No user call is outstanding on this row.)
+      brief) — 4d53531. Creation gains WHY ARE YOU ON THE ROAD; the
+      hook prints on READY and under THE MASTER on RECORD and travels
+      in the export, and a printed sheet says which film it came from
+      instead (MH p.92). Four prompts ship in
+      `packages/content/data/app/prompts.json` and open the passage
+      field with a question at an Unexpected Event, a kill, a rescue
+      and a treasure taken; NOT NOW dismisses one and nothing is ever
+      required. **One call is in the commit body**: the prompts are
+      not the narrator's and are the one authored line in the build
+      that uses the second person, so they get their own gate in
+      `voice.test.ts` rather than his.
 
 **The milestone (phase 10, by 2026-12-05):**
 - [ ] Phase 10 — The cave played to its ending `[needs-user-call]`
