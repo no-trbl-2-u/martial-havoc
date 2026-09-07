@@ -129,8 +129,17 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       deliberately **not** his and are not held to it — see the commit
       body. Act lines still print where Phase 5 put them; moving them
       onto an act change is 10c's row.
-- [ ] Phase 10b — The opening: the village as the Call (brief:
-      `phase_10b_the_opening.md`)
+- [x] Phase 10b — The opening: the village as the Call (brief:
+      `phase_10b_the_opening.md`) — 3053fc2. BEGIN lands on the
+      village; THE CALL is the premise (5T a1) with the narrator's
+      line under it; the trail is the point of no return and the only
+      way onto the mountain, recorded as a deed; BACK DOWN TO FEN PASS
+      is the way off it, and LEAVE FOR THE REGION now appears at the
+      ending and not before. `beginAdventure` no longer records the
+      start area as visited (a new labelled behaviour), which is what
+      lets `lib/opening.ts` ask whether the adventure has begun — with
+      no record version bump and no migration. The premise slip is
+      gone from the beat with the code that fed it.
 - [ ] Phase 10c — The three acts on screen (brief:
       `phase_10c_three_acts.md`)
 - [ ] Phase 10d — The fight as a scene (brief:
