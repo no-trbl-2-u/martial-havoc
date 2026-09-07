@@ -158,3 +158,83 @@ estate should record the answer or overturn it, since the book
 carries neither. No sealed rule is touched, no refusal is crossed,
 and the narrator of the 2026-09-06 report is unchanged apart from one
 tightened rule.
+
+---
+
+# Field report — 2026-09-07T20:14:29Z
+
+origin: idea-0003 @ state/0013
+built-through: Phase 10l (spirits immune to ordinary blows, e4c2b86,
+merged as PR #60, ab1687e). The feel-of-play block 10a-10l is
+complete; Phase 10, the operator's own sitting, is the next row.
+
+## What drifted
+
+The Horizon says "About 440 authored lines: every Oracle cell,
+Unexpected Event, Inspiration, Spark and Technique or Ritual
+effect", and the acceptance criteria say "437 is the full count".
+On 2026-09-07 the operator, asked what happens to the 149 of those
+lines that are held to no style guide (66 Oracle, 72 Technique and
+Ritual effect, 11 Unexpected Event), answered: cut them to the
+book's text only. That removes one of the Horizon's sentences and
+one acceptance criterion, and it puts Phase 11, whose whole scope is
+the remaining 288 lines (72 Inspirations, 216 Sparks), in question.
+
+## What was built instead
+
+The 149 lines exist as data. The 66 Oracle lines are in
+`packages/content` and have never been rendered by the app. The 72
+effect lines render in combat as the row text under a Technique, in
+the second person ("you cross it without a boat and without getting
+wet"). The 11 Unexpected Event lines render when a tie lands on the
+p.28 table. All 149 are `label: invention`, cite a folio rather than
+`plan/VOICE.md`, and are exempted by name from `voice.test.ts`.
+Beside them the narrator's 24 lines (20 result lines, 4 prompts)
+cite the guide and pass its test.
+
+The mechanics under the effect lines are untouched by the cut:
+`effects.json` also carries `class`, `cost`, `timing` and
+`operation`, and the engine reads those.
+
+## Why
+
+The 2026-09-06 report re-issued the authored line as the narrator's.
+The 149 predate him: they were written in Phase 4 to the spec's
+count, before the app had a voice, and nobody rewrote them when it
+got one. So the app now prints three registers: the book's, upright
+and cited; Old Ping's, italic and bounded; and a third that is
+neither, addresses the Master as "you" against the guide, and is
+counted toward a number the spec set before the narrator existed.
+The count was a proxy for "played, not recited". The narrator now
+carries that; the proxy no longer measures anything the operator
+wants.
+
+The audit row scored the 149 at 4.5 and the critique carries the
+second-person row; both are in `plan/CRITIQUE.md` Pending. The
+candidate that would ship the cut is filed in
+`plan/PHASE_CANDIDATES.md` (expand pass 1, score 6.0) and waits on
+this report by rule 6.
+
+## What the source should do
+
+**Re-seed from the current state.** Two sentences of the Horizon
+and one acceptance criterion need re-issuing:
+
+1. "About 440 authored lines: every Oracle cell, Unexpected Event,
+   Inspiration, Spark and Technique or Ritual effect" becomes: the
+   narrator's lines, one per result kind and one per imagining
+   moment, bounded by `plan/VOICE.md`; the book's cells print as
+   printed.
+2. "The shipped authored-line count is printed by the build; 437 is
+   the full count" becomes a count of narrator lines, printed, with
+   no target.
+3. The source must say whether Phase 11 survives. The operator's
+   answer covered the 149 lines that exist, not the 288 that do not.
+   If the same reasoning holds, Phase 11 is withdrawn and the
+   Inspiration and Spark tables print as printed; if the operator
+   wants the word tables spoken, they are Old Ping's and the phase
+   is re-briefed to his guide. Until the source answers, Phase 11
+   stands as written and the candidate does not ship.
+
+The refusal "No generated prose" is untouched. No sealed rule is
+reopened. The narrator of the 2026-09-06 report stands unchanged.
