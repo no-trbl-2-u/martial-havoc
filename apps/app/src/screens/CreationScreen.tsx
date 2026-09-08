@@ -18,9 +18,10 @@
  *    `@martial-havoc/engine` through `../state/creation.ts`; every
  *    string comes from `@martial-havoc/content`. This file arranges.
  */
+import { useState } from 'react'
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 import {
-  adventureHooks,
+  adventureHookById,
   marketItemByName,
   martialArts,
   presets,
@@ -52,6 +53,7 @@ import { Button } from '../components/Button'
 import { MenuButton } from '../components/MenuButton'
 import { Slip } from '../components/Slip'
 import { Counter } from '../components/creation/Counter'
+import { MotiveCard } from '../components/creation/MotiveCard'
 import { Step, Value } from '../components/creation/Step'
 
 type Props = { readonly state: RecordState; readonly dispatch: (a: Action) => void }
@@ -74,14 +76,38 @@ const kitItems = () => {
 }
 
 export const CreationScreen = ({ state, dispatch }: Props) => {
+  // Whether the Adventures-table card is up. Local, not the record's:
+  // a card being open is not a fact about a Master, and a reload that
+  // reopened it would be the app rolling again on its own.
+  const [motiveOpen, setMotiveOpen] = useState(false)
   const c = state.creation
   if (c === null) return null
   const art = artOf(c)
   const flags = flagsOf(c)
   const stepNumber = CREATION_STEPS.indexOf(c.step) + 1
 
+  // The two steps that spend a pool, and the tally each one spends
+  // against. Lifted out of the page below because both steps are long
+  // lists - three Proficiencies is short, but thirty-six Techniques and
+  // thirty-six Rituals is not, and a player who has scrolled to the
+  // Rituals can no longer see what they have left. The strip does not
+  // scroll (operator's first-impressions pass, 2026-09-08).
+  const tally =
+    c.step === 'spend'
+      ? fill(t('ui.creation.spend.pool'), { spent: spentProficiency(c), pool: pool(c) })
+      : c.step === 'learn'
+        ? fill(t('ui.creation.techniques.pool'), { spent: spentResources(c), pool: resourcePool(c) })
+        : null
+
   return (
     <View style={styles.screen} testID="creation">
+      {tally === null ? null : (
+        <View style={styles.tally}>
+          <Text testID="creation-tally" style={styles.tallyText}>
+            {tally}
+          </Text>
+        </View>
+      )}
       <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
         {c.step === 'who' ? (
           <>
@@ -141,18 +167,11 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
                 testID="creation-roll-motive"
                 primary
                 text={t('ui.creation.motive.roll')}
-                onPress={() => dispatch({ type: 'creation.motive.roll' })}
+                onPress={() => {
+                  dispatch({ type: 'creation.motive.roll' })
+                  setMotiveOpen(true)
+                }}
               />
-              {adventureHooks.map((hook) => (
-                <MenuButton
-                  key={hook.id}
-                  testID={`motive-${hook.id}`}
-                  title={String(hook.d66)}
-                  note=""
-                  line={hook.text}
-                  onPress={() => dispatch({ type: 'creation.motive', id: hook.id })}
-                />
-              ))}
             </Step>
             <Step
               title={t('ui.creation.presets.title')}
@@ -214,7 +233,8 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
               <MenuButton
                 key={item.id}
                 testID={`kit-${item.id}`}
-                title={`${c.kitItemId === item.id ? '* ' : ''}${item.item}`}
+                title={item.item}
+                selected={c.kitItemId === item.id}
                 note={item.priceGp === null ? `${item.priceSp ?? 0} SP` : `${item.priceGp} GP`}
                 line=""
                 onPress={() => dispatch({ type: 'creation.kit', id: item.id })}
@@ -301,9 +321,6 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
             source={t('ui.creation.spend.source')}
             testID="step-spend"
           >
-            <Text testID="creation-pool" style={styles.reading}>
-              {fill(t('ui.creation.spend.pool'), { spent: spentProficiency(c), pool: pool(c) })}
-            </Text>
             {(art?.proficiencies ?? []).map((name) => (
               <Counter
                 key={name}
@@ -323,12 +340,6 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
             source={t('ui.creation.techniques.source')}
             testID="step-techniques"
           >
-            <Text testID="creation-resources" style={styles.reading}>
-              {fill(t('ui.creation.techniques.pool'), {
-                spent: spentResources(c),
-                pool: resourcePool(c),
-              })}
-            </Text>
             {/* All 36 of each (R16), in the tables' order: the book does not
                 tie a Technique or a Ritual to a style, so nothing is hidden. */}
             <Text style={styles.label}>{t('ui.creation.learn.techniques')}</Text>
@@ -336,7 +347,8 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
               <MenuButton
                 key={tech.id}
                 testID={`technique-${tech.id}`}
-                title={`${c.techniqueIds.includes(tech.id) ? '* ' : ''}${tech.name}`}
+                title={tech.name}
+                selected={c.techniqueIds.includes(tech.id)}
                 note={`${tech.cost}`}
                 line={tech.effect}
                 onPress={() => dispatch({ type: 'creation.technique', id: tech.id })}
@@ -347,7 +359,8 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
               <MenuButton
                 key={rite.id}
                 testID={`ritual-${rite.id}`}
-                title={`${c.ritualIds.includes(rite.id) ? '* ' : ''}${rite.name}`}
+                title={rite.name}
+                selected={c.ritualIds.includes(rite.id)}
                 note={`${rite.cost}`}
                 line={rite.effect}
                 onPress={() => dispatch({ type: 'creation.ritual', id: rite.id })}
@@ -433,6 +446,19 @@ export const CreationScreen = ({ state, dispatch }: Props) => {
           )}
         </View>
       </View>
+
+      {/*
+        The Adventures table's one row, over the page. It goes up on the
+        roll and comes down on CONTINUE; ROLL AGAIN re-rolls under it
+        (MH p.36-39, R50).
+      */}
+      {motiveOpen && c.step === 'who' ? (
+        <MotiveCard
+          hook={c.motiveId === null ? null : adventureHookById(c.motiveId) ?? null}
+          onRoll={() => dispatch({ type: 'creation.motive.roll' })}
+          onContinue={() => setMotiveOpen(false)}
+        />
+      ) : null}
     </View>
   )
 }
@@ -441,6 +467,21 @@ const styles = StyleSheet.create({
   screen: { flex: 1 },
   page: { flex: 1 },
   pageContent: { paddingBottom: 12 },
+  /**
+   * The tally strip. `flexShrink: 0` is the mechanism, the same one the
+   * beat's sheet uses: the page below gives way, this never does.
+   */
+  tally: {
+    flexShrink: 0,
+    marginTop: 10,
+    marginHorizontal: 14,
+    borderWidth: 3,
+    borderColor: color.ink,
+    backgroundColor: color.ink,
+    paddingVertical: 6,
+    paddingHorizontal: 9,
+  },
+  tallyText: { fontFamily: font.sans, fontSize: 12, fontWeight: '800', letterSpacing: 0.9, color: color.paper },
   label: { fontFamily: font.sans, fontSize: 10, fontWeight: '800', letterSpacing: 0.8, color: color.dim },
   field: { borderWidth: 3, borderColor: color.ink, paddingVertical: 8, paddingHorizontal: 9 },
   fieldText: { fontFamily: font.serif, fontSize: 15, color: color.ink },

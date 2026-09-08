@@ -408,14 +408,11 @@ test('the opening: a made Master wakes in Fen Pass, and the trail is the point o
   await page.getByTestId('preset-preset.san-te').click()
   await page.getByTestId('creation-begin').click()
 
-  // The Call: the book's premise under a heading of ours, with the
-  // narrator naming the Goal, and no beat anywhere.
+  // Fen Pass, named, with no beat anywhere and nothing about the
+  // mountain on it (first-impressions pass, 2026-09-08).
   await expect(page.getByTestId('village')).toBeVisible()
-  const call = page.getByTestId('call')
-  await expect(call).toContainText('THE CALL')
-  await expect(call).toContainText('On the Flat-top mountain two fiends threaten the travellers')
-  await expect(page.getByTestId('call-narrator-name')).toHaveText('OLD PING')
-  await expect(page.getByTestId('call-narrator-line')).toContainText('San Te')
+  await expect(page.getByTestId('village-here')).toHaveText('FEN PASS')
+  await expect(page.getByTestId('call')).toHaveCount(0)
   await expect(page.getByTestId('beat')).toHaveCount(0)
 
   // The header cannot reach the beat before the trail is taken.
@@ -430,6 +427,14 @@ test('the opening: a made Master wakes in Fen Pass, and the trail is the point o
   await expect(page.getByTestId('beat')).toBeVisible()
   await expect(page.getByTestId('area-name')).toHaveText('FLAT-TOP MOUNTAIN')
   await expect(page.getByText('DEEDS 1')).toBeVisible()
+
+  // The Call: the book's premise under a heading of ours, with the
+  // narrator naming the Goal, read on the mountain it is about.
+  const call = page.getByTestId('call')
+  await expect(call).toContainText('THE CALL')
+  await expect(call).toContainText('On the Flat-top mountain two fiends threaten the travellers')
+  await expect(page.getByTestId('call-narrator-name')).toHaveText('OLD PING')
+  await expect(page.getByTestId('call-narrator-line')).toContainText('San Te')
 
   // The Call has been answered and does not call again; the way back is
   // the trail, and it does not un-begin the adventure.

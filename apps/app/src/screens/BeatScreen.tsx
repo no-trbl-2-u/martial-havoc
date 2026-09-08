@@ -11,6 +11,7 @@
 import { actFor, ending, hintFor } from '@martial-havoc/engine'
 import { t, theFiveTreasures, theFiveTreasuresAreaById } from '@martial-havoc/content'
 import { fill } from '../lib/fill'
+import { hasBegun } from '../lib/opening'
 import { SheetBeat } from '../components/beat/SheetBeat'
 import type { RollCardReason } from '../components/beat/RollCard'
 import { shown } from '../components/beat/shown'
@@ -85,6 +86,27 @@ const momentumFor = (state: RecordState): { readonly face: number; readonly was:
     ? { face: state.result.eventFace, was: state.result.eventText }
     : null
 
+/**
+ * Is this the moment THE CALL is read (Phase 10b, revised 2026-09-08)?
+ *
+ * The premise used to hang over the village, beside the stall row, and
+ * read as a second place the Master might be standing in. It now lands
+ * here, once, on arrival: the trail has been taken (`hasBegun`), the
+ * mountain is the only room entered, and nothing has happened in it
+ * yet - no result, no fight.
+ *
+ * Derived, not stored. Every term is already on the record for its own
+ * reasons, so there is no new field to persist, no migration, and no
+ * way for a saved game to disagree with itself about whether the Call
+ * was read: a Master who has done one thing on the mountain has
+ * answered it, and the slip is gone for good.
+ */
+const callHere = (state: RecordState): boolean =>
+  hasBegun(state) &&
+  state.cave.visited.length === 1 &&
+  state.result === null &&
+  state.combat === null
+
 export const BeatScreen = ({ state, dispatch }: Props) => {
   const area = theFiveTreasuresAreaById(state.cave.area)
   if (area === undefined) return null
@@ -110,6 +132,7 @@ export const BeatScreen = ({ state, dispatch }: Props) => {
       acts={acts}
       act={act}
       announce={announce}
+      call={callHere(state)}
       momentum={momentumFor(state)}
       options={menuFor(state)}
       onPick={(option) => dispatch(actionOf(option))}

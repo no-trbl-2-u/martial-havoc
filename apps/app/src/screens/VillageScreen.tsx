@@ -15,33 +15,25 @@
  * `invention`, its procedures are `rule`, and the rules panel says so
  * for each — this file only arranges them.
  *
- * Phase 10b made this the screen a made Master opens on, and gave it a
- * first act. THE CALL is the book's own premise (5T a1) under a heading
- * of ours, with the narrator's line under that: who the Master is,
- * where they are going and why, read before the first roll rather than
- * discovered after it (MH p.84, Act I). It shows until the trail is
- * taken and never again — a Call that keeps calling after the Master
- * has answered is a notice board, not an opening.
+ * Phase 10b made this the screen a made Master opens on, and hung THE
+ * CALL — the adventure's premise — above the stall row. The operator's
+ * first-impressions pass of 2026-09-08 read that as two places at once
+ * ("am I in a cave, or am I in Fen Pass?") and it has been undone: this
+ * screen is Fen Pass and only Fen Pass. The village names itself at the
+ * top, lists what the village allows, and ends at the trail out. The
+ * Call now lands on the mountain, on arrival
+ * (`components/beat/CallSlip.tsx`) — where the Master is going is read
+ * once they have gone, not while they are still buying torches.
  */
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import {
-  INCENSE_ID,
-  market,
-  t,
-  theFiveTreasuresMeta,
-  villageLocations,
-  villageTrail,
-} from '@martial-havoc/content'
+import { INCENSE_ID, market, t, villageLocations, villageTrail } from '@martial-havoc/content'
 import { fromSilver } from '@martial-havoc/engine'
 import { fill } from '../lib/fill'
-import { narrate } from '../lib/narrator'
-import { hasBegun } from '../lib/opening'
 import type { Action, RecordState } from '../state/types'
 import { color, font } from '../theme/tokens'
 import { Button } from '../components/Button'
 import { Die } from '../components/Die'
 import { MenuButton } from '../components/MenuButton'
-import { Narrator } from '../components/Narrator'
 import { Slip } from '../components/Slip'
 import { Source } from '../components/Source'
 
@@ -60,26 +52,20 @@ const priceOf = (gp: number | null, sp: number | null): string =>
 
 export const VillageScreen = ({ state, dispatch }: Props) => {
   const purse = fromSilver(state.silver)
-  const call = hasBegun(state) ? null : narrate('call', state.sheet.name)
   return (
     <View style={styles.screen} testID="village">
+      {/*
+        The village names itself, and does not move. Every slip below is
+        somewhere inside this one place; without the name at the top a
+        player arriving from the mountain has to infer where they are
+        from a stall row.
+      */}
+      <View style={styles.here}>
+        <Text testID="village-here" style={styles.hereText}>
+          {t('ui.village.here')}
+        </Text>
+      </View>
       <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
-        {call === null ? null : (
-          <Slip style={styles.place} testID="call">
-            <View style={styles.head}>
-              <Text style={styles.name}>{t('ui.village.call.title')}</Text>
-            </View>
-            <Text style={styles.blurb}>{theFiveTreasuresMeta.premise}</Text>
-            <View style={styles.callFoot}>
-              <Narrator testID="call-narrator" line={call} style={styles.callNarrator} />
-              <View style={styles.noteRow}>
-                <Text style={styles.note2}>{t('ui.village.call.note')}</Text>
-                <Source cite={theFiveTreasuresMeta.cite} />
-              </View>
-            </View>
-          </Slip>
-        )}
-
         <Slip style={styles.purse}>
           <Text testID="village-purse" style={styles.purseText}>
             {fill(t('ui.village.purse'), { gp: purse.gp, sp: purse.sp })}
@@ -120,7 +106,8 @@ export const VillageScreen = ({ state, dispatch }: Props) => {
                   <MenuButton
                     key={item.id}
                     testID={`buy-${item.id}`}
-                    title={`${item.id === INCENSE_ID && state.incense ? '* ' : ''}${item.item}`}
+                    title={item.item}
+                    selected={item.id === INCENSE_ID && state.incense}
                     note={priceOf(item.priceGp, item.priceSp)}
                     line=""
                     onPress={() => dispatch({ type: 'village.buy', id: item.id })}
@@ -194,9 +181,13 @@ const styles = StyleSheet.create({
   cite: { borderTopWidth: 2, borderTopColor: color.ink, paddingVertical: 5, paddingHorizontal: 9 },
   noteRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 },
   place: { marginTop: 10, marginHorizontal: 14 },
-  /** The Call's foot: his line, then the act note and the folio. */
-  callFoot: { paddingHorizontal: 9, paddingBottom: 9, gap: 7 },
-  callNarrator: { marginTop: 0, paddingTop: 0, borderTopWidth: 0 },
+  /**
+   * The place name. `flexShrink: 0` keeps it above the scroll, the same
+   * mechanism the beat's act outline uses: "where am I" is a question
+   * with a permanent answer.
+   */
+  here: { flexShrink: 0, paddingTop: 8, paddingHorizontal: 14 },
+  hereText: { fontFamily: font.sans, fontSize: 16, fontWeight: '800', letterSpacing: 1.4, color: color.ink },
   head: { paddingVertical: 6, paddingHorizontal: 9, backgroundColor: color.ink },
   name: { fontFamily: font.sans, fontSize: 11, fontWeight: '800', letterSpacing: 0.9, color: color.paper },
   blurb: { fontFamily: font.serif, fontSize: 14, lineHeight: 20, padding: 9 },

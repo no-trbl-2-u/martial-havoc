@@ -74,13 +74,13 @@ test('a Master is made by walking the book’s order', async ({ page }) => {
   await page.getByTestId('creation-next').click()
 
   // R10, D06 — the Proficiency pool is the ROLLED SKILL, before Training.
-  await expect(page.getByTestId('creation-pool')).toHaveText(`0 OF ${skill} SPENT`)
+  await expect(page.getByTestId('creation-tally')).toHaveText(`0 OF ${skill} SPENT`)
   await page.getByTestId('creation-next').click() // to Techniques and Rituals
 
   // R14, R16 — both tables, whole, priced; a Ritual bought with the point.
-  await expect(page.getByTestId('creation-resources')).toHaveText('0 OF 4 RESOURCE POINTS')
+  await expect(page.getByTestId('creation-tally')).toHaveText('0 OF 4 RESOURCE POINTS')
   await page.getByTestId('ritual-ritual.acupuncture').click()
-  await expect(page.getByTestId('creation-resources')).toHaveText('1 OF 4 RESOURCE POINTS')
+  await expect(page.getByTestId('creation-tally')).toHaveText('1 OF 4 RESOURCE POINTS')
   await page.getByTestId('creation-next').click() // to ready
 
   await expect(page.getByTestId('step-ready')).toBeVisible()
@@ -89,13 +89,18 @@ test('a Master is made by walking the book’s order', async ({ page }) => {
   await page.getByTestId('creation-begin').click()
 
   // The made Master is the one now playing, and they wake in Fen Pass
-  // with the Call in front of them (Phase 10b), not on the mountain.
+  // (Phase 10b), not on the mountain. The village is only the village:
+  // it names itself and offers nothing about where the trail leads
+  // (first-impressions pass, 2026-09-08).
   await expect(page.getByTestId('village')).toBeVisible()
+  await expect(page.getByTestId('village-here')).toHaveText('FEN PASS')
+  await expect(page.getByTestId('call')).toHaveCount(0)
+  await page.getByTestId('village-go').click()
+  await expect(page.getByTestId('beat')).toBeVisible()
+  // The Call is read on arrival, on the mountain it is about.
   await expect(page.getByTestId('call')).toContainText(
     'On the Flat-top mountain two fiends threaten the travellers',
   )
-  await page.getByTestId('village-go').click()
-  await expect(page.getByTestId('beat')).toBeVisible()
   await expect(page.getByTestId('attr-skill')).toHaveText(String(skill - 1))
   await expect(page.getByTestId('attr-endurance')).toHaveText(String(endurance))
 })

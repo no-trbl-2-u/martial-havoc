@@ -175,19 +175,23 @@ const narratorNames = (page: Page) => page.getByTestId(/narrator-name$/)
  * Phase 10b: the village is the Call, the trail is the Point of No
  * Return and the first deed.
  */
-test('the Call comes before the beat, and the trail is the point of no return', async ({ page }) => {
+test('the Call comes on arrival, and the trail is the point of no return', async ({ page }) => {
   const state = await open(page, readingTheCall)
   await expect(page.getByTestId('village')).toBeVisible()
   await expect(page.getByTestId('beat')).toHaveCount(0)
+  // Fen Pass shows Fen Pass and nothing about the mountain: one place
+  // per screen (first-impressions pass, 2026-09-08).
+  await expect(page.getByTestId('village-here')).toHaveText('FEN PASS')
+  await expect(page.getByTestId('call')).toHaveCount(0)
+
+  await page.getByTestId('village-go').click()
+  await expect(page.getByTestId('beat')).toBeVisible()
   const call = page.getByTestId('call')
   await expect(call).toContainText(t('ui.village.call.title'))
   // The premise as 5T a1 prints it, upright, from the adventure file.
   await expect(call).toContainText(theFiveTreasuresMeta.premise)
   await assertSpoken(page, 'call-narrator', spoken('call', state))
   await assertNoSharedSentence(call.getByText(theFiveTreasuresMeta.premise), page.getByTestId('call-narrator-line'))
-
-  await page.getByTestId('village-go').click()
-  await expect(page.getByTestId('beat')).toBeVisible()
   // The trail lands on the start area, which the village record already
   // stands in: the beat is the same area before and after the trail.
   await expect(page.getByTestId('area-name')).toHaveText(areaName(state))

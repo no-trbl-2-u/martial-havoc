@@ -27,6 +27,7 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import type { AdventureAct, AdventureArea } from '@martial-havoc/content'
 import type { Ending } from '@martial-havoc/engine'
 import { ActMark, ActSlip, MomentumSlip } from './ActSlip'
+import { CallSlip } from './CallSlip'
 import { AreaSlip, BeatFoot, EndingSlip, MenuList, ResultSlip } from './pieces'
 import { RollCard } from './RollCard'
 import type { RollCardReason } from './RollCard'
@@ -50,6 +51,11 @@ export type SheetBeatProps = {
   readonly act: AdventureAct | null
   /** The act to announce now, or null when there is nothing new to say. */
   readonly announce: AdventureAct | null
+  /**
+   * Show THE CALL above the area: the Master has just arrived and
+   * nothing has happened yet (see `CallSlip`).
+   */
+  readonly call: boolean
   /** The pacing override to show beside the result, or null. */
   readonly momentum: { readonly face: number; readonly was: string } | null
   /** The menu the cave allows here. */
@@ -72,6 +78,7 @@ export const SheetBeat = ({
   acts,
   act,
   announce,
+  call,
   momentum,
   options,
   onPick,
@@ -91,6 +98,7 @@ export const SheetBeat = ({
 
     <ScrollView style={styles.page} contentContainerStyle={styles.pageContent}>
       {ending === null ? null : <EndingSlip ending={ending} master={state.sheet.name} />}
+      {call ? <CallSlip master={state.sheet.name} /> : null}
       {announce === null ? null : (
         <ActSlip
           act={announce}

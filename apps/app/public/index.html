@@ -55,6 +55,27 @@
         height: 100%;
         flex: 1;
       }
+      /*
+        The safe area. `viewport-fit=cover` above tells the browser to
+        draw the page under the system bars; without this it draws the
+        attribute strip under the clock. Padding rather than margin, so
+        the ochre frame still reaches the physical edge and only the
+        content is inset. Zero on a desktop browser, where the insets
+        are all 0px, so nothing moves there.
+
+        Only the top inset is a bug worth fixing in a browser tab: the
+        Android navigation bar below cannot be removed by a page at all
+        (it is the OS chrome, not ours), and installing the app to the
+        home screen is what hides it - the manifest already asks for
+        `display: fullscreen`. The bottom inset is applied anyway so an
+        installed, gesture-navigation phone does not put the footer
+        buttons under the home indicator.
+      */
+      body {
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        box-sizing: border-box;
+      }
     </style>
   </head>
 
