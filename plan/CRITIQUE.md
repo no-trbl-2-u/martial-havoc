@@ -50,16 +50,6 @@
 - source: agent
 
 
-### [MED] packages/content — the narrator's Ambush line is spoken only for an ambush by nobody
-- pass: agent (commit pending, the played-not-recited e2e)
-- viewport: 390x844
-- auth_state: anonymous
-- category: voice
-- observation: `narrator.turn.ambush` ("The first blow is theirs. {name} learns this the way everyone does.") is VOICE.md's sample 4 for an Ambush. `momentOf` in `lib/narrator.ts` reads who was met before the Event's own name, so an Ambush that brought a foe is spoken as `turn.encounter` ("{name} is not alone in this room any more") and the Ambush line prints only when Event 1 rolls a named foe already dead (I-36). The mirror in `components/beat/shown.ts` is deliberate for the slip's headline; for the narrator it silences the one line written for the moment the book marks with an exclamation.
-- evidence: `apps/app/src/lib/narrator.ts`, `momentOf`, the `turn` branch; `e2e/played.spec.ts`, "every result prints the book upright", the Ambush step asserts `turn.encounter`
-- suggested fix: in `momentOf`, read `result.event === 'ambush'` before `foes.length > 0`; keep the slip's headline as it is. One line moves and the e2e assertion flips back to `turn.ambush`.
-- source: agent
-
 ### [LOW] apps/app — the ending sets the book's closing question in italic, the narrator's mark
 - pass: agent (commit pending, the played-not-recited e2e)
 - viewport: 390x844
@@ -301,6 +291,18 @@ not from that pass: they are the carry-overs the `/march` loop of
 - source: user
 
 ## Done
+
+### [x] [MED] apps/app/src/lib/narrator.ts — the narrator's Ambush line was spoken only for an ambush by nobody
+- pass: agent (commit pending, the played-not-recited e2e); shipped by /iterate 2026-09-08 (commit a6e2d77)
+- closed: `momentOf`'s `turn` branch now checks `result.event === 'ambush'` before `foes.length > 0`, so an Ambush that also brought a foe is still spoken as `turn.ambush`. `brought()`'s own priority for the slip's "against" sub-line is a different question and is untouched. `narrator.test.ts` gained a case for ambush-with-foe; `e2e/played.spec.ts` flipped its assertion from `turn.encounter` to `turn.ambush`.
+- issue: #66
+- viewport: 390x844
+- auth_state: anonymous
+- category: voice
+- observation: `narrator.turn.ambush` ("The first blow is theirs. {name} learns this the way everyone does.") is VOICE.md's sample 4 for an Ambush. `momentOf` in `lib/narrator.ts` read who was met before the Event's own name, so an Ambush that brought a foe was spoken as `turn.encounter` ("{name} is not alone in this room any more") and the Ambush line printed only when Event 1 rolls a named foe already dead (I-36). The mirror in `components/beat/shown.ts` is deliberate for the slip's headline; for the narrator it silenced the one line written for the moment the book marks with an exclamation.
+- evidence: `apps/app/src/lib/narrator.ts`, `momentOf`, the `turn` branch; `e2e/played.spec.ts`, "every result prints the book upright", the Ambush step asserted `turn.encounter`
+- suggested fix: in `momentOf`, read `result.event === 'ambush'` before `foes.length > 0`; keep the slip's headline as it is. One line moves and the e2e assertion flips back to `turn.ambush`.
+- source: agent
 
 ### [HIGH] skills/ship-a-phase.md — the dispatcher picks by list order, not by dependency
 - pass: user-jot (commit 14d178e); shipped by /iterate 2026-09-07 (commit 1648bad)
