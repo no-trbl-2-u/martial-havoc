@@ -41,6 +41,8 @@ const VERBS = [
   'feat', 'fix', 'docs', 'chore',
   // skills/re-seed.md commits the field report as `re-seed: <drift>`.
   're-seed',
+  // skills/critique.md commits the pass as `critique: pass <N> - ...`.
+  'critique',
 ]
 
 // Pulls the first `-m`/`--message` string out of a `git commit`

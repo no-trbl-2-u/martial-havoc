@@ -185,6 +185,7 @@ Every commit message is `<verb>: <subject>`, enforced by
 | `digest`, `expand`, `jot`, `oversight`, `triage`, `plan` | the skills of the same name, and `/plan-a-phase` |
 | `feat`, `fix`, `docs`, `chore` | shipping work: a feature, a fix, documentation, housekeeping |
 | `re-seed` | `/re-seed`'s field report, `RE-SEED.md`, committed alone |
+| `critique` | `/critique`'s pass, `plan/CRITIQUE.md`, committed alone |
 
 A new verb is added here and to `VERBS` in the guard in the same
 commit, never one without the other.
