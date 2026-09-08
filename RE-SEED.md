@@ -238,3 +238,124 @@ and one acceptance criterion need re-issuing:
 
 The refusal "No generated prose" is untouched. No sealed rule is
 reopened. The narrator of the 2026-09-06 report stands unchanged.
+
+---
+
+# Field report — 2026-09-08T13:10:00Z
+
+origin: idea-0003 @ state/0013
+built-through: Phase 10l (spirits immune to ordinary blows, e4c2b86,
+merged as PR #60, ab1687e); no phase has shipped since. The work of
+this window is not phase work: the operator answered the third
+report's open question via `/oversight` (e70ba8b, 826d2de), the first
+`/critique` pass ran (d770a00), one engine fix landed (a6e2d77), and
+the operator played the deployed build on an Android phone and filed
+nine observations, six of which shipped as fixes (81008a8, merged as
+PR #67, c2c10d1).
+
+## What drifted
+
+The third report (2026-09-07T20:14Z) asked the source one question it
+could not answer itself: whether Phase 11 survives the cut of the 149
+unguided lines. The operator answered it on 2026-09-07, twice and the
+same way — the 72 Inspirations and 216 Sparks are the same category
+of line, cut with the 149, and the word tables print as the book
+prints them. Phase 11 is now `[skipped]` in
+`plan/steps/01_build_plan.md`, with its scope section carrying the
+reason and pointing at this report.
+
+That closes the question and widens the drift. Where the third report
+asked for two sentences to be re-issued about 149 existing lines, the
+answer now voids the whole of the Horizon's "About 440 authored
+lines: every Oracle cell, Unexpected Event, Inspiration, Spark and
+Technique or Ritual effect" and the whole of the acceptance criterion
+"The shipped authored-line count is printed by the build; 437 is the
+full count, and a smaller number names the fallback". Not a smaller
+number naming a fallback: a different measure. The plan has removed a
+phase the spec's Horizon implies, on the operator's word, and
+`spec.md` still says the phase's work is the target.
+
+## What was built instead
+
+Nothing, which is the point. The 149 lines still ship exactly as the
+third report described them — 66 Oracle lines unrendered, 72 effect
+lines under Techniques in the second person, 11 Unexpected Event
+lines on the p.28 table, all `label: invention`, all exempt by name
+from `voice.test.ts`. The candidate that would cut them
+(`plan/PHASE_CANDIDATES.md`, expand pass 1, score 6.0) is still
+blocked on this re-issue by rule 6 and has not shipped. The 288
+Inspiration and Spark records exist as the book's printed cells
+(`inspirations.json` 72, `sparks.json` 216) and never had authored
+lines to lose. Old Ping's own count stands at 24 (20 result lines, 4
+prompts), guide-cited and guide-tested.
+
+So the build's content is unchanged since the third report; what
+changed is the plan around it. Phase 11 skipped rather than deleted,
+Phase 12 keeping its row order, Phase 10m and Phases 15 and 16
+promoted into the rows before the milestone.
+
+Beside that, the first evidence from a real phone. The operator ran
+the deployed build on Android and the six defects fixed there were
+all frame, not rule: the status bar sat over the attribute strip,
+selection was a typed asterisk rather than an inverted row, a long
+style note crushed a long name, the pool tally scrolled away, the
+Adventures table printed all thirty-six rows under its ROLL button,
+and Fen Pass and the mountain told two narratives on one screen. One
+of those fixes carries a small call worth naming: the Master's motive
+step now offers ROLL and a card with the one row the dice gave, and
+no free-text field — the motive is a row of the book's table or it is
+nothing, and the step may be left unrolled.
+
+## Why
+
+The cut has one reason and it is the same one three times over. The
+spec's count was written before the app had a voice. It was a proxy
+for "played, not recited", and Old Ping now carries that load
+directly: a line that is neither the book's nor his is a third
+register on the screen, and the operator does not want a third
+register whether it exists already or would have to be written. The
+149 and the 288 differ only in whether the writing has happened, and
+that is not a difference the reader can see.
+
+Phase 11 was skipped rather than deleted because deleting it would
+have been the quiet edit this skill exists to prevent. The row and
+its scope section both say the spec sentence is sealed, both say the
+seal has not lifted, and both name the fourth report as the thing
+that carries the answer back. The plan is honest about being ahead of
+its spec; it is still ahead of it.
+
+The motive step's missing free-text field is reported for
+completeness rather than as drift. The Horizon's free-text field is
+the one beside an encounter's resolution and it is untouched; the
+creation hook was added by the operator's call of 2026-09-07 and
+their call of 2026-09-08 is that it stays a row of the book's table.
+
+## What the source should do
+
+**Re-seed from the current state.** No refusal was crossed and no
+sealed rule reopened; three things need re-issuing, and the third is
+new:
+
+1. "About 440 authored lines: every Oracle cell, Unexpected Event,
+   Inspiration, Spark and Technique or Ritual effect" becomes: the
+   narrator's lines, one per result kind and one per imagining
+   moment, bounded by `plan/VOICE.md`; every table cell of the book —
+   Oracle, Inspiration, Spark, Unexpected Event, Technique and Ritual
+   effect — prints as printed. This is the third report's item 1,
+   now covering the tables Phase 11 would have spoken.
+2. "The shipped authored-line count is printed by the build; 437 is
+   the full count, and a smaller number names the fallback" becomes a
+   count of narrator lines, printed by the build, with no target and
+   no fallback. 437 is not a reduced target; it measured a thing the
+   product no longer contains.
+3. The Horizon should say that the word tables are the book's, so
+   that no later phase re-derives Phase 11 from the sentence in item
+   1. The phase is `[skipped]`, not deleted, precisely because
+   reopening it means reopening these two sentences; once they are
+   re-issued the row can be retired by the plan.
+
+Until the source acts, the state is stable and honest: the 149 lines
+still ship, the cut candidate stays blocked, and the spec still says
+437. The cost of the wait is three registers on the screen, which is
+the audit's 4.5 row and the critique's second-person row, both still
+Pending.
