@@ -1,13 +1,43 @@
 # Critique log
 
-> Last pass: never
-> Pass count: 0
+> Last pass: 2026-09-08 at commit 826d2de
+> Pass count: 1
 
 > External-observer feedback for Martial Havoc. Populated by
 > `/critique`, drained by `/iterate`. See `skills/critique.md`
 > for the contract.
 
 ## Pending
+
+### [HIGH] infra — this cloud session has no browser automation tool, so an interactive critique pass cannot run
+- pass: 1 (commit 826d2de)
+- viewport: n/a
+- auth_state: anonymous
+- category: infra
+- observation: `skills/critique.md` and `.claude/agents/reader.md` are written for a `reader` with `mcp__claude-in-chrome__*` tools (Path A) and a WebFetch fallback (Path B) for when those are absent. Path B's own contract assumes some server-rendered content to fall back to. Martial Havoc has none: it is a pure client-rendered Expo/RN-web export (`apps/app/dist/index.html` body is `<div id="root"></div>` plus one deferred JS bundle), so WebFetch can only ever see the empty pre-hydration shell. This first-ever `/critique` pass could not reach Master creation, the village, the cave, combat, the rules panel, the ABOUT screen or the journal — every screen the skill's own page-set logic exists to visit — because no browser tool was available in this session at all (confirmed: no `mcp__claude-in-chrome__*` tool is visible to the calling agent either, not just the reader sub-agent). This is an environment capability gap, not a site defect, and not something `/iterate` can fix in code.
+- evidence: reader sub-agent pass 1, 2026-09-08: "no browser automation tools were available in this pass (only WebFetch, WebSearch, Read, Grep, Glob)"; `apps/app/dist/index.html` lines 67-68 (`<div id="root"></div>` + deferred bundle script); `ToolSearch` from the calling session for "claude-in-chrome navigate browser" returned no match
+- suggested fix: [needs-user-call] — not `/iterate` work. Either run `/critique` from a surface where the reader sub-agent actually has `mcp__claude-in-chrome__*` (a desktop/local Claude Code session, not this cloud environment), or give the reader a Playwright-based tool against the same Expo web export the e2e suite already drives (`apps/app/dist`, served by `scripts/serve-static.mjs` per `plan/bearings.md`), so a cloud-only critique pass has a real rendering path instead of a bare WebFetch of the SPA shell.
+- source: agent
+
+### [LOW] apps/app/dist/index.html — no Open Graph or canonical tags
+- pass: 1 (commit 826d2de)
+- viewport: desktop
+- auth_state: anonymous
+- category: seo
+- observation: The shipped `<head>` carries a real title, meta description, theme-color, manifest link and icons, but no `og:title`, `og:description`, `og:image`, `twitter:card`, or `<link rel="canonical">`. A link to the app shared anywhere that reads Open Graph tags (Slack, Discord, iMessage, most social apps) renders with no preview image and only the bare tab title.
+- evidence: `apps/app/dist/index.html` lines 3-30 — title/description/theme-color/manifest/icon tags present; no `og:*`/`twitter:*` meta, no `rel="canonical"` anywhere in the file
+- suggested fix: Add `og:title`, `og:description` (reuse the existing tagline string from `packages/content/data/app/strings.json`), `og:image` (an icon or a title-screen screenshot) and a canonical link to the workers.dev root, in the same index.html template that already carries the description.
+- source: agent
+
+### [LOW] apps/app/dist/index.html — no pre-hydration content, blank load with zero perceived-progress signal
+- pass: 1 (commit 826d2de)
+- viewport: desktop
+- auth_state: anonymous
+- category: performance
+- observation: `#root` is empty until the full JS bundle parses and the React tree mounts; the shipped `expo-reset` style sets height/flex on `#root` but injects no content or spinner. On a slow connection a stranger sees a blank page for the whole load window, with nothing to read until hydration completes — the opposite of "comprehension at first paint."
+- evidence: `apps/app/dist/index.html` — `<style id="expo-reset">` targets `#root` with no fallback content; the only pre-JS text on the page is the `<noscript>` block, which a JS-enabled browser never shows
+- suggested fix: Inline a minimal static splash (app name + one-line tagline, styled with the theme-color background) directly in index.html so there is something to read before the bundle finishes loading; the React app replaces it on mount.
+- source: agent
 
 ### [LOW] skills/iterate.md + .claude/hooks/guard.mjs — the two commit-verb lists disagree
 - pass: agent (/iterate 2026-09-07)
