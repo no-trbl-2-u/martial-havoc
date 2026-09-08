@@ -45,13 +45,21 @@
   Oracle cell, Unexpected Event, Inspiration, Spark and Technique or
   Ritual effect", and the acceptance criterion "437 is the full
   count" (rule 6, sealed). The field report is filed in `RE-SEED.md`
-  (2026-09-07T20:14Z) in the same pass. The one point the operator's answer
-  did not cover is now answered: on 2026-09-07 via `/oversight` Phase
-  11 was skipped and its 288 Inspiration and Spark lines cut with the
-  149, being the same category of line. What remains before this ships
-  is the spec itself, which moves only by a re-issue from the source;
-  the fourth field report carrying the Phase 11 answer back is the
-  next `/re-seed`.
+  (2026-09-07T20:14Z) in the same pass. The one point that report left
+  to the source is now answered, and answered twice: two `/oversight`
+  passes on 2026-09-07 put the question to the operator independently
+  and got the same call, minutes apart. Phase 11's 288 Inspiration and
+  Spark lines are the same category as the 149 - not printed, not the
+  narrator's - and are cut with them; the word tables print against the
+  book's own text. Phase 11 is `[skipped]` in
+  `plan/steps/01_build_plan.md` and the decision is row 6 of
+  `plan/NEEDS_HUMAN_ATTENTION.md`.
+
+  What remains is the spec itself. `spec.md` still reads "About 440
+  authored lines" and "437 is the full count", unchanged by either
+  pass, so the seal has not lifted and the cut - the 149 and Phase
+  11's 288 alike - waits on the re-issue regardless. The fourth field
+  report, carrying this answer back, is the next `/re-seed`.
 - score: base 4, +3 four source types, +2 operator decision today,
   +2 cheap, -5 spec conflict.
 
@@ -128,7 +136,11 @@
 - score: base 4, +3 four rows and a standing rule, -2 two phases.
 
 ### [x] Reconcile VISION.md with the authored lines
-- duplicate cleared: 2026-09-07 via /oversight. This candidate was carrying a live `[ ]` row in `## Pending` as well as this one, so `/oversight` was offering an already-resolved phase for promotion. The Pending copy is removed; this row is the record.
+- duplicate cleared: 2026-09-07 via `/oversight`, by two passes that
+  found it independently. This candidate was carrying a live `[ ]`
+  row in `## Pending` as well as this one, so `/oversight` was
+  offering an already-resolved phase for promotion. The Pending copy
+  held no information this row does not. This row is the record.
 - promoted: 2026-09-06, the operator, in the session that wrote the
   feel-of-play block; resolved as Phase 10a (`phase_10a_the_voice.md`)
 - resolution: the spec wins and is re-issued through `RE-SEED.md`;
