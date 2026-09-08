@@ -153,6 +153,40 @@ re-cut (10b) and the map (10h).
   and Phase 12 in `steps/01_build_plan.md`.
 - **Unblocks:** 10h's MAP mode rule and 10b's exit from the village.
 
+## 6. Whether Phase 11 survives the cut — CLOSED 2026-09-07
+
+Opened and closed in the same `/oversight`. The operator's call of
+2026-09-07 cut the 149 unguided lines (66 Oracle, 72 Technique and
+Ritual effect, 11 Unexpected Event) to the book's printed text. Phase
+11 is 288 more of the same kind - 72 Inspirations and 216 Sparks, one
+authored line each - and no state file was tracking whether the same
+reasoning reached them. `RE-SEED.md`'s third report asked the source;
+the question belonged here too, and was not.
+
+- **Options:** (a) cut them too, the word tables print as printed and
+  Phase 11 is withdrawn; (b) keep the phase but re-brief the 288 to
+  Old Ping's guide, bounded by `plan/VOICE.md` and held by
+  `voice.test.ts`; (c) keep the phase as written, 288 lines in the
+  existing unguided style.
+- **Recommendation:** (a). The Inspirations and Sparks are a table cell
+  speaking - neither the book's voice nor the narrator's - which is the
+  exact reason the 149 were cut. Keeping them would reverse that
+  reasoning three to four weeks of writing later.
+- **Cost of guessing:** (a) releases the writing time and retires a
+  sealed spec sentence, which needs a re-issue whichever way it goes;
+  (b) costs the weeks and adds 288 records to a guide that today holds
+  24; (c) ships the thing the operator has already rejected once.
+- **Decided:** option (a). Phase 11 is `[skipped]` in
+  `plan/steps/01_build_plan.md` with the reason on the row and in its
+  scope section. The word tables print as the book prints them.
+- **Unblocks:** nothing waits on it; Phase 12's `Waits on` keeps Phase
+  11 in its list and its row order is unchanged, so the skip is
+  reversible if the source overturns it.
+- **Still open at the spec:** `spec.md`'s "About 440 authored lines"
+  and its "437 is the full count" criterion are sealed and now describe
+  a build that will not exist. The fourth field report carrying this
+  answer back is the next `/re-seed`; this row does not edit the spec.
+
 ## Closed rows
 
 Rows are never deleted. When closed they keep their number, gain the

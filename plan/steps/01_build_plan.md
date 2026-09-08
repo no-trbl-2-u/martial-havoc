@@ -305,13 +305,29 @@ rules panel's titles, three lies fixed). What remains is phase-sized:
       wholesale; and the Fan and the Cord are left open against
       spirits, being neither traditional weapons nor blows.
 
+**The book's own intent (phase 10m; the second bucket of
+`determined-intent.md` section 7, promoted via oversight 2026-09-07):**
+- [ ] Phase 10m — LUCK seen draining, Escape priced, equipment as
+      permission (candidate 7.0, expand pass 1)
+
+**The sources (phases 15-16; promoted via oversight 2026-09-07, and
+numbered after 14 while sitting here, because the loop reaches them by
+row order and they are agent work that the operator's sitting does not
+gate):**
+- [ ] Phase 15 — The docs are the book: gloss out, verbatim marked
+- [ ] Phase 16 — The rulebook's prose transcribed
+
 **The milestone (phase 10, by 2026-12-05):**
 - [ ] Phase 10 — The cave played to its ending `[needs-user-call]`
       (waits on 10a–10k: the sitting is only evidence once the cave
       plays as a story and the fight runs as the book runs it)
 
 **The sandbox (phases 11–14, by 2027-03-05):**
-- [ ] Phase 11 — Word-table lines
+- [skipped] Phase 11 — Word-table lines (skipped via oversight
+      2026-09-07 — the operator cut the 149 unguided lines to the
+      book's text, and the 288 Inspirations and Sparks are the same
+      category of line; they print as the book prints them. The
+      answer RE-SEED.md's third report asked the source for.)
 - [ ] Phase 12 — Sandbox procedures
 - [ ] Phase 13 — Native builds `[needs-user-call]` for accounts
 - [ ] Phase 14 — The whole sitting `[needs-user-call]`
@@ -640,16 +656,102 @@ agent fixes what the operator reports through the loop. Evidence: the
 record, its override count, the content counts. A field report goes back
 to the estate as `capture` on idea-0003.
 
-### Phase 11 — Word-table lines
+### Phase 11 — Word-table lines `[skipped]`
 
-**Done when:** 437 authored lines in total, or a smaller number with the
-fallback named.
+**Skipped:** via `/oversight` 2026-09-07.
 **Waits on:** Phase 10 in time only
-**Cost:** three to four weeks of writing
+**Cost:** none; three to four weeks of writing released
 
-The 72 Inspirations and 216 Sparks with an authored line each; the
-operator may reserve any (`[needs-user-call]` for those only); the build
-prints the shipped count.
+The phase was the 72 Inspirations and 216 Sparks with an authored line
+each, to reach the spec's 437. The operator cut the 149 existing
+unguided lines to the book's printed text on 2026-09-07, and these 288
+are the same category of line - a table cell speaking, neither the
+book's voice nor Old Ping's - so they are cut with them and the word
+tables print as the book prints them.
+
+This is the answer `RE-SEED.md`'s third report asked the source for.
+The spec's "About 440 authored lines" and its "437 is the full count"
+criterion are sealed (rule 6) and are what the report asks to have
+re-issued; a fourth report carrying this answer back is the next
+`/re-seed`. Nothing here edits `spec.md`.
+
+Reopening this phase means reopening that spec sentence, so it is
+`[skipped]` rather than deleted, and Phase 12 keeps its row order.
+
+### Phase 10m — LUCK seen draining, Escape priced, equipment as permission
+
+**Done when:** every LUCK check shows the point it costs, on screen, at
+the moment it is spent (MH p.22, R21); the Escape row is priced before
+it is chosen, with the last blow of 2 and the Dishonor Point named on
+it (MH p.30, R38 and R39, I-32); and a test asserts no roll anywhere
+adds an equipment modifier, with each equipment gate labelled a
+permission rather than a bonus (MH p.53, R68).
+**Waits on:** 10k
+**Cost:** one to two weeks
+
+Promoted from `plan/PHASE_CANDIDATES.md` candidate 7.0 by `/oversight`
+on 2026-09-07. It is the second bucket of `determined-intent.md`
+section 7: 10k took items 1, 2, 3, 7, 8, 10, 12 and 13, 10f took item 4
+and 10i took item 9, leaving items 5, 6 and 11 named by no brief.
+
+The rules are already in the engine and already labelled
+(`checks.luck-decrement-regardless` R21; `escape.last-blow-of-two` R38,
+`escape.dishonor-on-damage` R39, I-32;
+`combat.armed-proficiency-needs-its-weapon` R68). The gap is the
+surface: LUCK is shown on the naming step and the KEEP IT row alone,
+and FLEE is one row among the fight's options with its cost only after
+the fact. Section 3.3 calls LUCK a burning fuse; a fuse that burns
+invisibly is not one. Item 14 (adventures keyed lightly) is Phase 12's
+format question and stays there.
+
+No sealed rule is touched and no refusal is crossed.
+
+### Phase 15 — The docs are the book: gloss out, verbatim marked
+
+**Done when:** the five rule-file fields that carry the bundle's gloss
+are corrected at their docs source with their dependent records in the
+same commit; `docs/index.md` carries two conventions (a cell or quote
+that transcribes the book is verbatim, a column that does so says
+"(verbatim)" in its header, everything else is gloss; dice pips are
+digits); the headers are retrofitted table by table; and a docs-to-PDF
+leg sits beside `fidelity.test.ts` checking marked columns and
+blockquotes.
+**Waits on:** nothing
+**Cost:** two to three weeks
+
+Promoted from candidate 5.0 by `/oversight` on 2026-09-07, as the first
+of its two phases. Standing rule 9's sharp end: content is transcribed
+from `docs/`, so a gloss cell there is a gloss cell in play. Five
+fields labelled `rule` are the bundle's summary rather than the book's
+printed text, and 274 of 879 table cells are not verbatim with nothing
+marking which. The marker is what makes any docs-to-PDF gate possible
+at all.
+
+One field waits on I-08 saying what an icon stands for
+(`loot.the-5-treasures.devil-servant.3.item`); if it has not, the
+schema permits an empty item where `hint` is true and the phase says
+so. Correcting `docs/` is its own change, never a side effect of
+shipping a phase (rule 9); the PDFs and `spec.md` are untouched.
+
+### Phase 16 — The rulebook's prose transcribed
+
+**Done when:** the rulebook's absent prose is in the bundle's existing
+concepts, transcribed from the rendered pages rather than the
+extraction, one folio per commit, each verified against the render.
+**Waits on:** 15
+**Cost:** two to three weeks
+
+Promoted from candidate 5.0 by `/oversight` on 2026-09-07, as the
+second of its two phases. About half the rulebook's prose is not in
+`docs/`: the introduction, the Lie Zi epigraph, the WuXia paragraph,
+most of "Cinematic journey" (MH p.81-91), the worked examples and the
+pre-generated sheets as prose. The tables are complete; `VISION.md`
+says the rulebook is decomposed verbatim and cited, and the adventure
+is while the rulebook is not.
+
+No engine or app change follows from it until a phase asks for the
+introduction on screen. Waits on 15 because the verbatim convention
+decides how the transcribed prose is marked.
 
 ### Phase 12 — Sandbox procedures
 

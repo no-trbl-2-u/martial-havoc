@@ -56,6 +56,7 @@ mechanical, and there is no judgement in it. It shipped this tick.
 - ease: 5 (the row's own fix is the operator widening the token; the agent-side alternative is teaching `deploy:check` to read the deployed version off the Workers Scripts API instead, which is a rewrite on an unproven assumption)
 - source bump: +0.5 (user-filed via /jot)
 - next: `[needs-user-call]` — widen the token with Workers Builds read, and say so in `.env.example`. Until then the gate is dead rather than not-due, and no agent tick can revive it cheaply.
+- operator's call, 2026-09-07 via /oversight: **leave it.** The token is not being widened, `deploy:check` is not being rewritten onto the Workers Scripts API, and `/critique` is not being run by hand to fill the queue. The row stays open and durable; the queue stays a `/jot` and `/iterate` inbox with 25 rows already in it. Do not re-ask this until the operator reopens it.
 
 ## Left the list this pass
 
