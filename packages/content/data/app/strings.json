@@ -1413,6 +1413,11 @@
       "cite": "spec.md, Horizon (the village)"
     },
     {
+      "id": "ui.village.here",
+      "text": "FEN PASS",
+      "cite": "spec.md, Horizon (the village)"
+    },
+    {
       "id": "ui.village.trail.go",
       "text": "TAKE THE TRAIL",
       "cite": "spec.md, Horizon (the village)"
@@ -1925,6 +1930,11 @@
     {
       "id": "ui.creation.motive.roll",
       "text": "ROLL THE ADVENTURES TABLE",
+      "cite": "design/roll-modal/README.md"
+    },
+    {
+      "id": "ui.creation.motive.again",
+      "text": "ROLL AGAIN",
       "cite": "design/roll-modal/README.md"
     },
     {
