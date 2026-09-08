@@ -89,6 +89,15 @@ describe('a beat result resolves to the moment its slip is about', () => {
     expect(momentOf(turn({ event: 'ambush' }))).toBe('turn.ambush')
   })
 
+  it('keeps an ambush an ambush even when it brought a foe', () => {
+    // Unlike a plain Encounter, the Event itself outranks who it
+    // brought here: an Ambush is the moment the book marks with an
+    // exclamation, to a listener, whether or not the row also names a
+    // foe (plan/CRITIQUE.md, "the narrator's Ambush line is spoken
+    // only for an ambush by nobody").
+    expect(momentOf(turn({ event: 'ambush', foes: ['Ogre'] }))).toBe('turn.ambush')
+  })
+
   it('reads a loot row the way the slip reads it', () => {
     expect(momentOf(loot())).toBe('loot.item')
     expect(momentOf(loot({ treasure: 'Purple Gold Gourd' }))).toBe('loot.treasure')

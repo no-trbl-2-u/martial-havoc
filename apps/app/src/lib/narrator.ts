@@ -102,12 +102,14 @@ export const momentOf = (result: Result): string | null => {
     case 'take':
       return 'take'
     case 'turn':
-      // Mirrors `brought()`: who was met outranks the Event's own name,
-      // because an Encounter row that brought nobody is, to a listener,
-      // an empty room.
+      // The Event itself outranks who it brought: an Ambush is the
+      // moment the book marks with an exclamation, and it stays an
+      // Ambush to a listener even when the row also names a foe.
+      // `brought()` still reads foes first for the "against" sub-line
+      // (an empty room versus a body), which is a different question.
+      if (result.event === 'ambush') return 'turn.ambush'
       if (result.foes.length > 0) return 'turn.encounter'
       if (result.hint) return 'turn.hint'
-      if (result.event === 'ambush') return 'turn.ambush'
       if (result.event === 'safe') return 'turn.safe'
       return 'turn.nothing'
     case 'loot':

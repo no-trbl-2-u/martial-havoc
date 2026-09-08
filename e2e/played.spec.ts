@@ -257,13 +257,13 @@ test('every result prints the book upright and Old Ping italic, and neither rest
   await assertSpoken(page, 'result-narrator', spoken('turn.hint', state))
   await assertNoSharedSentence(description, line)
 
-  // An Ambush, and the flight from it. The Ogre it brought is what he
-  // speaks about, not the row: `lib/narrator.ts` reads who was met
-  // before the Event's own name, so `turn.ambush` is only ever spoken
-  // for an ambush by nobody (filed in `plan/CRITIQUE.md`).
+  // An Ambush, and the flight from it. The Event outranks who it
+  // brought for the narrator: an Ambush is `turn.ambush` even with an
+  // Ogre standing in the room, the moment the book marks with an
+  // exclamation.
   await go(page, /TO THE CAVE ENTRANCE/)
   await expect(page.getByTestId('result-total')).toHaveText('Ambush!') // 5T a1, Event table
-  await assertSpoken(page, 'result-narrator', spoken('turn.encounter', state))
+  await assertSpoken(page, 'result-narrator', spoken('turn.ambush', state))
   await assertNoSharedSentence(description, line)
   await button(page, /^FACE /).first().click()
   await expect(page.getByTestId('combat')).toBeVisible()
