@@ -80,12 +80,15 @@
   Oracle cell, Unexpected Event, Inspiration, Spark and Technique or
   Ritual effect", and the acceptance criterion "437 is the full
   count" (rule 6, sealed). The field report is filed in `RE-SEED.md`
-  (2026-09-07T20:14Z) in the same pass. `[needs-user-call]` remains
-  on one point the operator's answer did not cover: Phase 11's 288
-  Inspiration and Spark lines are the same category as the 149; the
-  source or the operator must say whether Phase 11 survives the cut.
-  This candidate does not ship until that answer and the re-issued
-  spec exist.
+  (2026-09-07T20:14Z) in the same pass. This candidate does not ship
+  until the re-issued spec exists.
+  **Decided via oversight 2026-09-07:** Phase 11's 288 Inspiration
+  and Spark lines are the same category as the 149 and are cut too,
+  same reasoning (not printed, not the narrator's). Phase 11 ships
+  against the book's own text only. `spec.md` still reads "About 440
+  authored lines" / "437 is the full count" unchanged as of this
+  oversight pass — the seal has not yet lifted, so the cut (both the
+  149 and Phase 11's 288) waits on the re-issue regardless.
 - score: base 4, +3 four source types, +2 operator decision today,
   +2 cheap, -5 spec conflict.
 
@@ -122,33 +125,6 @@
   `spec.md` are untouched.
 - score: base 4, +3 four rows and a standing rule, -2 two phases.
 
-### [ ] [score 6.0] Reconcile VISION.md with the authored lines: where inventions may print
-- proposed: 2026-09-06, operator via oversight (not an expand pass)
-- source signals:
-  - `VISION.md` (operator, 2026-09-06): inventions are "confined to the
-    app's own controls (button titles, headings, citations)".
-  - `plan/CRITIQUE.md` [MED] "no full proofread of the docs against the
-    PDF has been done (VISION.md)".
-  - Measurement, 2026-09-06 (PR #21 session): six invented surfaces
-    print as prose in play - Technique effect lines (72, combat),
-    Unexpected Event lines (11, combat), ending act lines (5, beat),
-    village blurbs (4), behaviour notes (109, rules panel), combat menu
-    lines (strings). Oracle lines (66) are in data but never rendered.
-    The areas' authored lines stopped printing in phase 8c.
-- rationale: two operator-level statements disagree. `spec.md` commits
-  to "an authored line beside every result", "About 440 authored
-  lines" and a done-condition that "the shipped authored-line count is
-  printed by the build; 437 is the full count". `VISION.md` forbids
-  those lines anywhere but controls. The build cannot satisfy both,
-  and every phase that touches a result slip inherits the ambiguity.
-- proposed scope: 1 phase after the reading is settled - either strip
-  the six surfaces to the book's text and cite-only rows, or print
-  each invented line under its INVENTION pill and amend VISION.md.
-- estimated phases: 1 (plus the re-seed)
-- conflicts: `spec.md` (sealed, rule 6) - resolution goes through
-  `/re-seed` before any phase ships; `/oversight` decides which
-  statement wins.
-
 ## Promoted
 
 ### [x] Reconcile VISION.md with the authored lines
@@ -157,6 +133,9 @@
 - resolution: the spec wins and is re-issued through `RE-SEED.md`;
   the app has a named narrator (option 2), bounded by `plan/VOICE.md`;
   `VISION.md` rewritten to carry the two voices.
+- bookkeeping: a duplicate of this row was left sitting in Pending
+  after promotion; removed via oversight 2026-09-07 — no new
+  information in it, this entry is the record of record.
 
 ## Rejected
 
