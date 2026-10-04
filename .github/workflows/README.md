@@ -28,9 +28,9 @@ then `npm run deploy:check` against Cloudflare.
 | Trigger | When | Notes |
 |---|---|---|
 | `workflow_dispatch` | On demand | Actions tab → **march** → *Run workflow*, or `gh workflow run march.yml`. Takes an optional `args` string, passed to the skill as `$ARGUMENTS`. |
-| `schedule` | `0 */6 * * *` (UTC) | Four ticks a day. GitHub's cron is best-effort; a skipped tick is harmless because `/march` re-derives its work from `plan/` every run. |
+| `schedule` | Disabled | The `0 */6 * * *` (UTC) cron was removed at the operator's request. Re-add the `schedule:` block in `march.yml` to restore the unattended loop. |
 
-Change the cadence by editing the `cron` line. Note that GitHub
+To re-enable, restore the `schedule:` block. Note that GitHub
 disables scheduled workflows in repositories with no activity for
 60 days.
 

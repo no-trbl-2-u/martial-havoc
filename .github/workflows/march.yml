@@ -41,12 +41,12 @@ on:
         type: string
         default: ''
 
-  # ---- Trigger 2: schedule. The unattended loop. ---------------------------
-  # Every 6 hours on the hour, UTC. GitHub's scheduler is best-effort and can
-  # lag under load; a missed tick is harmless because `/march` is stateless --
-  # it re-derives what to do from plan/ on every run.
-  schedule:
-    - cron: '0 */6 * * *'
+  # ---- Trigger 2: schedule -- disabled. -------------------------------------
+  # The `schedule:` block (`cron: '0 */6 * * *'`) was removed at the
+  # operator's request; the workflow now runs only on manual dispatch.
+  # To restore the unattended loop, re-add:
+  #   schedule:
+  #     - cron: '0 */6 * * *'
 
 # One march at a time. Two concurrent ticks would race on `origin/main` and on
 # the Cloudflare deploy. `cancel-in-progress: false` because a tick that is
